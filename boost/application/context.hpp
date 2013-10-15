@@ -38,6 +38,21 @@ namespace boost { namespace application {
       : public entity::aspect_map, noncopyable
    {
    public: 
+      
+      // returns true if the aspect did not exist and was successfully added, 
+      // if the aspect already exists, returns false and nothing is done.
+      template <class T>
+      // the name 'add_aspect_if_not_exists' is too verbose?
+      bool add_aspect_if_not_exists(std::shared_ptr<T> asp) 
+      {
+         if (!has_aspect<T>()) {
+            add_aspect<T>(asp);
+            return true;
+         }
+
+         return false;
+      }
+
    };
 
 }} // boost::application 

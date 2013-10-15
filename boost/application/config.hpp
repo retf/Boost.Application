@@ -25,6 +25,16 @@
 #include <boost/system/system_error.hpp>
 #include <boost/application/version.hpp>
 
+#ifndef BOOST_NO_CXX11_SMART_PTR
+#include <memory>
+#include <unordered_map>
+#include <typeindex>
+#else
+#include <boost/smart_ptr.hpp>
+#include <boost/unordered/unordered_map.hpp>
+#include <boost/typeindex/typeindex.hpp>
+#endif
+
 #if defined(BOOST_POSIX_API)
 #   include <errno.h>
 #   define BOOST_APPLICATION_LAST_ERROR errno
@@ -35,6 +45,22 @@
 #   define BOOST_APPLICATION_STD_WSTRING
 #   endif
 #endif
+
+// check if compiler provide some STL features of c++11 
+// that we use by the library, else use boost.
+// we need think in a good way to do this. any idea?
+#ifndef BOOST_NO_CXX11_SMART_PTR 
+#define BOOST_APPLICATION_FEATURE_SELECT \
+   using std::make_shared;               \
+   using std::unique_ptr;                \
+   using std::shared_ptr; 
+#else
+#define BOOST_APPLICATION_FEATURE_SELECT \
+   using boost::make_shared;             \
+   using boost::shared_ptr;              \
+   using boost::unique_ptr; 
+#endif
+BOOST_APPLICATION_FEATURE_SELECT
 
 // error handle for Boost.Application lib, based on Boost.System.
 // user can set this macro for example to BOOST_THROW_EXCEPTION 
@@ -67,4 +93,3 @@
       boost::system::system_category())
 
 #endif // BOOST_APPLICATION_CONFIG_HPP
-

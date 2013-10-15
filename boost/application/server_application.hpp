@@ -20,32 +20,30 @@
 #include <boost/application/context.hpp>
 #include <boost/application/status_aspect.hpp>
 #include <boost/application/run_mode_aspect.hpp>
-
-#ifndef BOOST_NO_CXX11_SMART_PTR
-#include <memory>
-#else
-#include <boost/make_shared.hpp> 
-#endif
+#include <boost/application/ready_to_use_aspects.hpp>
 
 namespace boost { namespace application {
-	
-#ifndef BOOST_NO_CXX11_SMART_PTR
-   using std::make_shared;
-#else
-   using boost::make_shared;
-#endif
+
+   BOOST_APPLICATION_FEATURE_SELECT
 
    class server
    {
    public:
-      server(application::context &context)
+      server(application::context &context, boost::system::error_code& ec)
       {
-        context.add_aspect<run_mode>(
+
+         // default aspects patterns added to this kind of application
+
+         context.add_aspect_if_not_exists<run_mode>(
             make_shared<run_mode>(run_mode::server));
 
-         context.add_aspect<status>(
+         context.add_aspect_if_not_exists<status>(
             make_shared<status>(status::running));
+
+         context.add_aspect_if_not_exists<wait_for_termination_request>(
+            shared_ptr<wait_for_termination_request>(new wait_for_termination_request));
       }
+
    };
 
 }} // boost::application 

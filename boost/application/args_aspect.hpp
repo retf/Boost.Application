@@ -25,8 +25,6 @@ namespace boost { namespace application {
    //
    // an aspect that will hold args, and provide a easy way to access they
    // or user can extrat args from it to use with Program_options, getopts or argp ...
-   //
-   // Note in this version we only support Multi-Byte Character Set
    template <typename value_type>
    class args_          
    {
@@ -36,7 +34,7 @@ namespace boost { namespace application {
       typedef value_type char_type;
       typedef std::basic_string<char_type> string_type;
 
-      args_(int argc, char *char_type[]) 
+      args_(int argc, char_type *argv[]) 
       {  
          for(int i=0; i <argc; i++)
             arguments_.push_back(char_type[i]);

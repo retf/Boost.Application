@@ -13,8 +13,7 @@
 #include <boost/application/context.hpp>
 #include <boost/application/launch.hpp>
 #include <boost/application/ready_to_use_aspects.hpp>
-
-// #include <boost/application/shared_library.hpp>
+#include <boost/application/shared_library.hpp>
 
 #endif
 

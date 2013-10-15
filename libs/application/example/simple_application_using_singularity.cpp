@@ -43,10 +43,12 @@ public:
    int operator()()
    {
       std::cout << "Test" << std::endl;
-      if( this_application().has_aspect<application::args>())
+      std::shared_ptr<application::args> myargs 
+         = this_application().get_aspect<application::args>();
+
+      if (myargs)
       {
-         std::vector<std::string> arg_vector = 
-            this_application().use_aspect<application::args>().arg_vector();
+         std::vector<std::string> arg_vector = myargs->arg_vector();
 
          // only print args on screen
          for(std::vector<std::string>::iterator it = arg_vector.begin(); 
@@ -54,8 +56,10 @@ public:
             std::cout << *it << std::endl;
          }
       }
+
       return 0;
    }
+
 };
 
 // main
@@ -63,13 +67,14 @@ public:
 int main(int argc, char *argv[])
 {   
    myapp app;
+   int ret =  0
  
    boost::singularity<application::context>::create_global();
 
    this_application().add_aspect<application::args>(
       std::make_shared<application::args>(argc, argv));
 
-   int ret = application::launch<application::server>(app, global_context);
+   ret = application::launch<application::server>(app, global_context);
 
    boost::singularity<application::context>::destroy();
 

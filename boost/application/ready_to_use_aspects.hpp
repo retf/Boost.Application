@@ -12,6 +12,8 @@
 #define BOOST_APPLICATION_READY_TO_USE_ASPECTS_HPP
 
 #include <boost/application/args_aspect.hpp>
+#include <boost/application/limit_single_instance_aspect.hpp>
+#include <boost/application/wait_for_termination_request_aspect.hpp>
 
 #endif // BOOST_APPLICATION_READY_TO_USE_ASPECTS_HPP
 
