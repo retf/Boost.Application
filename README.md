@@ -53,3 +53,9 @@ New modules:
 * exceptions
 * shared_library
 
+New Examples:
+------------
+
+* limit_single_instance_callback_using_singularity
+* limit_single_instance_callback
+
