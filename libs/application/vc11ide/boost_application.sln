@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "limit_single_instance", "li
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "limit_single_instance_callback", "limit_single_instance_callback.vcxproj", "{520BF4EB-7F98-4D60-8B45-95940B51F5F1}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "limit_single_instance_callback_using_singularity", "limit_single_instance_callback_using_singularity.vcxproj", "{570BF4EB-6F98-4D60-8B45-95940B51F5F1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -31,6 +33,10 @@ Global
 		{520BF4EB-7F98-4D60-8B45-95940B51F5F1}.Debug|Win32.Build.0 = Debug|Win32
 		{520BF4EB-7F98-4D60-8B45-95940B51F5F1}.Release|Win32.ActiveCfg = Release|Win32
 		{520BF4EB-7F98-4D60-8B45-95940B51F5F1}.Release|Win32.Build.0 = Release|Win32
+		{570BF4EB-6F98-4D60-8B45-95940B51F5F1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{570BF4EB-6F98-4D60-8B45-95940B51F5F1}.Debug|Win32.Build.0 = Debug|Win32
+		{570BF4EB-6F98-4D60-8B45-95940B51F5F1}.Release|Win32.ActiveCfg = Release|Win32
+		{570BF4EB-6F98-4D60-8B45-95940B51F5F1}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

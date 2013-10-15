@@ -62,7 +62,7 @@ namespace boost { namespace application {
       singularity<application::context> &context, boost::system::error_code& ec)
    {
       // the ensure_single_instance tell us to exit?
-      bool we_need_exit = detail::ensure_single_instance(context, ec);
+      bool we_need_exit = detail::ensure_single_instance(context.get_global(), ec);
 
       if(ec) return 0; 
       if(we_need_exit) return 0; 

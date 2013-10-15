@@ -37,7 +37,7 @@ namespace boost { namespace application {
       args_(int argc, char_type *argv[]) 
       {  
          for(int i=0; i <argc; i++)
-            arguments_.push_back(char_type[i]);
+            arguments_.push_back(argv[i]);
       }
 
       int argc() const
