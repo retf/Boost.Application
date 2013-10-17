@@ -15,6 +15,10 @@ contact: re.tf@acm.org
 Change Log
 --------------------------------------------------------------------------------
 
+* 17/10/2013 [dd/mm/yyyy]
+
+TODO : Many updates, I have to update later.
+
 * 15/10/2013 [dd/mm/yyyy]
 
 New Aspects:
