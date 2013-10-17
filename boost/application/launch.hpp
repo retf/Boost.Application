@@ -22,7 +22,7 @@
 #include <boost/application/common_application.hpp>
 #include <boost/application/server_application.hpp>
 // aspects
-#include <boost/application/limit_single_instance_aspect.hpp>
+#include <boost/application/aspects/limit_single_instance.hpp>
 #include <boost/application/detail/ensure_single_instance.hpp>
 
 // Note that singularity is in approval process, 
@@ -32,14 +32,47 @@
 
 namespace boost { namespace application {
 
-   // this class/function (we need to define better opetion)
-   // launch an application as common(terminal/interactive/console) 
-   // or server (Daemon/Service) application.
+   /*!
+    * This file has a list of free function to launch an aplication using
+    * a specifyc mode. 
+    *  
+    * In this version 2 flavors of application are supported: 
+    *  
+    * - common_application 
+    * - server_application 
+    *  
+    * The "launch" function can create any of this files, and launch 
+    * will aready setup/add default control aspects to application context. 
+    *  
+    * Two version of "launch" are available, the first receive a 
+    * boost::system::error_code variable 'ec' that would be set 
+    * to the result of the operation, and no thrown an exception of 
+    * boost::system::system_error. 
+    *  
+    */
 
    // receive a boost::system::error_code variable 'ec' launch versions
 
-   // param version, the ec ( boost::system::error_code& ec) will be set to 
-   // the result of the operation, they should be tested for errors.
+   /*!
+    * Creates a application, the ec ( boost::system::error_code& ec)
+    * will be set to the result of the operation, they should be
+    * tested for errors. 
+    * 
+    * \param app User application functor instance.
+    *  
+    * \param context The context of application, that will be passed 
+    *        as paramenter to application operator and populated
+    *        with defaul aspects, depending on type of application
+    *        that are passed as ApplicationMode.
+    *  
+    * \param ec Variable (boost::system::error_code) that will be 
+    *        set to the result of the operation.
+    *  
+    * \return the return of application operator of user functor 
+    *         class that usually need be returned by main function
+    *         to O.S.
+    *      
+    */
    template <typename ApplicationMode, typename Application>
    inline int launch(Application& app, application::context &context, 
       boost::system::error_code& ec)
@@ -57,6 +90,27 @@ namespace boost { namespace application {
    
    // singularity version, the ec ( boost::system::error_code& ec) will be  
    // set to the result of the operation, they should be tested for errors.
+
+   /*!
+    * Creates a application, the ec ( boost::system::error_code& ec)
+    * will be set to the result of the operation, they should be
+    * tested for errors. 
+    * 
+    * \param app User application functor instance.
+    *  
+    * \param context The "singularity" context of application, 
+    *        that will be passed as paramenter to application operator
+    *        and populated with defaul aspects, depending on type of
+    *        application that are passed as ApplicationMode.
+    *  
+    * \param ec Variable (boost::system::error_code) that will be 
+    *        set to the result of the operation.
+    *  
+    * \return the return of application operator of user functor 
+    *         class that usually need be returned by main function
+    *         to O.S.
+    *      
+    */
    template <typename ApplicationMode, typename Application>
    inline int launch(Application& app, 
       singularity<application::context> &context, boost::system::error_code& ec)
@@ -75,6 +129,23 @@ namespace boost { namespace application {
 
    // param version, throws an exception of type 
    // boost::system::system_error on error.
+
+   /*!
+    * Creates a application, throws an exception of type
+    * boost::system::system_error on error.
+    * 
+    * \param app User application functor instance.
+    *  
+    * \param context The context of application, that will be passed 
+    *        as paramenter to application operator and populated
+    *        with defaul aspects, depending on type of application
+    *        that are passed as ApplicationMode.
+    *  
+    * \return the return of application operator of user functor 
+    *         class that usually need be returned by main function
+    *         to O.S.
+    *      
+    */
    template <typename ApplicationMode, typename Application>
    inline int launch(Application& app, application::context &context)
    {
@@ -86,8 +157,22 @@ namespace boost { namespace application {
       return ret;
    }
    
-   // singularity version, throws an exception of type 
-   // boost::system::system_error on error.
+   /*!
+    * Creates a application, throws an exception of type
+    * boost::system::system_error on error.
+    * 
+    * \param app User application functor instance.
+    *  
+    * \param context The "singularity" context of application, 
+    *        that will be passed as paramenter to application operator
+    *        and populated with defaul aspects, depending on type of
+    *        application that are passed as ApplicationMode.
+    *  
+    * \return the return of application operator of user functor 
+    *         class that usually need be returned by main function
+    *         to O.S.
+    *      
+    */
    template <typename ApplicationMode, typename Application>
    inline int launch(Application& app, singularity<application::context> &context)
    {

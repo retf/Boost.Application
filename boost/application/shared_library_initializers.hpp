@@ -1,12 +1,17 @@
-// shared_library.hpp --------------------------------------------------------//
+// shared_library_initializers.hpp -------------------------------------------//
+// -----------------------------------------------------------------------------
 
 // Copyright 2011-2013 Renato Tegon Forti
 
 // Distributed under the Boost Software License, Version 1.0.
 // See http://www.boost.org/LICENSE_1_0.txt
 
+// -----------------------------------------------------------------------------
+
 // Revision History
 // 05-04-2013 dd-mm-yyyy - Initial Release
+
+// -----------------------------------------------------------------------------
 
 #ifndef BOOST_APPLICATION_SHARED_LIBRARY_INITIALIZERS_HPP
 #define BOOST_APPLICATION_SHARED_LIBRARY_INITIALIZERS_HPP
@@ -57,3 +62,4 @@ namespace boost { namespace application {
 }} // boost::application
 
 #endif // BOOST_APPLICATION_SHARED_LIBRARY_INITIALIZERS_HPP
+

@@ -1,4 +1,4 @@
-// limit_single_instance.hpp ------------------------------------------------//
+// limit_single_instance_impl.hpp --------------------------------------------//
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2012 Renato Tegon Forti
@@ -31,17 +31,17 @@
 
 namespace boost { namespace application {
 
-   template <typename value_type>
+   template <typename CharType>
    class limit_single_instance_impl_ : noncopyable
    {
 
    public:
 
-      typedef value_type char_type;
+      typedef CharType char_type;
       typedef std::basic_string<char_type> string_type;
 
       limit_single_instance_impl_()
-         : has_anyone_(false)
+         : owns_lock(false)
       {
       }
 
@@ -65,30 +65,30 @@ namespace boost { namespace application {
                interprocess::create_only, name_.c_str(), 
                interprocess::read_write));
 
-            has_anyone_ = false; // we lock now
+            owns_lock_ = false; // we lock now
          } 
          catch(...)
          {
             // executable is already running
-            has_anyone_ = true;
+            owns_lock_ = true;
          }
 
-         return has_anyone_;
+         return owns_lock_;
       }
       
       void release(void)
       {
          // if I create it, I can remove it
-         if(has_anyone_ == false) {
+         if(owns_lock_ == false) {
             interprocess::shared_memory_object::remove(name_.c_str());
          }
 
-         has_anyone_ = false;
+         owns_lock_ = false;
       }
 
       bool is_another_instance_running() 
       {
-         return has_anyone_;
+         return owns_lock_;
       }
 
    private:
@@ -96,7 +96,7 @@ namespace boost { namespace application {
       string_type name_;
 
       scoped_ptr<interprocess::shared_memory_object> create_shared_memory_or_die_;
-      bool has_anyone_;
+      bool owns_lock_;
    };
 
    typedef limit_single_instance_impl_<character_types::char_type> limit_single_instance_impl;

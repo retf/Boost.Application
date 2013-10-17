@@ -1,4 +1,4 @@
-// status_aspect.hpp  ---------------------------------------------------------//
+// status.hpp  ---------------------------------------------------------------//
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2013 Renato Tegon Forti
@@ -21,13 +21,17 @@
 
 namespace boost { namespace application {
 
-   // status aspect
-   //
-   // indicates the current state of application, that can be:
-   //
-   // * application_stoped 
-   // * application_running
-   // * application_paused (used only on server appliation on windows side)
+   /*!
+    * \brief This aspect class is used internaly by applications types (modes)
+    * 
+    * Indicates the current state of application,
+    * 3 ways are possible:
+    *
+    * - application_stoped 
+    * - application_running
+    * - application_paused (used only on server appliation on windows side)
+    * 
+    */
    class status 
    {
       friend class server;
@@ -41,13 +45,30 @@ namespace boost { namespace application {
          paused // Windows Service
       };
 
+      /*!
+       * Constructs an application_state aspect.
+       *
+       * \param state The state of application.
+       */
       status(application_state state) 
          :  application_state_(state) {}
 
+      /*!
+       * Retreaves current state of application.
+       * 
+       * \return the state of application.
+       *      
+       */
       application_state state() {
          return application_state_;
       }
 
+      /*!
+       * Sets the current state of application.
+       * 
+       * \param state The state of application.
+       *      
+       */
       void state(application_state state) {
          application_state_ = state;
       }

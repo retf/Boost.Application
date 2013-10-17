@@ -1,6 +1,7 @@
 // -----------------------------------------------------------------------------
-// simple_application.cpp : examples that show how use 
-// Boost.Application to make a simplest interactive (terminal) application 
+// limit_single_instance_callback_using_singularity.cpp : 
+//examples that show how use Boost.Application to make a simplest interactive 
+// (terminal) application 
 //
 // Note 1: The Boost.Application (Aspects v4) and this sample are in 
 //         development process.
@@ -90,8 +91,6 @@ int main(int argc, char *argv[])
    
    boost::uuids::string_generator gen;
    boost::uuids::uuid appuuid = gen("{9F63E4AD-ECA5-475D-8784-4BAA329EF9F3}");
-
-   int ret =  0;
  
    boost::singularity<context>::create_global();
    
@@ -104,9 +103,9 @@ int main(int argc, char *argv[])
       std::make_shared<args>(argc, argv));
 
    this_application().add_aspect<limit_single_instance>(
-      std::make_shared<limit_single_instance>(appuuid, callback));
+      std::make_shared<limit_single_instance_default_behaviour>(appuuid, callback));
 
-   ret = launch<common>(app, global_context);
+   int ret = launch<common>(app, global_context);
 
    boost::singularity<context>::destroy();
 

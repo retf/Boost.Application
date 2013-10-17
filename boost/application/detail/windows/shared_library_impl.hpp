@@ -1,4 +1,4 @@
-// shared_library.hpp -------------------------------------------------------//
+// shared_library_impl.hpp ---------------------------------------------------//
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2012 Renato Tegon Forti
@@ -20,6 +20,7 @@
 
 #include <boost/application/config.hpp>
 #include <boost/application/shared_library_initializers.hpp>
+#include <boost/application/shared_library_load_mode.hpp>
 
 #include <boost/thread.hpp>
 #include <boost/noncopyable.hpp>
@@ -28,7 +29,7 @@
 namespace boost { namespace application {
 
    class shared_library;
-   class shared_library_impl : public noncopyable 
+   class shared_library_impl : noncopyable 
    {
       friend class shared_library;
 
@@ -44,13 +45,6 @@ namespace boost { namespace application {
       }
       
       template <typename T>
-      shared_library_impl(const library_type<T> &sh)
-         : handle_(NULL)
-      {
-         load(sh);
-      }
-
-      template <typename T>
       shared_library_impl(const library_type<T> &sh, boost::system::error_code &ec)
          : handle_(NULL)
       {
@@ -58,35 +52,11 @@ namespace boost { namespace application {
       }
 
       template <typename T>
-      shared_library_impl(const library_type<T> &sh, unsigned long mode)
-         : handle_(NULL)
-      {
-         load(sh, mode);
-      }
-
-      template <typename T>
-      shared_library_impl(const library_type<T> &sh, unsigned long mode, 
+      shared_library_impl(const library_type<T> &sh, shared_library_load_mode mode, 
                           boost::system::error_code &ec)
          : handle_(NULL)
       {
          load(sh, mode, ec);
-      }
-
-      template <typename T>
-      void load(const library_type<T> &sh)
-      {
-         if (handle_) 
-            unload();
-
-         DWORD flags(0);
-         path_ = sh.get().c_str();
-
-         if (path_.is_absolute()) 
-            flags |= LOAD_WITH_ALTERED_SEARCH_PATH; // usual mode, generic (plugin mode)
-
-         boost::system::error_code ec;
-         if(!load(static_cast<unsigned long>(flags), ec))
-            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("LoadLibrary() failed");
       }
 
       template <typename T>
@@ -106,17 +76,7 @@ namespace boost { namespace application {
       }
 
       template <typename T>
-      void load(const library_type<T> &sh, unsigned long mode)
-      {
-         path_ = sh.get().c_str();
-
-         boost::system::error_code ec;
-         if(!load(static_cast<unsigned long>(mode), ec))
-            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("LoadLibrary() failed");
-      }
-
-      template <typename T>
-      void load(const library_type<T> &sh, unsigned long mode, 
+      void load(const library_type<T> &sh, shared_library_load_mode mode, 
                 boost::system::error_code &ec)
       {
          path_ = sh.get().c_str();
@@ -155,37 +115,7 @@ namespace boost { namespace application {
       }
 
       template <typename T>
-      void* get_symbol(const symbol_type<T> &sb)
-      {
-         boost::system::error_code ec;
-
-         void* symbol = symbol_addr(sb, ec);
-         if(symbol == NULL)
-            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("GetProcAddress() failed");
-
-         return symbol;
-      }
-
-      template <typename T>
       void* get_symbol(const symbol_type<T> &sb, boost::system::error_code &ec)
-      {
-         return symbol_addr(sb, ec);
-      }
-
-      template <typename T>
-      void* operator()(const symbol_type<T> &sb)
-      {
-         boost::system::error_code ec;
-
-         void* symbol = symbol_addr(sb, ec);
-         if(symbol == NULL)
-            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("GetProcAddress() failed");
-
-         return symbol;
-      }
-
-      template <typename T>
-      void* operator()(const symbol_type<T> &sb, boost::system::error_code &ec)
       {
          return symbol_addr(sb, ec);
       }

@@ -1,4 +1,4 @@
-// run_mode_aspect.hpp  ------------------------------------------------------//
+// run_mode.hpp  -------------------------------------------------------------//
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2013 Renato Tegon Forti
@@ -21,33 +21,55 @@
 
 namespace boost { namespace application {
 
- // run_mode aspect
-   //
-   // indicates how the application was created, in this version 3 ways are possible:
-   //
-   // * created by the launcher as a Server (application_server)
-   // * created by an app launcher as Common/Interactive (application_common)
-   // * created directly by User (application_direct)
+   /*!
+    * \brief This aspect class is used internaly by applications types (modes)
+    * 
+    * Indicates how the application was created,
+    * 3 ways are possible:
+    *
+    * - created by the launcher as a Server (application_server)
+    * - created by an app launcher as Common/Interactive (application_common)
+    * - created directly by User (application_direct)
+    * 
+    */
    class run_mode
    {
       friend class server;
       friend class common;
 
    public:
-      // application type
+
+      // application types / modes
       enum application_run_mode {
          common = 0,
          server,
          direct // not created by the launcher
       };
 
+      /*!
+       * Constructs an run_mode aspect.
+       *
+       * \param run_mode The mode of application.
+       */
       run_mode(application_run_mode run_mode) 
          : application_run_mode_(run_mode) {}
 
+      /*!
+       * Retreaves current mode of application.
+       * 
+       * \return the mode of application.
+       *      
+       */
       application_run_mode mode() {
          return application_run_mode_;
       }
 
+      /*!
+       * Sets the current mode of application.
+       * 
+       * \param mode The mode of application.
+       *      
+       */
       void mode(application_run_mode mode) {
          application_run_mode_ = mode;
       }

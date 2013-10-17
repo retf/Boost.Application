@@ -11,7 +11,7 @@
 // Revision History
 // 14-10-2013 dd-mm-yyyy - Initial Release
 // 
-// Note about this code
+// Note about this LIBRARY
 //
 // This is a test that add "aspect" concept on Boost.Application interface.
 //
@@ -31,18 +31,38 @@
 
 namespace boost { namespace application {
 
-   // this class hold all aspects of an application.
-   // you can use one of the ready-to-use aspects provided by library, 
-   // or define your own aspects.
+   /*!
+    * \brief This class is the base of Boost.Application.
+    *        This class can hold any apect, and user can add one,
+    *        or use some application modes that will add specifics
+    *        aspects to it.
+    * 
+    *        The heavy work is done by aspect_map.
+    * 
+    *        Thanks to Vicente J. Botet Escriba that provide this
+    *        important class and concept to the Boost.Application
+    *        library.
+    *
+    * This class hold all aspects of an application.
+    * you can use one of the ready-to-use aspects provided by library, 
+    * or define your own aspects.
+    * 
+    */
    class context 
       : public entity::aspect_map, noncopyable
    {
    public: 
       
-      // returns true if the aspect did not exist and was successfully added, 
-      // if the aspect already exists, returns false and nothing is done.
+      /*!
+       * Add a new aspect to the aspect pool if it don't already exists 
+       * on aspect pool of application context. 
+       *  
+       * \return true if the aspect did not exist and was successfully added, 
+       *         if the aspect already exists, returns false and
+       *         nothing is done.
+       *      
+       */
       template <class T>
-      // the name 'add_aspect_if_not_exists' is too verbose?
       bool add_aspect_if_not_exists(std::shared_ptr<T> asp) 
       {
          if (!has_aspect<T>()) {

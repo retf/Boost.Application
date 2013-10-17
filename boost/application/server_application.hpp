@@ -16,21 +16,48 @@
 #ifndef BOOST_APPLICATION_SERVER_APPLICATION_HPP
 #define BOOST_APPLICATION_SERVER_APPLICATION_HPP
 
+// application
 #include <boost/application/config.hpp>
 #include <boost/application/context.hpp>
-#include <boost/application/status_aspect.hpp>
-#include <boost/application/run_mode_aspect.hpp>
+// aspects
 #include <boost/application/ready_to_use_aspects.hpp>
+#include <boost/application/aspects/status.hpp>
+#include <boost/application/aspects/run_mode.hpp>
 
 namespace boost { namespace application {
 
-   BOOST_APPLICATION_FEATURE_SELECT
-
+   /*!
+    * \brief This class hold a application mode system. 
+    *  
+    * server : Can be seen as Server (log-time duration) 
+    *          aplication type. 
+    *  
+    * An application mode is a collection of aspects that 
+    * define application instantiation and behaviour. 
+    *  
+    * The usual use of this class is to pass it as 
+    * template param on launch free function. 
+    * 
+    */
    class server
    {
    public:
+
+      /*!
+       * Creates a server application.
+       *
+       * \param context An context of application, that hold all
+       *        aspects.
+       * 
+       * \param ec Variable (boost::system::error_code) that will be 
+       *        set to the result of the operation.
+       * 
+       * Check ec for errors.
+       * 
+       */
       server(application::context &context, boost::system::error_code& ec)
       {
+         BOOST_APPLICATION_FEATURE_SELECT
 
          // default aspects patterns added to this kind of application
 
@@ -41,7 +68,8 @@ namespace boost { namespace application {
             make_shared<status>(status::running));
 
          context.add_aspect_if_not_exists<wait_for_termination_request>(
-            shared_ptr<wait_for_termination_request>(new wait_for_termination_request));
+            shared_ptr<wait_for_termination_request>(
+               new wait_for_termination_request_default_behaviour));
       }
 
    };

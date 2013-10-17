@@ -1,4 +1,4 @@
-// launch.hpp  ---------------------------------------------------------------//
+// ensure_single_instance.hpp  ------------------------------------------------//
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2013 Renato Tegon Forti
@@ -18,7 +18,7 @@
 
 // application
 #include <boost/application/config.hpp>
-#include <boost/application/limit_single_instance_aspect.hpp>
+#include <boost/application/aspects/limit_single_instance.hpp>
 
 namespace boost { namespace application { namespace detail {
 
@@ -28,9 +28,11 @@ namespace boost { namespace application { namespace detail {
       boost::system::error_code& ec)
    {
       if(cxt.has_aspect<limit_single_instance>())
-      {
-         bool is_another_instance_running = 
-            cxt.use_aspect<limit_single_instance>().lock(ec);
+      {    
+         std::shared_ptr<limit_single_instance> ol =          
+            cxt.get_aspect<limit_single_instance>();
+
+         bool is_another_instance_running = ol->lock(ec);
 
          if(ec) return false; // user need check by error
 
@@ -40,7 +42,7 @@ namespace boost { namespace application { namespace detail {
          // check if we have any callback to call
 
          limit_single_instance::cxparameter_cb* cxparameter =
-            cxt.use_aspect<limit_single_instance>().get_cxparameter_cb();
+            ol->get_cxparameter_cb();
 
          if(cxparameter)
          {
@@ -54,7 +56,7 @@ namespace boost { namespace application { namespace detail {
          }
 
          limit_single_instance::singularity_cb* singularity =
-            cxt.use_aspect<limit_single_instance>().get_singularity_cb();
+            ol->get_singularity_cb();
 
          if(singularity)
          {
@@ -68,7 +70,8 @@ namespace boost { namespace application { namespace detail {
          }
       }
 
-      return true;
+      // continue / no restriction
+      return false;
    }
 
 }}} // boost::application 

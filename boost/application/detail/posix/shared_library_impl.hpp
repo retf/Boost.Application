@@ -1,4 +1,4 @@
-// shared_library.hpp ---------------------------------------------------------//
+// shared_library_impl.hpp ---------------------------------------------------//
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2012 Renato Tegon Forti
@@ -21,6 +21,7 @@
 
 #include <boost/application/config.hpp>
 #include <boost/application/shared_library_initializers.hpp>
+#include <boost/application/shared_library_load_mode.hpp>
 
 #include <boost/thread.hpp>
 #include <boost/noncopyable.hpp>
@@ -42,7 +43,7 @@
 namespace boost { namespace application {
 
    class shared_library;
-   class shared_library_impl : public noncopyable 
+   class shared_library_impl : noncopyable 
    {
       friend class shared_library;
 
@@ -56,14 +57,7 @@ namespace boost { namespace application {
       {
          unload();
       }
-      
-      template <typename T>
-      shared_library_impl(const library_type<T> &sl)
-         : handle_(NULL)
-      {
-         load(sl);
-      }
-
+    
       template <typename T>
       shared_library_impl(const library_type<T> &sl, boost::system::error_code &ec)
          : handle_(NULL)
@@ -72,31 +66,11 @@ namespace boost { namespace application {
       }
 
       template <typename T>
-      shared_library_impl(const library_type<T> &sl, unsigned long mode)
-         : handle_(NULL)
-      {
-         load(sl, mode);
-      }
-
-      template <typename T>
-      shared_library_impl(const library_type<T> &sl, unsigned long mode, 
+      shared_library_impl(const library_type<T> &sl, shared_library_load_mode mode, 
                           boost::system::error_code &ec)
          : handle_(NULL)
       {
          load(sl, mode, ec);
-      }
-
-      template <typename T>
-      void load(const library_type<T> &sl)
-      {
-         if (handle_) 
-            unload();
-
-         path_ = sl.get().c_str();
-
-         boost::system::error_code ec;
-         if(!load(RTLD_LAZY | RTLD_GLOBAL, ec))
-            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("dlopen() failed");
       }
 
       template <typename T>
@@ -112,17 +86,7 @@ namespace boost { namespace application {
       }
 
       template <typename T>
-      void load(const library_type<T> &sl, unsigned long mode)
-      {
-         path_ = sl.get().c_str();
-
-         boost::system::error_code ec;
-         if(!load(static_cast<unsigned long>(mode), ec))
-            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("dlopen() failed");
-      }
-
-      template <typename T>
-      void load(const library_type<T> &sl, unsigned long mode, 
+      void load(const library_type<T> &sl, shared_library_load_mode mode, 
                 boost::system::error_code &ec)
       {
          path_ = sl.get().c_str();
@@ -131,7 +95,7 @@ namespace boost { namespace application {
 
       void unload()
       {
-         boost::lock_guard<boost::mutex> lock(mutex);
+         boost::lock_guard<boost::mutex> lock(mutex_);
 
          if (handle_)
          {
@@ -158,37 +122,7 @@ namespace boost { namespace application {
       }
 
       template <typename T>
-      void* get_symbol(const symbol_type<T> &sb) 
-      {
-         boost::system::error_code ec; 
-
-         void* symbol = symbol_addr(sb, ec);
-         if(symbol == NULL)
-            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("dlsym() failed");
-
-         return symbol;
-      }
-
-      template <typename T>
       void* get_symbol(const symbol_type<T> &sb, boost::system::error_code &ec)
-      {
-         return symbol_addr(sb, ec);
-      }
-
-      template <typename T>
-      void* operator()(const symbol_type<T> &sb)
-      {
-         boost::system::error_code ec;
-
-         void* symbol = symbol_addr(sb, ec);
-         if(symbol ==  NULL)
-            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("dlsym() failed");
-
-         return symbol;
-      }
-
-      template <typename T>
-      void* operator()(const symbol_type<T> &sb, boost::system::error_code &ec)
       {
          return symbol_addr(sb, ec);
       }
@@ -213,7 +147,7 @@ namespace boost { namespace application {
       template <typename T>
       void* symbol_addr(const symbol_type<T> &sb, boost::system::error_code &ec)
       {
-         boost::lock_guard<boost::mutex> lock(mutex);
+         boost::lock_guard<boost::mutex> lock(mutex_);
 
          void* symbol = 0;
 
@@ -236,7 +170,7 @@ namespace boost { namespace application {
 	  
       bool load(unsigned long mode, boost::system::error_code &ec)
       {
-         boost::lock_guard<boost::mutex> lock(mutex);
+         boost::lock_guard<boost::mutex> lock(mutex_);
 
          handle_ = dlopen(path_.string().c_str(), static_cast<int>(mode));
 
@@ -249,9 +183,20 @@ namespace boost { namespace application {
          return true;
       }
 
+      void unload(boost::lock_guard<boost::mutex> &lock)
+      {
+         if (handle_)
+         {
+            dlclose(handle_);
+            handle_ = 0;
+         }
+
+         path_.clear();
+      }
+
 	  private:
       
-      boost::mutex mutex;  
+      boost::mutex mutex__;  
       boost::filesystem::path path_;
       void* handle_;
 

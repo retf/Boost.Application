@@ -1,4 +1,4 @@
-// args_aspect.hpp  ----------------------------------------------------------//
+// wait_for_termination_request_impl.hpp  ------------------------------------//
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2013 Renato Tegon Forti
@@ -18,13 +18,29 @@
 
 namespace boost { namespace application {
 
-   class wait_for_termination_request_impl : noncopyable          
+   class wait_for_termination_request_impl : noncopyable    
+      // http://www.cs.kent.edu/~farrell/sp/lectures/signals.html      
    {
    public:
 
       // will wait for termination request
       void wait()
       {
+         sigset_t sset;
+
+         sigemptyset(&sset);
+
+         sigaddset(&sset, SIGINT);
+         sigaddset(&sset, SIGQUIT);
+         sigaddset(&sset, SIGTERM);
+
+         sigprocmask(SIG_BLOCK, &sset, NULL);
+
+         int sig;
+         sigwait(&sset, &sig);
+      }
+
+      void proceed() {
       }
 
    private:

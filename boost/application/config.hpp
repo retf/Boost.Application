@@ -1,4 +1,4 @@
-// config.hpp  --------------------------------------------------------------//
+// config.hpp ----------------------------------------------------------------//
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2013 Renato Tegon Forti
@@ -48,7 +48,6 @@
 
 // check if compiler provide some STL features of c++11 
 // that we use by the library, else use boost.
-// we need think in a good way to do this. any idea?
 #ifndef BOOST_NO_CXX11_SMART_PTR 
 #define BOOST_APPLICATION_FEATURE_SELECT \
    using std::make_shared;               \
@@ -60,7 +59,8 @@
    using boost::shared_ptr;              \
    using boost::unique_ptr; 
 #endif
-BOOST_APPLICATION_FEATURE_SELECT
+
+
 
 // error handle for Boost.Application lib, based on Boost.System.
 // user can set this macro for example to BOOST_THROW_EXCEPTION 

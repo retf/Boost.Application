@@ -1,12 +1,17 @@
-// string_type.hpp  ----------------------------------------------------------//
+// base_type.hpp -------------------------------------------------------------//
+// -----------------------------------------------------------------------------
 
 // Copyright 2011-2013 Renato Tegon Forti
 
 // Distributed under the Boost Software License, Version 1.0.
 // See http://www.boost.org/LICENSE_1_0.txt
 
+// -----------------------------------------------------------------------------
+
 // Revision History
 // 04-03-2013 dd-mm-yyyy - Initial Release
+
+// -----------------------------------------------------------------------------
 
 #ifndef BOOST_APPLICATION_BASE_TYPE_HPP
 #define BOOST_APPLICATION_BASE_TYPE_HPP
@@ -16,10 +21,14 @@
 
 namespace boost { namespace application {
    
-   // This is a fundamental type for Boost.Application,
-   // it is used to pack string, args, paths values, 
-   // with it we can handle unicode (windows) and others
-   // neededs types required by application lib
+   /*!
+    * \brief This is a fundamental type for Boost.Application.
+    *
+    * It is used to pack string, args, paths values, 
+    * with it we can handle unicode (windows) and others
+    * neededs types required by application lib.
+    * 
+    */
    template <typename Type>
    class  base_type
    {
@@ -37,7 +46,14 @@ namespace boost { namespace application {
       Type s_;
    };
 
-   // pack for characters types used by application lib
+   /*!
+    * \brief Pack for characters types used by Boost.Application.
+    *
+    * It is used to pack string, args, paths values, 
+    * with it we can handle unicode (windows) and others
+    * neededs types required by application lib.
+    * 
+    */
    struct character_types
    {
       // basic string types to be used by application lib
@@ -48,7 +64,6 @@ namespace boost { namespace application {
 #endif 
       typedef std::basic_string<char_type> string_type;
    };
-
 
 }} // boost::application   
 

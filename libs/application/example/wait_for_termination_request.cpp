@@ -1,13 +1,9 @@
 // -----------------------------------------------------------------------------
-// simple_application_using_singularity.cpp : examples that show how use 
-// Boost.Application to make a simplest interactive (terminal) application 
-// using Boost.singularity
+// wait_for_termination_request.cpp : examples that show how use 
+// Boost.Application to make a application 
 //
 // Note 1: The Boost.Application (Aspects v4) and this sample are in 
 //         development process.
-//
-// Note 2: The Boost.Singularity is in approval process, 
-//         refer boost.org to know more.
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2013 Renato Tegon Forti
@@ -26,25 +22,16 @@
 
 using namespace boost;
 
-// singularity access 
-
-boost::singularity<application::context> global_context;
-inline application::context& this_application() {
-   return global_context.get_global();
-}
-
-// my functor application
-
 class myapp
 {
 public:
 
-   // singularity, no param
-   int operator()()
+   // param
+   int operator()(application::context& context)
    {
       std::cout << "Test" << std::endl;
       std::shared_ptr<application::args> myargs 
-         = this_application().get_aspect<application::args>();
+         = context.get_aspect<application::args>();
 
       if (myargs)
       {
@@ -56,10 +43,11 @@ public:
             std::cout << *it << std::endl;
          }
       }
+	  
+	   context.use_aspect<application::wait_for_termination_request>().wait();
 
       return 0;
    }
-
 };
 
 // main
@@ -67,15 +55,10 @@ public:
 int main(int argc, char *argv[])
 {   
    myapp app;
- 
-   boost::singularity<application::context>::create_global();
+   application::context app_context;
 
-   this_application().add_aspect<application::args>(
+   app_context.add_aspect<application::args>(
       std::make_shared<application::args>(argc, argv));
 
-   int ret = application::launch<application::server>(app, global_context);
-
-   boost::singularity<application::context>::destroy();
-
-   return ret;
+   return application::launch<application::server>(app, app_context);
 }

@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------------
-// simple_application.cpp : examples that show how use 
+// limit_single_instance_callback.cpp : examples that show how use 
 // Boost.Application to make a simplest interactive (terminal) application 
 //
 // Note 1: The Boost.Application (Aspects v4) and this sample are in 
@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
       = boost::bind<bool>(&myapp::instace_aready_running, &app, _1);
 
    app_context.add_aspect<limit_single_instance>(
-      std::make_shared<limit_single_instance>(appuuid, callback));
+      std::make_shared<limit_single_instance_default_behaviour>(appuuid, callback));
 
    return launch<common>(app, app_context);
 }

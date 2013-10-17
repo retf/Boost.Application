@@ -1,4 +1,4 @@
-// args_aspect.hpp  ----------------------------------------------------------//
+// args.hpp  -----------------------------------------------------------------//
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2013 Renato Tegon Forti
@@ -21,35 +21,63 @@
 
 namespace boost { namespace application {
 
-   // args aspect
-   //
-   // an aspect that will hold args, and provide a easy way to access they
-   // or user can extrat args from it to use with Program_options, getopts or argp ...
-   template <typename value_type>
+   /*!
+    * \brief This aspect class handle application args in more friedly way.
+    *
+    * An aspect that will hold args, and provide a easy way to access they
+    * or user can extrat args from it to use with Program_options,
+    * getopts or argp and so on.
+    * 
+    */
+   template <typename CharType>
    class args_          
    {
    public:
 
       // string types to be used internaly to handle unicode on windows
-      typedef value_type char_type;
+      typedef CharType char_type;
       typedef std::basic_string<char_type> string_type;
 
+      /*!
+       * Constructs an args_.
+       *
+       * \param argc An argc from main.
+       * \param argc An argv from main.
+       */
       args_(int argc, char_type *argv[]) 
       {  
          for(int i=0; i <argc; i++)
             arguments_.push_back(argv[i]);
       }
 
+      /*!
+       * Get a argc as provided by main.
+       * 
+       * \return an argc variable.
+       *      
+       */
       int argc() const
       {
          return arguments_.size();
       }
 
-      char** argv() 
+      /*!
+       * Get a argv as provided by main.
+       * 
+       * \return an argv variable.
+       *      
+       */
+      char_type** argv() 
       {
          return &arguments_[0];
       }
 
+      /*!
+       * Get a vector of args.
+       * 
+       * \return an vector of args.
+       *      
+       */
       std::vector< string_type > arg_vector()
       {
          std::vector< string_type > args;

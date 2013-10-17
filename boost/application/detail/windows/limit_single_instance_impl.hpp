@@ -1,4 +1,4 @@
-//  limit_single_instance.hpp -----------------------------------------------//
+//  limit_single_instance_impl.hpp -------------------------------------------//
 // -----------------------------------------------------------------------------
 
 //  Copyright 2011-2012 Renato Tegon Forti
@@ -28,17 +28,17 @@ namespace boost { namespace application {
 
    // This code is from Q243953 in case you lose the article and wonder
    // where this code came from.
-   template <typename value_type>
+   template <typename CharType>
    class limit_single_instance_impl_ : noncopyable
    {
 
    public: 
 
-      typedef value_type char_type;
+      typedef CharType char_type;
       typedef std::basic_string<char_type> string_type;
    
       limit_single_instance_impl_()
-         : mutex_(NULL) {}
+         : mutex_(0) {}
 
       ~limit_single_instance_impl_() {
          release();
@@ -54,9 +54,9 @@ namespace boost { namespace application {
          string_type normalized_uuid_text = 
             boost::to_upper_copy(boost::lexical_cast<string_type>(instance_id));
 		
-         mutex_ = CreateMutex(NULL, FALSE, normalized_uuid_text.c_str());     
+         mutex_ = CreateMutex(0, FALSE, normalized_uuid_text.c_str());     
          
-         if(mutex_ == NULL)
+         if(mutex_ == 0)
          {
             BOOST_APPLICATION_SET_LAST_SYSTEM_ERROR(ec); return false;
          }
@@ -68,10 +68,10 @@ namespace boost { namespace application {
    
       void release() 
       {
-         if (mutex_ == NULL) 
+         if (mutex_ == 0) 
          {
             CloseHandle(mutex_); 
-            mutex_ = NULL; 
+            mutex_ = 0; 
          }
       }
 
