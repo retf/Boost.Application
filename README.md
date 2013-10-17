@@ -11,12 +11,12 @@ https://sourceforge.net/projects/boostapp/
 
 contact: re.tf@acm.org
 
---------------------------------------------------------------------------------
+
+
 Change Log
 --------------------------------------------------------------------------------
 
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
+
 * 17/10/2013 [dd/mm/yyyy] / Commint : Updates 17102013 
 --------------------------------------------------------------------------------
 
@@ -37,8 +37,18 @@ Updated Files:
 * Some aspects now has an abstract class, that allow user extend these aspects to anyone with different behaviour.
 * Many minor updates and fix in several files.
 
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
+New Examples:
+------------
+
+ * limit_single_instance.cpp
+ * limit_single_instance_boost_interprocess_named_mutex.cpp
+ * my_own_wait_for_termination_request.cpp
+ * path.cpp
+ * simple_application.cpp
+ * simple_application_using_singularity.cpp
+ * wait_for_termination_request.cpp
+ 
+
 * 15/10/2013 [dd/mm/yyyy] / Commint : New commit (Single instance and more)
 --------------------------------------------------------------------------------
 
