@@ -15,11 +15,32 @@ contact: re.tf@acm.org
 Change Log
 --------------------------------------------------------------------------------
 
-* 17/10/2013 [dd/mm/yyyy]
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+* 17/10/2013 [dd/mm/yyyy] / Commint : Updates 17102013 
+--------------------------------------------------------------------------------
 
-TODO : Many updates, I have to update later.
+New Aspects:
+-----------
 
-* 15/10/2013 [dd/mm/yyyy]
+* path
+
+* limit_single_instance_named_mutex_behaviour
+  -> Based on Boost.Interprocess
+
+  -> All aspects now live on "application/aspects" folder
+  
+Updated Files:
+-------------
+
+* All public interfaces now use doxigen comments.
+* Some aspects now has an abstract class, that allow user extend these aspects to anyone with different behaviour.
+* Many minor updates and fix in several files.
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+* 15/10/2013 [dd/mm/yyyy] / Commint : New commit (Single instance and more)
+--------------------------------------------------------------------------------
 
 New Aspects:
 -----------
