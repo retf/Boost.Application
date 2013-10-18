@@ -30,6 +30,7 @@
 #else
 #error "Sorry, no boost application are available for this platform."
 #endif
+#include <boost/application/handler.hpp>
 
 namespace boost { namespace application { 
  
@@ -38,21 +39,17 @@ namespace boost { namespace application {
      *        class implementation of wait_for_termination_request aspect.
      * 
      */
-   class limit_single_instance : noncopyable        
+   class limit_single_instance : public handler        
    {
    public:
 
-      // callback methods   
-      typedef boost::function< bool (context&) > cxparameter_cb; 
-      typedef boost::function< bool (void)     > singularity_cb; 
-
       limit_single_instance() {}
 
-      limit_single_instance(const cxparameter_cb& callback)
-         : callback_cxparameter_(callback) {}
+      limit_single_instance(const parameter_callback& callback)
+         : handler(callback) {}
 
-      limit_single_instance(const singularity_cb& callback)
-         : callback_singularity_(callback)  {}
+      limit_single_instance(const singleton_callback& callback)
+         : handler(callback)  {}
 
       virtual ~limit_single_instance() {}
 
@@ -67,48 +64,6 @@ namespace boost { namespace application {
     
       virtual bool is_another_instance_running() = 0;
       virtual void release(void) = 0; 
-
-      /*!
-       * Get a callback pointer to futher execution.
-       * This method is used internaly by launch.
-       *
-       * \pre user need test it to know if it is valid.
-       *      (get_cxparameter_cb() != 0)
-       * 
-       * \return a callback pointer.
-       *      
-       */
-      virtual cxparameter_cb* get_cxparameter_cb()
-      {
-         if(callback_cxparameter_.empty())
-            return NULL;
-
-         return &callback_cxparameter_;
-      }
-
-      /*!
-       * Get a callback pointer to futher execution.
-       * This method is used internaly by launch.
-       *
-       * \pre user need test it to know if it is valid.
-       *      (get_cxparameter_cb() != 0)
-       * 
-       * \return a callback pointer.
-       *      
-       */
-      virtual singularity_cb* get_singularity_cb()
-      {
-         if(callback_singularity_.empty())
-            return NULL;
-
-         return &callback_singularity_;
-      }
-
-   private:
-
-      cxparameter_cb callback_cxparameter_; 
-      singularity_cb callback_singularity_; 
-
    };
 
    /*!
@@ -155,7 +110,7 @@ namespace boost { namespace application {
        *        execution in case of positive evaluation of single istance.
        */
       limit_single_instance_default_behaviour(const uuids::uuid& app_uuid, 
-         const cxparameter_cb& callback)
+         const parameter_callback& callback)
          : limit_single_instance(callback)
          , impl_(new limit_single_instance_impl()) 
          , uuid_(app_uuid)
@@ -173,7 +128,7 @@ namespace boost { namespace application {
        *        execution in case of positive evaluation of single istance.
        */
       limit_single_instance_default_behaviour(const uuids::uuid& app_uuid, 
-         const singularity_cb& callback)
+         const singleton_callback& callback)
          : limit_single_instance(callback)
          , impl_(new limit_single_instance_impl()) 
          , uuid_(app_uuid)
@@ -281,7 +236,7 @@ namespace boost { namespace application {
        *        execution in case of positive evaluation of single istance.
        */
       limit_single_instance_named_mutex_behaviour(const uuids::uuid& app_uuid, 
-         const cxparameter_cb& callback)
+         const parameter_callback& callback)
          : limit_single_instance(callback)
          , uuid_(app_uuid)
          , owns_lock_(false)
@@ -299,7 +254,7 @@ namespace boost { namespace application {
        *        execution in case of positive evaluation of single istance.
        */
       limit_single_instance_named_mutex_behaviour(const uuids::uuid& app_uuid, 
-         const singularity_cb& callback)
+         const singleton_callback& callback)
          : limit_single_instance(callback)
          , uuid_(app_uuid)
          , owns_lock_(false)

@@ -21,6 +21,7 @@
 #include <boost/application.hpp>
 #include <boost/uuid/string_generator.hpp>
 #include <boost/bind.hpp>
+#include <boost/thread/thread.hpp>
 
 using namespace boost::application;
 
@@ -28,45 +29,64 @@ class myapp
 {
 public:
 
+   ~myapp()
+   {
+      std::cout << "~myapp()" << std::endl;
+   }
+
+   void work_thread()
+   {
+      while(1)
+      {
+         boost::this_thread::sleep(boost::posix_time::seconds(2));
+         std::cout << "running" << std::endl;
+      }
+   }
+
    // param
    int operator()(context& context)
    {
-      
-      if( context.has_aspect<args>())
+      std::cout << "operator()" << std::endl;
+	  
+	  // using [state]
+
+      /*
+      std::shared_ptr<status> state = 
+         context.get_aspect<status>();
+
+      while(state->state() != status::stoped)
       {
-         std::vector<std::string> arg_vector = 
-            context.use_aspect<args>().arg_vector();
-
-         // only print args on screen
-         for(std::vector<std::string>::iterator it = arg_vector.begin(); 
-            it != arg_vector.end(); ++it) {
-            std::cout << *it << std::endl;
-         }
+         boost::this_thread::sleep(boost::posix_time::seconds(2));
+         std::cout << "running" << std::endl;
       }
+      */
 
+      // or using [wait_for_termination_request]
+
+      // launch a work thread
+      boost::thread thread(boost::bind(&myapp::work_thread, this));
+	  
       context.use_aspect<wait_for_termination_request>().wait();
 
       return 0;
    }
 
-   bool instace_aready_running(context &context)
+   bool stop(context &context)
    {
       char type;
       do
       {
-         std::cout << "An instance of this application is already running on "
-            "this operating system!" << std::endl;
-         std::cout << "Do you want to start another? [y/n]" << std::endl;
+         std::cout << "Do you want to exit? [y/n]" << std::endl;
          std::cin >> type;
       }
       while( !std::cin.fail() && type!='y' && type!='n' );
 
       if(type == 'y')
           // tell to app to continue.
-         return true;
+         return false;
 
       // tell to app to exit.
-      return false;
+      return true;
    }
 
 };
@@ -78,14 +98,11 @@ int main(int argc, char *argv[])
    myapp app;
    context app_context;
 
-   boost::uuids::string_generator gen;
-   boost::uuids::uuid appuuid = gen("{9F66E4AD-ECA5-475D-8784-4BAA329EF9F2}");
-
    handler::parameter_callback callback 
-      = boost::bind<bool>(&myapp::instace_aready_running, &app, _1);
+      = boost::bind<bool>(&myapp::stop, &app, _1);
 
-   app_context.add_aspect<limit_single_instance>(
-      std::make_shared<limit_single_instance_default_behaviour>(appuuid, callback));
+   app_context.add_aspect<termination_handler>(
+      std::make_shared<termination_handler_default_behaviour>(callback));
 
    return launch<common>(app, app_context);
 }

@@ -41,12 +41,11 @@ namespace boost { namespace application { namespace detail {
 
          // check if we have any callback to call
 
-         limit_single_instance::cxparameter_cb* cxparameter =
-            ol->get_cxparameter_cb();
+         handler::parameter_callback* parameter;
 
-         if(cxparameter)
+         if(ol->callback(parameter))
          {
-            if((*cxparameter)(cxt))
+            if((*parameter)(cxt))
             {
                // user tell us to continue
                return false;
@@ -55,12 +54,11 @@ namespace boost { namespace application { namespace detail {
             return true;
          }
 
-         limit_single_instance::singularity_cb* singularity =
-            ol->get_singularity_cb();
+         handler::singleton_callback* singleton = 0;
 
-         if(singularity)
+         if(ol->callback(singleton))
          {
-            if((*singularity)())
+            if((*singleton)())
             {
                // user tell us to continue
                return false;
@@ -68,6 +66,7 @@ namespace boost { namespace application { namespace detail {
 
             return true;
          }
+
       }
 
       // continue / no restriction

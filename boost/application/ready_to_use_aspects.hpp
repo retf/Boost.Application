@@ -21,5 +21,6 @@
 #include <boost/application/aspects/limit_single_instance.hpp>
 #include <boost/application/aspects/wait_for_termination_request.hpp>
 #include <boost/application/aspects/path.hpp>
+#include <boost/application/aspects/termination_handler.hpp>
 
 #endif // BOOST_APPLICATION_READY_TO_USE_ASPECTS_HPP

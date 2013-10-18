@@ -77,6 +77,10 @@ namespace boost { namespace application {
          return state == application_state_;
       }
 
+      bool operator!=(application_state state) const {
+         return state != application_state_;
+      }
+
    private:
 
       application_state application_state_;
