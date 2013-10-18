@@ -17,6 +17,27 @@ Change Log
 --------------------------------------------------------------------------------
 
 
+* 18/10/2013 [dd/mm/yyyy] / Commint : Updates 17102013 
+--------------------------------------------------------------------------------
+
+
+In this commit we have first prototype version of an fully implemented of common 
+application (Windows Only), with all possible handlers 
+(stop/termination_handler, single instance, wait for termination request)
+
+This has same functionality of old version, but now using aspects.
+
+The changes are on:
+
+* common_application.hpp
+* handler.hpp
+* termination_handler.hpp
+
+The sample program is:
+
+* termination_handler.cpp
+
+
 * 17/10/2013 [dd/mm/yyyy] / Commint : Updates 17102013 
 --------------------------------------------------------------------------------
 
