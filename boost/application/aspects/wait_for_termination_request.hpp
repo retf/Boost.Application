@@ -82,7 +82,8 @@ namespace boost { namespace application {
       }
 
    private:
-      unique_ptr<wait_for_termination_request_impl> impl_;
+      BOOST_APPLICATION_FEATURE_NS_SELECT::
+         unique_ptr<wait_for_termination_request_impl> impl_;
 
    };
       

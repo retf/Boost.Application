@@ -1,4 +1,4 @@
-// wait_for_termination_request.hpp  -----------------------------------------//
+// path.hpp  ---------------------------------------------------------------//
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2013 Renato Tegon Forti
@@ -196,7 +196,9 @@ namespace boost { namespace application {
       }
 
    private:
-      unique_ptr<path_impl> impl_;
+     BOOST_APPLICATION_FEATURE_NS_SELECT::
+        unique_ptr<path_impl> impl_;
+
       boost::system::error_code ec_;
 
    };

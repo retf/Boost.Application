@@ -33,8 +33,6 @@
 
 namespace boost { namespace application { 
  
-   BOOST_APPLICATION_FEATURE_SELECT
-
     /*!
      * \brief A contract class to be used by the user on your own 
      *        class implementation of wait_for_termination_request aspect.
@@ -239,7 +237,9 @@ namespace boost { namespace application {
 
    private:
 
-      unique_ptr<limit_single_instance_impl> impl_;
+      BOOST_APPLICATION_FEATURE_NS_SELECT::
+         unique_ptr<limit_single_instance_impl> impl_;
+
       uuids::uuid uuid_;
    };
 
@@ -393,7 +393,9 @@ namespace boost { namespace application {
    private:
       bool owns_lock_;
       uuids::uuid uuid_;
-      unique_ptr<interprocess::named_mutex> named_mutex_;
+
+      BOOST_APPLICATION_FEATURE_NS_SELECT::
+         unique_ptr<interprocess::named_mutex> named_mutex_;
    };
 
 #endif

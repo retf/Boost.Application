@@ -77,37 +77,35 @@ namespace boost { namespace application {
       void load(const library_type<T> &sl, 
                 boost::system::error_code &ec)
       {
+         boost::lock_guard<boost::mutex> lock(mutex_);
+
          if (handle_) 
-            unload();
+            unload(lock);
 
          path_ = sl.get().c_str();
 
-         load(RTLD_LAZY | RTLD_GLOBAL, ec);// usual mode, generic
+         load(RTLD_LAZY | RTLD_GLOBAL, ec, lock);// usual mode, generic
       }
 
       template <typename T>
       void load(const library_type<T> &sl, shared_library_load_mode mode, 
                 boost::system::error_code &ec)
       {
+         boost::lock_guard<boost::mutex> lock(mutex_);
+
          path_ = sl.get().c_str();
-         load(static_cast<unsigned long>(mode), ec);
+         load(static_cast<unsigned long>(mode), ec, lock);
       }
 
       void unload()
       {
          boost::lock_guard<boost::mutex> lock(mutex_);
-
-         if (handle_)
-         {
-            dlclose(handle_);
-            handle_ = 0;
-         }
-
-         path_.clear();
+         unload(lock);
       }
 
-      bool is_loaded() const
+      bool is_loaded() 
       {
+         boost::lock_guard<boost::mutex> lock(mutex_);
          return (handle_ != 0); 
       }
 
@@ -127,8 +125,9 @@ namespace boost { namespace application {
          return symbol_addr(sb, ec);
       }
 
-      const boost::filesystem::path& get_path() const
+      const boost::filesystem::path get_path()
       {
+         boost::lock_guard<boost::mutex> lock(mutex_);
          return path_;
       }
 
@@ -158,7 +157,7 @@ namespace boost { namespace application {
          }
 
          if(symbol == NULL)
-            BOOST_APPLICATION_SET_LAST_SYSTEM_ERROR(ec);
+            ec = boost::application::last_error_code();
 
          // If handle does not refer to a valid object opened by dlopen(), 
          // or if the named symbol cannot be found within any of the objects 
@@ -168,15 +167,15 @@ namespace boost { namespace application {
          return symbol;
       }
 	  
-      bool load(unsigned long mode, boost::system::error_code &ec)
+      bool load(unsigned long mode, boost::system::error_code &ec, boost::lock_guard<boost::mutex> &lock)
       {
-         boost::lock_guard<boost::mutex> lock(mutex_);
+         //boost::lock_guard<boost::mutex> lock(mutex_);
 
          handle_ = dlopen(path_.string().c_str(), static_cast<int>(mode));
 
          if (!handle_) 
          {
-            BOOST_APPLICATION_SET_LAST_SYSTEM_ERROR(ec);
+            ec = boost::application::last_error_code();
             return false;
          }
 

@@ -58,7 +58,7 @@ namespace boost { namespace application {
          
          if(mutex_ == 0)
          {
-            BOOST_APPLICATION_SET_LAST_SYSTEM_ERROR(ec); return false;
+           ec = boost::application::last_error_code(); return false;
          }
          else
             last_error_ = GetLastError(); //save for use later...

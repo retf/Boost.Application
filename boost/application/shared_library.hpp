@@ -16,7 +16,7 @@
 #ifndef BOOST_APPLICATION_SHARED_LIBRARY_HPP
 #define BOOST_APPLICATION_SHARED_LIBRARY_HPP
 
-#include <boost/application/config.hpp>
+#include <boost/application/config.hpp>            
 #include <boost/application/shared_library_load_mode.hpp>
 #if defined( BOOST_WINDOWS_API )
 #include <boost/application/detail/windows/shared_library_impl.hpp>

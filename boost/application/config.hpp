@@ -11,18 +11,23 @@
 // -----------------------------------------------------------------------------
 
 // Revision History
-// 01-04-2012 dd-mm-yyyy - Initial Release
-// 10-07-2013 dd-mm-yyyy - Refatored
+// 18-10-2013 dd-mm-yyyy - Initial Release
 
 // -----------------------------------------------------------------------------
+
+/*!
+ * Configuration file used by Boost.Application. 
+ *  
+ * Unicode setup for Windows, System Error Handle 
+ * and C++11/Boost feature Select area handled here. 
+ *  
+ */
 
 #ifndef BOOST_APPLICATION_CONFIG_HPP                  
 #define BOOST_APPLICATION_CONFIG_HPP
 
 #include <boost/config.hpp> 
-#include <boost/system/config.hpp>
-#include <boost/system/error_code.hpp>
-#include <boost/system/system_error.hpp>
+#include <boost/application/system_error.hpp>
 #include <boost/application/version.hpp>
 
 #ifndef BOOST_NO_CXX11_SMART_PTR
@@ -35,12 +40,7 @@
 #include <boost/typeindex/typeindex.hpp>
 #endif
 
-#if defined(BOOST_POSIX_API)
-#   include <errno.h>
-#   define BOOST_APPLICATION_LAST_ERROR errno
-#elif defined(BOOST_WINDOWS_API)
-#   include <Windows.h>
-#   define BOOST_APPLICATION_LAST_ERROR GetLastError()
+#if defined(BOOST_WINDOWS_API)
 #   if defined(_UNICODE) || defined(UNICODE)
 #   define BOOST_APPLICATION_STD_WSTRING
 #   endif
@@ -48,19 +48,20 @@
 
 // check if compiler provide some STL features of c++11 
 // that we use by the library, else use boost.
+
+// BOOST_APPLICATION_FEATURE_NS_SELECT is used to select correct ns 
+// on class members.
 #ifndef BOOST_NO_CXX11_SMART_PTR 
-#define BOOST_APPLICATION_FEATURE_SELECT \
-   using std::make_shared;               \
-   using std::unique_ptr;                \
-   using std::shared_ptr; 
+#define BOOST_APPLICATION_FEATURE_NS_SELECT std
 #else
-#define BOOST_APPLICATION_FEATURE_SELECT \
-   using boost::make_shared;             \
-   using boost::shared_ptr;              \
-   using boost::unique_ptr; 
+#define BOOST_APPLICATION_FEATURE_NS_SELECT boost
 #endif
-
-
+// BOOST_APPLICATION_FEATURE_SELECT is used to select correct ns 
+// on functin/method scope.
+#define BOOST_APPLICATION_FEATURE_SELECT                     \
+   using BOOST_APPLICATION_FEATURE_NS_SELECT::make_shared;   \
+   using BOOST_APPLICATION_FEATURE_NS_SELECT::shared_ptr;    \
+   using BOOST_APPLICATION_FEATURE_NS_SELECT::unique_ptr; 
 
 // error handle for Boost.Application lib, based on Boost.System.
 // user can set this macro for example to BOOST_THROW_EXCEPTION 
@@ -70,26 +71,25 @@
 
 // error ctrl
 
+// report location of error.
 #define BOOST_APPLICATION_SOURCE_LOCATION \
    "in file '" __FILE__ "', line " BOOST_STRINGIZE(__LINE__) ": "
 
+// define BOOST_APPLICATION_TROWN_MY_OWN_EXCEPTION if you want
+// THROW your own EXCEPTION
 #if defined(BOOST_APPLICATION_TROWN_MY_OWN_EXCEPTION)
 #define BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR(what) \
    BOOST_APPLICATION_TROWN_MY_OWN_EXCEPTION( \
       what " : " + boost::system::error_code( \
-         BOOST_APPLICATION_LAST_ERROR,  \
+         last_error(),  \
             boost::system::system_category()).message(),  \
-               BOOST_APPLICATION_LAST_ERROR)
+               last_error())
 #else
 #define BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR(what) \
    BOOST_APPLICATION_THROW(boost::system::system_error( \
-      boost::system::error_code(BOOST_APPLICATION_LAST_ERROR, \
+      boost::system::error_code(last_error(), \
          boost::system::system_category()), \
             BOOST_APPLICATION_SOURCE_LOCATION what))
 #endif
-
-#define BOOST_APPLICATION_SET_LAST_SYSTEM_ERROR(ec) \
-   ec = boost::system::error_code(BOOST_APPLICATION_LAST_ERROR, \
-      boost::system::system_category())
 
 #endif // BOOST_APPLICATION_CONFIG_HPP

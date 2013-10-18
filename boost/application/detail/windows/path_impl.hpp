@@ -1,4 +1,4 @@
-//  path_impl.hpp ------------------------------------------------------------//
+//  path_impl.hpp -----------------------------------------------------------//
 // -----------------------------------------------------------------------------
 
 //  Copyright 2011-2013 Renato Tegon Forti
@@ -47,7 +47,7 @@ namespace boost { namespace application {
          }
          else
          {
-            BOOST_APPLICATION_SET_LAST_SYSTEM_ERROR(ec);
+            ec = boost::application::last_error_code();
          }     
       }
    };

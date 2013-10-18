@@ -63,8 +63,10 @@ namespace boost { namespace application {
       void load(const library_type<T> &sh, 
                 boost::system::error_code &ec)
       {
+         boost::lock_guard<boost::mutex> lock(mutex_);
+
          if (handle_) 
-            unload();
+            unload(lock);
          
          DWORD flags(0);
          path_ = sh.get().c_str();
@@ -72,33 +74,29 @@ namespace boost { namespace application {
          if (path_.is_absolute()) 
             flags |= LOAD_WITH_ALTERED_SEARCH_PATH; // usual mode, generic (plugin mode)
 
-         load(static_cast<unsigned long>(flags), ec);
+         load(static_cast<unsigned long>(flags), ec, lock);
       }
 
       template <typename T>
       void load(const library_type<T> &sh, shared_library_load_mode mode, 
                 boost::system::error_code &ec)
       {
+         boost::lock_guard<boost::mutex> lock(mutex_);
+
          path_ = sh.get().c_str();
 
-         load(static_cast<unsigned long>(mode), ec);
+         load(static_cast<unsigned long>(mode), ec, lock);
       }
 
       void unload()
       {
          boost::lock_guard<boost::mutex> lock(mutex_);
-
-         if (handle_)
-         {
-            FreeLibrary((HMODULE) handle_);
-            handle_ = NULL;
-         }
-
-         path_.clear();
+         unload(lock);
       }
 
-      bool is_loaded() const
+      bool is_loaded() 
       {
+         boost::lock_guard<boost::mutex> lock(mutex_);
          return (handle_ != 0); 
       }
 
@@ -120,8 +118,9 @@ namespace boost { namespace application {
          return symbol_addr(sb, ec);
       }
 
-      const boost::filesystem::path& get_path() const
+      const boost::filesystem::path get_path() 
       {
+         boost::lock_guard<boost::mutex> lock(mutex_);
          return path_;
       }
 
@@ -150,15 +149,13 @@ namespace boost { namespace application {
          if (handle_)
             return (void*) GetProcAddress((HMODULE) handle_, as_std_string.c_str());
          else 
-            BOOST_APPLICATION_SET_LAST_SYSTEM_ERROR(ec);
+            ec = boost::application::last_error_code();
 
          return NULL;
       }
 	  
-      bool load(unsigned long mode, boost::system::error_code &ec)
+      bool load(unsigned long mode, boost::system::error_code &ec, boost::lock_guard<boost::mutex> &lock)
       {
-         boost::lock_guard<boost::mutex> lock(mutex_);
-
          DWORD flags = static_cast<DWORD>(mode);
 
 #if defined(BOOST_APPLICATION_STD_WSTRING)
@@ -171,11 +168,22 @@ namespace boost { namespace application {
 
          if (!handle_) 
          {
-            BOOST_APPLICATION_SET_LAST_SYSTEM_ERROR(ec);
+            ec = boost::application::last_error_code();
             return false;
          }
 
          return true;
+      }
+
+      void unload(boost::lock_guard<boost::mutex> &lock)
+      {
+         if (handle_)
+         {
+            FreeLibrary((HMODULE) handle_);
+            handle_ = NULL;
+         }
+
+         path_.clear();
       }
 
    private:
