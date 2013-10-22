@@ -48,21 +48,6 @@ public:
    {
       std::cout << "operator()" << std::endl;
 	  
-	  // using [state]
-
-      /*
-      std::shared_ptr<status> state = 
-         context.get_aspect<status>();
-
-      while(state->state() != status::stoped)
-      {
-         boost::this_thread::sleep(boost::posix_time::seconds(2));
-         std::cout << "running" << std::endl;
-      }
-      */
-
-      // or using [wait_for_termination_request]
-
       // launch a work thread
       boost::thread thread(boost::bind(&myapp::work_thread, this));
 	  
@@ -71,21 +56,36 @@ public:
       return 0;
    }
 
+};
+
+// my common class
+
+class mycommon : public common
+{
+public:
+
+   template <typename Application>
+   mycommon(Application& app, context &context, boost::system::error_code& ec)
+      : common(app, context, ec)
+   {
+      handler::parameter_callback callback 
+               = boost::bind<bool>(&mycommon::stop, this, _1);
+
+      // define my own signal / handler
+
+      tie_signal(SIGINT,  callback);
+      tie_signal(SIGTERM, callback);
+   }
+
    bool stop(context &context)
    {
-      char type;
-      do
-      {
-         std::cout << "Do you want to exit? [y/n]" << std::endl;
-         std::cin >> type;
-      }
-      while( !std::cin.fail() && type!='y' && type!='n' );
+      std::cout << "exiting..." << std::endl;
 
-      if(type == 'y')
-          // tell to app to continue.
-         return true;
+      std::shared_ptr<wait_for_termination_request> th 
+         = context.get_aspect<wait_for_termination_request>();
 
-      // tell to app to exit.
+      th->proceed();
+
       return false;
    }
 
@@ -98,11 +98,6 @@ int main(int argc, char *argv[])
    myapp app;
    context app_context;
 
-   handler::parameter_callback callback 
-      = boost::bind<bool>(&myapp::stop, &app, _1);
-
-   app_context.add_aspect<termination_handler>(
-      std::make_shared<termination_handler_default_behaviour>(callback));
-
-   return launch<common>(app, app_context);
+   return launch<mycommon>(app, app_context);
 }
+

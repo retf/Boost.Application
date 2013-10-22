@@ -21,6 +21,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "path", "path.vcxproj", "{EB
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "termination_handler", "termination_handler.vcxproj", "{210BF4EB-7F98-4D60-5B45-95940B51F5F5}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "my_own_termination_handler", "my_own_termination_handler.vcxproj", "{210BF4EB-7F98-4D60-5B45-95040B51F5F1}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "simple_server_application", "simple_server_application.vcxproj", "{710BF4EB-7F98-4D60-1B42-95940B51F5F7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -67,6 +71,14 @@ Global
 		{210BF4EB-7F98-4D60-5B45-95940B51F5F5}.Debug|Win32.Build.0 = Debug|Win32
 		{210BF4EB-7F98-4D60-5B45-95940B51F5F5}.Release|Win32.ActiveCfg = Release|Win32
 		{210BF4EB-7F98-4D60-5B45-95940B51F5F5}.Release|Win32.Build.0 = Release|Win32
+		{210BF4EB-7F98-4D60-5B45-95040B51F5F1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{210BF4EB-7F98-4D60-5B45-95040B51F5F1}.Debug|Win32.Build.0 = Debug|Win32
+		{210BF4EB-7F98-4D60-5B45-95040B51F5F1}.Release|Win32.ActiveCfg = Release|Win32
+		{210BF4EB-7F98-4D60-5B45-95040B51F5F1}.Release|Win32.Build.0 = Release|Win32
+		{710BF4EB-7F98-4D60-1B42-95940B51F5F7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{710BF4EB-7F98-4D60-1B42-95940B51F5F7}.Debug|Win32.Build.0 = Debug|Win32
+		{710BF4EB-7F98-4D60-1B42-95940B51F5F7}.Release|Win32.ActiveCfg = Release|Win32
+		{710BF4EB-7F98-4D60-1B42-95940B51F5F7}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

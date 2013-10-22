@@ -19,10 +19,16 @@
 // application
 #include <boost/application/config.hpp>
 #include <boost/application/context.hpp>
-// aspects
-#include <boost/application/ready_to_use_aspects.hpp>
-#include <boost/application/aspects/status.hpp>
-#include <boost/application/aspects/run_mode.hpp>
+#include <boost/application/app.hpp>
+// platform dependent
+#if defined( BOOST_WINDOWS_API )
+#include <boost/application/detail/windows/server_application_impl.hpp>
+#include <boost/application/detail/windows/service_setup.hpp>
+#elif defined( BOOST_POSIX_API )
+#include <boost/application/detail/posix/server_application_impl.hpp>
+#else
+#error "Sorry, no boost application are available for this platform."
+#endif
 
 namespace boost { namespace application {
 
@@ -39,7 +45,7 @@ namespace boost { namespace application {
     * template param on launch free function. 
     * 
     */
-   class server
+   class server : public app
    {
    public:
 
@@ -55,22 +61,50 @@ namespace boost { namespace application {
        * Check ec for errors.
        * 
        */
-      server(application::context &context, boost::system::error_code& ec)
+      template <typename Application>
+      server(Application& myapp, application::context &context, 
+         boost::system::error_code& ec)
+         : app(context, ec)
       {
          BOOST_APPLICATION_FEATURE_SELECT
 
+         if(ec) return;
+
          // default aspects patterns added to this kind of application
 
-         context.add_aspect_if_not_exists<run_mode>(
+         context_.add_aspect_if_not_exists<run_mode>(
             make_shared<run_mode>(run_mode::server));
 
-         context.add_aspect_if_not_exists<status>(
-            make_shared<status>(status::running));
+         // run user code
 
-         context.add_aspect_if_not_exists<wait_for_termination_request>(
-            shared_ptr<wait_for_termination_request>(
-               new wait_for_termination_request_default_behaviour));
+         impl_.reset(new server_application_impl(
+            boost::bind<int>( &Application::operator(), &myapp, _1), context, ec)); 
       }
+
+      template <typename Application>
+      server(Application& myapp, singularity<application::context> &context, 
+         boost::system::error_code& ec)
+         : app(context.get_global(), ec), 
+      {
+         BOOST_APPLICATION_FEATURE_SELECT
+
+         if(ec) return;     
+         
+         // default aspects patterns added to this kind of application
+
+         context_.add_aspect_if_not_exists<run_mode>(
+            make_shared<run_mode>(run_mode::server));
+         
+         // run user code
+
+         impl_.reset(new server_application_impl(
+            boost::bind<int>( &Application::operator(), &myapp), context, ec));
+      }
+
+   private:
+
+      BOOST_APPLICATION_FEATURE_NS_SELECT::
+         unique_ptr<server_application_impl> impl_;
 
    };
 

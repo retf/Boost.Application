@@ -43,7 +43,7 @@ namespace boost { namespace application {
      * if your return false the application mechanism will exit.
      *
      */
-   class handler : noncopyable
+   class handler
    {
    public:
 
@@ -171,6 +171,17 @@ namespace boost { namespace application {
             return false;
 
           return true;
+      }
+
+      /*!
+       * Retrieves handler.
+       * 
+       * \return the hanlder istance.
+       *      
+       */
+      handler &get_handler()
+      {
+         return *this;
       }
 
    private:

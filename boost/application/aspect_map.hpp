@@ -17,6 +17,13 @@
  *
  */
 
+
+// Revision History
+// 22-10-2013 dd-mm-yyyy - Renato Forti - Add replace aspect method
+// 
+// -----------------------------------------------------------------------------
+
+
 #ifndef BOOST_ASPECT_MAP_HPP
 #define BOOST_ASPECT_MAP_HPP
 
@@ -92,6 +99,15 @@ namespace boost
         return *std::static_pointer_cast<T>(it->second);
 
       }
+
+      template <class T>
+      void replace_aspect(std::shared_ptr<T> asp)
+      {
+        key_type ti = typeid(T);
+        if(aspects_.erase(ti))
+          aspects_.insert(make_pair(ti, asp));
+      }
+
     };
   }
 }

@@ -58,5 +58,5 @@ int main(int argc, char *argv[])
    app_context.add_aspect<application::args>(
       std::make_shared<application::args>(argc, argv));
 
-   return application::launch<application::server>(app, app_context);
+   return application::launch<application::common>(app, app_context);
 }

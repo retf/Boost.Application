@@ -62,5 +62,5 @@ int main(int argc, char *argv[])
       std::make_shared<application::limit_single_instance_default_behaviour>(
          gen("{9F66E4AD-ECA5-475D-8784-4BAA329EF9F2}")));
 
-   return application::launch<application::server>(app, app_context);
+   return application::launch<application::common>(app, app_context);
 }

@@ -16,6 +16,9 @@
 #ifndef BOOST_APPLICATION_WAIT_FOR_TERMINATION_REQUEST_IMPL_HPP
 #define BOOST_APPLICATION_WAIT_FOR_TERMINATION_REQUEST_IMPL_HPP
 
+#include  <stdio.h>
+#include  <signal.h>
+
 namespace boost { namespace application {
 
    class wait_for_termination_request_impl : noncopyable    
@@ -30,9 +33,10 @@ namespace boost { namespace application {
 
          sigemptyset(&sset);
 
-         sigaddset(&sset, SIGINT);
-         sigaddset(&sset, SIGQUIT);
-         sigaddset(&sset, SIGTERM);
+         //sigaddset(&sset, SIGINT);
+         //sigaddset(&sset, SIGQUIT);
+         //sigaddset(&sset, SIGTERM);
+         sigaddset(&sset, SIGUSR1); 
 
          sigprocmask(SIG_BLOCK, &sset, NULL);
 
@@ -41,6 +45,7 @@ namespace boost { namespace application {
       }
 
       void proceed() {
+         raise(SIGUSR1); 
       }
 
    private:

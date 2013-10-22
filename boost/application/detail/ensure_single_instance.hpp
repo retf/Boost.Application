@@ -41,7 +41,7 @@ namespace boost { namespace application { namespace detail {
 
          // check if we have any callback to call
 
-         handler::parameter_callback* parameter;
+         handler::parameter_callback* parameter = 0;
 
          if(ol->callback(parameter))
          {

@@ -21,7 +21,7 @@
 // modes
 #include <boost/application/common_application.hpp>
 #include <boost/application/server_application.hpp>
-// aspects
+// aspects used by launch
 #include <boost/application/aspects/limit_single_instance.hpp>
 #include <boost/application/detail/ensure_single_instance.hpp>
 
@@ -84,8 +84,13 @@ namespace boost { namespace application {
       if(we_need_exit) return 0; 
 
       // all ok, istantiate application mode and start user code.
-      ApplicationMode run_as(context, ec);
-      return app(context);
+
+      // tie ApplicationMode and User code, and then start it, after that, 
+      // get result code.
+
+      // we need that Application Mode start function, because in server 
+      // implementation, we need start it on a new thread.
+      return ApplicationMode(app, context, ec).result();
    }
    
    // singularity version, the ec ( boost::system::error_code& ec) will be  
@@ -121,8 +126,14 @@ namespace boost { namespace application {
       if(ec) return 0; 
       if(we_need_exit) return 0; 
 
-      ApplicationMode run_as(context.get_global(), ec);
-      return app();
+      // all ok, istantiate application mode and start user code.
+
+      // tie ApplicationMode and User code, and then start it, after that, 
+      // get result code.
+
+      // we need that Application Mode start function, because in server 
+      // implementation, we need start it on a new thread.
+      return ApplicationMode(app, context, ec).result();
    }
 
    // throws an exception of type boost::system::system_error launch versions

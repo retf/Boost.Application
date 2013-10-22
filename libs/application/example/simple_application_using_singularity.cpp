@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
    this_application().add_aspect<application::args>(
       std::make_shared<application::args>(argc, argv));
 
-   int ret = application::launch<application::server>(app, global_context);
+   int ret = application::launch<application::common>(app, global_context);
 
    boost::singularity<application::context>::destroy();
 

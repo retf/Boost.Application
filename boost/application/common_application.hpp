@@ -18,11 +18,7 @@
 
 #include <boost/application/config.hpp>
 #include <boost/application/context.hpp>
-// internal aspects
-#include <boost/application/aspects/status.hpp>
-#include <boost/application/aspects/run_mode.hpp>
-// public aspects
-#include <boost/application/ready_to_use_aspects.hpp>
+#include <boost/application/app.hpp>
 
 namespace boost { namespace application {
 
@@ -39,9 +35,9 @@ namespace boost { namespace application {
     * template param on launch free function. 
     * 
     */
-  
-   class common
+   class common : public app
    {
+
    public:
 
       /*!
@@ -56,114 +52,49 @@ namespace boost { namespace application {
        * Check ec for errors.
        * 
        */
-      common(application::context &context, boost::system::error_code& ec)
-         : context_ (context)
-         , thread_(0)
+
+      template <typename Application>
+      common(Application& myapp, application::context &context, boost::system::error_code& ec)
+         : app(context, ec)
       {
          BOOST_APPLICATION_FEATURE_SELECT
 
+         if(ec) return;
+
          // default aspects patterns added to this kind of application
 
-         context.add_aspect_if_not_exists<run_mode>(
+         context_.add_aspect_if_not_exists<run_mode>(
             make_shared<run_mode>(run_mode::common));
 
-         context.add_aspect_if_not_exists<status>(
-            make_shared<status>(status::running));
+         // run user code
+         result_ = myapp(context);
+      }
 
-         context.add_aspect_if_not_exists<wait_for_termination_request>(
-            shared_ptr<wait_for_termination_request>(
-               new wait_for_termination_request_default_behaviour));
+      template <typename Application>
+      common(Application& myapp, singularity<application::context> &context, boost::system::error_code& ec)
+         : app(context.get_global(), ec)
+      {
+         BOOST_APPLICATION_FEATURE_SELECT
 
-         // launch a signal engine on new thread
-         thread_ = new boost::thread(
-            boost::bind(&common::termination_handler_signal_setup, this));
+         if(ec) return;
+
+         // default aspects patterns added to this kind of application
+
+         context_.add_aspect_if_not_exists<run_mode>(
+            make_shared<run_mode>(run_mode::common));
+
+         // run user code
+         result_ = myapp();
       }
 
       /*!
        * Destruct an common application.
        *
        */
-      virtual ~common() {
-         if(thread_) delete thread_;
-      }
-
-   protected:
-
-      // user can override this, and configure your own signal handler
-      virtual void termination_handler_signal_setup()
+      virtual ~common() 
       {
-         BOOST_APPLICATION_FEATURE_SELECT
-
-         if(context_.has_aspect<termination_handler>())
-         {
-            asio::signal_set signals(io_service_, SIGINT, SIGTERM, SIGABRT);
-
-            signals.async_wait(
-               boost::bind(&common::termination_signal_handler, this, 
-                  boost::asio::placeholders::error, 
-                  boost::asio::placeholders::signal_number));
-
-             io_service_.run();
-         }
       }
 
-      virtual void termination_signal_handler(
-         const boost::system::error_code& ec, int signal_number)
-      {
-         BOOST_APPLICATION_FEATURE_SELECT
-
-          std::cout <<  ec.message();
-
-         if (!ec)
-         {
-            if((signal_number == SIGINT)  ||
-               (signal_number == SIGTERM) ||
-               (signal_number == SIGABRT))
-            {
-               shared_ptr<termination_handler> th =
-                  context_.get_aspect<termination_handler>();
-
-               handler::parameter_callback* parameter = 0;
-
-               if(th->callback(parameter))
-               {
-                  if((*parameter)(context_))
-                  {
-                     // we need continue
-                     return;
-                  }
-
-                  // we need set application_state to stop
-                  // and exit, signalize wait_for_termination_request
-                  context_.use_aspect<status>().state(status::stoped);
-                  context_.use_aspect<wait_for_termination_request>().proceed();
-               }
-
-               handler::singleton_callback* singleton = 0;
-
-               if(th->callback(singleton))
-               {
-                  if((*singleton)())
-                  {
-                     // we need continue
-                     return;
-                  }
-
-                  // we need set application_state to stop
-                  // and exit, signalize wait_for_termination_request
-                  context_.use_aspect<status>().state(status::stoped);
-                  context_.use_aspect<wait_for_termination_request>().proceed();
-               }
-            }
-         }
-      }
-
-   private:
-
-      application::context &context_;
-
-      boost::thread *thread_; 
-      asio::io_service io_service_;
    };
 
 }} // boost::application 
