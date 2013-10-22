@@ -17,6 +17,31 @@ Change Log
 --------------------------------------------------------------------------------
 
 
+* 22/10/2013 [dd/mm/yyyy] / Commint : Updates 22102013 
+--------------------------------------------------------------------------------
+
+In this commit we have first prototype version of an fully implemented
+server application (Windows Only), with all possible handlers
+(stop/termination_handler, pause, resume, wait for termination request)
+
+This has same functionality of old version (beta 3), but now using
+aspects.
+
+The main changes are on:
+
+app.hpp
+sever_application.hpp
+
+example: simple_server_application.cpp
+
+Now we also have a way to customize the signals/handlers on common app,
+refer to:
+
+my_own_termination_handler.cpp
+
+Many other modifications and fix were made.
+
+
 * 18/10/2013 [dd/mm/yyyy] / Commint : Updates 17102013 
 --------------------------------------------------------------------------------
 
