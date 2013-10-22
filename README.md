@@ -29,15 +29,17 @@ aspects.
 
 The main changes are on:
 
-app.hpp
-sever_application.hpp
+* app.hpp
+* sever_application.hpp
 
-example: simple_server_application.cpp
+example: 
+
+* simple_server_application.cpp
 
 Now we also have a way to customize the signals/handlers on common app,
-refer to:
+refer to example:
 
-my_own_termination_handler.cpp
+* my_own_termination_handler.cpp
 
 Many other modifications and fix were made.
 
