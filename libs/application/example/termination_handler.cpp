@@ -95,6 +95,8 @@ public:
 
 int main(int argc, char *argv[])
 {   
+   BOOST_APPLICATION_FEATURE_SELECT
+
    myapp app;
    context app_context;
 
@@ -102,7 +104,7 @@ int main(int argc, char *argv[])
       = boost::bind<bool>(&myapp::stop, &app, _1);
 
    app_context.add_aspect<termination_handler>(
-      std::make_shared<termination_handler_default_behaviour>(callback));
+      make_shared<termination_handler_default_behaviour>(callback));
 
    return launch<common>(app, app_context);
 }

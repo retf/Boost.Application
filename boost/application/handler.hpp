@@ -17,6 +17,9 @@
 #define BOOST_APPLICATION_HANDLER_HPP
 
 #include <boost/application/config.hpp>
+#include <boost/application/context.hpp>
+
+#include <boost/function.hpp>
 
 namespace boost { namespace application {
 
@@ -188,6 +191,7 @@ namespace boost { namespace application {
 
       parameter_callback parameter_callback_; 
       singleton_callback singleton_callback_; 
+
    };
     
 }} // boost::application

@@ -18,7 +18,15 @@
 
 #include <boost/application/config.hpp>
 #include <boost/application/context.hpp>
-#include <boost/application/app.hpp>
+#include <boost/application/detail/app.hpp>
+// platform dependent
+#if defined( BOOST_WINDOWS_API )
+#include <boost/application/detail/windows/common_application_impl.hpp>
+#elif defined( BOOST_POSIX_API )
+#include <boost/application/detail/posix/common_application_impl.hpp>
+#else
+#error "Sorry, no boost application are available for this platform."
+#endif
 
 namespace boost { namespace application {
 
@@ -66,8 +74,8 @@ namespace boost { namespace application {
          context_.add_aspect_if_not_exists<run_mode>(
             make_shared<run_mode>(run_mode::common));
 
-         // run user code
-         result_ = myapp(context);
+         impl_.reset(new common_application_impl(
+            boost::bind<int>( &Application::operator(), &myapp, _1), context, ec)); 
       }
 
       template <typename Application>
@@ -83,8 +91,13 @@ namespace boost { namespace application {
          context_.add_aspect_if_not_exists<run_mode>(
             make_shared<run_mode>(run_mode::common));
 
-         // run user code
-         result_ = myapp();
+         impl_.reset(new common_application_impl(
+            boost::bind<int>( &Application::operator(), &myapp), context, ec));
+      }
+
+      int run()
+      {
+         return impl_->run();
       }
 
       /*!
@@ -94,6 +107,11 @@ namespace boost { namespace application {
       virtual ~common() 
       {
       }
+
+   private:
+
+      BOOST_APPLICATION_FEATURE_NS_SELECT::
+         shared_ptr<common_application_impl> impl_;
 
    };
 

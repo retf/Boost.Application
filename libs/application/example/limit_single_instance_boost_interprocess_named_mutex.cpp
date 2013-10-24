@@ -61,14 +61,16 @@ public:
 // main
 
 int main(int argc, char *argv[])
-{   
+{  
+   BOOST_APPLICATION_FEATURE_SELECT
+
    myapp app;
    application::context app_context;
 
    boost::uuids::string_generator gen;
 
    app_context.add_aspect<application::limit_single_instance>(
-      std::make_shared<application::limit_single_instance_named_mutex_behaviour>(
+      make_shared<application::limit_single_instance_named_mutex_behaviour>(
          gen("{0F1164AD-ECA5-175D-8784-4BAA329EF9F2}")));
 
    return application::launch<application::common>(app, app_context);

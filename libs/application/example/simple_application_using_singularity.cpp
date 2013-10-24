@@ -42,8 +42,10 @@ public:
    // singularity, no param
    int operator()()
    {
+      BOOST_APPLICATION_FEATURE_SELECT
+
       std::cout << "Test" << std::endl;
-      std::shared_ptr<application::args> myargs 
+      shared_ptr<application::args> myargs 
          = this_application().get_aspect<application::args>();
 
       if (myargs)
@@ -66,12 +68,14 @@ public:
 
 int main(int argc, char *argv[])
 {   
+   BOOST_APPLICATION_FEATURE_SELECT
+
    myapp app;
  
    boost::singularity<application::context>::create_global();
 
    this_application().add_aspect<application::args>(
-      std::make_shared<application::args>(argc, argv));
+      make_shared<application::args>(argc, argv));
 
    int ret = application::launch<application::common>(app, global_context);
 

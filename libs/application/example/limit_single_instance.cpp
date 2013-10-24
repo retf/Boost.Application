@@ -53,14 +53,16 @@ public:
 
 int main(int argc, char *argv[])
 {   
+   BOOST_APPLICATION_FEATURE_SELECT
+
    myapp app;
    application::context app_context;
 
    boost::uuids::string_generator gen;
 
    app_context.add_aspect<application::limit_single_instance>(
-      std::make_shared<application::limit_single_instance_default_behaviour>(
-         gen("{9F66E4AD-ECA5-475D-8784-4BAA329EF9F2}")));
+      make_shared<application::limit_single_instance_default_behaviour>(
+         gen("{9F66E4AD-ECA5-475D-8784-4BAA329EF9F1}")));
 
    return application::launch<application::common>(app, app_context);
 }

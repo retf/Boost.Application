@@ -19,7 +19,7 @@
 // application
 #include <boost/application/config.hpp>
 #include <boost/application/context.hpp>
-#include <boost/application/app.hpp>
+#include <boost/application/detail/app.hpp>
 // platform dependent
 #if defined( BOOST_WINDOWS_API )
 #include <boost/application/detail/windows/server_application_impl.hpp>
@@ -84,7 +84,7 @@ namespace boost { namespace application {
       template <typename Application>
       server(Application& myapp, singularity<application::context> &context, 
          boost::system::error_code& ec)
-         : app(context.get_global(), ec), 
+         : app(context.get_global(), ec)
       {
          BOOST_APPLICATION_FEATURE_SELECT
 
@@ -101,10 +101,15 @@ namespace boost { namespace application {
             boost::bind<int>( &Application::operator(), &myapp), context, ec));
       }
 
+      int run()
+      {
+         return impl_->run();
+      }
+
    private:
 
       BOOST_APPLICATION_FEATURE_NS_SELECT::
-         unique_ptr<server_application_impl> impl_;
+         shared_ptr<server_application_impl> impl_;
 
    };
 

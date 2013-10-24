@@ -29,8 +29,9 @@ namespace boost { namespace application { namespace detail {
    {
       if(cxt.has_aspect<limit_single_instance>())
       {    
-         std::shared_ptr<limit_single_instance> ol =          
-            cxt.get_aspect<limit_single_instance>();
+         BOOST_APPLICATION_FEATURE_NS_SELECT
+            ::shared_ptr<limit_single_instance> ol =          
+               cxt.get_aspect<limit_single_instance>();
 
          bool is_another_instance_running = ol->lock(ec);
 
@@ -67,6 +68,8 @@ namespace boost { namespace application { namespace detail {
             return true;
          }
 
+         // default behaviour
+         return true;
       }
 
       // continue / no restriction

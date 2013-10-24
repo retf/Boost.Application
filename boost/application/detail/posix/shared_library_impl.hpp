@@ -169,8 +169,6 @@ namespace boost { namespace application {
 	  
       bool load(unsigned long mode, boost::system::error_code &ec, boost::lock_guard<boost::mutex> &lock)
       {
-         //boost::lock_guard<boost::mutex> lock(mutex_);
-
          handle_ = dlopen(path_.string().c_str(), static_cast<int>(mode));
 
          if (!handle_) 
@@ -195,7 +193,7 @@ namespace boost { namespace application {
 
 	  private:
       
-      boost::mutex mutex__;  
+      boost::mutex mutex_;  
       boost::filesystem::path path_;
       void* handle_;
 

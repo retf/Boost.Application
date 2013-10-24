@@ -73,15 +73,21 @@ public:
 
       // define my own signal / handler
 
-      tie_signal(SIGINT,  callback);
-      tie_signal(SIGTERM, callback);
+#if defined( BOOST_WINDOWS_API )
+      tie_signal(SIGINT,  callback); // CTRL-C
+#elif defined( BOOST_POSIX_API )
+      tie_signal(SIGTSTP, callback); // CTRL-Z
+#endif
+
    }
 
    bool stop(context &context)
    {
+      BOOST_APPLICATION_FEATURE_SELECT
+
       std::cout << "exiting..." << std::endl;
 
-      std::shared_ptr<wait_for_termination_request> th 
+      shared_ptr<wait_for_termination_request> th 
          = context.get_aspect<wait_for_termination_request>();
 
       th->proceed();

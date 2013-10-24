@@ -75,6 +75,8 @@ public:
 
 int main(int argc, char *argv[])
 {   
+   BOOST_APPLICATION_FEATURE_SELECT
+
    myapp app;
    context app_context;
 
@@ -85,7 +87,7 @@ int main(int argc, char *argv[])
       = boost::bind<bool>(&myapp::instace_aready_running, &app, _1);
 
    app_context.add_aspect<limit_single_instance>(
-      std::make_shared<limit_single_instance_default_behaviour>(appuuid, callback));
+      make_shared<limit_single_instance_default_behaviour>(appuuid, callback));
 
    return launch<common>(app, app_context);
 }

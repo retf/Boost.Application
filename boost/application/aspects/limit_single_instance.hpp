@@ -193,7 +193,7 @@ namespace boost { namespace application {
    private:
 
       BOOST_APPLICATION_FEATURE_NS_SELECT::
-         unique_ptr<limit_single_instance_impl> impl_;
+         shared_ptr<limit_single_instance_impl> impl_;
 
       uuids::uuid uuid_;
    };

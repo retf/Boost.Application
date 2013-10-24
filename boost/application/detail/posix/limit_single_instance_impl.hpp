@@ -23,7 +23,7 @@
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/lexical_cast.hpp>
-#include <boost/application/limit_single_instance.hpp>
+//#include <boost/application/limit_single_instance.hpp>
 #include <boost/interprocess/shared_memory_object.hpp>
 #include <boost/scoped_ptr.hpp>
 
@@ -41,7 +41,7 @@ namespace boost { namespace application {
       typedef std::basic_string<char_type> string_type;
 
       limit_single_instance_impl_()
-         : owns_lock(false)
+         : owns_lock_(false)
       {
       }
 
@@ -95,7 +95,9 @@ namespace boost { namespace application {
 
       string_type name_;
 
-      scoped_ptr<interprocess::shared_memory_object> create_shared_memory_or_die_;
+      BOOST_APPLICATION_FEATURE_NS_SELECT::
+         scoped_ptr<interprocess::shared_memory_object> create_shared_memory_or_die_;
+
       bool owns_lock_;
    };
 

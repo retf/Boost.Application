@@ -29,8 +29,10 @@ public:
    // param
    int operator()(application::context& context)
    {
+      BOOST_APPLICATION_FEATURE_SELECT
+
       std::cout << "Test" << std::endl;
-      std::shared_ptr<application::args> myargs 
+      shared_ptr<application::args> myargs 
          = context.get_aspect<application::args>();
 
       if (myargs)
@@ -44,7 +46,7 @@ public:
          }
       }
 	  
-	   context.use_aspect<application::wait_for_termination_request>().wait();
+	    context.use_aspect<application::wait_for_termination_request>().wait();
 
       return 0;
    }
@@ -53,12 +55,14 @@ public:
 // main
 
 int main(int argc, char *argv[])
-{   
+{  
+   BOOST_APPLICATION_FEATURE_SELECT
+
    myapp app;
    application::context app_context;
 
    app_context.add_aspect<application::args>(
-      std::make_shared<application::args>(argc, argv));
+      make_shared<application::args>(argc, argv));
 
    return application::launch<application::common>(app, app_context);
 }

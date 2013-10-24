@@ -90,7 +90,7 @@ namespace boost { namespace application {
 
       // we need that Application Mode start function, because in server 
       // implementation, we need start it on a new thread.
-      return ApplicationMode(app, context, ec).result();
+      return ApplicationMode(app, context, ec).run();
    }
    
    // singularity version, the ec ( boost::system::error_code& ec) will be  
@@ -133,7 +133,7 @@ namespace boost { namespace application {
 
       // we need that Application Mode start function, because in server 
       // implementation, we need start it on a new thread.
-      return ApplicationMode(app, context, ec).result();
+      return ApplicationMode(app, context, ec).run();
    }
 
    // throws an exception of type boost::system::system_error launch versions

@@ -197,7 +197,7 @@ namespace boost { namespace application {
 
    private:
      BOOST_APPLICATION_FEATURE_NS_SELECT::
-        unique_ptr<path_impl> impl_;
+        shared_ptr<path_impl> impl_;
 
       boost::system::error_code ec_;
 

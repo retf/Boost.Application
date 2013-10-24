@@ -18,6 +18,10 @@
 
 #include <boost/application/config.hpp>
 
+#if defined( BOOST_POSIX_API )
+#include <dlfcn.h>
+#endif
+
 namespace boost { namespace application {
 
    /*! \enum Modes of load library.

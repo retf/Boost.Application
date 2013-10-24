@@ -29,9 +29,11 @@ public:
    // param
    int operator()(application::context& context)
    {
+      BOOST_APPLICATION_FEATURE_SELECT
+
       std::cout << "Test" << std::endl;
 
-      std::shared_ptr<application::path> path 
+      shared_ptr<application::path> path 
          = context.get_aspect<application::path>();
 
       std::cout << "executable_path      : " << path->executable_path()      << std::endl;
@@ -54,11 +56,13 @@ public:
 
 int main(int argc, char *argv[])
 {   
+   BOOST_APPLICATION_FEATURE_SELECT
+
    myapp app;
    application::context app_context;
 
   app_context.add_aspect<application::path>(
-     std::make_shared<application::path_default_behaviour>(argc, argv));
+     make_shared<application::path_default_behaviour>(argc, argv));
 
    return application::launch<application::common>(app, app_context);
 }

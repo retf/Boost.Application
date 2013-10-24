@@ -98,7 +98,7 @@ namespace boost { namespace application {
          }
       }
 
-      bool is_tied()
+      bool is_tied(int signal_number)
       {
          return (handler_map_.cend() != handler_map_.find(signal_number));
       }

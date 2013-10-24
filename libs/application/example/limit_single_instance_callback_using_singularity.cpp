@@ -87,6 +87,8 @@ public:
 
 int main(int argc, char *argv[])
 {   
+   BOOST_APPLICATION_FEATURE_SELECT
+
    myapp app;   
    
    boost::uuids::string_generator gen;
@@ -100,10 +102,10 @@ int main(int argc, char *argv[])
    // use aspects
 
    this_application().add_aspect<args>(
-      std::make_shared<args>(argc, argv));
+      make_shared<args>(argc, argv));
 
    this_application().add_aspect<limit_single_instance>(
-      std::make_shared<limit_single_instance_default_behaviour>(appuuid, callback));
+      make_shared<limit_single_instance_default_behaviour>(appuuid, callback));
 
    int ret = launch<common>(app, global_context);
 

@@ -33,11 +33,15 @@
 #ifndef BOOST_NO_CXX11_SMART_PTR
 #include <memory>
 #include <unordered_map>
-#include <typeindex>
 #else
 #include <boost/smart_ptr.hpp>
 #include <boost/unordered/unordered_map.hpp>
-#include <boost/typeindex/typeindex.hpp>
+#endif
+
+#ifndef BOOST_NO_CXX11_HDR_TYPEINDEX
+#include <typeindex>
+#else
+#include <boost/type_index.hpp>
 #endif
 
 #if defined(BOOST_WINDOWS_API)
@@ -60,8 +64,7 @@
 // on functin/method scope.
 #define BOOST_APPLICATION_FEATURE_SELECT                     \
    using BOOST_APPLICATION_FEATURE_NS_SELECT::make_shared;   \
-   using BOOST_APPLICATION_FEATURE_NS_SELECT::shared_ptr;    \
-   using BOOST_APPLICATION_FEATURE_NS_SELECT::unique_ptr; 
+   using BOOST_APPLICATION_FEATURE_NS_SELECT::shared_ptr;    
 
 // error handle for Boost.Application lib, based on Boost.System.
 // user can set this macro for example to BOOST_THROW_EXCEPTION 

@@ -48,7 +48,7 @@ namespace boost { namespace application {
          // realpath -returns the canonicalized absolute pathname
          if (realpath (command.c_str(), resolved_path) == 0) 
          { 
-            BOOST_APPLICATION_SET_LAST_SYSTEM_ERROR(ec);
+            ec = boost::application::last_error_code();
          } 
          else 
          {

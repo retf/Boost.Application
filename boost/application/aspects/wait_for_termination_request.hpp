@@ -83,7 +83,7 @@ namespace boost { namespace application {
 
    private:
       BOOST_APPLICATION_FEATURE_NS_SELECT::
-         unique_ptr<wait_for_termination_request_impl> impl_;
+         shared_ptr<wait_for_termination_request_impl> impl_;
 
    };
       
