@@ -1,0 +1,78 @@
+#
+#          Copyright Renato Tegon Forti 2011 - 2013.
+# Distributed under the Boost Software License, Version 1.0.
+#    (See accompanying file LICENSE_1_0.txt or copy at
+#          http://www.boost.org/LICENSE_1_0.txt)
+#
+
+# For more information, see http://www.boost.org
+
+# bring in rules for testing
+import testing ;
+
+project
+   : source-location .
+   : requirements
+
+   # windows
+
+   # msvc
+      <toolset>msvc:<define>_SCL_SECURE_NO_WARNINGS
+      <toolset>msvc:<define>_SCL_SECURE_NO_DEPRECATE
+      <toolset>msvc:<define>_CRT_SECURE_NO_WARNINGS
+      <toolset>msvc:<define>_CRT_SECURE_NO_DEPRECATE
+      <toolset>msvc:<define>_SCL_SECURE_NO_WARNINGS
+
+   # linux
+      <target-os>linux:<linkflags>"-ldl" 
+
+   # gcc
+      <toolset>gcc:<cxxflags>-fno-strict-aliasing  # avoids strict aliasing violations in other Boost components
+
+   # others
+      <link>shared:<define>BOOST_ALL_DLL      
+      <library>/boost/system//boost_system
+      <library>/boost/program_options//boost_program_options
+      <library>/boost/filesystem//boost_filesystem
+      <library>/boost/date_time//boost_date_time
+      <library>/boost/thread//boost_thread
+      <library>../../test/build//boost_test_exec_monitor
+      <threading>multi
+      ;
+{
+
+   # our test lib for shared library tests
+   lib test_library : test_library.cpp ; 
+   install install-bin 
+      : test_library : 
+      <target-os>windows:<location>"C:/test/boost/application" 
+      <target-os>linux:<location>/test/boost/application ; 
+
+   test-suite application
+      : 
+
+      #
+      # common application
+      #
+      [ run simple_common_application_test.cpp ]
+      #
+      #
+
+      #
+      # server application
+      #
+      [ run simple_server_application_test.cpp ]
+      #
+      #
+
+      #
+      # shared library
+      #
+      [ run shared_library_load_test.cpp ]
+      [ run shared_library_search_symbol_test.cpp ]
+      [ run shared_library_get_symbol_test.cpp ]
+      #
+      #
+      ;
+}
+      

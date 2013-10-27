@@ -289,7 +289,7 @@ namespace boost { namespace application {
        * 
        */
       template <typename T>
-      void load(const library_type<T> &sl, unsigned long mode, 
+      void load(const library_type<T> &sl, shared_library_load_mode mode, 
                 boost::system::error_code &ec)
       {
          impl_->load(sl, mode, ec);
