@@ -89,4 +89,10 @@ exe simple_server_application
 exe shared_library_load_plugin  
    : shared_library_load_plugin.cpp
    ;
+   
+# windows only
 
+exe service_setup
+   : service_setup.cpp
+   : <build>no <target-os>windows:<build>yes 
+   ;	

@@ -27,6 +27,7 @@
 
 // application
 #include <boost/application/config.hpp>
+#include <boost/application/detail/csbl.hpp>
 #include <boost/application/aspect_map.hpp>
 
 namespace boost { namespace application {
@@ -63,8 +64,7 @@ namespace boost { namespace application {
        *      
        */
       template <class T>
-      bool add_aspect_if_not_exists(BOOST_APPLICATION_FEATURE_NS_SELECT::
-                                       shared_ptr<T> asp) 
+      bool add_aspect_if_not_exists(csbl::shared_ptr<T> asp) 
       {
          if (!has_aspect<T>()) {
             add_aspect<T>(asp);

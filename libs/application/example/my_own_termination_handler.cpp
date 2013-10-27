@@ -18,6 +18,8 @@
 #define BOOST_LIB_DIAGNOSTIC
 
 #include <iostream>
+#include <fstream>
+
 #include <boost/application.hpp>
 #include <boost/uuid/string_generator.hpp>
 #include <boost/bind.hpp>
@@ -58,25 +60,21 @@ public:
 
 };
 
-// my common class
-
-class mycommon : public common
+class my_signal_manager : public signal_manager
 {
 public:
-
-   template <typename Application>
-   mycommon(Application& app, context &context, boost::system::error_code& ec)
-      : common(app, context, ec)
+   my_signal_manager(context &context)
+      : signal_manager(context)
    {
       handler::parameter_callback callback 
-               = boost::bind<bool>(&mycommon::stop, this, _1);
+         = boost::bind<bool>(&my_signal_manager::stop, this, _1);
 
       // define my own signal / handler
 
 #if defined( BOOST_WINDOWS_API )
-      tie_signal(SIGINT,  callback); // CTRL-C
+      bind(SIGINT,  callback); // CTRL-C (2)
 #elif defined( BOOST_POSIX_API )
-      tie_signal(SIGTSTP, callback); // CTRL-Z
+      bind(SIGUSR2, callback); 
 #endif
 
    }
@@ -85,7 +83,15 @@ public:
    {
       BOOST_APPLICATION_FEATURE_SELECT
 
+#if defined( BOOST_WINDOWS_API )
       std::cout << "exiting..." << std::endl;
+#elif defined( BOOST_POSIX_API )
+      std::ofstream my_log_file;
+      my_log_file.open((context.use_aspect<
+         path>().executable_path().string() + "/log_stop.txt").c_str());
+      my_log_file << ":0)-" << std::endl;
+      my_log_file.close();
+#endif
 
       shared_ptr<wait_for_termination_request> th 
          = context.get_aspect<wait_for_termination_request>();
@@ -94,16 +100,28 @@ public:
 
       return false;
    }
-
 };
 
 // main
 
 int main(int argc, char *argv[])
 {   
+   BOOST_APPLICATION_FEATURE_SELECT
+
    myapp app;
    context app_context;
 
-   return launch<mycommon>(app, app_context);
+   app_context.add_aspect<path>(
+      make_shared<path_default_behaviour>(argc, argv));
+
+   // we will customize our signals behaviour
+   my_signal_manager sm(app_context);
+
+#if defined( BOOST_WINDOWS_API )
+   return launch<common>(app, sm, app_context);
+#elif defined( BOOST_POSIX_API )
+   return launch<server>(app, sm, app_context);
+#endif
+
 }
 

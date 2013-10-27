@@ -29,6 +29,7 @@
 #include <boost/config.hpp> 
 #include <boost/application/system_error.hpp>
 #include <boost/application/version.hpp>
+#include <boost/application/detail/typeindex.hpp>
 
 #ifndef BOOST_NO_CXX11_SMART_PTR
 #include <memory>
@@ -36,12 +37,6 @@
 #else
 #include <boost/smart_ptr.hpp>
 #include <boost/unordered/unordered_map.hpp>
-#endif
-
-#ifndef BOOST_NO_CXX11_HDR_TYPEINDEX
-#include <typeindex>
-#else
-#include <boost/type_index.hpp>
 #endif
 
 #if defined(BOOST_WINDOWS_API)
@@ -62,9 +57,12 @@
 #endif
 // BOOST_APPLICATION_FEATURE_SELECT is used to select correct ns 
 // on functin/method scope.
-#define BOOST_APPLICATION_FEATURE_SELECT                     \
-   using BOOST_APPLICATION_FEATURE_NS_SELECT::make_shared;   \
-   using BOOST_APPLICATION_FEATURE_NS_SELECT::shared_ptr;    
+#define BOOST_APPLICATION_FEATURE_SELECT                          \
+   using BOOST_APPLICATION_FEATURE_NS_SELECT::make_shared;        \
+   using BOOST_APPLICATION_FEATURE_NS_SELECT::shared_ptr;         \
+   using BOOST_APPLICATION_FEATURE_NS_SELECT::type_index;         \
+   using BOOST_APPLICATION_FEATURE_NS_SELECT::unordered_map;      \
+   using BOOST_APPLICATION_FEATURE_NS_SELECT::static_pointer_cast;
 
 // error handle for Boost.Application lib, based on Boost.System.
 // user can set this macro for example to BOOST_THROW_EXCEPTION 

@@ -1,0 +1,100 @@
+// Copyright 2011-2013 Renato Tegon Forti
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt
+// or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+// -----------------------------------------------------------------------------
+// This example shows how to add both  application types support to application.
+// [use]
+// application_mode_select[.exe] -f (run as common/foreground)
+// application_mode_select[.exe]    (run as server daemon) (default)
+// -----------------------------------------------------------------------------
+
+#define BOOST_ALL_DYN_LINK
+#define BOOST_LIB_DIAGNOSTIC
+
+#include <iostream>
+#include <boost/program_options.hpp>
+#include <boost/application.hpp>
+
+using namespace boost;
+namespace po = boost::program_options;
+
+class my_application_functor_class
+{
+public:
+
+   int operator()(application::context& context)
+   {
+      // your application logic here!
+      // use ctrl to get state of your application...
+
+      std::cout << "your application logic!" << std::endl;
+      context.use_aspect<application::wait_for_termination_request>().wait();
+
+      return 0;
+   }
+
+   bool stop(application::context& context)
+   {
+      std::cout << "stop!" << std::endl;
+      return true; // return true to stop, false to ignore
+   }
+
+};
+
+int main(int argc, char** argv)
+{
+   BOOST_APPLICATION_FEATURE_SELECT
+
+   // select application mode
+
+   po::variables_map vm;
+   po::options_description desc;
+
+   desc.add_options()
+      (",f", "run on foreground")
+      ;
+
+   po::store(po::parse_command_line(argc, argv, desc), vm);
+
+   my_application_functor_class app;
+   application::context app_context;
+
+   // add termination handler
+
+   application::handler::parameter_callback termination_callback 
+      = boost::bind<bool>(&my_application_functor_class::stop, &app, _1);
+
+   app_context.add_aspect<application::termination_handler>(
+      make_shared<
+         application::termination_handler_default_behaviour>(termination_callback));
+
+   int result = 0;
+   boost::system::error_code ec;
+
+   // we will run like a daemon or like a common application (foreground)
+   if (vm.count("-f")) 
+   {
+      result = 
+         application::launch<
+            application::common>(app, app_context, ec);
+   }
+   else
+   {  
+      result = 
+         application::launch<
+            application::server>(app, app_context, ec);
+   }
+
+   // check for error
+
+   if(ec)
+   {
+      std::cout << "[E] " << ec.message() 
+         << " <" << ec.value() << "> " << std::cout;
+   }
+   
+   return result;
+}
+

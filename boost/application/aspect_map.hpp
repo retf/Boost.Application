@@ -22,134 +22,126 @@
 // 
 // 22-10-2013 dd-mm-yyyy - Renato Forti - Add replace_aspect method
 // 23-10-2013 dd-mm-yyyy - Renato Forti - Add remove_aspect method
-// 24-10-2013 dd-mm-yyyy - Renato Forti - Use BOOST_APPLICATION_FEATURE_NS_SELECT 
+// 25-10-2013 dd-mm-yyyy - Renato Forti - Enable use of csbl::
 // 
 // -----------------------------------------------------------------------------
 
-#ifndef BOOST_ASPECT_MAP_HPP
-#define BOOST_ASPECT_MAP_HPP
+#ifndef BOOST_APPLICATION_ENTITY_ASPECT_MAP_HPP
+#define BOOST_APPLICATION_ENTITY_ASPECT_MAP_HPP
 
 #include <boost/config.hpp>
 #include <boost/application/config.hpp>
+#include <boost/application/detail/csbl.hpp>
+
 #include <utility>
 
-namespace boost
-{
-  namespace entity
-  {
-    class aspect_map
-    {
-      typedef BOOST_APPLICATION_FEATURE_NS_SELECT::
-         type_index key_type;
+namespace boost{
+   namespace application {  
+      namespace entity {
 
-      typedef BOOST_APPLICATION_FEATURE_NS_SELECT::
-         shared_ptr<void> value_type;
+         class aspect_map
+         {
+            typedef csbl::type_index key_type;
+            typedef csbl::shared_ptr<void> value_type;
+            typedef csbl::unordered_map<key_type, value_type> map_type;
 
-      typedef BOOST_APPLICATION_FEATURE_NS_SELECT::
-         unordered_map<key_type, value_type> map_type;
+            map_type aspects_;
 
-      map_type aspects_;
+         public:
 
-    public:
-      template <class T>
-      void add_aspect(BOOST_APPLICATION_FEATURE_NS_SELECT::
-                         shared_ptr<T> asp)
-      {
-
+            template <class T>
+            void add_aspect(csbl::shared_ptr<T> asp)
+            {
 #ifndef BOOST_NO_CXX11_HDR_TYPEINDEX
-         key_type ti = typeid(T);
+               key_type ti = typeid(T);
 #else
-         key_type ti = type_id<T>();
+               key_type ti = type_id<T>();
 #endif
 
-        if (!aspects_.insert(std::make_pair(ti, asp)).second) throw std::logic_error(
-            std::string("Type ") + ti.name() + " already added as an aspect");
-      }
+               if (!aspects_.insert(std::make_pair(ti, asp)).second) 
+                  throw std::logic_error(
+                     std::string("Type ") + ti.name() + " already added as an aspect");
+            }
 
-      template <class T>
-      bool has_aspect() const
-      {
-        return aspects_.cend() != aspects_.find(key_type(typeid(T)));
-      }
+            template <class T>
+            bool has_aspect() const
+            {
+               return aspects_.cend() != aspects_.find(key_type(typeid(T)));
+            }
 
-      template <class T>
-      BOOST_APPLICATION_FEATURE_NS_SELECT::
-         shared_ptr<T> get_aspect()
-      {
-        map_type::const_iterator it = aspects_.find(key_type(typeid(T)));
-        if (aspects_.cend() == it) return BOOST_APPLICATION_FEATURE_NS_SELECT::
-           shared_ptr<T>();
+            template <class T>
+            csbl::shared_ptr<T> get_aspect()
+            {
+               map_type::const_iterator it = aspects_.find(key_type(typeid(T)));
 
-        return BOOST_APPLICATION_FEATURE_NS_SELECT::
-           static_pointer_cast<T>(it->second);
-      }
+               if (aspects_.cend() == it) 
+                  return csbl::shared_ptr<T>();
 
-      template <class T>
-      BOOST_APPLICATION_FEATURE_NS_SELECT::
-         shared_ptr<const T> get_aspect() const
-      {
-        map_type::const_iterator it = aspects_.find(key_type(typeid(T)));
-        if (aspects_.cend() == it) return BOOST_APPLICATION_FEATURE_NS_SELECT::
-           shared_ptr<T>();
+               return csbl::static_pointer_cast<T>(it->second);
+            }
 
-        return BOOST_APPLICATION_FEATURE_NS_SELECT::
-           static_pointer_cast<const T>(it->second);
-      }
+            template <class T>
+            csbl::shared_ptr<const T> get_aspect() const
+            {
+               map_type::const_iterator it = aspects_.find(key_type(typeid(T)));
 
-      template <class T>
-      T& use_aspect()
-      {
-        map_type::const_iterator it = aspects_.find(key_type(typeid(T)));
+               if (aspects_.cend() == it) 
+                  return csbl::shared_ptr<T>();
 
-        if (aspects_.cend() == it)
-          throw std::logic_error(std::string("Type ") + key_type(typeid(T)).name() + " is not an aspect");
+               return csbl::static_pointer_cast<const T>(it->second);
+            }
 
-        return *BOOST_APPLICATION_FEATURE_NS_SELECT::
-           static_pointer_cast<T>(it->second);
+            template <class T>
+            T& use_aspect()
+            {
+               map_type::const_iterator it = aspects_.find(key_type(typeid(T)));
 
-      }
+               if (aspects_.cend() == it)
+                  throw std::logic_error(
+                     std::string("Type ") + key_type(typeid(T)).name() + " is not an aspect");
 
-      template <class T>
-      T const& use_aspect() const
-      {
-        map_type::const_iterator it = aspects_.find(key_type(typeid(T)));
-        if (aspects_.cend() == it)
-          throw std::logic_error(std::string("Type ") + key_type(typeid(T)).name() + " is not an aspect");
+               return *csbl::static_pointer_cast<T>(it->second);
+            }
 
-        return *BOOST_APPLICATION_FEATURE_NS_SELECT::
-           static_pointer_cast<T>(it->second);
+            template <class T>
+            T const& use_aspect() const
+            {
+               map_type::const_iterator it = aspects_.find(key_type(typeid(T)));
 
-      }
+               if (aspects_.cend() == it)
+                  throw std::logic_error(
+                     std::string("Type ") + key_type(typeid(T)).name() + " is not an aspect");
 
-      template <class T>
-      void replace_aspect(BOOST_APPLICATION_FEATURE_NS_SELECT::
-                             shared_ptr<T> asp)
-      {
+               return *csbl::static_pointer_cast<T>(it->second);
+            }
+
+            template <class T>
+            void replace_aspect(csbl::shared_ptr<T> asp)
+            {
 #ifndef BOOST_NO_CXX11_HDR_TYPEINDEX
-         key_type ti = typeid(T);
+               key_type ti = typeid(T);
 #else
-         key_type ti = type_id<T>();
+               key_type ti = type_id<T>();
 #endif
-        if(aspects_.erase(ti))
-          aspects_.insert(std::make_pair(ti, asp));
-      }
 
-      template <class T>
-      void remove_aspect(BOOST_APPLICATION_FEATURE_NS_SELECT::
-                            shared_ptr<T> asp)
-      {
+               if(aspects_.erase(ti))
+                  aspects_.insert(std::make_pair(ti, asp));
+            }
+
+            template <class T>
+            void remove_aspect(csbl::shared_ptr<T> asp)
+            {
 #ifndef BOOST_NO_CXX11_HDR_TYPEINDEX
-         key_type ti = typeid(T);
+               key_type ti = typeid(T);
 #else
-         key_type ti = type_id<T>();
+               key_type ti = type_id<T>();
 #endif
-        aspects_.erase(ti);
-      }
 
+               aspects_.erase(ti);
+            }
 
-    };
-  }
-}
+   }; // aspect_map
 
-#endif // header
+} } } // boost::application::entity
 
+#endif // BOOST_APPLICATION_ENTITY_ASPECT_MAP_HPP

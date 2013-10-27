@@ -94,7 +94,7 @@ namespace boost { namespace application {
          unload(lock);
       }
 
-      bool is_loaded() 
+      bool is_loaded() const
       {
          boost::lock_guard<boost::mutex> lock(mutex_);
          return (handle_ != 0); 
@@ -118,7 +118,7 @@ namespace boost { namespace application {
          return symbol_addr(sb, ec);
       }
 
-      const boost::filesystem::path get_path() 
+      const boost::filesystem::path get_path() const
       {
          boost::lock_guard<boost::mutex> lock(mutex_);
          return path_;
@@ -188,7 +188,7 @@ namespace boost { namespace application {
 
    private:
       
-      boost::mutex mutex_;  
+      mutable boost::mutex mutex_;  
       boost::filesystem::path path_;
       void* handle_;
    };

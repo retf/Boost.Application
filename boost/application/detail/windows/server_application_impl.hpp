@@ -24,6 +24,9 @@
 #include <boost/application/aspects/pause_handler.hpp>
 #include <boost/application/aspects/resume_handler.hpp>
 
+#include <boost/application/detail/application_impl.hpp>
+#include <boost/application/signal_binder.hpp>
+
 #include <boost/thread/thread.hpp>
 #include <boost/lambda/lambda.hpp>
 
@@ -48,7 +51,7 @@
 namespace boost { namespace application {
 
    template <typename CharType>
-   class server_application_impl_ : noncopyable
+   class server_application_impl_ : public application_impl
    {
    public:
 
@@ -59,25 +62,25 @@ namespace boost { namespace application {
       typedef CharType char_type;
       typedef std::basic_string<char_type> string_type;
 
-      server_application_impl_(const main_parameter &main, application::context &context, boost::system::error_code& ec)
-         : context_(context)
+      server_application_impl_(const main_parameter &main, signal_binder &sb, application::context &context, boost::system::error_code& ec)
+         : application_impl(parameter, context)
          , main_parameter_(main)
          , main_thread_(0)
          , launch_thread_(0)
          , result_code_(0)
       {      
-         type_ = parameter;
+         sb.start();
          initialize(ec);
       }
 
-      server_application_impl_(const main_singleton &main, singularity<application::context> &context, boost::system::error_code& ec)
-         : context_(context.get_global())
+      server_application_impl_(const main_singleton &main, signal_binder &sb, singularity<application::context> &context, boost::system::error_code& ec)
+         : application_impl(singleton, context.get_global())
          , main_thread_(0)
          , launch_thread_(0)
          , main_singleton_(main)
          , result_code_(0)
       {       
-         type_ = singleton;
+         sb.start(); 
          initialize(ec);
       }
 
@@ -530,15 +533,6 @@ namespace boost { namespace application {
       }
 
    private:
-
-      enum instantiation_type
-      {
-         parameter,
-         singleton
-
-      } type_;
-
-      application::context &context_;
 
       // Event used to hold ServiceMain from completing
       HANDLE terminate_event_;

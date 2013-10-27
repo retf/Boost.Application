@@ -16,6 +16,11 @@ contact: re.tf@acm.org
 Change Log
 --------------------------------------------------------------------------------
 
+* 27/10/2013 [dd/mm/yyyy] / Commint : Fully prototype.1.27102013 
+--------------------------------------------------------------------------------
+
+The prototype now is fully implemented (all application flavors, and on both sides).
+
 * 24/10/2013 [dd/mm/yyyy] / Commint : Updates 24102013 
 --------------------------------------------------------------------------------
 

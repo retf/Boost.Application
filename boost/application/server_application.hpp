@@ -19,7 +19,9 @@
 // application
 #include <boost/application/config.hpp>
 #include <boost/application/context.hpp>
-#include <boost/application/detail/app.hpp>
+//#include <boost/application/detail/app.hpp>
+#include <boost/application/detail/csbl.hpp>
+#include <boost/application/application_initializers.hpp>
 // platform dependent
 #if defined( BOOST_WINDOWS_API )
 #include <boost/application/detail/windows/server_application_impl.hpp>
@@ -45,7 +47,7 @@ namespace boost { namespace application {
     * template param on launch free function. 
     * 
     */
-   class server : public app
+   class server 
    {
    public:
 
@@ -61,44 +63,39 @@ namespace boost { namespace application {
        * Check ec for errors.
        * 
        */
-      template <typename Application>
-      server(Application& myapp, application::context &context, 
-         boost::system::error_code& ec)
-         : app(context, ec)
+      template <typename Application, typename SignalManager>
+      server(Application& myapp, SignalManager &sm, application::context &context, boost::system::error_code& ec)
       {
-         BOOST_APPLICATION_FEATURE_SELECT
-
-         if(ec) return;
-
          // default aspects patterns added to this kind of application
 
-         context_.add_aspect_if_not_exists<run_mode>(
-            make_shared<run_mode>(run_mode::server));
+         context.add_aspect_if_not_exists<run_mode>(
+            csbl::make_shared<run_mode>(run_mode::server));
 
-         // run user code
+         context.add_aspect_if_not_exists<status>(
+            csbl::make_shared<status>(status::running));
+
+         // need be created after run_mode, status
 
          impl_.reset(new server_application_impl(
-            boost::bind<int>( &Application::operator(), &myapp, _1), context, ec)); 
+            boost::bind<int>( &Application::operator(), &myapp, _1), sm, context, ec));
       }
 
-      template <typename Application>
-      server(Application& myapp, singularity<application::context> &context, 
-         boost::system::error_code& ec)
-         : app(context.get_global(), ec)
+      template <typename Application, typename SignalManager>
+      server(Application& myapp, SignalManager &sm, singularity<application::context> &context, boost::system::error_code& ec)
       {
-         BOOST_APPLICATION_FEATURE_SELECT
-
-         if(ec) return;     
          
          // default aspects patterns added to this kind of application
 
-         context_.add_aspect_if_not_exists<run_mode>(
-            make_shared<run_mode>(run_mode::server));
+        context.get_global().add_aspect_if_not_exists<run_mode>(
+            csbl::make_shared<run_mode>(run_mode::server));
+
+        context.get_global().add_aspect_if_not_exists<status>(
+            csbl::make_shared<status>(status::running));     
          
-         // run user code
+         // need be created after run_mode, status
 
          impl_.reset(new server_application_impl(
-            boost::bind<int>( &Application::operator(), &myapp), context, ec));
+            boost::bind<int>( &Application::operator(), &myapp), sm, context, ec));
       }
 
       int run()
@@ -106,10 +103,14 @@ namespace boost { namespace application {
          return impl_->run();
       }
 
+      virtual ~server() 
+      {
+         impl_->get_context().use_aspect<status>().state(status::stoped);
+      }
+
    private:
 
-      BOOST_APPLICATION_FEATURE_NS_SELECT::
-         shared_ptr<server_application_impl> impl_;
+      csbl::shared_ptr<server_application_impl> impl_;
 
    };
 

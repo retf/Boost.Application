@@ -18,6 +18,8 @@
 
 #include <boost/application/config.hpp>
 #include <boost/application/context.hpp>
+#include <boost/application/detail/application_impl.hpp>
+#include <boost/application/signal_binder.hpp>
 
 #include <boost/function.hpp>
 
@@ -35,7 +37,7 @@
 namespace boost { namespace application {
 
    template <typename CharType>
-   class server_application_impl_ : noncopyable
+   class server_application_impl_ : public application_impl
    {
    public:
 
@@ -46,28 +48,28 @@ namespace boost { namespace application {
       typedef CharType char_type;
       typedef std::basic_string<char_type> string_type;
 
-      server_application_impl_(const main_parameter &main, 
+      server_application_impl_(const main_parameter &main,
+                               signal_binder &sb,
                                application::context &context, 
                                boost::system::error_code& ec)
-         : context_(context)
+         : application_impl(parameter, context)
          , main_parameter_(main)
       {      
-         type_ = parameter;
-         
-         // need check this
+
          process_id_ = daemonize(ec);
+         sb.start(); // need be started after daemonize
       }
 
       server_application_impl_(const main_singleton &main, 
+                               signal_binder &sb,
                                singularity<application::context> &context, 
                                boost::system::error_code& ec)
-         : context_(context.get_global())
+         : application_impl(singleton, context.get_global())
          , main_singleton(main)
       {       
-         type_ = singleton;
 
-         // need check this
          process_id_ = daemonize(ec);
+         sb.start(); // need be started after daemonize
       }
 
       int run()
@@ -84,41 +86,62 @@ namespace boost { namespace application {
 
    protected:
 
+      // create a daemon using fork(). 
+      // 
+      // the fork() creates a new process by duplicating 
+      // the calling process. 
+      // 
+      // here the parent process would exit leaving the the child process behind. 
+      // 
+      // this child process detaches from the controlling terminal, reopens all 
+      // of {stdin, stdout, stderr} to /dev/null, and changes the working directory 
+      // to the root directory. (based on flags). 
+      // 
+      // under linux, fork() is implemented using copy-on-write pages, so the only 
+      // penalty that it incurs is the time and memory required to duplicate the 
+      // parent's page tables, and to create a unique task structure for the child.
+
       pid_t daemonize(boost::system::error_code &ec)
       {
-         pid_t pid;
+         // ignore terminal stop signals 
+         #ifdef SIGTTOU
+         signal(SIGTTOU, SIG_IGN);
+         #endif
+
+         #ifdef SIGTTIN
+         signal(SIGTTIN, SIG_IGN);
+         #endif
+
+         #ifdef SIGTSTP
+         signal(SIGTSTP, SIG_IGN);
+         #endif
+
+         // allow parent shell to continue.
+         // ensure the process is not a process group leader.
+
+         pid_t fork_pid = fork();
+
+         if(fork_pid < 0) {
+            // fork error
+            ec = last_error_code();
+            return 0;
+         } else if (fork_pid != 0){
+            exit(0); // parent exits 
+         }
+
+         // child from here
+         //
+
+         // obtain a new process group
+         setsid(); 
+
+         // lose controlling terminal & change process group
+         setpgrp();
+
+         // Ensure future opens won't allocate controlling TTYs.
 
          struct rlimit rl;
          struct sigaction sa;
-
-         // Clear file creation mask.
-         umask(0);
-
-         // Get maximum number of file descriptors.
-         if (getrlimit(RLIMIT_NOFILE, &rl) < 0)
-         {
-            // can't getrlimit 
-            ec = last_error_code();
-         }
-
-         // Become a session leader to lose controlling TTY.
-
-         if ((pid = fork()) < 0)
-         {
-            // can't fork
-            ec = last_error_code();
-         }
-         else if (pid != 0) 
-         {
-            exit(0); // parent exits
-         }
-
-         // Chield continues 
-
-         // Obtain a new process group
-         setsid(); 
-
-         // Ensure future opens won't allocate controlling TTYs.
 
          sa.sa_handler = SIG_IGN;
          sigemptyset(&sa.sa_mask);
@@ -127,21 +150,20 @@ namespace boost { namespace application {
          if (sigaction(SIGHUP, &sa, NULL) < 0)
          {
             // can't ignore SIGHUP
-            ec = last_error_code();
+            ec = last_error_code(); return 0;
          }
 
-         if ((pid = fork()) < 0)
-         {
-            // can't fork
+         fork_pid = fork(); // become non-pgrp-leader
+
+         if(fork_pid < 0) {
+            // fork error
             ec = last_error_code();
-         }
-         else if (pid != 0) // parent 
-         {
-            exit(0);
+            return 0;
+         } else if (fork_pid != 0){
+            exit(0); // parent exits again
          }
 
-         //
-         // Change the current working directory to the root so
+         // change the current working directory to the root so
          // we won't prevent file systems from being unmounted.
          if (chdir("/") < 0)
          {
@@ -149,7 +171,7 @@ namespace boost { namespace application {
             ec = last_error_code();
          }
 
-         // Close all open file descriptors.
+         // close all open file descriptors.
          if (rl.rlim_max == RLIM_INFINITY)
          {
             rl.rlim_max = 1024;
@@ -167,8 +189,11 @@ namespace boost { namespace application {
          fd0 = open("/dev/null", O_RDWR);
          fd1 = dup(0);
          fd2 = dup(0);
+         
+         // clear any inherited file mode creation mask 
+         umask(0);
 
-         return pid;
+         return fork_pid;
       }
 
    private:
@@ -177,15 +202,6 @@ namespace boost { namespace application {
 
       main_parameter main_parameter_;
       main_singleton main_singleton_;
-
-      enum instantiation_type
-      {
-         parameter,
-         singleton
-
-      } type_;
-
-      application::context &context_;
 
    };
 	

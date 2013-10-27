@@ -14,6 +14,11 @@
 
 // -----------------------------------------------------------------------------
 
+// To call "stop" on POSIX, use:
+//
+// kill -2 <PID>
+// kill -INT <PID>
+
 // output sample on windows service (log.txt)
 // 
 // Start Log...
@@ -56,7 +61,7 @@ class myapp
 {   
 public:
 
-   void work_thread(application::context* context)
+   void worker(application::context* context)
    {
       BOOST_APPLICATION_FEATURE_SELECT
 
@@ -84,14 +89,15 @@ public:
       shared_ptr<application::status> st =          
          context->get_aspect<application::status>();
 
+      int count = 0;
       while(st->state() != application::status::stoped)
       {
          boost::this_thread::sleep(boost::posix_time::seconds(1));
 
          if(st->state() == application::status::paused)
-            my_log_file_ << "paused..." << std::endl;
+            my_log_file_ << count++ << ", paused..." << std::endl;
          else
-            my_log_file_ << "running..." << std::endl;
+            my_log_file_ << count++ << ", running..." << std::endl;
       }
    }
 
@@ -105,12 +111,17 @@ public:
       my_log_file_ << "Start Log..." << std::endl;
 
       // launch a work thread
-      boost::thread thread(&myapp::work_thread, this, &context);
+      boost::thread thread(&myapp::worker, this, &context);
       
       context.use_aspect<application::wait_for_termination_request>().wait();
 
+      // to run direct
+      // worker(&context);
+
       return 0;
    }
+
+   // windows/posix
 
    bool stop(application::context& context)
    {
@@ -151,7 +162,7 @@ bool setup(application::context& context)
 
    shared_ptr<application::path> mypath 
       = context.get_aspect<application::path>();
-
+   
 // provide setup for windows service   
 #if defined(BOOST_WINDOWS_API)      
 
@@ -203,7 +214,7 @@ bool setup(application::context& context)
          return true;
       }
 #endif
-
+      
    return false;
 }
 // main

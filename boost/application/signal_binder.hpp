@@ -9,12 +9,12 @@
 // -----------------------------------------------------------------------------
 
 // Revision History
-// 21-10-2013 dd-mm-yyyy - Initial Release
+// 26-10-2013 dd-mm-yyyy - Initial Release
 
 // -----------------------------------------------------------------------------
 
-#ifndef BOOST_APPLICATION_DETAIL_SIGNAL_MANAGER_HPP
-#define BOOST_APPLICATION_DETAIL_SIGNAL_MANAGER_HPP
+#ifndef BOOST_APPLICATION_SIGNAL_MANAGER_HPP
+#define BOOST_APPLICATION_SIGNAL_MANAGER_HPP
 
 #include <boost/application/config.hpp>
 #include <boost/application/context.hpp>
@@ -23,29 +23,30 @@
 #include <boost/bind.hpp>
 #include <boost/thread/thread.hpp>
 
+#include <boost/application/aspects/termination_handler.hpp>
+#include <boost/application/aspects/wait_for_termination_request.hpp>
+
 namespace boost { namespace application {
 
+   // todo : doxygen comment
    // This is an attempt to make things more flexible, 
    // this allow user to define your own sinal -> handler map
-   template <typename ApplicationMode>
-   class signal_manager
+   class signal_binder
    {
+
    public:
-      signal_manager()
+      explicit signal_binder(context &cxt)
          : io_service_thread_(0)
          , signals_(io_service_)
+         , context_(cxt)
       {
          signals_.async_wait(
-            boost::bind(&signal_manager::signal_handler, this, 
+            boost::bind(&signal_binder::signal_handler, this, 
             boost::asio::placeholders::error, 
             boost::asio::placeholders::signal_number));
-
-         // launch a signal engine on new thread
-         io_service_thread_ = new boost::thread(
-            boost::bind(&signal_manager::run_io_service, this));
       }
 
-      virtual ~signal_manager()
+      virtual ~signal_binder()
       {
          if(io_service_thread_)
          {
@@ -53,42 +54,42 @@ namespace boost { namespace application {
          }
       }
 
-      void tie_signal(int signal_number, const handler& h)
+      void bind(int signal_number, const handler& h)
       {
          boost::system::error_code ec;
-         tie_signal(signal_number, h, handler(), ec);
+         bind(signal_number, h, handler(), ec);
 
          if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("tie_signal() failed");
       }
 
-      void tie_signal(int signal_number, const handler& h1, const handler& h2)
+      void bind(int signal_number, const handler& h1, const handler& h2)
       {
          boost::system::error_code ec;
-         tie_signal(signal_number, h1, h2, ec);
+         bind(signal_number, h1, h2, ec);
 
          if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("tie_signal() failed");
       }
 
-      void tie_signal(int signal_number, const handler& h, boost::system::error_code& ec)
+      void bind(int signal_number, const handler& h, boost::system::error_code& ec)
       {
-         tie_signal(signal_number, h, handler(), ec);
+         bind(signal_number, h, handler(), ec);
       }
 
-      void tie_signal(int signal_number, const handler& h1, const handler& h2, boost::system::error_code& ec)
+      void bind(int signal_number, const handler& h1, const handler& h2, boost::system::error_code& ec)
       {
          signals_.add(signal_number, ec);
          handler_map_[signal_number] = std::make_pair(h1, h2);
       }
 
-      void untie_signal(int signal_number)
+      void unbind(int signal_number)
       {
          boost::system::error_code ec;
-         untie_signal(signal_number, ec);
+         unbind(signal_number, ec);
 
          if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("tie_signal() failed");
       }
 
-      void untie_signal(int signal_number, boost::system::error_code& ec)
+      void unbind(int signal_number, boost::system::error_code& ec)
       {
          if(handler_map_.cend() != handler_map_.find(signal_number))
          {
@@ -101,10 +102,16 @@ namespace boost { namespace application {
       bool is_tied(int signal_number)
       {
          return (handler_map_.cend() != handler_map_.find(signal_number));
-      }
+      }    
       
-   protected:
+      void start()
+      {
+          io_service_thread_ = new boost::thread(
+            boost::bind(&signal_binder::run_io_service, this));
+      }
 
+   protected:
+  
       void run_io_service()
       {
          io_service_.run();
@@ -114,19 +121,17 @@ namespace boost { namespace application {
       {
          if (!ec)
          {
-            context &cxt = static_cast<ApplicationMode*>(this)->context_;
-
             if(handler_map_[signal_number].first.parameter_callback_is_valid())
             {
                handler::parameter_callback* parameter;
 
                if(handler_map_[signal_number].first.callback(parameter))
                {
-                  if((*parameter)(cxt))
+                  if((*parameter)(context_))
                   {
                      // user tell us to call second callback
                      if(handler_map_[signal_number].second.callback(parameter))
-                        (*parameter)(cxt);
+                        (*parameter)(context_);
                   }
 
                   return;
@@ -151,6 +156,9 @@ namespace boost { namespace application {
             }
          }
       }
+   protected:
+      
+      application::context &context_;
 
    private:
 
@@ -165,7 +173,71 @@ namespace boost { namespace application {
       boost::thread *io_service_thread_; 
    };
 
+   class signal_manager
+      : public signal_binder
+   {
+
+   public:
+   
+      signal_manager(application::context &context, boost::system::error_code& ec) 
+         : signal_binder(context)
+      {
+         register_signals(ec);
+      }
+
+      signal_manager(application::context &context) 
+         : signal_binder(context)
+      {
+         boost::system::error_code ec;
+
+         register_signals(ec);
+
+         if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("signal_manager() failed");
+      }
+
+   protected:
+
+      virtual void register_signals(boost::system::error_code& ec)
+      {
+         BOOST_APPLICATION_FEATURE_SELECT
+
+         context_.add_aspect_if_not_exists<wait_for_termination_request>(
+            shared_ptr<wait_for_termination_request>(
+               new wait_for_termination_request_default_behaviour));
+
+         if(context_.has_aspect<termination_handler>())
+         {
+            shared_ptr<termination_handler> th =
+               context_.get_aspect<termination_handler>();
+
+            handler::parameter_callback callback 
+               = boost::bind<bool>(&signal_manager::termination_signal_handler, this, _1);
+
+            bind(SIGINT,  th->get_handler(), callback, ec);
+            if(ec) return;
+
+            bind(SIGTERM, th->get_handler(), callback, ec);
+            if(ec) return;
+
+            bind(SIGABRT, th->get_handler(), callback, ec);
+            if(ec) return;
+         }
+      }
+
+      virtual bool termination_signal_handler(application::context &context)
+      { 
+         // we need set application_state to stop
+         context_.use_aspect<status>().state(status::stoped);
+
+         // and signalize wait_for_termination_request
+         context_.use_aspect<wait_for_termination_request>().proceed();
+
+         // this is not used
+         return false;
+      }
+   };
+
 }} // boost::application 
 
-#endif // BOOST_APPLICATION_DETAIL_SIGNAL_MANAGER_HPP
+#endif // BOOST_APPLICATION_SIGNAL_MANAGER_HPP
        

@@ -18,10 +18,9 @@
 
 #include <boost/application/config.hpp>
 #include <boost/application/base_type.hpp>
-
+#include <boost/application/detail/application_impl.hpp>
 #include <boost/application/aspects/termination_handler.hpp>
-#include <boost/application/aspects/pause_handler.hpp>
-#include <boost/application/aspects/resume_handler.hpp>
+#include <boost/application/signal_binder.hpp>
 
 #include <boost/thread/thread.hpp>
 #include <boost/lambda/lambda.hpp>
@@ -34,7 +33,7 @@
 namespace boost { namespace application {
 
    template <typename CharType>
-   class common_application_impl_ : noncopyable
+   class common_application_impl_ : public application_impl
    {
    public:
 
@@ -46,21 +45,23 @@ namespace boost { namespace application {
       typedef std::basic_string<char_type> string_type;
 
       common_application_impl_(const main_parameter &main, 
+                               signal_binder &sb,
                                application::context &context, 
                                boost::system::error_code& ec)
-         : context_(context)
+         : application_impl(parameter, context)
          , main_parameter_(main)
-      {      
-         type_ = parameter;
+      {     
+         sb.start();
       }
 
       common_application_impl_(const main_singleton &main, 
+                               signal_binder &sb,
                                singularity<application::context> &context, 
                                boost::system::error_code& ec)
-         : context_(context.get_global())
+         : application_impl(singleton, context.get_global())
          , main_singleton_(main)
       {       
-         type_ = singleton;
+         sb.start();
       }
 
       virtual ~common_application_impl_()
@@ -84,13 +85,6 @@ namespace boost { namespace application {
       main_parameter main_parameter_;
       main_singleton main_singleton_;
 
-      enum instantiation_type
-      {
-         parameter,
-         singleton
-      } type_;
-
-      application::context &context_;
    };
 
    /////////////////////////////////////////////////////////////////////////////

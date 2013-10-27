@@ -79,7 +79,7 @@ namespace boost { namespace application {
       void release(void)
       {
          // if I create it, I can remove it
-         if(owns_lock_ == false) {
+         if(owns_lock_ == true) {
             interprocess::shared_memory_object::remove(name_.c_str());
          }
 
