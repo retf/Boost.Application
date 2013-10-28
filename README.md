@@ -282,21 +282,17 @@ libs/application/example/shared_library_load_plugin.cpp
 
 --
 
-Change Log
---------------------------------------------------------------------------------
+##Change Log
 
-* 27/10/2013 [dd/mm/yyyy] / Commint : Fully prototype.1.27102013 
---------------------------------------------------------------------------------
+### 27/10/2013 [dd/mm/yyyy] / Commint : Fully prototype.1.27102013 
 
 The prototype now is fully implemented (all application flavors, and on both sides).
 
-* 24/10/2013 [dd/mm/yyyy] / Commint : Updates 24102013 
---------------------------------------------------------------------------------
+### 24/10/2013 [dd/mm/yyyy] / Commint : Updates 24102013 
 
 In this commit we have some fix, and reorganization of source.
 
-* 22/10/2013 [dd/mm/yyyy] / Commint : Updates 22102013 
---------------------------------------------------------------------------------
+### 22/10/2013 [dd/mm/yyyy] / Commint : Updates 22102013 
 
 In this commit we have first prototype version of an fully implemented
 server application (Windows Only), with all possible handlers
@@ -322,9 +318,7 @@ refer to example:
 Many other modifications and fix were made.
 
 
-* 18/10/2013 [dd/mm/yyyy] / Commint : Updates 17102013 
---------------------------------------------------------------------------------
-
+### 18/10/2013 [dd/mm/yyyy] / Commint : Updates 17102013 
 
 In this commit we have first prototype version of an fully implemented of common 
 application (Windows Only), with all possible handlers 
@@ -343,11 +337,9 @@ The sample program is:
 * termination_handler.cpp
 
 
-* 17/10/2013 [dd/mm/yyyy] / Commint : Updates 17102013 
---------------------------------------------------------------------------------
+### 17/10/2013 [dd/mm/yyyy] / Commint : Updates 17102013 
 
-New Aspects:
------------
+####New Aspects:
 
 * path
 
@@ -356,15 +348,13 @@ New Aspects:
 
   -> All aspects now live on "application/aspects" folder
   
-Updated Files:
--------------
+####Updated Files:
 
 * All public interfaces now use doxigen comments.
 * Some aspects now has an abstract class, that allow user extend these aspects to anyone with different behaviour.
 * Many minor updates and fix in several files.
 
-New Examples:
-------------
+####New Examples:
 
  * limit_single_instance.cpp
  * limit_single_instance_boost_interprocess_named_mutex.cpp
@@ -375,25 +365,21 @@ New Examples:
  * wait_for_termination_request.cpp
  
 
-* 15/10/2013 [dd/mm/yyyy] / Commint : New commit (Single instance and more)
---------------------------------------------------------------------------------
+### 15/10/2013 [dd/mm/yyyy] / Commint : New commit (Single instance and more)
 
-New Aspects:
------------
+####New Aspects:
 
 * wait_for_termination_request_aspect
 
 * limit_single_instance_aspect
   -> This aspect implement some tests with callback
 
-Updated Aspects:
----------------
+####Updated Aspects:
 
 * args_aspec
   -> minor fix
 
-Updated Files:
--------------
+####Updated Files:
 
 * common_application
   -> handle new aspects (wait_for_termination_request_aspect, limit_single_instance_aspect)
@@ -408,14 +394,12 @@ Updated Files:
 * context
   -> now implement 'add_aspect_if_not_exists' method
 
-New modules:
------------
+####New modules:
 
 * exceptions
 * shared_library
 
-New Examples:
-------------
+####New Examples:
 
 * limit_single_instance_callback_using_singularity
 * limit_single_instance_callback
