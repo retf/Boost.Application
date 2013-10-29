@@ -17,6 +17,8 @@
 #define BOOST_APPLICATION_SIGNAL_MANAGER_HPP
 
 #include <boost/application/config.hpp>
+#include <boost/application/detail/csbl.hpp>
+
 #include <boost/application/context.hpp>
 #include <boost/application/handler.hpp>
 
@@ -28,11 +30,23 @@
 
 namespace boost { namespace application {
 
-   // todo : doxygen comment
    // This is an attempt to make things more flexible, 
    // this allow user to define your own sinal -> handler map
+
+   // forward declaration.
+   template <class T> class common_application_impl_;  
+   template <class T> class server_application_impl_;  
+
+   /*!
+    * \brief This class is the base of signal_manager class.
+    *        User can extend of signal_manager to customize SIGANAL/Handlers
+    *        of your application.
+    * 
+    */
    class signal_binder
    {
+      template<class> friend class common_application_impl_; 
+      template<class> friend class server_application_impl_; 
 
    public:
       explicit signal_binder(context &cxt)
@@ -54,41 +68,101 @@ namespace boost { namespace application {
          }
       }
 
+      /*!
+       * Bind/tie a standard SIGNAL to a handler callback. 
+       *  
+       * \param signal_number The signal constant, e.g.: SIGUSR2, SIGINT.
+       *
+       * \param h An handler that hold a callback that will called when signal 
+       *          arrives.
+       *      
+       */
       void bind(int signal_number, const handler& h)
       {
          boost::system::error_code ec;
          bind(signal_number, h, handler(), ec);
 
-         if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("tie_signal() failed");
+         if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("bind() failed");
       }
 
+      /*!
+       * Bind/tie a standard SIGNAL to a handler callback, and define
+       * handler to be executed on sucess of first handler. 
+       *  
+       * \param signal_number The signal constant, e.g.: SIGUSR2, SIGINT.
+       *
+       * \param h1 An handler that hold a callback that will called when signal 
+       *          arrives.
+       *
+       * \param h2 An handler that hold a callback that will called when the 
+       *           first handler return true;
+       *   
+       */
       void bind(int signal_number, const handler& h1, const handler& h2)
       {
          boost::system::error_code ec;
          bind(signal_number, h1, h2, ec);
 
-         if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("tie_signal() failed");
+         if(ec) 
+            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("bind() failed");
       }
 
-      void bind(int signal_number, const handler& h, boost::system::error_code& ec)
+       /*!
+       * Bind/tie a standard SIGNAL to a handler callback. 'ec' version.
+       *  
+       * \param signal_number The signal constant, e.g.: SIGUSR2, SIGINT.
+       *
+       * \param h An handler that hold a callback that will called when signal 
+       *          arrives.
+       *      
+       */
+      void bind(int signal_number, const handler& h, 
+         boost::system::error_code& ec)
       {
          bind(signal_number, h, handler(), ec);
       }
 
-      void bind(int signal_number, const handler& h1, const handler& h2, boost::system::error_code& ec)
+      /*!
+       * Bind/tie a standard SIGNAL to a handler callback, and define
+       * handler to be executed on sucess of first handler. 'ec' version.
+       *  
+       * \param signal_number The signal constant, e.g.: SIGUSR2, SIGINT.
+       *
+       * \param h1 An handler that hold a callback that will called when signal 
+       *          arrives.
+       *
+       * \param h2 An handler that hold a callback that will called when the 
+       *           first handler return true;
+       *   
+       */
+      void bind(int signal_number, const handler& h1, const handler& h2, 
+         boost::system::error_code& ec)
       {
          signals_.add(signal_number, ec);
          handler_map_[signal_number] = std::make_pair(h1, h2);
       }
 
+      /*!
+       * Unbind/untie a standard SIGNAL.
+       *  
+       * \param signal_number The signal constant, e.g.: SIGUSR2, SIGINT.
+       *      
+       */
       void unbind(int signal_number)
       {
          boost::system::error_code ec;
          unbind(signal_number, ec);
 
-         if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("tie_signal() failed");
+         if(ec) 
+            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("unbind() failed");
       }
 
+      /*!
+       * Unbind/untie a standard SIGNAL. 'ec' version.
+       *  
+       * \param signal_number The signal constant, e.g.: SIGUSR2, SIGINT.
+       *      
+       */
       void unbind(int signal_number, boost::system::error_code& ec)
       {
          if(handler_map_.cend() != handler_map_.find(signal_number))
@@ -99,25 +173,32 @@ namespace boost { namespace application {
          }
       }
 
-      bool is_tied(int signal_number)
+      /*!
+       * Check if a standard SIGNAL is tied to a handler;
+       *  
+       * \param signal_number The signal constant, e.g.: SIGUSR2, SIGINT.
+       *      
+       */
+      bool is_bound(int signal_number)
       {
          return (handler_map_.cend() != handler_map_.find(signal_number));
-      }    
-      
+      }  
+
+    protected:
+       
       void start()
       {
           io_service_thread_ = new boost::thread(
             boost::bind(&signal_binder::run_io_service, this));
       }
 
-   protected:
-  
       void run_io_service()
       {
          io_service_.run();
       }
 
-      void signal_handler(const boost::system::error_code& ec, int signal_number)
+      void signal_handler(const boost::system::error_code& ec, 
+         int signal_number)
       {
          if (!ec)
          {
@@ -156,6 +237,7 @@ namespace boost { namespace application {
             }
          }
       }
+
    protected:
       
       application::context &context_;
@@ -164,8 +246,7 @@ namespace boost { namespace application {
 
       // signal < handler / handler> 
       // if first handler returns true, the second handler are called
-      BOOST_APPLICATION_FEATURE_NS_SELECT::
-         unordered_map<int, std::pair<handler, handler> > handler_map_;
+      csbl::unordered_map<int, std::pair<handler, handler> > handler_map_;
 
       asio::io_service io_service_;
       asio::signal_set signals_;
@@ -173,13 +254,19 @@ namespace boost { namespace application {
       boost::thread *io_service_thread_; 
    };
 
+   /*!
+    * \brief This class hold the default behaviour of SIGNALS 
+    *        used by application.
+    * 
+    */
    class signal_manager
       : public signal_binder
    {
 
    public:
    
-      signal_manager(application::context &context, boost::system::error_code& ec) 
+      signal_manager(application::context &context, 
+         boost::system::error_code& ec) 
          : signal_binder(context)
       {
          register_signals(ec);
@@ -192,7 +279,9 @@ namespace boost { namespace application {
 
          register_signals(ec);
 
-         if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("signal_manager() failed");
+         if(ec) 
+            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR(
+            "signal_manager() failed");
       }
 
    protected:
@@ -211,7 +300,8 @@ namespace boost { namespace application {
                context_.get_aspect<termination_handler>();
 
             handler::parameter_callback callback 
-               = boost::bind<bool>(&signal_manager::termination_signal_handler, this, _1);
+               = boost::bind<bool>(
+               &signal_manager::termination_signal_handler, this, _1);
 
             bind(SIGINT,  th->get_handler(), callback, ec);
             if(ec) return;

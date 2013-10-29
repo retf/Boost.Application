@@ -4,7 +4,8 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //
-// Convenience umbrella header which includes all public Boost.Application header files.
+// Convenience umbrella header which includes all public Boost.Application 
+//  ]header files.
 //
 
 #ifndef BOOST_APPLICATION_HPP

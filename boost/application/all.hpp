@@ -1,4 +1,4 @@
-// all.hpp  -----------------------------------------------------------------//
+// all.hpp  ----------------------------------------------------------------//
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2013 Renato Tegon Forti
@@ -20,6 +20,7 @@
 // application sub-system
 #include <boost/application/context.hpp>
 #include <boost/application/launch.hpp>
+// aspects
 #include <boost/application/ready_to_use_aspects.hpp>
 // plugin sub-system
 #include <boost/application/shared_library.hpp>

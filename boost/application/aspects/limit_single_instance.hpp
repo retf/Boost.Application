@@ -20,6 +20,7 @@
 #include <boost/function.hpp>
 
 #include <boost/application/config.hpp>
+#include <boost/application/detail/csbl.hpp>
 #if defined( ENABLE_BOOST_INTERPROCESS_NAMED_MUTEX )
 #include <boost/interprocess/sync/named_mutex.hpp>
 #endif
@@ -192,10 +193,9 @@ namespace boost { namespace application {
 
    private:
 
-      BOOST_APPLICATION_FEATURE_NS_SELECT::
-         shared_ptr<limit_single_instance_impl> impl_;
-
+      csbl::shared_ptr<limit_single_instance_impl> impl_;
       uuids::uuid uuid_;
+
    };
 
 #if defined( ENABLE_BOOST_INTERPROCESS_NAMED_MUTEX )
@@ -208,7 +208,8 @@ namespace boost { namespace application {
     * named_mutex.
     * 
     */
-   class limit_single_instance_named_mutex_behaviour : public limit_single_instance
+   class limit_single_instance_named_mutex_behaviour 
+      : public limit_single_instance
    {
    public:
        /*!
@@ -358,5 +359,3 @@ namespace boost { namespace application {
 } }  // boost::application
 
 #endif // BOOST_APPLICATION_LIMIT_SINGLE_INSTANCE_ASPECT_HPP
-
-		

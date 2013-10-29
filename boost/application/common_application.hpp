@@ -58,6 +58,12 @@ namespace boost { namespace application {
       /*!
        * Creates a common application.
        *
+       * \param myapp An user application functor class.
+       *
+       * \param sm The signal manager of application, that will be used 
+       *           internaly by application type. 
+       *           User can customize this instance.
+       *
        * \param context An context of application, that hold all
        *        aspects.
        * 
@@ -67,12 +73,12 @@ namespace boost { namespace application {
        * Check ec for errors.
        * 
        */
-
       template <typename Application, typename SignalManager>
-      common(Application& myapp, SignalManager &sm, application::context &context, 
-         boost::system::error_code& ec)
+      common(Application& myapp, SignalManager &sm, 
+         application::context &context, boost::system::error_code& ec)
          : impl_(new common_application_impl(
-                 boost::bind<int>( &Application::operator(), &myapp, _1), sm, context, ec))
+                 boost::bind<int>( &Application::operator(), &myapp, _1), sm, 
+                 context, ec))
       {
          if(ec) return;
 
@@ -85,11 +91,32 @@ namespace boost { namespace application {
             csbl::make_shared<status>(status::running));
       }
 
+      /*!
+       * Creates a common application.
+       *
+       * \param myapp An user application functor class.
+       *
+       * \param context An context of application, that hold all
+       *        aspects.
+       *
+       * \param sm The signal manager of application, that will be used 
+       *           internaly by application type. 
+       *           User can customize this instance.
+       * 
+       * \param ec Variable (boost::system::error_code) that will be 
+       *        set to the result of the operation.
+       * 
+       * Check ec for errors.
+       * 
+       */
+
       template <typename Application, typename SignalManager>
-      common(Application& myapp, SignalManager &sm, singularity<application::context> &context, 
+      common(Application& myapp, SignalManager &sm, 
+         singularity<application::context> &context, 
          boost::system::error_code& ec)
          : impl_(new common_application_impl(
-                 boost::bind<int>( &Application::operator(), &myapp), sm, context, ec))
+                 boost::bind<int>( &Application::operator(), &myapp), sm, 
+                 context, ec))
       {        
          if(ec) return;
 
@@ -102,6 +129,10 @@ namespace boost { namespace application {
             csbl::make_shared<status>(status::running));
       }
 
+      /*!
+       * Prepare application and run user functor operator.
+       *
+       */
       int run()
       {
          return impl_->run();

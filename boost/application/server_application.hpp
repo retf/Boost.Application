@@ -19,7 +19,6 @@
 // application
 #include <boost/application/config.hpp>
 #include <boost/application/context.hpp>
-//#include <boost/application/detail/app.hpp>
 #include <boost/application/detail/csbl.hpp>
 #include <boost/application/application_initializers.hpp>
 // platform dependent
@@ -53,7 +52,13 @@ namespace boost { namespace application {
 
       /*!
        * Creates a server application.
+       * 
+       * \param myapp An user application functor class.
        *
+       * \param sm The signal manager of application, that will be used 
+       *           internaly by application type. 
+       *           User can customize this instance.
+       * 
        * \param context An context of application, that hold all
        *        aspects.
        * 
@@ -64,7 +69,8 @@ namespace boost { namespace application {
        * 
        */
       template <typename Application, typename SignalManager>
-      server(Application& myapp, SignalManager &sm, application::context &context, boost::system::error_code& ec)
+      server(Application& myapp, SignalManager &sm, 
+             application::context &context, boost::system::error_code& ec)
       {
          // default aspects patterns added to this kind of application
 
@@ -77,11 +83,32 @@ namespace boost { namespace application {
          // need be created after run_mode, status
 
          impl_.reset(new server_application_impl(
-            boost::bind<int>( &Application::operator(), &myapp, _1), sm, context, ec));
+            boost::bind<int>( &Application::operator(), &myapp, _1), sm, 
+            context, ec));
       }
 
+      /*!
+       * Creates a server application.
+       * 
+       * \param myapp An user application functor class.
+       *
+       * \param sm The signal manager of application, that will be used 
+       *           internaly by application type. 
+       *           User can customize this instance.
+       * 
+       * \param context An singularity context of application, that hold all
+       *        aspects.
+       * 
+       * \param ec Variable (boost::system::error_code) that will be 
+       *        set to the result of the operation.
+       * 
+       * Check ec for errors.
+       * 
+       */
       template <typename Application, typename SignalManager>
-      server(Application& myapp, SignalManager &sm, singularity<application::context> &context, boost::system::error_code& ec)
+      server(Application& myapp, SignalManager &sm, 
+             singularity<application::context> &context, 
+             boost::system::error_code& ec)
       {
          
          // default aspects patterns added to this kind of application
@@ -95,14 +122,23 @@ namespace boost { namespace application {
          // need be created after run_mode, status
 
          impl_.reset(new server_application_impl(
-            boost::bind<int>( &Application::operator(), &myapp), sm, context, ec));
+            boost::bind<int>( &Application::operator(), &myapp), sm, 
+            context, ec));
       }
 
+      /*!
+       * Prepare application and run user functor operator.
+       *
+       */
       int run()
       {
          return impl_->run();
       }
 
+      /*!
+       * Destruct an server application.
+       *
+       */
       virtual ~server() 
       {
          impl_->get_context().use_aspect<status>().state(status::stoped);

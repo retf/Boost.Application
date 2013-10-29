@@ -18,6 +18,7 @@
 
 // application
 #include <boost/application/config.hpp>
+#include <boost/application/detail/csbl.hpp>
 #include <boost/application/aspects/limit_single_instance.hpp>
 
 namespace boost { namespace application { namespace detail {
@@ -29,8 +30,7 @@ namespace boost { namespace application { namespace detail {
    {
       if(cxt.has_aspect<limit_single_instance>())
       {    
-         BOOST_APPLICATION_FEATURE_NS_SELECT
-            ::shared_ptr<limit_single_instance> ol =          
+         csbl::shared_ptr<limit_single_instance> ol =          
                cxt.get_aspect<limit_single_instance>();
 
          bool is_another_instance_running = ol->lock(ec);
