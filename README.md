@@ -7,6 +7,8 @@ The main purpose of this test is to see how it looks and how it behaves in a fin
 * This release will be identified as : Beta 4
 * To get Beta 3 (older version) refer to: [Beta 3] (https://sourceforge.net/projects/boostapp/)
 
+`This library is in "Work in Progress" status! To more stable version, refer to beta 3`
+
 contact: re.tf@acm.org
 
 ###Acknowledgements
@@ -273,16 +275,20 @@ The basic way to use this feature is define a plugin (and plugin API), and load 
 
 Plugin: 
 
-libs/application/example/plugin_api.hpp
-libs/application/example/plugin_library.cpp
+[Full Code (plugin_api)] (libs/application/example/plugin_api.hpp), 
+[Full Code (plugin_library)] (libs/application/example/plugin_library.cpp)
 
 And to load and call plugin:
 
-libs/application/example/shared_library_load_plugin.cpp
+[Full Code (shared_library_load_plugin)] (libs/application/example/shared_library_load_plugin.cpp)
 
 --
 
 ##Change Log
+
+### 29/10/2013 [dd/mm/yyyy] / Commint : Updates 29102013 
+
+Minor updates and fixes.
 
 ### 27/10/2013 [dd/mm/yyyy] / Commint : Fully prototype.1.27102013 
 
