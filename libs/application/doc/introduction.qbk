@@ -1,0 +1,20 @@
+[section:introduction Introduction]
+
+A Boost.Application provides a application environment, or start point to any people that want a basic infrastructure to build an system application on Windows or Unix Variants (e.g. Linux, MacOS).
+
+The Boost.Application allows a developer run a application as a Service (Windows), or a background process/Daemon (Unix Variants), or as a usual interactive application (terminal) without the need to add extra code, the library abstract OS specific API and provide a easy common interface. Also Boost.Application provide many others usefull ready-to-use features, e.g:
+
+* Run application as Windows Service or UNIX Daemon;
+* Plugin extension system;
+* Aspects extensions; 
+* Process(executable) Single instance Instantiation support;
+* And many others.
+
+Here's a simple example of how to start a program with Boost.Application:
+
+[import ../example/simple_application.cpp]
+[intro]
+
+[caution This is not yet an official Boost C++ library. It wasn't reviewed and can't be downloaded from www.boost.org. This beta is available to boost community to know real interest and get comments for refinement.The intention is to submit library to formal review, if community think that it is interesting!]
+
+[endsect]
