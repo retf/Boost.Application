@@ -1,8 +1,11 @@
 [section:introduction Introduction]
 
-A Boost.Application provides a application environment, or start point to any people that want a basic infrastructure to build an system application on Windows or Unix Variants (e.g. Linux, MacOS).
+[caution
+This documentatuion is in "Work in Progress" status.
+[@https://github.com/retf/Boost.Application DOWNLOAD THE LIB]
+]
 
-The Boost.Application allows a developer run a application as a Service (Windows), or a background process/Daemon (Unix Variants), or as a usual interactive application (terminal) without the need to add extra code, the library abstract OS specific API and provide a easy common interface. Also Boost.Application provide many others usefull ready-to-use features, e.g:
+A Boost.Application provides a application environment, or start point to any people that want a basic infrastructure to build an system application on Windows or Unix Variants (e.g. Linux, MacOS).
 
 * Run application as Windows Service or UNIX Daemon;
 * Plugin extension system;

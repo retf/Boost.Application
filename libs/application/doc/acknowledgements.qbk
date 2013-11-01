@@ -1,12 +1,18 @@
+[/
+    Copyright 2013 Renato Tegon Forti
+    Distributed under the Boost Software License, Version 1.0.
+    (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+/]
+
 [section Acknowledgements]
 
-A special thanks goes to Vicente J. Botet Escriba that helped a lot on all areas of this lib.
+A special thanks goes to [*Vicente J. Botet Escriba] that helped a lot on all areas of this lib.
 
 The first Boost.Application appears in 2011 labed as 'version beta 3' and some people have helped on various areas that influenced Boost.Application. 
 
 Thanks to:
 
-Jarrad Waterloo for your comments and directions.
+Jarrad Waterloo for your comments and directions.[br]
 Julian Gonggrijp for your comments to improving the ease of use.
 
 [endsect]

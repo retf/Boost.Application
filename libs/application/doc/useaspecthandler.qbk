@@ -1,0 +1,52 @@
+[/
+    Copyright 2013 Renato Tegon Forti
+    Distributed under the Boost Software License, Version 1.0.
+    (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+/]
+
+[section Using Application Handlers]
+
+In Boost.Application, the aspects handlers is the way that you can define a custom action to one of provided signal/event catch.
+
+The handler can be defined using a param signature, e.g.:
+
+```
+   bool stop(context &context)
+```
+   
+Or using Boost.singularity version, e.g.:
+
+```
+   bool stop(void)
+```
+
+Note that all handlers return a 'bool' to indicate to application mode engine, what action need be done, e.g.:
+
+```
+class myapp
+{
+public:
+// ...
+bool stop(context &context)
+{
+   char type;
+   do
+   {
+      std::cout << "Do you want to exit? [y/n]" << std::endl;
+      std::cin >> type;
+   }
+   while( !std::cin.fail() && type!='y' && type!='n' );
+
+   if(type == 'y')
+      // tell to app mode engine to continue.
+      return true;
+
+   // tell to app mode engine to exit.
+   return false;
+}
+// ...
+};
+```
+
+[endsect]
+

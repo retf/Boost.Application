@@ -1,0 +1,22 @@
+[/
+    Copyright 2013 Renato Tegon Forti
+    Distributed under the Boost Software License, Version 1.0.
+    (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+/]
+
+[section Dependencies]
+
+The Boost.Application is a header only library, but it depends of the following libraries, and they must be available in order to link programs that use Boost.Application:
+
+* Boost.System for the boost::system::error_code and boost::system::system_error classes.
+* Boost.Thead for creating a service thread and synchronization. Windows Service blocks the main thread so, then service thread function would need to be called from a boost thread.
+* Boost.Function, Bind for creation of a callbak system and others.
+* Boost.Asio for SIGNALs. 
+* Boost.Singularity for singleton version. 
+* Boost.TypeIndex or Std TypeIndex used by application context. 
+* Boost.Filesystem to directory manipulation.
+
+Furthermore, some of the examples also require the Boost.Program_options libraries in both sides (Window/Unix).
+
+[endsect]
+
