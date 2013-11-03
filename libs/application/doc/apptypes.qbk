@@ -16,7 +16,8 @@ This kind of application is a usual Interactive Terminal application.
 This kind of application generates a Service (Windows), or a background process/Daemon (Unix).
 [endsect]
 
-[note Both versions can be extended using the plugin system provided by library (see Extending Application).]
+[note Both versions can be extended using the plugin system provided by library (see [@../html/boost_application/other_features.html#plugin_system 'Extending Application'])
+]
 
 Other types of applications can be added in the future, e.g. Apache Module, IIS Module, FastCGI.
 

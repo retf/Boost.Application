@@ -6,21 +6,35 @@
 
 [section Using Application Handlers]
 
-In Boost.Application, the aspects handlers is the way that you can define a custom action to one of provided signal/event catch.
+In the Boost.Application, the '[*aspects handlers]' is the way that you can define a custom action to response some events, that are initiated by user via [@http://msdn.microsoft.com/en-us/library/windows/desktop/ms685150(v=vs.85).aspx SCM] or [@http://en.wikipedia.org/wiki/Unix_signal SIGNALS].
 
-The handler can be defined using a param signature, e.g.:
+[table:ahc Pre-configured Handlers available in the library
+    [[Aspect Name]                        [Aspect Contract Class]         [Aspect Final Class]                             [Aspect Functionality]]
+    [[pause_handler]                      [pause_handler]                 [pause_handler_default_behaviour]                [When 'pause' event is detected, fire a user defined callback]]
+    [[resume_handler]                     [resume_handler]                [resume_handler_default_behaviour]               [When 'resume' event is detected, fire a user defined callback]]
+    [[termination_handler]                [termination_handler]           [termination_handler_default_behaviour]          [When 'stop' signal/event is detected, fire a user defined callback]]
+    [[limit_single_instance]              [limit_single_instance]         [limit_single_instance_default_behaviour]        [When single instance feature is enabled, fire a user defined callback to handle it]]
+
+]
+
+The user can define the handler using one of two types of signature available.
+
+  1. Parameter Version
+  2. Void Version (To be used with Boost.Singularity)
+
+The handler defined using a param signature, looks like:
 
 ```
    bool stop(context &context)
 ```
    
-Or using Boost.singularity version, e.g.:
+The handler defined to be used with Boost.Singularity, looks like:
 
 ```
    bool stop(void)
 ```
 
-Note that all handlers return a 'bool' to indicate to application mode engine, what action need be done, e.g.:
+Note that all handlers must return a 'bool' to indicate to '[*application mode engine]', what action need be done, e.g.:
 
 ```
 class myapp

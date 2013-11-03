@@ -4,42 +4,35 @@
     (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 /]
 
-[section Application Roadmap]
+[section:roadmap Application Roadmap]
 
-Building an application with Boost.Application is a simple process, the basic road map steps are:
+Building an application with Boost.Application is a simple process, the basic roadmap steps are:
 
-	a.  Define a 'functor' class for your application with an application operator of desired signature;
-
-	b.  Create a 'context' for application;
-
-	c.  Add desired 'aspects' to application context;
-
-	d.  Optionally, define a 'callback' for 'handler aspects' type, e.g.: stop, pause, resume;
-
-	e.  Optionally, define new 'apects';
-
-	f.  Optionally, customize/extend some ready to use 'apects';
-
-	g.  Optionally, customize 'SIGNAL' of application;
-
-	h.  Launch an application using some read-to-use mode, e.g.: 'common' or 'server' application;
-
-	i.  Optionally, use 'plugin system' to extend or change behavior of application at runtime.
-
-	j.  Optionally, in case of 'Windows Service', use ready-to-use code to setup service;
-
-	k.  Use 'aspects' available on context (that user add on step [[c]] or [[e]]).
-	
-[note	
-	   The 'application operator' provided by user on functor class can be defined in 2 ways (signatures). [br]
-		 [br]    1. 'singleton' based version (void).
-		 [br]    2. 'param' based version (that receive a 'context' of application as parameter).
+[table:rs Roadmap Steps
+    [[Step]               [Optionally?]             [Description]]
+    [[A]                  [NO]                      [Define a 'functor' class for your application with an application operator of desired signature]]
+    [[B]                  [NO]                      [Create a 'context' for application]]
+    [[C]                  [YES]                     [Add desired 'aspects' to application context]]
+    [[D]                  [YES]                     [Define a 'callback' for 'handler aspects' type. e.g.: stop, pause, resume]]
+    [[E]                  [YES]                     [Define new 'apects', and add it to application context]]
+    [[F]                  [YES]                     [Customize some ready to use 'apects']]
+    [[G]                  [YES]                     [Customize 'SIGNALS' of application]]
+    [[H]                  [NO]                      [Launch an application using some ready to use mode. ('common' or 'server' application)]]
+    [[I]                  [YES]                     [Use 'plugin system' to extend or change behavior of application at runtime]]
+    [[J]                  [YES]                     [In case of 'Windows Service' (Server mode on Windows), use ready-to-use code to setup service]]
+    [[K]                  [YES]                     [Use 'aspects' available in the context (that user add on step 'c' or 'e')]]
 ]
 
 A basic sample of server application can be:
 
 [import ../example/simple_server_application_help.cpp]
 [simplesrvrhelp]
+
+[note	
+	   The 'application operator' provided by user on functor class can be defined in 2 ways (signatures). [br]
+		 [br]    1. 'singleton' based version (void).
+		 [br]    2. 'param' based version (that receive a 'context' of application as parameter).
+]
 
 [endsect]
 
