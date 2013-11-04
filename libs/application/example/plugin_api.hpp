@@ -8,6 +8,7 @@
 #ifndef BOOST_APPLICATION_MY_PLUGIN_API_HPP
 #define BOOST_APPLICATION_MY_PLUGIN_API_HPP
 
+//[plugapi
 class my_plugin_api
 {
 public:
@@ -15,6 +16,7 @@ public:
    virtual float version() = 0;
    virtual float calculate(float x, float y) = 0;
 };
+//]
    
 #endif // BOOST_APPLICATION_MY_PLUGIN_API_HPP
 

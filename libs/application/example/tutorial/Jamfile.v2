@@ -1,0 +1,55 @@
+#
+#          Copyright Renato Tegon Forti 2011 - 2013.
+# Distributed under the Boost Software License, Version 1.0.
+#    (See accompanying file LICENSE_1_0.txt or copy at
+#          http://www.boost.org/LICENSE_1_0.txt)
+#
+
+project
+   : source-location .
+   : requirements
+
+   # windows
+
+   # msvc
+      <toolset>msvc:<define>_SCL_SECURE_NO_WARNINGS
+      <toolset>msvc:<define>_SCL_SECURE_NO_DEPRECATE
+      <toolset>msvc:<define>_CRT_SECURE_NO_WARNINGS
+      <toolset>msvc:<define>_CRT_SECURE_NO_DEPRECATE
+      <toolset>msvc:<define>_SCL_SECURE_NO_WARNINGS
+
+   # linux
+      <target-os>linux:<linkflags>"-ldl" 
+
+   # gcc
+      <toolset>gcc:<cxxflags>-fno-strict-aliasing  # avoids strict aliasing violations in other Boost components
+
+   # others
+      <link>shared:<define>BOOST_ALL_DLL
+      <library>/boost/system//boost_system
+      <library>/boost/program_options//boost_program_options
+      <library>/boost/filesystem//boost_filesystem
+      <library>/boost/date_time//boost_date_time
+      <library>/boost/thread//boost_thread
+	  <library>/boost/timer//boost_timer
+      <library>../../../test/build//boost_test_exec_monitor
+      <threading>multi
+      ;
+	
+# tutorial samples
+
+exe main_stage1  
+   : main_stage1.cpp
+   ;
+	
+exe main_stage2  
+   : main_stage2.cpp
+   ;
+   
+exe main_stage3  
+   : main_stage3.cpp
+   ;
+		
+exe main_stage4  
+   : main_stage4.cpp
+   ;

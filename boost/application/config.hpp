@@ -31,30 +31,58 @@
 #include <boost/application/version.hpp>
 #include <boost/application/detail/typeindex.hpp>
 
-#ifndef BOOST_NO_CXX11_SMART_PTR
-#include <memory>
-#include <unordered_map>
-#else
-#include <boost/smart_ptr.hpp>
-#include <boost/unordered/unordered_map.hpp>
+// other header selection
+//
+// the user can force one selection defining
+// BOOST_APPLICATION_FEATURE_NS_SELECT_STD or
+// BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
+
+// force selection
+#if defined( BOOST_APPLICATION_FEATURE_NS_SELECT_STD )
+#   include <memory>
+#   include <unordered_map>
+#elif defined( BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST )
+#   include <boost/shared_ptr.hpp>
+#   include <boost/make_shared.hpp>
+#   include <boost/unordered_map.hpp>
+#else // auto detect
+#   ifndef BOOST_NO_CXX11_SMART_PTR 
+#      include <memory>
+#   else
+#      include <boost/shared_ptr.hpp>
+#      include <boost/make_shared.hpp>
+#   endif
+#   ifndef BOOST_NO_CXX11_HDR_UNORDERED_MAP
+#      include <unordered_map>
+#   else
+#      include <boost/unordered_map.hpp>
+#   endif
 #endif
 
 #if defined(BOOST_WINDOWS_API)
 #   if defined(_UNICODE) || defined(UNICODE)
-#   define BOOST_APPLICATION_STD_WSTRING
+#      define BOOST_APPLICATION_STD_WSTRING
 #   endif
 #endif
 
 // check if compiler provide some STL features of c++11 
 // that we use by the library, else use boost.
 
+// force selection
+#if defined( BOOST_APPLICATION_FEATURE_NS_SELECT_STD )
+#   define BOOST_APPLICATION_FEATURE_NS_SELECT std
+#elif defined( BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST )
+#   define BOOST_APPLICATION_FEATURE_NS_SELECT boost
+#else // auto detect
 // BOOST_APPLICATION_FEATURE_NS_SELECT is used to select correct ns 
 // on class members.
-#ifndef BOOST_NO_CXX11_SMART_PTR 
-#define BOOST_APPLICATION_FEATURE_NS_SELECT std
-#else
-#define BOOST_APPLICATION_FEATURE_NS_SELECT boost
+#   ifndef BOOST_NO_CXX11_SMART_PTR 
+#      define BOOST_APPLICATION_FEATURE_NS_SELECT std
+#   else
+#      define BOOST_APPLICATION_FEATURE_NS_SELECT boost
+#   endif
 #endif
+
 // BOOST_APPLICATION_FEATURE_SELECT is used to select correct ns 
 // on functin/method scope.
 #define BOOST_APPLICATION_FEATURE_SELECT                          \

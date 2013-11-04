@@ -9,6 +9,24 @@
 // server.cpp : Defines the entry point for the console application.
 //
 
+
+// -----------------------------------------------------------------------------
+// This example shows how to use windows service setup module to provide a
+// installation system to application using program_options
+//
+// [installation]
+// windows_service_setup.exe -i --name "My Service" --path "c:\myservice\service.exe"
+// windows_service_setup.exe -i --name "My Service" --path "c:\myservice\service.exe" --display "My Service"
+// windows_service_setup.exe -i --name "My Service" --path "c:\myservice\service.exe" --display "My Service" --description "Service Description"
+// [check]
+// windows_service_setup.exe -c --name "My Service" 
+// [uninstallation]
+// windows_service_setup.exe -u --name "My Service" --path "c:\myservice\service.exe" 
+// 
+// Note that when arg name are not priovided, the name will be the name of
+// executable, in thiscase, service name will be: 'windows_service_setup'
+// -----------------------------------------------------------------------------
+
 #define BOOST_ALL_DYN_LINK
 #define BOOST_LIB_DIAGNOSTIC
 
@@ -18,6 +36,7 @@
 using namespace boost;
 namespace po = program_options;
 
+//[wss
 class windows_service_setup
 {
 public:
@@ -110,7 +129,6 @@ public:
    }
 };
 
-//todo
 int main(int argc, char *argv[])
 {
    BOOST_APPLICATION_FEATURE_SELECT
@@ -143,5 +161,5 @@ int main(int argc, char *argv[])
 
    return 0;
 }
-
+//]
 

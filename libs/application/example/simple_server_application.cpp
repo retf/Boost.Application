@@ -47,6 +47,8 @@
 #define BOOST_ALL_DYN_LINK
 #define BOOST_LIB_DIAGNOSTIC
 
+#define BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
+
 #include <iostream>
 #include <fstream>
 #include <boost/program_options.hpp>
@@ -63,8 +65,6 @@ public:
 
    void worker(application::context* context)
    {
-      BOOST_APPLICATION_FEATURE_SELECT
-
       // my application behaviour
 
       // dump args
@@ -86,7 +86,7 @@ public:
 
       // run logic
 
-      shared_ptr<application::status> st =          
+      boost::shared_ptr<application::status> st =          
          context->get_aspect<application::status>();
 
       int count = 0;
@@ -155,12 +155,10 @@ private:
 
 bool setup(application::context& context)
 {
-   BOOST_APPLICATION_FEATURE_SELECT
-
-   shared_ptr<application::args> myargs 
+   boost::shared_ptr<application::args> myargs 
       = context.get_aspect<application::args>();
 
-   shared_ptr<application::path> mypath 
+   boost::shared_ptr<application::path> mypath 
       = context.get_aspect<application::path>();
    
 // provide setup for windows service   
@@ -221,27 +219,25 @@ bool setup(application::context& context)
 
 int main(int argc, char *argv[])
 {   
-   BOOST_APPLICATION_FEATURE_SELECT
-
    myapp app;
    application::context app_context;
 
    // my server aspects
 
    app_context.add_aspect<application::path>(
-      make_shared<application::path_default_behaviour>(argc, argv));
+      boost::make_shared<application::path_default_behaviour>(argc, argv));
 
    app_context.add_aspect<application::args>(
-      make_shared<application::args>(argc, argv));
+      boost::make_shared<application::args>(argc, argv));
 
    // add termination handler
-
+  
    application::handler::parameter_callback termination_callback 
       = boost::bind<bool>(&myapp::stop, &app, _1);
 
    app_context.add_aspect<application::termination_handler>(
-      make_shared<application::termination_handler_default_behaviour>(termination_callback));
-
+      boost::make_shared<application::termination_handler_default_behaviour>(termination_callback));
+   
    // To  "pause/resume" works, is required to add the 2 handlers.
 
 #if defined(BOOST_WINDOWS_API) 
@@ -252,7 +248,7 @@ int main(int argc, char *argv[])
       = boost::bind<bool>(&myapp::pause, &app, _1);
 
    app_context.add_aspect<application::pause_handler>(
-      make_shared<application::pause_handler_default_behaviour>(pause_callback));
+      boost::make_shared<application::pause_handler_default_behaviour>(pause_callback));
 
    // windows only : add resume handler
 
@@ -260,7 +256,7 @@ int main(int argc, char *argv[])
       = boost::bind<bool>(&myapp::resume, &app, _1);
 
    app_context.add_aspect<application::resume_handler>(
-      make_shared<application::resume_handler_default_behaviour>(resume_callback));
+      boost::make_shared<application::resume_handler_default_behaviour>(resume_callback));
 
 #endif     
 

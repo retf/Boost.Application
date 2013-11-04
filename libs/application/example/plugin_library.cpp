@@ -7,6 +7,8 @@
 
 #include <iostream>
 
+//[plugcpp
+
 #if defined(_WIN32)
 #   define LIBRARY_API __declspec(dllexport)
 #else
@@ -48,3 +50,5 @@ void delete_my_plugin(my_plugin_api* myplugin)
 {
    delete myplugin;
 }
+//]
+

@@ -18,10 +18,16 @@
 
 #include <boost/config.hpp>
 
-#ifndef BOOST_NO_CXX11_HDR_TYPEINDEX
-#include <typeindex>
+#if defined( BOOST_APPLICATION_FEATURE_NS_SELECT_STD )
+#   include <typeindex>
+#elif defined( BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST )
+#   include <boost/type_index.hpp>
 #else
-#include <boost/type_index.hpp>
+#   ifndef BOOST_NO_CXX11_HDR_TYPEINDEX
+#      include <typeindex>
+#   else
+#      include <boost/type_index.hpp>
+#   endif
 #endif
 
 #endif // BOOST_APPLICATION_DETAIL_TYPEINDEX_HPP

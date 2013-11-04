@@ -53,27 +53,7 @@ namespace boost { namespace application {
       : public entity::aspect_map, noncopyable
    {
    public: 
-      
-      /*!
-       * Add a new aspect to the aspect pool if it don't already exists 
-       * on aspect pool of application context. 
-       *  
-       * \return true if the aspect did not exist and was successfully added, 
-       *         if the aspect already exists, returns false and
-       *         nothing is done.
-       *      
-       */
-      template <class T>
-      bool add_aspect_if_not_exists(csbl::shared_ptr<T> asp) 
-      {
-         if (!has_aspect<T>()) {
-            add_aspect<T>(asp);
-            return true;
-         }
-
-         return false;
-      }
-
+      // nothing here! Reserved for future use.
    };
 
 }} // boost::application 

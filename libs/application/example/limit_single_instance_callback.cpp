@@ -24,6 +24,7 @@
 
 using namespace boost::application;
 
+//[lsic
 class myapp
 {
 public:
@@ -49,6 +50,7 @@ public:
       return 0;
    }
 
+   /*<< Define a cllback that will handle if a new instance of application should continue or exit >>*/
    bool instace_aready_running(context &context)
    {
       char type;
@@ -81,6 +83,7 @@ int main(int argc, char *argv[])
    context app_context;
 
    boost::uuids::string_generator gen;
+   /*<< Define a unique identity to application >>*/
    boost::uuids::uuid appuuid = gen("{9F66E4AD-ECA5-475D-8784-4BAA329EF9F2}");
 
    handler::parameter_callback callback 
@@ -91,3 +94,4 @@ int main(int argc, char *argv[])
 
    return launch<common>(app, app_context);
 }
+//]

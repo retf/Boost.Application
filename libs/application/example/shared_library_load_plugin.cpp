@@ -12,6 +12,7 @@
 #define BOOST_ALL_DYN_LINK
 #define BOOST_LIB_DIAGNOSTIC
 
+//[callplugcpp
 #include <boost/application.hpp>
 #include "plugin_api.hpp"
 
@@ -80,4 +81,4 @@ int main(int argc, char* argv[])
       return 1;
    }
 }
-
+//]

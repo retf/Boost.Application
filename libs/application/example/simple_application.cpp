@@ -17,22 +17,24 @@
 #define BOOST_ALL_DYN_LINK
 #define BOOST_LIB_DIAGNOSTIC
 
+#define BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
+
+//[intro
 #include <iostream>
 #include <boost/application.hpp>
 
 using namespace boost;
 
+/*<<Define application functor class>>*/
 class myapp
 {
 public:
 
-   // param
+   /*<<Define the application operator that will receive a application context>>*/
    int operator()(application::context& context)
    {
-      BOOST_APPLICATION_FEATURE_SELECT
-
-      std::cout << "Test" << std::endl;
-      shared_ptr<application::args> myargs 
+      /*<<Make use of an 'aspect'>>*/
+      boost::shared_ptr<application::args> myargs 
          = context.get_aspect<application::args>();
 
       if (myargs)
@@ -46,6 +48,9 @@ public:
          }
       }
 
+      /*<<Add other application logic>>*/
+      // code your application
+
       return 0;
    }
 };
@@ -53,14 +58,19 @@ public:
 // main
 
 int main(int argc, char *argv[])
-{   
-   BOOST_APPLICATION_FEATURE_SELECT
-
+{  
+   /*<<Instantiate your application>>*/    
    myapp app;
+
+   /*<<Create a context application aspect pool>>*/   
    application::context app_context;
 
+   /*<<Add an aspect for future use. An 'aspect' can be customized, or new aspects can be created>>*/  
    app_context.add_aspect<application::args>(
-      make_shared<application::args>(argc, argv));
+      boost::make_shared<application::args>(argc, argv));
 
+   /*<<Start the application on the desired mode (common, server)>>*/  
    return application::launch<application::common>(app, app_context);
 }
+//]
+

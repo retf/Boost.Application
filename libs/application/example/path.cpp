@@ -17,11 +17,14 @@
 #define BOOST_ALL_DYN_LINK
 #define BOOST_LIB_DIAGNOSTIC
 
+#define BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
+
 #include <iostream>
 #include <boost/application.hpp>
 
 using namespace boost;
 
+//[path
 class myapp
 {
 public:
@@ -29,11 +32,10 @@ public:
    // param
    int operator()(application::context& context)
    {
-      BOOST_APPLICATION_FEATURE_SELECT
-
       std::cout << "Test" << std::endl;
 
-      shared_ptr<application::path> path 
+	    /*<< Use 'path' aspect on your logic >>*/ 
+      boost::shared_ptr<application::path> path 
          = context.get_aspect<application::path>();
 
       std::cout << "executable_path      : " << path->executable_path()      << std::endl;
@@ -56,13 +58,14 @@ public:
 
 int main(int argc, char *argv[])
 {   
-   BOOST_APPLICATION_FEATURE_SELECT
-
    myapp app;
    application::context app_context;
 
-  app_context.add_aspect<application::path>(
-     make_shared<application::path_default_behaviour>(argc, argv));
+   /*<< Add 'path' aspect to context pool of application, it will be available for future use >>*/ 
+   app_context.add_aspect<application::path>(
+     boost::make_shared<application::path_default_behaviour>(argc, argv));
 
    return application::launch<application::common>(app, app_context);
 }
+
+//]

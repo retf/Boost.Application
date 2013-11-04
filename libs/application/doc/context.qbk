@@ -28,7 +28,7 @@ Boost.Application provide a wide class of ready-to-use 'aspects' and user is fre
 
 ]
 
-To know how customize an Aspect, refer to [@../html/boost_application/other_features.html#boost_application.other_features.customize_handlers 'Customize Aspects']
+To know how customize an Aspect, refer to [@../html/boost_application/customization.html#boost_application.customization.customize_handlers 'Customize Aspects']
 
 
 [note	

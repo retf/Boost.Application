@@ -9,19 +9,68 @@
 
 [pre
 Simplest Common Aplication [@http://www.boost.org/libs/application/example/simple_application.cpp (simple_application.cpp)] 
-Simplest Common Aplication [@http://www.boost.org/libs/application/example/simple_application.cpp (simple_application.cpp)]
+Simplest Common Aplication Using Singularity [@http://www.boost.org/libs/application/example/simple_application_using_singularity.cpp (simple_application_using_singularity.cpp)] 
 ]
 
 [* Server Application]
 
+[pre
+Simplest Server Aplication [@http://www.boost.org/libs/application/example/simple_server_application.cpp (simple_server_application.cpp)] 
+]
+
 [* Other Features]
 
+[pre
+Application Mode Select [@http://www.boost.org/libs/application/example/application_mode_select.cpp (application_mode_select.cpp)] 
+Handling Errors (ec version) [@http://www.boost.org/libs/application/example/handling_errors_ec_version.cpp (handling_errors_ec_version.cpp)] 
+Handling Errors (ex version) [@http://www.boost.org/libs/application/example/handling_errors_ex_version.cpp (handling_errors_ex_version.cpp)] 
+Limit Single Instance [@http://www.boost.org/libs/application/example/limit_single_instance.cpp (limit_single_instance.cpp)] 
+Limit Single Instance (interprocess) [@http://www.boost.org/libs/application/example/limit_single_instance_boost_interprocess_named_mutex.cpp (limit_single_instance_boost_interprocess_named_mutex.cpp)] 
+Limit Single Instance Using Callback [@http://www.boost.org/libs/application/example/limit_single_instance_callback.cpp (limit_single_instance_callback.cpp)]
+Limit Single Instance Using Singularity [@http://www.boost.org/libs/application/example/limit_single_instance_callback_using_singularity.cpp (limit_single_instance_callback_using_singularity.cpp)]
+Windows Service Setup [@http://www.boost.org/libs/application/example/service_setup.cpp (service_setup.cpp)]
+Plug-in System [@http://www.boost.org/libs/application/example/shared_library_load_plugin.cpp (shared_library_load_plugin.cpp)]
+]
+
+[* Customization]
+
+[pre
+Termination Handler Signal Customization [@http://www.boost.org/libs/application/example/my_own_termination_handler.cpp (my_own_termination_handler.cpp)] 
+Wait For Termination Request Customization [@http://www.boost.org/libs/application/example/my_own_wait_for_termination_request.cpp (my_own_wait_for_termination_request.cpp)] 
+]
+
+[* Other Aspects]
+
+[pre
+Path Aspect [@http://www.boost.org/libs/application/example/path.cpp (path.cpp)] 
+Wait For Termination Request Customization [@http://www.boost.org/libs/application/example/my_own_wait_for_termination_request.cpp (my_own_wait_for_termination_request.cpp)] 
+Termination Handler [@http://www.boost.org/libs/application/example/termination_handler.cpp (termination_handler.cpp)] 
+Wait For Termination Request [@http://www.boost.org/libs/application/example/wait_for_termination_request.cpp (wait_for_termination_request.cpp)] 
+]
+
+
+
 [* Tutorial]
+
+[pre
+Tutorial Stage 1 [@http://www.boost.org/libs/application/example/tutorial/main_stage1.cpp (main_stage1.cpp)] 
+Tutorial Stage 2 [@http://www.boost.org/libs/application/example/tutorial/main_stage2.cpp (main_stage2.cpp)] 
+Tutorial Stage 3 [@http://www.boost.org/libs/application/example/tutorial/main_stage3.cpp (main_stage3.cpp)] 
+Tutorial Stage 4 [@http://www.boost.org/libs/application/example/tutorial/main_stage4.cpp (main_stage4.cpp)] 
+]
 
 [* Complex Examples]
 
 [pre
 Common Application With Simple Asio Based Threadpool [@http://www.boost.org/libs/application/example/work_queue/work_queue.cpp (work_queue.cpp)]
+UUID Generator (server) Application Uisng Asio [@http://www.boost.org/libs/application/example/uuid_client_server/server.cpp (server.cpp)]
+UUID Generator (client) Application Uisng Asio [@http://www.boost.org/libs/application/example/uuid_client_server/client.cpp (client.cpp)]
+UUID Generator (plugin) Application Uisng Asio [@http://www.boost.org/libs/application/example/uuid_client_server/plugin.cpp (plugin.cpp)]
+]
+
+[note
+For Windows Users the library provide Visual Studio 11 Projects to all samples on :
+application\vc11ide
 ]
 
 [endsect]

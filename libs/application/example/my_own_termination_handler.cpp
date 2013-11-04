@@ -27,6 +27,7 @@
 
 using namespace boost::application;
 
+//[myownsig
 class myapp
 {
 public:
@@ -60,6 +61,7 @@ public:
 
 };
 
+/*<< Inheriting of signal_manager >>*/
 class my_signal_manager : public signal_manager
 {
 public:
@@ -70,7 +72,7 @@ public:
          = boost::bind<bool>(&my_signal_manager::stop, this, _1);
 
       // define my own signal / handler
-
+      /*<< Define signal bind >>*/
 #if defined( BOOST_WINDOWS_API )
       bind(SIGINT,  callback); // CTRL-C (2)
 #elif defined( BOOST_POSIX_API )
@@ -79,6 +81,7 @@ public:
 
    }
 
+   /*<< Define signal callback >>*/
    bool stop(context &context)
    {
       BOOST_APPLICATION_FEATURE_SELECT
@@ -115,8 +118,10 @@ int main(int argc, char *argv[])
       make_shared<path_default_behaviour>(argc, argv));
 
    // we will customize our signals behaviour
+   /*<< Instantiate your custon signal manager. >>*/
    my_signal_manager sm(app_context);
-
+   
+   /*<< Pass 'custon signal manager (sm)' to launch function. >>*/
 #if defined( BOOST_WINDOWS_API )
    return launch<common>(app, sm, app_context);
 #elif defined( BOOST_POSIX_API )
@@ -124,4 +129,4 @@ int main(int argc, char *argv[])
 #endif
 
 }
-
+//]

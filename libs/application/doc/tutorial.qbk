@@ -78,7 +78,7 @@ Here we will use the first version.
 [note
 By default the signals '[*SIGINT]', '[*SIGTERM]' and '[*SIGABRT]' will change internal state os aspect '[*status]' of application from '[*application::status::running]' to '[*application::status::stoped]'.
 
-User can customize the default behaviour, refer to [@../html/boost_application/other_features.html#boost_application.other_features.customize_signal 'Customize Signals/Handlers']
+User can customize the default behaviour, refer to [@../html/boost_application/customization.html#boost_application.customization.customize_signal 'Customize Signals/Handlers']
 ] 
 
 [h4 Handlers ]
@@ -93,7 +93,7 @@ Here we will add a '[*stop]' handler to application.
 [import ../example/tutorial/myfunctor_stage3.hpp]
 [tutorials3]
 
-Now you need tie a 'stop' handlet to 'termination_handler' aspect, like:
+Now you need tie a 'stop' handler to 'termination_handler' aspect, like:
 
 [import ../example/tutorial/main_stage2.cpp]
 [tutorialcpps2]
@@ -134,7 +134,7 @@ On POSIX system you need only execute your application.
 
 Now that you know the basis, we will do a simplest server and add some new handles to it.
 
-Let's start doing a simple server with simple log to file funcionality (If you desire you can change this code to use Boost.Log to have log logged on event viewr of windows).
+Let's start doing a simple server with simple log to file funcionality (If you desire you can change this code to use Boost.Log).
 
 [import ../example/tutorial/myfunctor_stage4.hpp]
 [tutorials4]

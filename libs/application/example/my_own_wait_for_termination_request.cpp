@@ -22,7 +22,7 @@
 
 using namespace boost;
 
-
+//[mownwfr
 class myapp
 {
 public:
@@ -32,7 +32,8 @@ public:
    {
       std::cout << "Test" << std::endl;
 	  
-	    context.use_aspect<application::wait_for_termination_request>().wait();
+	  /*<< Use your custon handler >>*/
+      context.use_aspect<application::wait_for_termination_request>().wait();
 
       return 0;
    }
@@ -40,10 +41,12 @@ public:
 
 // my made by hand behaviour
 class wait_for_termination_request_my_behaviour 
+   /*<< Inheriting of 'wait_for_termination_request' handler contract abstract class >>*/ 
    : public application::wait_for_termination_request
 {
 public:
 
+   /*<< Define your desired operation for 'wait' method >>*/ 
    void wait(){
       char type;
       do
@@ -73,9 +76,11 @@ int main(int argc, char *argv[])
  
    // if user do this, the default behavoiur will be ignored, 
    // and the user behaviour will be executed by application::server
+   /*<< Add your custon handler to context aspect pool of application >>*/ 
    app_context.add_aspect< application::wait_for_termination_request>(
       shared_ptr<application::wait_for_termination_request>(
          new wait_for_termination_request_my_behaviour));
 
    return application::launch<application::common>(app, app_context);
 }
+//]

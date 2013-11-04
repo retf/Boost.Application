@@ -18,6 +18,7 @@
 #define BOOST_APPLICATION_SERVER_APPLICATION_IMPL_HPP
 
 #include <boost/application/config.hpp>
+#include <boost/application/detail/csbl.hpp>
 #include <boost/application/base_type.hpp>
 
 #include <boost/application/aspects/termination_handler.hpp>
@@ -138,7 +139,7 @@ namespace boost { namespace application {
       {
          if(context_.has_aspect<termination_handler>())
          {
-            std::shared_ptr<termination_handler> th =          
+            csbl::shared_ptr<termination_handler> th =          
                context_.get_aspect<termination_handler>();
 
             handler::parameter_callback* parameter = 0;
@@ -172,7 +173,7 @@ namespace boost { namespace application {
       {
          if(context_.has_aspect<pause_handler>())
          {
-            std::shared_ptr<pause_handler> th =          
+            csbl::shared_ptr<pause_handler> th =          
                context_.get_aspect<pause_handler>();
 
             handler::parameter_callback* parameter = 0;
@@ -206,7 +207,7 @@ namespace boost { namespace application {
       {
         if(context_.has_aspect<resume_handler>())
          {
-            std::shared_ptr<resume_handler> th =          
+            csbl::shared_ptr<resume_handler> th =          
                context_.get_aspect<resume_handler>();
 
             handler::parameter_callback* parameter = 0;
@@ -498,7 +499,7 @@ namespace boost { namespace application {
       void work_thread(int argc, char_type** argv)
       {
          context_.replace_aspect<application::args>(
-            std::make_shared<application::args>(argc, argv));
+            csbl::make_shared<application::args>(argc, argv));
 
          if(type_ == parameter)
          {
