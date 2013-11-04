@@ -21,6 +21,8 @@
 #define BOOST_ALL_DYN_LINK
 #define BOOST_LIB_DIAGNOSTIC
 
+#define BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
+
 #include <iostream>
 #include <boost/application.hpp>
 
@@ -68,14 +70,12 @@ public:
 
 int main(int argc, char *argv[])
 {   
-   BOOST_APPLICATION_FEATURE_SELECT
-
    myapp app;
  
    boost::singularity<application::context>::create_global();
 
    this_application().add_aspect<application::args>(
-      make_shared<application::args>(argc, argv));
+      boost::make_shared<application::args>(argc, argv));
 
    int ret = application::launch<application::common>(app, global_context);
 

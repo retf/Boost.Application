@@ -18,6 +18,8 @@
 #define BOOST_ALL_DYN_LINK
 #define BOOST_LIB_DIAGNOSTIC
 
+#define BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
+
 // Single instance mechanism that will support aspect based on
 // Boost.Interprocess Named Mutex too.
 #define ENABLE_BOOST_INTERPROCESS_NAMED_MUTEX
@@ -62,15 +64,13 @@ public:
 
 int main(int argc, char *argv[])
 {  
-   BOOST_APPLICATION_FEATURE_SELECT
-
    myapp app;
    application::context app_context;
 
    boost::uuids::string_generator gen;
 
    app_context.add_aspect<application::limit_single_instance>(
-      make_shared<application::limit_single_instance_named_mutex_behaviour>(
+      boost::make_shared<application::limit_single_instance_named_mutex_behaviour>(
          gen("{0F1164AD-ECA5-175D-8784-4BAA329EF9F2}")));
 
    return application::launch<application::common>(app, app_context);

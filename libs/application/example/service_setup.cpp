@@ -30,6 +30,8 @@
 #define BOOST_ALL_DYN_LINK
 #define BOOST_LIB_DIAGNOSTIC
 
+#define BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
+
 #include <boost\application.hpp>
 #include <boost\program_options.hpp>
 
@@ -43,12 +45,10 @@ public:
 
    int operator()(application::context& context)
    {
-      BOOST_APPLICATION_FEATURE_SELECT
-
       std::cout << "Setup Windows Service " 
          << "(Note that you need run this AS ADMIN!)" << std::endl;
 
-      shared_ptr<application::args> myargs 
+      boost::shared_ptr<application::args> myargs 
          = context.get_aspect<application::args>();
 
       // define our simple installation schema options
@@ -131,15 +131,13 @@ public:
 
 int main(int argc, char *argv[])
 {
-   BOOST_APPLICATION_FEATURE_SELECT
-
    try 
    {
       windows_service_setup app;
       application::context app_context;
 
       app_context.add_aspect<application::args>(
-         make_shared<application::args>(argc, argv));
+         boost::make_shared<application::args>(argc, argv));
 
       return application::launch<application::common>(app, app_context);
    }

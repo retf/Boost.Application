@@ -17,6 +17,8 @@
 #define BOOST_ALL_DYN_LINK
 #define BOOST_LIB_DIAGNOSTIC
 
+#define BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
+
 #include <iostream>
 #include <boost/application.hpp>
 
@@ -29,10 +31,8 @@ public:
    // param
    int operator()(application::context& context)
    {
-      BOOST_APPLICATION_FEATURE_SELECT
-
       std::cout << "Test" << std::endl;
-      shared_ptr<application::args> myargs 
+      boost::shared_ptr<application::args> myargs 
          = context.get_aspect<application::args>();
 
       if (myargs)
@@ -46,7 +46,7 @@ public:
          }
       }
 	  
-	    context.use_aspect<application::wait_for_termination_request>().wait();
+      context.use_aspect<application::wait_for_termination_request>().wait();
 
       return 0;
    }
@@ -56,13 +56,11 @@ public:
 
 int main(int argc, char *argv[])
 {  
-   BOOST_APPLICATION_FEATURE_SELECT
-
    myapp app;
    application::context app_context;
 
    app_context.add_aspect<application::args>(
-      make_shared<application::args>(argc, argv));
+      boost::make_shared<application::args>(argc, argv));
 
    return application::launch<application::common>(app, app_context);
 }

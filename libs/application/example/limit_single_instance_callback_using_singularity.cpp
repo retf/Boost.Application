@@ -18,6 +18,8 @@
 #define BOOST_ALL_DYN_LINK
 #define BOOST_LIB_DIAGNOSTIC
 
+#define BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
+
 #include <iostream>
 #include <boost/application.hpp>
 #include <boost/uuid/string_generator.hpp>
@@ -42,7 +44,7 @@ public:
    int operator()()
    {
       std::cout << "Test" << std::endl;
-      std::shared_ptr<args> myargs 
+      boost::shared_ptr<args> myargs 
          = this_application().get_aspect<args>();
 
       if (myargs)
@@ -87,8 +89,6 @@ public:
 
 int main(int argc, char *argv[])
 {   
-   BOOST_APPLICATION_FEATURE_SELECT
-
    myapp app;   
    
    boost::uuids::string_generator gen;
@@ -102,10 +102,10 @@ int main(int argc, char *argv[])
    // use aspects
 
    this_application().add_aspect<args>(
-      make_shared<args>(argc, argv));
+      boost::make_shared<args>(argc, argv));
 
    this_application().add_aspect<limit_single_instance>(
-      make_shared<limit_single_instance_default_behaviour>(appuuid, callback));
+      boost::make_shared<limit_single_instance_default_behaviour>(appuuid, callback));
 
    int ret = launch<common>(app, global_context);
 

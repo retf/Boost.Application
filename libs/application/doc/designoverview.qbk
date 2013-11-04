@@ -8,7 +8,7 @@
 
 The design of Boost.Application is very modular and extensible. The components are very independents (loosely coupled). The 'aspects' concept allow user to customize, and extend library functionality in easy way. The key components are designed in independent way, and are tied at runtime (launch).
 
-The diagram below shows the componestes of Boost.Application.
+The diagram below shows the components of Boost.Application.
 
 [$app.gif]
 
@@ -20,13 +20,13 @@ The next components is the '[@../html/boost_application/suported_application_typ
 
 The third component is responsible for receiving '[*signals]' from the operating system and run the '[*callback]'  defined by the User. The User can customize this [@../html/boost_application/customization.html#boost_application.customization.customize_signal manager] if necessary.
 
-The next components is the '[@../html/boost_application/boost_application/context.html Application Context]'. This Component hold the '[*Aspect Pool]' of application. User can customize an '[*Aspect]' provided by library, or/and can create new '[*Aspects]' to your own need.
+The next components is the '[@../html/boost_application/context.html Application Context]'. This Component hold the '[*Aspect Pool]' of application. User can customize an '[*Aspect]' provided by library, or/and can create new '[*Aspects]' to your own need.
 
 The last components is the '[*launch]'. The launch tie all components and execute the '[*User Application]'.
 
 [h5 Optional Components]
 
-The 'A' shows a '[@../html/boost_application/other_features.html#plugin_system plug-in system]' that are provided by library. The plug-in system allows user to change and/or extend the behaviour of application at run time using shared libraries.
+The 'A' shows a '[@../html/boost_application/other_features.html#boost_application.other_features.plugin_system plug-in system]' that are provided by library. The plug-in system allows user to change and/or extend the behaviour of application at run time using shared libraries.
 
 On 'B' we have the '[@../html/boost_application/other_features.html#boost_application.other_features.setup_service service setup]' component. This component is Windows specific, and has the code necessary to install and uninstall a Windows Service on Client machine.
 

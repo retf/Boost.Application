@@ -13,6 +13,8 @@
 #define BOOST_ALL_DYN_LINK
 #define BOOST_LIB_DIAGNOSTIC
 
+#define BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
+
 #include <iostream>
 #include <boost/program_options.hpp>
 #include <boost/application.hpp>
@@ -45,8 +47,6 @@ public:
 
 int main(int argc, char** argv)
 {
-   BOOST_APPLICATION_FEATURE_SELECT
-
    // select application mode
 
    po::variables_map vm;
@@ -67,7 +67,7 @@ int main(int argc, char** argv)
       = boost::bind<bool>(&my_application_functor_class::stop, &app, _1);
 
    app_context.add_aspect<application::termination_handler>(
-      make_shared<
+      boost::make_shared<
          application::termination_handler_default_behaviour>(termination_callback));
 
    int result = 0;

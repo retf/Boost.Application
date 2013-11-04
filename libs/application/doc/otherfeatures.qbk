@@ -109,7 +109,11 @@ Note that you need run this AS ADMIN.
 ]
 
 [note
-Note that when arg name are not priovided, the name will be the name ofexecutable, in thiscase, service name will be: 'windows_service_setup'
+Note that when arg name are not priovided, the name will be the name of executable, in this case, service name will be: 'windows_service_setup'
+]
+
+[tip
+The sample 'simple_server application.cpp' has the setup code embed on it. This shows a way to incorporate all required code into a single executable.
 ]
 
 [endsect]

@@ -17,13 +17,20 @@
 
 [section:customize_handlers Customize Aspects]
 
-The user can customize the default behavior of any handler. To do this, the user needs inheriting of contract handler class (abstract) that he wants to modify the behavior.
+The '[*aspects]' concept allow user to customize, and extend library functionality in easy way. The diagram below shows the way to extend or create new aspect.
+
+[$aspect.gif]
+
+The '[*A]' shows the more complex aspects, that needs to meet a well defined interface, which is used internally by the application mode.
+
+On '[*B]' we have simplest aspect that can be any C++ class.
+
+Thus, the user can customize the default behavior of any handler. To do this, the user needs inheriting of contract handler class (abstract) that he wants to modify the behavior.
 
 For sample: The default behavior of wait_for_termination_request is unblock and exit of application. To change this behavior user can do as follows:
 
 [import ../example/my_own_wait_for_termination_request.cpp]
 [mownwfr]
-
 
 [endsect]
 
@@ -51,7 +58,6 @@ To do this user need inheriting of signal_manager class and add new signal bind,
 
 [import ../example/my_own_termination_handler.cpp]
 [myownsig]
-
 
 [endsect]
 

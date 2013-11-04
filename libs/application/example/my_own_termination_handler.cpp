@@ -17,6 +17,8 @@
 #define BOOST_ALL_DYN_LINK
 #define BOOST_LIB_DIAGNOSTIC
 
+#define BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
+
 #include <iostream>
 #include <fstream>
 
@@ -65,6 +67,8 @@ public:
 class my_signal_manager : public signal_manager
 {
 public:
+
+   /*<< Customize SIGNALS bind >>*/
    my_signal_manager(context &context)
       : signal_manager(context)
    {
@@ -72,10 +76,10 @@ public:
          = boost::bind<bool>(&my_signal_manager::stop, this, _1);
 
       // define my own signal / handler
-      /*<< Define signal bind >>*/
 #if defined( BOOST_WINDOWS_API )
       bind(SIGINT,  callback); // CTRL-C (2)
-#elif defined( BOOST_POSIX_API )
+#elif defined( BOOST_POSIX_API )      
+      /*<< Define signal bind >>*/
       bind(SIGUSR2, callback); 
 #endif
 
@@ -109,20 +113,18 @@ public:
 
 int main(int argc, char *argv[])
 {   
-   BOOST_APPLICATION_FEATURE_SELECT
-
    myapp app;
    context app_context;
 
    app_context.add_aspect<path>(
-      make_shared<path_default_behaviour>(argc, argv));
+      boost::make_shared<path_default_behaviour>(argc, argv));
 
    // we will customize our signals behaviour
    /*<< Instantiate your custon signal manager. >>*/
    my_signal_manager sm(app_context);
    
-   /*<< Pass 'custon signal manager (sm)' to launch function. >>*/
 #if defined( BOOST_WINDOWS_API )
+   /*<< Pass 'custon signal manager (sm)' to launch function. >>*/
    return launch<common>(app, sm, app_context);
 #elif defined( BOOST_POSIX_API )
    return launch<server>(app, sm, app_context);

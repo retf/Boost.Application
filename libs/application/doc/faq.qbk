@@ -19,21 +19,25 @@ Boost.Application supports Unicode on Windows. If the macro UNICODE or _UNICODE 
 [section Can I customize a application SIGNALS?]
 Yes. The unique exception is Server Mode on Windows (Windows Service).
 
-The rule is that you need inherit of abstract contract class of aspect. Refer to [@../html/boost_application/other_features.html#boost_application.other_features.customize_signal 'Customize Signals/Handlers'] to know more. 
+The rule is that you need inherit of abstract contract class of aspect. Refer to [@../html/boost_application/customization.html#boost_application.customization.customize_signal 'Customize Signals/Handlers'] to know more. 
 [endsect]
 
-[section Can I customize a library provided aspect?]
+[section Can I customize a library provided aspects?]
 Yes. All library provided aspects can be customized. 
 
-The rule is that you need inherit of '[*signal_manager]' class and customize signals that you want. Refer to [@../html/boost_application/other_features.html#boost_application.other_features.customize_handlers 'Customize Handlers/Callbacks'] to know more. 
+The rule is that you need inherit of '[*signal_manager]' class and customize signals that you want. Refer to [@../html/boost_application/customization.html#boost_application.customization.customize_handlers 'Customize Aspects'] to know more. 
 [endsect]
 
 [section Can I build another aspects to application?]
-Yes. An aspect is a normal object, that are stored in application context. Any C++ class can be an aspect. The only limitation is that you can have only one aspect of same type on application context.
+Yes. An aspect is a normal object, that are stored in application context. Any C++ class can be an aspect. The only limitation is that you can have only one aspect of same type on application context. Refer to [@../html/boost_application/customization.html#boost_application.customization.customize_handlers 'Customize Aspects'] to know more.
 [endsect]
 
 [section Can I build another application mode? What is needed?]
-Yes. Use a common mode as base, and changes the internal behaviour to what you want. You can create new aspects to it too.
+Yes. Use a '[*common]' mode as model, and changes the internal behaviour to what you want. You can create new aspects to it too.
+[endsect]
+
+[section I have found a bug, how do I notify?]
+Please, send a e-mail with detailed description to re.tf[at]acm.org
 [endsect]
 
 [endsect]

@@ -17,6 +17,8 @@
 #define BOOST_ALL_DYN_LINK
 #define BOOST_LIB_DIAGNOSTIC
 
+#define BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
+
 #include <iostream>
 #include <boost/application.hpp>
 
@@ -66,13 +68,11 @@ public:
 
 int main(int argc, char *argv[])
 {   
-   BOOST_APPLICATION_FEATURE_SELECT
-
    myapp app;
    application::context app_context;
 
    app_context.add_aspect<application::args>(
-      make_shared<application::args>(argc, argv));
+      boost::make_shared<application::args>(argc, argv));
  
    // if user do this, the default behavoiur will be ignored, 
    // and the user behaviour will be executed by application::server

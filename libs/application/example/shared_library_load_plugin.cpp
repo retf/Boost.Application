@@ -12,6 +12,8 @@
 #define BOOST_ALL_DYN_LINK
 #define BOOST_LIB_DIAGNOSTIC
 
+#define BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
+
 //[callplugcpp
 #include <boost/application.hpp>
 #include "plugin_api.hpp"
@@ -61,15 +63,13 @@ public:
 
 int main(int argc, char* argv[])
 { 
-   BOOST_APPLICATION_FEATURE_SELECT
-
    try
    {
       my_application_functor_class app;
       application::context app_context;
 
       app_context.add_aspect<application::args>(
-         make_shared<application::args>(argc, argv));
+         boost::make_shared<application::args>(argc, argv));
 
       return application::launch<application::common>(app, app_context);
    }

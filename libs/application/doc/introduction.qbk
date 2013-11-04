@@ -24,7 +24,7 @@ Here's a simple example of how to construct a application with Boost.Application
 [import ../example/simple_application.cpp]
 [intro]
 
-Refer to [@../html/boost_application/roadmap.html "road map"] to know all required/optional steps to build a complete application using Boost.Application.
+Refer to [@../html/boost_application/roadmap.html "road map"] to know all required/optional steps to build a complete application using Boost.Application. To high level design overview, refer to [@../html/boost_application/design_overview.html '"design overview"']
 
 [caution This is not yet an official Boost C++ library. It wasn't reviewed and can't be downloaded from www.boost.org. This beta is available to boost community to know real interest and get comments for refinement.The intention is to submit library to formal review, if community think that it is interesting!]
 

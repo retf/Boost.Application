@@ -350,8 +350,7 @@ namespace boost { namespace application {
       bool owns_lock_;
       uuids::uuid uuid_;
 
-      BOOST_APPLICATION_FEATURE_NS_SELECT::
-         unique_ptr<interprocess::named_mutex> named_mutex_;
+      csbl::shared_ptr<interprocess::named_mutex> named_mutex_;
    };
 
 #endif
