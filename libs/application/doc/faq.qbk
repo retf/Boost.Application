@@ -7,9 +7,9 @@
 [section F.A.Q.]
 
 [section Is Boost.Application thread-safe?]
-Not at all, applications singliton objects should not be called between threads, you should create several threads from it.
+Not at all, applications singleton objects should not be called between threads, you should create several threads from it.
 
-The "shared_library" classe is sincronized.
+The "shared_library" class is synchronized
 [endsect]
 
 [section How Unicode (Windows) is hadled?]
