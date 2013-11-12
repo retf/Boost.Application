@@ -21,7 +21,7 @@
 
 namespace boost { namespace application {
 
-   class resume_handler : public handler        
+   class resume_handler : public handler
    {
    public:
       resume_handler(const parameter_callback& callback)
@@ -31,7 +31,7 @@ namespace boost { namespace application {
          : handler(callback)  {}
    };
 
-   class resume_handler_default_behaviour : public resume_handler        
+   class resume_handler_default_behaviour : public resume_handler
    {
    public:
       resume_handler_default_behaviour(const parameter_callback& callback)
@@ -40,7 +40,7 @@ namespace boost { namespace application {
       resume_handler_default_behaviour(const singleton_callback& callback)
          : resume_handler(callback)  {}
    };
-  
+
 }} // boost::application
 
 #endif // BOOST_APPLICATION_ASPECT_RESUME_HANDLER_HPP

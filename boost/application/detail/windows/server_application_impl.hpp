@@ -31,7 +31,7 @@
 #include <boost/thread/thread.hpp>
 #include <boost/lambda/lambda.hpp>
 
-// Note that singularity is in approval process, 
+// Note that singularity is in approval process,
 // refer to the above link to know more:
 // http://www.boost.org/community/review_schedule.html
 #include <boost/singularity/singularity.hpp>
@@ -43,8 +43,8 @@
 
 #ifdef _MSC_VER
 // Advanced Services API - advapi32
-// Advanced Services Provide access to functionality additional to the kernel. 
-// Include things like: Windows registry, shutdown/restart or abort the system, 
+// Advanced Services Provide access to functionality additional to the kernel.
+// Include things like: Windows registry, shutdown/restart or abort the system,
 // start/stop/create a Windows service (that we need), manage user accounts.
 #pragma comment(lib, "advapi32.lib")
 #endif
@@ -69,7 +69,7 @@ namespace boost { namespace application {
          , main_thread_(0)
          , launch_thread_(0)
          , result_code_(0)
-      {      
+      {
          sb.start();
          initialize(ec);
       }
@@ -80,8 +80,8 @@ namespace boost { namespace application {
          , launch_thread_(0)
          , main_singleton_(main)
          , result_code_(0)
-      {       
-         sb.start(); 
+      {
+         sb.start();
          initialize(ec);
       }
 
@@ -93,10 +93,10 @@ namespace boost { namespace application {
 
       virtual ~server_application_impl_()
       {
-         if(main_thread_) 
-            delete main_thread_; 
+         if(main_thread_)
+            delete main_thread_;
 
-         if(launch_thread_) 
+         if(launch_thread_)
             delete launch_thread_;
 
          // if terminateEvent has been created, close it.
@@ -139,7 +139,7 @@ namespace boost { namespace application {
       {
          if(context_.has_aspect<termination_handler>())
          {
-            csbl::shared_ptr<termination_handler> th =          
+            csbl::shared_ptr<termination_handler> th =
                context_.get_aspect<termination_handler>();
 
             handler::parameter_callback* parameter = 0;
@@ -173,7 +173,7 @@ namespace boost { namespace application {
       {
          if(context_.has_aspect<pause_handler>())
          {
-            csbl::shared_ptr<pause_handler> th =          
+            csbl::shared_ptr<pause_handler> th =
                context_.get_aspect<pause_handler>();
 
             handler::parameter_callback* parameter = 0;
@@ -207,7 +207,7 @@ namespace boost { namespace application {
       {
         if(context_.has_aspect<resume_handler>())
          {
-            csbl::shared_ptr<resume_handler> th =          
+            csbl::shared_ptr<resume_handler> th =
                context_.get_aspect<resume_handler>();
 
             handler::parameter_callback* parameter = 0;
@@ -247,13 +247,13 @@ namespace boost { namespace application {
             case SERVICE_CONTROL_STOP:
             {
                if(!stop())
-                  // don't accept, returns the service 
+                  // don't accept, returns the service
                   // could not accept control messages
                   return;
 
                if (!send_status_to_scm(SERVICE_STOP_PENDING, 1, 1000))
                {
-                  terminate(GetLastError()); 
+                  terminate(GetLastError());
                   return;
                }
 
@@ -262,7 +262,7 @@ namespace boost { namespace application {
 
                if (!send_status_to_scm(SERVICE_STOPPED, 0, 0))
                {
-                  terminate(GetLastError()); 
+                  terminate(GetLastError());
                   return;
                }
             }
@@ -271,13 +271,13 @@ namespace boost { namespace application {
             case SERVICE_CONTROL_PAUSE:
             {
                if(!pause())
-                  // don't accept, returns the service 
+                  // don't accept, returns the service
                   // could not accept control messages
                   return;
 
                if (!send_status_to_scm(SERVICE_PAUSE_PENDING, 1, 1000))
                {
-                  terminate(GetLastError()); 
+                  terminate(GetLastError());
                   return;
                }
 
@@ -285,7 +285,7 @@ namespace boost { namespace application {
 
                if (!send_status_to_scm(SERVICE_PAUSED, 0, 0))
                {
-                  terminate(GetLastError()); 
+                  terminate(GetLastError());
                   return;
                }
             }
@@ -294,13 +294,13 @@ namespace boost { namespace application {
             case SERVICE_CONTROL_CONTINUE:
             {
                if(!resume())
-                  // don't accept, returns the service 
+                  // don't accept, returns the service
                   // could not accept control messages
                   return;
 
                if (!send_status_to_scm(SERVICE_CONTINUE_PENDING, 1, 1000))
                {
-                  terminate(GetLastError()); 
+                  terminate(GetLastError());
                   return;
                }
 
@@ -308,7 +308,7 @@ namespace boost { namespace application {
 
                if (!send_status_to_scm(SERVICE_RUNNING, 0, 0))
                {
-                  terminate(GetLastError()); 
+                  terminate(GetLastError());
                   return;
                }
             }
@@ -324,7 +324,7 @@ namespace boost { namespace application {
             {
                if (!send_status_to_scm(SERVICE_STOP_PENDING, 1, 1000))
                {
-                  terminate(GetLastError()); 
+                  terminate(GetLastError());
                   return;
                }
 
@@ -332,7 +332,7 @@ namespace boost { namespace application {
 
                if (!send_status_to_scm(SERVICE_STOPPED, 0, 0))
                {
-                  terminate(GetLastError()); 
+                  terminate(GetLastError());
                   return;
                }
             }
@@ -361,11 +361,11 @@ namespace boost { namespace application {
          return accepted_controls;
       }
 
-       // this function consolidates the activities of 
+       // this function consolidates the activities of
       // updating the service status of service on scm
-      BOOL send_status_to_scm(DWORD dw_current_state, 
-                              DWORD dw_check_point, 
-                              DWORD dw_wait_hint = 1000, 
+      BOOL send_status_to_scm(DWORD dw_current_state,
+                              DWORD dw_check_point,
+                              DWORD dw_wait_hint = 1000,
                               DWORD dw_win32_exit_code = NO_ERROR,
                               DWORD dw_service_specific_exit_code = 0)
       {
@@ -375,9 +375,9 @@ namespace boost { namespace application {
          SERVICE_STATUS service_status;
 
          // Type of service executable.
-         // SERVICE_WIN32_OWN_PROCESS for one service, or 
-         // SERVICE_WIN32_SHARE_PROCESS for more, and you can use OR 
-         // SERVICE_INTERACTIVE_PROCESS if you can interact with desktop 
+         // SERVICE_WIN32_OWN_PROCESS for one service, or
+         // SERVICE_WIN32_SHARE_PROCESS for more, and you can use OR
+         // SERVICE_INTERACTIVE_PROCESS if you can interact with desktop
          service_status.dwServiceType = SERVICE_WIN32_OWN_PROCESS;
 
          // Current State of your service
@@ -440,24 +440,24 @@ namespace boost { namespace application {
       {
          string_type void_string;
 
-         // like this service is SERVICE_WIN32_OWN_PROCESS, 
+         // like this service is SERVICE_WIN32_OWN_PROCESS,
          // then the RegisterServiceCtrlHandler
-         // function does not verify if the name is valid, because there is only 
+         // function does not verify if the name is valid, because there is only
          // one registered service in the process. can be  "" (void_string)
-         service_status_handle_ = 
-            RegisterServiceCtrlHandler( (char_type*)void_string.c_str(), 
+         service_status_handle_ =
+            RegisterServiceCtrlHandler( (char_type*)void_string.c_str(),
             (LPHANDLER_FUNCTION) service_handler_entry);
 
          if (!service_status_handle_)
-         {   
-            terminate(GetLastError()); 
+         {
+            terminate(GetLastError());
             return;
          }
 
          // notify SCM of progress
          if (!send_status_to_scm(SERVICE_START_PENDING, 1, 5000))
          {
-            terminate(GetLastError()); 
+            terminate(GetLastError());
             return;
          }
 
@@ -466,14 +466,14 @@ namespace boost { namespace application {
 
          if (!terminate_event_)
          {
-            terminate(GetLastError()); 
+            terminate(GetLastError());
             return;
          }
 
          // notify SCM of progress
          if (!send_status_to_scm(SERVICE_START_PENDING, 2, 1000))
          {
-            terminate(GetLastError()); 
+            terminate(GetLastError());
             return;
          }
 
@@ -481,11 +481,11 @@ namespace boost { namespace application {
          launch_thread_ = new boost::thread(
             boost::bind(&server_application_impl_::work_thread, this, dw_argc, lpsz_argv));
 
-         // The service is now running. 
+         // The service is now running.
          // Notify SCM of progress
          if (!send_status_to_scm(SERVICE_RUNNING, 0, 0))
          {
-            terminate(GetLastError()); 
+            terminate(GetLastError());
             return;
          }
 
@@ -503,18 +503,18 @@ namespace boost { namespace application {
 
          if(type_ == parameter)
          {
-            main_thread_ 
-               = new boost::thread( 
-                  boost::lambda::var( result_code_ ) 
-                     = main_parameter_(context_) 
+            main_thread_
+               = new boost::thread(
+                  boost::lambda::var( result_code_ )
+                     = main_parameter_(context_)
                         );
          }
          else if(type_ == singleton)
          {
-            main_thread_ 
-               = new boost::thread( 
-                  boost::lambda::var( result_code_ ) 
-                     = main_singleton_() 
+            main_thread_
+               = new boost::thread(
+                  boost::lambda::var( result_code_ )
+                     = main_singleton_()
                         );
          }
       }
@@ -543,7 +543,7 @@ namespace boost { namespace application {
 
       // Handle used to communicate status info with
       // the SCM. Created by RegisterServiceCtrlHandler
-      SERVICE_STATUS_HANDLE service_status_handle_;	
+      SERVICE_STATUS_HANDLE service_status_handle_;
 
       // Flag to wait service thread complementation
       // need this to get return value of thread
@@ -551,7 +551,7 @@ namespace boost { namespace application {
 
       boost::thread *launch_thread_;
       boost::thread *main_thread_;
-      
+
       main_parameter main_parameter_;
       main_singleton main_singleton_;
 
@@ -561,7 +561,7 @@ namespace boost { namespace application {
    };
 
    // The unique instance of server application (Windows)
-   template <typename CharType> server_application_impl_<CharType>* 
+   template <typename CharType> server_application_impl_<CharType>*
       server_application_impl_<CharType>::instance_ = 0;  // definition
 
    /////////////////////////////////////////////////////////////////////////////
@@ -572,7 +572,7 @@ namespace boost { namespace application {
    typedef server_application_impl_<character_types::char_type> server_application_impl;
    // wchar_t / char
 
-}} // boost::application 
+}} // boost::application
 
 #ifdef BOOST_MSVC
 #pragma warning(pop)

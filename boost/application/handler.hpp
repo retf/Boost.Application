@@ -24,24 +24,24 @@
 namespace boost { namespace application {
 
     /*!
-     * \brief A class to be used by the classes that need execulte callback. 
+     * \brief A class to be used by the classes that need execulte callback.
      *
      * This callback is used on all handlers that application can define.
      *
-     * The application library supprt 2 versions, the first receive a 
+     * The application library supprt 2 versions, the first receive a
      * application context as param, and the signature looks like:
      *
      * bool instace_aready_running(context &context);
      *
-     * The second version assumes that you are using Boost.Singularity, 
+     * The second version assumes that you are using Boost.Singularity,
      * then no parameter was passed, and the signature looks like:
      *
      * bool instace_aready_running(context &context);
      *
-     * All callbacks are executed by user selected "application mode" 
+     * All callbacks are executed by user selected "application mode"
      * the return value indicates to application mechanism how behave.
-     * 
-     * In case of our sample, if your return true from 
+     *
+     * In case of our sample, if your return true from
      * instace_aready_running the application mechanism will continue,
      * if your return false the application mechanism will exit.
      *
@@ -50,7 +50,7 @@ namespace boost { namespace application {
    {
    public:
 
-      typedef boost::function< bool (context&) > parameter_callback; 
+      typedef boost::function< bool (context&) > parameter_callback;
       typedef boost::function< bool (void)     > singleton_callback;
 
       /*!
@@ -67,16 +67,16 @@ namespace boost { namespace application {
 
       /*!
        * Constructs an handler.
-       * 
+       *
        * \param callback An callback that receive a application context
        *        as param. User must return desired behaviour.
        */
       handler(const parameter_callback& callback)
          : parameter_callback_(callback) {}
-      
+
       /*!
        * Constructs an handler.
-       * 
+       *
        * \param callback An callback to control behaviour of execution.
        *        User must return desired behaviour.
        *
@@ -86,9 +86,9 @@ namespace boost { namespace application {
 
       /*!
        * Set a callback to handler.
-       * 
+       *
        * \param callback An callback that receive a application context
-       *        as param. 
+       *        as param.
        */
       void callback(const parameter_callback& callback)
       {
@@ -97,7 +97,7 @@ namespace boost { namespace application {
 
       /*!
        * Set a callback to handler.
-       * 
+       *
        * \param callback An callback.
        *
        */
@@ -113,7 +113,7 @@ namespace boost { namespace application {
        * \param callback An callback to execute.
        *
        * \return true if callback pointer is valid.
-       *      
+       *
        */
       bool callback(parameter_callback*& callback)
       {
@@ -122,8 +122,8 @@ namespace boost { namespace application {
             callback = &parameter_callback_;
             return true;
           }
-            
-         callback = 0; 
+
+         callback = 0;
          return false;
       }
 
@@ -132,9 +132,9 @@ namespace boost { namespace application {
        * This method is used internaly by launch/application mode.
        *
        * \param callback An callback to execute.
-       * 
+       *
        * \return true if callback pointer is valid.
-       *      
+       *
        */
       bool callback(singleton_callback*& callback)
       {
@@ -143,16 +143,16 @@ namespace boost { namespace application {
             callback = &singleton_callback_;
             return true;
           }
-            
-         callback = 0; 
+
+         callback = 0;
          return false;
       }
 
       /*!
        * Check if a callback pointer to futher execution is valid.
-       * 
+       *
        * \return true if callback pointer is valid.
-       *      
+       *
        */
       bool parameter_callback_is_valid() const
       {
@@ -164,9 +164,9 @@ namespace boost { namespace application {
 
       /*!
        * Check if a callback pointer to futher execution is valid.
-       * 
+       *
        * \return true if callback pointer is valid.
-       *      
+       *
        */
       bool singleton_callback_is_valid() const
       {
@@ -178,9 +178,9 @@ namespace boost { namespace application {
 
       /*!
        * Retrieves handler.
-       * 
+       *
        * \return the hanlder istance.
-       *      
+       *
        */
       handler &get_handler()
       {
@@ -189,11 +189,11 @@ namespace boost { namespace application {
 
    private:
 
-      parameter_callback parameter_callback_; 
-      singleton_callback singleton_callback_; 
+      parameter_callback parameter_callback_;
+      singleton_callback singleton_callback_;
 
    };
-    
+
 }} // boost::application
 
 #endif // BOOST_APPLICATION_ASPECT_TERMINATION_HANDLER_HPP

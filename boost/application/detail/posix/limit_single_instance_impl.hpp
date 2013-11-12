@@ -45,28 +45,28 @@ namespace boost { namespace application {
       {
       }
 
-      ~limit_single_instance_impl_() 
+      ~limit_single_instance_impl_()
       {
          release();
       }
 
-      // If the thread acquires ownership of the mutex, 
-      // returns true, if the another thread has ownership 
-      // of the mutex, returns false. 
+      // If the thread acquires ownership of the mutex,
+      // returns true, if the another thread has ownership
+      // of the mutex, returns false.
       bool lock(const uuids::uuid& instance_id, boost::system::error_code &ec)
       {
-         name_ = 
+         name_ =
             boost::to_upper_copy(boost::lexical_cast<string_type>(instance_id));
 
          try
          {
             create_shared_memory_or_die_.reset(
                new interprocess::shared_memory_object(
-               interprocess::create_only, name_.c_str(), 
+               interprocess::create_only, name_.c_str(),
                interprocess::read_write));
 
             owns_lock_ = false; // we lock now
-         } 
+         }
          catch(...)
          {
             // executable is already running
@@ -75,7 +75,7 @@ namespace boost { namespace application {
 
          return owns_lock_;
       }
-      
+
       void release(void)
       {
          // if I create it, I can remove it
@@ -86,7 +86,7 @@ namespace boost { namespace application {
          owns_lock_ = false;
       }
 
-      bool is_another_instance_running() 
+      bool is_another_instance_running()
       {
          return owns_lock_;
       }
@@ -103,7 +103,7 @@ namespace boost { namespace application {
 
    typedef limit_single_instance_impl_<character_types::char_type> limit_single_instance_impl;
 
-}} // boost::application 
+}} // boost::application
 
 #endif // BOOST_APPLICATION_IMPL_POSIX_LIMIT_SINGLE_INSTANCE_IMPL_HPP
-		
+

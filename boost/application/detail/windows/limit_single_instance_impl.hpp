@@ -24,7 +24,7 @@
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/lexical_cast.hpp>
 
-namespace boost { namespace application {  
+namespace boost { namespace application {
 
    // This code is from Q243953 in case you lose the article and wonder
    // where this code came from.
@@ -32,18 +32,18 @@ namespace boost { namespace application {
    class limit_single_instance_impl_ : noncopyable
    {
 
-   public: 
+   public:
 
       typedef CharType char_type;
       typedef std::basic_string<char_type> string_type;
-   
+
       limit_single_instance_impl_()
          : mutex_(0) {}
 
       ~limit_single_instance_impl_() {
          release();
-      }  
-      
+      }
+
       bool lock(const uuids::uuid& instance_id, boost::system::error_code &ec)
       {
          // Make sure that you use a name that is unique for this application otherwise
@@ -51,11 +51,11 @@ namespace boost { namespace application {
          // 3rd parm to CreateMutex
 
          // allways we will use upper case
-         string_type normalized_uuid_text = 
+         string_type normalized_uuid_text =
             boost::to_upper_copy(boost::lexical_cast<string_type>(instance_id));
-		
-         mutex_ = CreateMutex(0, FALSE, normalized_uuid_text.c_str());     
-         
+
+         mutex_ = CreateMutex(0, FALSE, normalized_uuid_text.c_str());
+
          if(mutex_ == 0)
          {
            ec = boost::application::last_error_code(); return false;
@@ -65,26 +65,26 @@ namespace boost { namespace application {
 
          return is_another_instance_running();
       }
-   
-      void release() 
+
+      void release()
       {
-         if (mutex_ == 0) 
+         if (mutex_ == 0)
          {
-            CloseHandle(mutex_); 
-            mutex_ = 0; 
+            CloseHandle(mutex_);
+            mutex_ = 0;
          }
       }
 
-      bool is_another_instance_running() 
+      bool is_another_instance_running()
       {
          return (ERROR_ALREADY_EXISTS == last_error_);
       }
-	  
+
    private:
-     
+
       DWORD  last_error_;
       HANDLE mutex_;
-	  
+
    };
 
    typedef limit_single_instance_impl_<character_types::char_type> limit_single_instance_impl;
@@ -92,4 +92,3 @@ namespace boost { namespace application {
 } }  // boost::application::win
 
 #endif // BOOST_APPLICATION_IMPL_WINDOWS_LIMIT_SINGLE_INSTANCE_IMPL_HPP
-		

@@ -29,7 +29,7 @@
 namespace boost { namespace application {
 
    class shared_library;
-   class shared_library_impl : noncopyable 
+   class shared_library_impl : noncopyable
    {
       friend class shared_library;
 
@@ -38,12 +38,12 @@ namespace boost { namespace application {
          : handle_(NULL)
       {
       }
-		
+
       virtual ~shared_library_impl()
       {
          unload();
       }
-      
+
       template <typename T>
       shared_library_impl(const library_type<T> &sh, boost::system::error_code &ec)
          : handle_(NULL)
@@ -52,7 +52,7 @@ namespace boost { namespace application {
       }
 
       template <typename T>
-      shared_library_impl(const library_type<T> &sh, shared_library_load_mode mode, 
+      shared_library_impl(const library_type<T> &sh, shared_library_load_mode mode,
                           boost::system::error_code &ec)
          : handle_(NULL)
       {
@@ -60,25 +60,25 @@ namespace boost { namespace application {
       }
 
       template <typename T>
-      void load(const library_type<T> &sh, 
+      void load(const library_type<T> &sh,
                 boost::system::error_code &ec)
       {
          boost::lock_guard<boost::mutex> lock(mutex_);
 
-         if (handle_) 
+         if (handle_)
             unload(lock);
-         
+
          DWORD flags(0);
          path_ = sh.get().c_str();
 
-         if (path_.is_absolute()) 
+         if (path_.is_absolute())
             flags |= LOAD_WITH_ALTERED_SEARCH_PATH; // usual mode, generic (plugin mode)
 
          load(static_cast<unsigned long>(flags), ec, lock);
       }
 
       template <typename T>
-      void load(const library_type<T> &sh, shared_library_load_mode mode, 
+      void load(const library_type<T> &sh, shared_library_load_mode mode,
                 boost::system::error_code &ec)
       {
          boost::lock_guard<boost::mutex> lock(mutex_);
@@ -97,7 +97,7 @@ namespace boost { namespace application {
       bool is_loaded() const
       {
          boost::lock_guard<boost::mutex> lock(mutex_);
-         return (handle_ != 0); 
+         return (handle_ != 0);
       }
 
       template <typename T>
@@ -132,9 +132,9 @@ namespace boost { namespace application {
          return character_types::string_type(".dll");
 #endif
       }
-	  
+
 	  protected:
-	  
+
       template <typename T>
       void* symbol_addr(const symbol_type<T> &sb, boost::system::error_code &ec)
       {
@@ -142,18 +142,18 @@ namespace boost { namespace application {
 
          // Judging by the documentation and
          // at GetProcAddress there is no version for UNICODE.
-         // There can be it and is correct, as in executed 
+         // There can be it and is correct, as in executed
          // units names of functions are stored in narrow characters.
          std::string as_std_string( sb.get().begin(), sb.get().end() );
 
          if (handle_)
             return (void*) GetProcAddress((HMODULE) handle_, as_std_string.c_str());
-         else 
+         else
             ec = boost::application::last_error_code();
 
          return NULL;
       }
-	  
+
       bool load(unsigned long mode, boost::system::error_code &ec, boost::lock_guard<boost::mutex> &lock)
       {
          DWORD flags = static_cast<DWORD>(mode);
@@ -161,12 +161,12 @@ namespace boost { namespace application {
 #if defined(BOOST_APPLICATION_STD_WSTRING)
          // LoadLibraryExW
          handle_ = LoadLibraryEx(path_.wstring().c_str(), 0, flags);
-#else 
+#else
          // LoadLibraryExA
          handle_ = LoadLibraryEx(path_.string().c_str(), 0, flags);
 #endif
 
-         if (!handle_) 
+         if (!handle_)
          {
             ec = boost::application::last_error_code();
             return false;
@@ -187,8 +187,8 @@ namespace boost { namespace application {
       }
 
    private:
-      
-      mutable boost::mutex mutex_;  
+
+      mutable boost::mutex mutex_;
       boost::filesystem::path path_;
       void* handle_;
    };

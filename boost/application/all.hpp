@@ -10,8 +10,8 @@
 
 /*!
  * Convenience umbrella header which includes all public
- * Boost.Application header files. 
- *  
+ * Boost.Application header files.
+ *
  */
 
 #ifndef BOOST_APPLICATION_ALL_HPP

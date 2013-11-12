@@ -21,8 +21,8 @@
 
 namespace boost { namespace application {
 
-   class wait_for_termination_request_impl : noncopyable    
-      // http://www.cs.kent.edu/~farrell/sp/lectures/signals.html      
+   class wait_for_termination_request_impl : noncopyable
+      // http://www.cs.kent.edu/~farrell/sp/lectures/signals.html
    {
    public:
 
@@ -36,7 +36,7 @@ namespace boost { namespace application {
          //sigaddset(&sset, SIGINT);
          //sigaddset(&sset, SIGQUIT);
          //sigaddset(&sset, SIGTERM);
-         sigaddset(&sset, SIGUSR1); 
+         sigaddset(&sset, SIGUSR1);
 
          sigprocmask(SIG_BLOCK, &sset, NULL);
 
@@ -45,13 +45,13 @@ namespace boost { namespace application {
       }
 
       void proceed() {
-         raise(SIGUSR1); 
+         raise(SIGUSR1);
       }
 
    private:
 
    };
-      
+
 }} // boost::application
 
 #endif // BOOST_APPLICATION_WAIT_FOR_TERMINATION_REQUEST_IMPL_HPP

@@ -24,19 +24,19 @@
 namespace boost { namespace application {
 
    // setup session
-   inline setup_type<character_types::string_type> 
+   inline setup_type<character_types::string_type>
       setup_arg(const character_types::char_type *s)
    {
       return setup_type<character_types::string_type>(s);
    }
 
-   inline setup_type<character_types::string_type> 
+   inline setup_type<character_types::string_type>
       setup_arg(const character_types::string_type &s)
    {
       return setup_type<character_types::string_type>(s);
    }
 
-   inline setup_type<character_types::string_type> 
+   inline setup_type<character_types::string_type>
       setup_arg(const boost::filesystem::path &p)
    {
 #if defined(BOOST_APPLICATION_STD_WSTRING)

@@ -11,7 +11,7 @@
 // Revision History
 // 05-04-2012 dd-mm-yyyy - Initial Release
 // 16-09-2013 dd-mm-yyyy - Refatored
-// 
+//
 // -----------------------------------------------------------------------------
 
 #ifndef BOOST_APPLICATION_SHARED_LIBRARY_IMPL_HPP
@@ -43,7 +43,7 @@
 namespace boost { namespace application {
 
    class shared_library;
-   class shared_library_impl : noncopyable 
+   class shared_library_impl : noncopyable
    {
       friend class shared_library;
 
@@ -52,12 +52,12 @@ namespace boost { namespace application {
          : handle_(NULL)
       {
       }
-   		
+
       virtual ~shared_library_impl()
       {
          unload();
       }
-    
+
       template <typename T>
       shared_library_impl(const library_type<T> &sl, boost::system::error_code &ec)
          : handle_(NULL)
@@ -66,7 +66,7 @@ namespace boost { namespace application {
       }
 
       template <typename T>
-      shared_library_impl(const library_type<T> &sl, shared_library_load_mode mode, 
+      shared_library_impl(const library_type<T> &sl, shared_library_load_mode mode,
                           boost::system::error_code &ec)
          : handle_(NULL)
       {
@@ -74,12 +74,12 @@ namespace boost { namespace application {
       }
 
       template <typename T>
-      void load(const library_type<T> &sl, 
+      void load(const library_type<T> &sl,
                 boost::system::error_code &ec)
       {
          boost::lock_guard<boost::mutex> lock(mutex_);
 
-         if (handle_) 
+         if (handle_)
             unload(lock);
 
          path_ = sl.get().c_str();
@@ -88,7 +88,7 @@ namespace boost { namespace application {
       }
 
       template <typename T>
-      void load(const library_type<T> &sl, shared_library_load_mode mode, 
+      void load(const library_type<T> &sl, shared_library_load_mode mode,
                 boost::system::error_code &ec)
       {
          boost::lock_guard<boost::mutex> lock(mutex_);
@@ -106,11 +106,11 @@ namespace boost { namespace application {
       bool is_loaded() const
       {
          boost::lock_guard<boost::mutex> lock(mutex_);
-         return (handle_ != 0); 
+         return (handle_ != 0);
       }
 
       template <typename T>
-      bool search_symbol(const symbol_type<T> &sb) 
+      bool search_symbol(const symbol_type<T> &sb)
       {
          boost::system::error_code ec;
          if(get_symbol(sb, ec) == NULL)
@@ -140,9 +140,9 @@ namespace boost { namespace application {
          return character_types::string_type(".so");
 #endif
       }
-	  
+
    protected:
-	  
+
       template <typename T>
       void* symbol_addr(const symbol_type<T> &sb, boost::system::error_code &ec)
       {
@@ -159,19 +159,19 @@ namespace boost { namespace application {
          if(symbol == NULL)
             ec = boost::application::last_error_code();
 
-         // If handle does not refer to a valid object opened by dlopen(), 
-         // or if the named symbol cannot be found within any of the objects 
-         // associated with handle, dlsym() shall return NULL. 
+         // If handle does not refer to a valid object opened by dlopen(),
+         // or if the named symbol cannot be found within any of the objects
+         // associated with handle, dlsym() shall return NULL.
          // More detailed diagnostic information shall be available through dlerror().
 
          return symbol;
       }
-	  
+
       bool load(unsigned long mode, boost::system::error_code &ec, boost::lock_guard<boost::mutex> &lock)
       {
          handle_ = dlopen(path_.string().c_str(), static_cast<int>(mode));
 
-         if (!handle_) 
+         if (!handle_)
          {
             ec = boost::application::last_error_code();
             return false;
@@ -192,8 +192,8 @@ namespace boost { namespace application {
       }
 
 	  private:
-      
-      mutable boost::mutex mutex_;  
+
+      mutable boost::mutex mutex_;
       boost::filesystem::path path_;
       void* handle_;
 

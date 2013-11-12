@@ -23,14 +23,14 @@ namespace boost { namespace application {
 
    /*!
     * \brief This aspect class is used internaly by applications types (modes)
-    * 
+    *
     * Indicates how the application was created,
     * 3 ways are possible:
     *
     * - created by the launcher as a Server (application_server)
     * - created by an app launcher as Common/Interactive (application_common)
     * - created directly by User (application_direct)
-    * 
+    *
     */
    class run_mode
    {
@@ -51,14 +51,14 @@ namespace boost { namespace application {
        *
        * \param run_mode The mode of application.
        */
-      run_mode(application_run_mode run_mode) 
+      run_mode(application_run_mode run_mode)
          : application_run_mode_(run_mode) {}
 
       /*!
        * Retreaves current mode of application.
-       * 
+       *
        * \return the mode of application.
-       *      
+       *
        */
       application_run_mode mode() {
          return application_run_mode_;
@@ -66,9 +66,9 @@ namespace boost { namespace application {
 
       /*!
        * Sets the current mode of application.
-       * 
+       *
        * \param mode The mode of application.
-       *      
+       *
        */
       void mode(application_run_mode mode) {
          application_run_mode_ = mode;
@@ -83,7 +83,7 @@ namespace boost { namespace application {
       application_run_mode application_run_mode_;
 
    };
-   
+
 }} // boost::application
 
 #endif // BOOST_APPLICATION_RUN_MODE_ASPECT_HPP

@@ -10,7 +10,7 @@
 
 // Revision History
 // 14-10-2013 dd-mm-yyyy - Initial Release
-// 
+//
 // -----------------------------------------------------------------------------
 
 #ifndef BOOST_APPLICATION_DETAIL_ENSURE_SINGLE_INSTANCE_HPP
@@ -25,12 +25,12 @@ namespace boost { namespace application { namespace detail {
 
    // check single_instance aspect and runs the requested behavior,
    // returns true to indicate that application needs exit.
-   inline bool ensure_single_instance(context &cxt, 
+   inline bool ensure_single_instance(context &cxt,
       boost::system::error_code& ec)
    {
       if(cxt.has_aspect<limit_single_instance>())
-      {    
-         csbl::shared_ptr<limit_single_instance> ol =          
+      {
+         csbl::shared_ptr<limit_single_instance> ol =
                cxt.get_aspect<limit_single_instance>();
 
          bool is_another_instance_running = ol->lock(ec);
@@ -76,7 +76,6 @@ namespace boost { namespace application { namespace detail {
       return false;
    }
 
-}}} // boost::application 
+}}} // boost::application
 
 #endif // BOOST_APPLICATION_DETAIL_ENSURE_SINGLE_INSTANCE_HPP
- 

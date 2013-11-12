@@ -50,23 +50,23 @@ namespace boost { namespace application {
 
       server_application_impl_(const main_parameter &main,
                                signal_binder &sb,
-                               application::context &context, 
+                               application::context &context,
                                boost::system::error_code& ec)
          : application_impl(parameter, context)
          , main_parameter_(main)
-      {      
+      {
 
          process_id_ = daemonize(ec);
          sb.start(); // need be started after daemonize
       }
 
-      server_application_impl_(const main_singleton &main, 
+      server_application_impl_(const main_singleton &main,
                                signal_binder &sb,
-                               singularity<application::context> &context, 
+                               singularity<application::context> &context,
                                boost::system::error_code& ec)
          : application_impl(singleton, context.get_global())
          , main_singleton(main)
-      {       
+      {
 
          process_id_ = daemonize(ec);
          sb.start(); // need be started after daemonize
@@ -76,7 +76,7 @@ namespace boost { namespace application {
       {
          if(type_ == parameter)
          {
-            return main_parameter_(context_); 
+            return main_parameter_(context_);
          }
          else if(type_ == singleton)
          {
@@ -86,24 +86,24 @@ namespace boost { namespace application {
 
    protected:
 
-      // create a daemon using fork(). 
-      // 
-      // the fork() creates a new process by duplicating 
-      // the calling process. 
-      // 
-      // here the parent process would exit leaving the the child process behind. 
-      // 
-      // this child process detaches from the controlling terminal, reopens all 
-      // of {stdin, stdout, stderr} to /dev/null, and changes the working directory 
-      // to the root directory. (based on flags). 
-      // 
-      // under linux, fork() is implemented using copy-on-write pages, so the only 
-      // penalty that it incurs is the time and memory required to duplicate the 
+      // create a daemon using fork().
+      //
+      // the fork() creates a new process by duplicating
+      // the calling process.
+      //
+      // here the parent process would exit leaving the the child process behind.
+      //
+      // this child process detaches from the controlling terminal, reopens all
+      // of {stdin, stdout, stderr} to /dev/null, and changes the working directory
+      // to the root directory. (based on flags).
+      //
+      // under linux, fork() is implemented using copy-on-write pages, so the only
+      // penalty that it incurs is the time and memory required to duplicate the
       // parent's page tables, and to create a unique task structure for the child.
 
       pid_t daemonize(boost::system::error_code &ec)
       {
-         // ignore terminal stop signals 
+         // ignore terminal stop signals
          #ifdef SIGTTOU
          signal(SIGTTOU, SIG_IGN);
          #endif
@@ -126,14 +126,14 @@ namespace boost { namespace application {
             ec = last_error_code();
             return 0;
          } else if (fork_pid != 0){
-            exit(0); // parent exits 
+            exit(0); // parent exits
          }
 
          // child from here
          //
 
          // obtain a new process group
-         setsid(); 
+         setsid();
 
          // lose controlling terminal & change process group
          setpgrp();
@@ -189,8 +189,8 @@ namespace boost { namespace application {
          fd0 = open("/dev/null", O_RDWR);
          fd1 = dup(0);
          fd2 = dup(0);
-         
-         // clear any inherited file mode creation mask 
+
+         // clear any inherited file mode creation mask
          umask(0);
 
          return fork_pid;
@@ -204,7 +204,7 @@ namespace boost { namespace application {
       main_singleton main_singleton_;
 
    };
-	
+
    /////////////////////////////////////////////////////////////////////////////
    // server_application_impl
    //
@@ -212,8 +212,8 @@ namespace boost { namespace application {
    // args versions for Multi-Byte string and Unicode string
    typedef server_application_impl_<character_types::char_type> server_application_impl;
    // wchar_t / char
-   
-}} // boost::application 
+
+}} // boost::application
 
 #endif // BOOST_APPLICATION_SERVER_APPLICATION_IMPL_HPP
 

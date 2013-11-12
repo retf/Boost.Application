@@ -18,7 +18,7 @@
 
 namespace boost { namespace application {
 
-   class wait_for_termination_request_impl : noncopyable          
+   class wait_for_termination_request_impl : noncopyable
    {
    public:
 
@@ -46,7 +46,7 @@ namespace boost { namespace application {
          if (terminate_event_)
             // set the event that is holding main
             // so that app can continue
-            SetEvent(terminate_event_);	
+            SetEvent(terminate_event_);
       }
 
    private:
@@ -55,7 +55,7 @@ namespace boost { namespace application {
       HANDLE terminate_event_;
 
    };
-      
+
 }} // boost::application
 
 #endif // BOOST_APPLICATION_WAIT_FOR_TERMINATION_REQUEST_IMPL_HPP
