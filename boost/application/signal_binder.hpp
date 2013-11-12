@@ -50,9 +50,9 @@ namespace boost { namespace application {
 
    public:
       explicit signal_binder(context &cxt)
-         : io_service_thread_(0)
+         : context_(cxt)
          , signals_(io_service_)
-         , context_(cxt)
+         , io_service_thread_(0)
       {
          signals_.async_wait(
             boost::bind(&signal_binder::signal_handler, this,
@@ -64,6 +64,8 @@ namespace boost { namespace application {
       {
          if(io_service_thread_)
          {
+            io_service_.stop();
+            io_service_thread_->join();
             delete io_service_thread_;
          }
       }

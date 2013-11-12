@@ -21,6 +21,7 @@
 #include <boost/application/detail/application_impl.hpp>
 #include <boost/application/signal_binder.hpp>
 
+#include <boost/assert.hpp>
 #include <boost/function.hpp>
 
 #include <signal.h>
@@ -74,14 +75,13 @@ namespace boost { namespace application {
 
       int run()
       {
-         if(type_ == parameter)
+         switch(type_)
          {
-            return main_parameter_(context_);
+           case parameter: return main_parameter_(context_);
+           case singleton: return main_singleton_();
+           default: BOOST_ASSERT_MSG(false, "boost::application type is not implemented");
          }
-         else if(type_ == singleton)
-         {
-            return main_singleton_();
-         }
+         return 0;
       }
 
    protected:
@@ -184,11 +184,9 @@ namespace boost { namespace application {
 
          // Attach file descriptors 0, 1, and 2 to /dev/null.
 
-         int fd0, fd1, fd2;
-
-         fd0 = open("/dev/null", O_RDWR);
-         fd1 = dup(0);
-         fd2 = dup(0);
+         open("/dev/null", O_RDWR);
+         dup(0);
+         dup(0);
 
          // clear any inherited file mode creation mask
          umask(0);

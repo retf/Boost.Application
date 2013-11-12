@@ -125,7 +125,7 @@ namespace boost { namespace application {
          return symbol_addr(sb, ec);
       }
 
-      const boost::filesystem::path get_path() const
+      const boost::filesystem::path& get_path() const
       {
          boost::lock_guard<boost::mutex> lock(mutex_);
          return path_;
