@@ -37,6 +37,10 @@ namespace boost { namespace application {
    
    selfpipe()
    {
+      boost::system::error_code ec;
+	  
+      setup(ec);
+	  if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("selfpipe() failed");
    }
    
    selfpipe(boost::system::error_code &ec)
