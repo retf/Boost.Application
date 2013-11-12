@@ -20,21 +20,21 @@
 #include <boost/application/config.hpp>
 
 namespace boost { namespace application {
-   
+
    /*!
     * \brief This is a fundamental type for Boost.Application.
     *
-    * It is used to pack string, args, paths values, 
+    * It is used to pack string, args, paths values,
     * with it we can handle unicode (windows) and others
     * neededs types required by application lib.
-    * 
+    *
     */
    template <typename Type>
    class  base_type
    {
    public:
-      explicit base_type(const Type &s) 
-         : s_(s) 
+      explicit base_type(const Type &s)
+         : s_(s)
       {}
 
       const Type& get() const
@@ -49,10 +49,10 @@ namespace boost { namespace application {
    /*!
     * \brief Pack for characters types used by Boost.Application.
     *
-    * It is used to pack string, args, paths values, 
+    * It is used to pack string, args, paths values,
     * with it we can handle unicode (windows) and others
     * neededs types required by application lib.
-    * 
+    *
     */
    struct character_types
    {
@@ -61,11 +61,11 @@ namespace boost { namespace application {
       typedef wchar_t char_type;
 #else
       typedef char char_type;
-#endif 
+#endif
       typedef std::basic_string<char_type> string_type;
    };
 
-}} // boost::application   
+}} // boost::application
 
 #endif // BOOST_APPLICATION_BASE_TYPE_HPP
 

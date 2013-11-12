@@ -10,14 +10,14 @@
 
 // Revision History
 // 14-10-2013 dd-mm-yyyy - Initial Release
-// 
+//
 // Note about this LIBRARY
 //
 // This is a test that add "aspect" concept on Boost.Application interface.
 //
-// The main purpose of this test is to see how it 
+// The main purpose of this test is to see how it
 // looks and how it behaves in a final use (interface use).
-// 
+//
 // To get older version of Boost.Appliation refer to:
 // https://sourceforge.net/projects/boostapp/
 // -----------------------------------------------------------------------------
@@ -37,26 +37,25 @@ namespace boost { namespace application {
     *        This class can hold any apect, and user can add one,
     *        or use some application modes that will add specifics
     *        aspects to it.
-    * 
+    *
     *        The heavy work is done by aspect_map.
-    * 
+    *
     *        Thanks to Vicente J. Botet Escriba that provide this
     *        important class and concept to the Boost.Application
     *        library.
     *
     * This class hold all aspects of an application.
-    * you can use one of the ready-to-use aspects provided by library, 
+    * you can use one of the ready-to-use aspects provided by library,
     * or define your own aspects.
-    * 
+    *
     */
-   class context 
+   class context
       : public entity::aspect_map, noncopyable
    {
-   public: 
+   public:
       // nothing here! Reserved for future use.
    };
 
-}} // boost::application 
+}} // boost::application
 
 #endif // BOOST_APPLICATION_CONTEXT_HPP
- 

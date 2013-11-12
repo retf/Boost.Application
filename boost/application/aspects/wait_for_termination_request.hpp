@@ -28,11 +28,11 @@
 namespace boost { namespace application {
 
     /*!
-     * \brief A contract class to be used by the user on your own 
+     * \brief A contract class to be used by the user on your own
      *        class implementation of wait_for_termination_request aspect.
-     * 
+     *
      */
-   class wait_for_termination_request : noncopyable        
+   class wait_for_termination_request : noncopyable
    {
    public:
       wait_for_termination_request() {}
@@ -40,15 +40,15 @@ namespace boost { namespace application {
 
 
       /*!
-       * Wait for termination request that need be 
+       * Wait for termination request that need be
        * implemented on derived class.
-       *      
+       *
        */
       virtual void wait() = 0;
 
       /*!
        * Continue, that need be implemented on derived class.
-       *      
+       *
        */
       virtual void proceed() = 0;
    };
@@ -56,10 +56,10 @@ namespace boost { namespace application {
    /*!
     * \brief This aspect class handle termination request of application.
     *        User can override this behavior and define your own.
-    * 
+    *
     */
-   class wait_for_termination_request_default_behaviour 
-      : public wait_for_termination_request   
+   class wait_for_termination_request_default_behaviour
+      : public wait_for_termination_request
    {
    public:
       wait_for_termination_request_default_behaviour()
@@ -67,7 +67,7 @@ namespace boost { namespace application {
 
       /*!
        * Wait for termination request.
-       *      
+       *
        */
       void wait() {
          impl_->wait();
@@ -75,7 +75,7 @@ namespace boost { namespace application {
 
       /*!
        * Continue, cause wait to be relesed
-       *      
+       *
        */
       void proceed() {
          impl_->proceed();
@@ -86,7 +86,7 @@ namespace boost { namespace application {
          shared_ptr<wait_for_termination_request_impl> impl_;
 
    };
-      
+
 }} // boost::application
 
 #endif // BOOST_APPLICATION_WAIT_FOR_TERMINATION_REQUEST_ASPECT_HPP

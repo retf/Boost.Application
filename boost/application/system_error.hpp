@@ -15,7 +15,7 @@
 
 // -----------------------------------------------------------------------------
 
-#ifndef BOOST_APPLICATION_SYSTEM_ERROR_HPP                  
+#ifndef BOOST_APPLICATION_SYSTEM_ERROR_HPP
 #define BOOST_APPLICATION_SYSTEM_ERROR_HPP
 
 #include <boost/system/config.hpp>
@@ -31,11 +31,11 @@
 
 namespace boost { namespace application {
 
-   // BOOST_APPLICATION_LAST_ERROR 
+   // BOOST_APPLICATION_LAST_ERROR
 
    /*!
     * Retrieves the last error code of system.
-    * 
+    *
     * \return the last error code of system.
     *
     * [Windows]
@@ -43,7 +43,7 @@ namespace boost { namespace application {
     *
     * [POSIX]
     * errno
-    *      
+    *
     */
    inline int last_error(void)
    {
@@ -58,14 +58,14 @@ namespace boost { namespace application {
 
    /*!
     * Generate a system::error_code form last_error function.
-    * 
-    * \return the system::error_code based on last_error 
+    *
+    * \return the system::error_code based on last_error
     *         function (System Error).
-    *      
+    *
     */
-   inline system::error_code last_error_code() 
+   inline system::error_code last_error_code()
    {
-      return boost::system::error_code(last_error(), 
+      return boost::system::error_code(last_error(),
          boost::system::system_category());
    }
 

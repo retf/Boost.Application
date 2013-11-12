@@ -34,42 +34,42 @@
 namespace boost { namespace application {
 
    /*!
-    * \brief This class hold a application mode system. 
-    *  
-    * server : Can be seen as Server (log-time duration) 
-    *          aplication type. 
-    *  
-    * An application mode is a collection of aspects that 
-    * define application instantiation and behaviour. 
-    *  
-    * The usual use of this class is to pass it as 
-    * template param on launch free function. 
-    * 
+    * \brief This class hold a application mode system.
+    *
+    * server : Can be seen as Server (log-time duration)
+    *          aplication type.
+    *
+    * An application mode is a collection of aspects that
+    * define application instantiation and behaviour.
+    *
+    * The usual use of this class is to pass it as
+    * template param on launch free function.
+    *
     */
-   class server 
+   class server
    {
    public:
 
       /*!
        * Creates a server application.
-       * 
+       *
        * \param myapp An user application functor class.
        *
-       * \param sm The signal manager of application, that will be used 
-       *           internaly by application type. 
+       * \param sm The signal manager of application, that will be used
+       *           internaly by application type.
        *           User can customize this instance.
-       * 
+       *
        * \param context An context of application, that hold all
        *        aspects.
-       * 
-       * \param ec Variable (boost::system::error_code) that will be 
+       *
+       * \param ec Variable (boost::system::error_code) that will be
        *        set to the result of the operation.
-       * 
+       *
        * Check ec for errors.
-       * 
+       *
        */
       template <typename Application, typename SignalManager>
-      server(Application& myapp, SignalManager &sm, 
+      server(Application& myapp, SignalManager &sm,
              application::context &context, boost::system::error_code& ec)
       {
          // default aspects patterns added to this kind of application
@@ -83,46 +83,46 @@ namespace boost { namespace application {
          // need be created after run_mode, status
 
          impl_.reset(new server_application_impl(
-            boost::bind<int>( &Application::operator(), &myapp, _1), sm, 
+            boost::bind<int>( &Application::operator(), &myapp, _1), sm,
             context, ec));
       }
 
       /*!
        * Creates a server application.
-       * 
+       *
        * \param myapp An user application functor class.
        *
-       * \param sm The signal manager of application, that will be used 
-       *           internaly by application type. 
+       * \param sm The signal manager of application, that will be used
+       *           internaly by application type.
        *           User can customize this instance.
-       * 
+       *
        * \param context An singularity context of application, that hold all
        *        aspects.
-       * 
-       * \param ec Variable (boost::system::error_code) that will be 
+       *
+       * \param ec Variable (boost::system::error_code) that will be
        *        set to the result of the operation.
-       * 
+       *
        * Check ec for errors.
-       * 
+       *
        */
       template <typename Application, typename SignalManager>
-      server(Application& myapp, SignalManager &sm, 
-             singularity<application::context> &context, 
+      server(Application& myapp, SignalManager &sm,
+             singularity<application::context> &context,
              boost::system::error_code& ec)
       {
-         
+
          // default aspects patterns added to this kind of application
 
         context.get_global().add_aspect_if_not_exists<run_mode>(
             csbl::make_shared<run_mode>(run_mode::server));
 
         context.get_global().add_aspect_if_not_exists<status>(
-            csbl::make_shared<status>(status::running));     
-         
+            csbl::make_shared<status>(status::running));
+
          // need be created after run_mode, status
 
          impl_.reset(new server_application_impl(
-            boost::bind<int>( &Application::operator(), &myapp), sm, 
+            boost::bind<int>( &Application::operator(), &myapp), sm,
             context, ec));
       }
 
@@ -139,7 +139,7 @@ namespace boost { namespace application {
        * Destruct an server application.
        *
        */
-      virtual ~server() 
+      virtual ~server()
       {
          impl_->get_context().use_aspect<status>().state(status::stoped);
       }
@@ -150,7 +150,6 @@ namespace boost { namespace application {
 
    };
 
-}} // boost::application 
+}} // boost::application
 
 #endif // BOOST_APPLICATION_SERVER_APPLICATION_HPP
-       

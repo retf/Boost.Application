@@ -19,11 +19,11 @@
 
 
 // Changes
-// 
+//
 // 22-10-2013 dd-mm-yyyy - Renato Forti - Add replace_aspect method
 // 23-10-2013 dd-mm-yyyy - Renato Forti - Add remove_aspect method
 // 25-10-2013 dd-mm-yyyy - Renato Forti - Enable use of csbl::
-// 
+//
 // -----------------------------------------------------------------------------
 
 #ifndef BOOST_APPLICATION_ENTITY_ASPECT_MAP_HPP
@@ -37,7 +37,7 @@
 
 
 namespace boost{
-   namespace application {  
+   namespace application {
       namespace entity {
 
          class aspect_map
@@ -53,7 +53,7 @@ namespace boost{
             /*!
              * Add a new aspect to the aspect map, throws an exception of type
              * std::logic_error on error.
-             *      
+             *
              * \param asp Shared Ptr of aspect to be added.
              *
              */
@@ -66,22 +66,22 @@ namespace boost{
 #elif defined( BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST )
                key_type ti = type_id<T>();
 #else // auto detect
-#   ifndef BOOST_NO_CXX11_HDR_TYPEINDEX 
+#   ifndef BOOST_NO_CXX11_HDR_TYPEINDEX
                key_type ti = typeid(T);
 #   else
                key_type ti = type_id<T>();
 #   endif
 #endif
-               if (!aspects_.insert(std::make_pair(ti, asp)).second) 
+               if (!aspects_.insert(std::make_pair(ti, asp)).second)
                   throw std::logic_error(
                      std::string("Type ") + ti.name() + " already added as an aspect");
             }
 
             /*!
              * Check if aspect exist on aspect map.
-             *      
+             *
              * \param Template type of aspect.
-             *  
+             *
              * \return True if aspect exist.
              *
              */
@@ -93,9 +93,9 @@ namespace boost{
 
             /*!
              * Get a stored aspect of the aspect map.
-             *      
+             *
              * \param asp Shared Ptr of aspect to be added.
-             *  
+             *
              * \return Shared Ptr of aspect or null Shared Ptr if aspect don't
              *         exist.
              *
@@ -105,7 +105,7 @@ namespace boost{
             {
                map_type::const_iterator it = aspects_.find(key_type(typeid(T)));
 
-               if (aspects_.cend() == it) 
+               if (aspects_.cend() == it)
                   return csbl::shared_ptr<T>();
 
                return csbl::static_pointer_cast<T>(it->second);
@@ -113,9 +113,9 @@ namespace boost{
 
             /*!
              * Get a stored aspect of the aspect map (const version).
-             *      
+             *
              * \param asp Shared Ptr of aspect to be added.
-             *  
+             *
              * \return Shared Ptr of aspect or null Shared Ptr if aspect don't
              *         exist.
              *
@@ -125,7 +125,7 @@ namespace boost{
             {
                map_type::const_iterator it = aspects_.find(key_type(typeid(T)));
 
-               if (aspects_.cend() == it) 
+               if (aspects_.cend() == it)
                   return csbl::shared_ptr<T>();
 
                return csbl::static_pointer_cast<const T>(it->second);
@@ -134,7 +134,7 @@ namespace boost{
             /*!
              * Use a stored aspect of the aspect map, throws an exception of type
              * std::logic_error on error.
-             *       
+             *
              * \return The aspect reference.
              *
              */
@@ -145,7 +145,7 @@ namespace boost{
 
                if (aspects_.cend() == it)
                   throw std::logic_error(
-                     std::string("Type ") + key_type(typeid(T)).name() + 
+                     std::string("Type ") + key_type(typeid(T)).name() +
                      " is not an aspect");
 
                return *csbl::static_pointer_cast<T>(it->second);
@@ -154,7 +154,7 @@ namespace boost{
             /*!
              * Use a stored aspect of the aspect map, throws an exception of type
              * std::logic_error on error.
-             *       
+             *
              * \return The aspect reference.
              *
              */
@@ -165,7 +165,7 @@ namespace boost{
 
                if (aspects_.cend() == it)
                   throw std::logic_error(
-                     std::string("Type ") + key_type(typeid(T)).name() + 
+                     std::string("Type ") + key_type(typeid(T)).name() +
                      " is not an aspect");
 
                return *csbl::static_pointer_cast<T>(it->second);
@@ -173,9 +173,9 @@ namespace boost{
 
             /*!
              * Replace a stored aspect to another one.
-             *      
+             *
              * \param asp Shared Ptr of aspect to be added.
-             *  
+             *
              */
             template <class T>
             void replace_aspect(csbl::shared_ptr<T> asp)
@@ -186,7 +186,7 @@ namespace boost{
 #elif defined( BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST )
                key_type ti = type_id<T>();
 #else // auto detect
-#   ifndef BOOST_NO_CXX11_HDR_TYPEINDEX 
+#   ifndef BOOST_NO_CXX11_HDR_TYPEINDEX
                key_type ti = typeid(T);
 #   else
                key_type ti = type_id<T>();
@@ -198,7 +198,7 @@ namespace boost{
 
             /*!
              * Remove a stored aspect.
-             *  
+             *
              */
             template <class T>
             void remove_aspect(csbl::shared_ptr<T> asp)
@@ -209,7 +209,7 @@ namespace boost{
 #elif defined( BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST )
                key_type ti = type_id<T>();
 #else // auto detect
-#   ifndef BOOST_NO_CXX11_HDR_TYPEINDEX 
+#   ifndef BOOST_NO_CXX11_HDR_TYPEINDEX
                key_type ti = typeid(T);
 #   else
                key_type ti = type_id<T>();
@@ -220,16 +220,16 @@ namespace boost{
             }
 
             /*!
-             * Add a new aspect to the aspect pool if it don't already exists 
-             * on aspect pool of application context. 
-             *  
-             * \return true if the aspect did not exist and was successfully added, 
+             * Add a new aspect to the aspect pool if it don't already exists
+             * on aspect pool of application context.
+             *
+             * \return true if the aspect did not exist and was successfully added,
              *         if the aspect already exists, returns false and
              *         nothing is done.
-             *      
+             *
              */
             template <class T>
-            bool add_aspect_if_not_exists(csbl::shared_ptr<T> asp) 
+            bool add_aspect_if_not_exists(csbl::shared_ptr<T> asp)
             {
                if (!has_aspect<T>()) {
                   add_aspect<T>(asp);

@@ -9,9 +9,9 @@
 // -----------------------------------------------------------------------------
 
 /*!
- * Convenience umbrella header which includes all 
+ * Convenience umbrella header which includes all
  * ready-to-use aspects provided by Boost.Application.
- *  
+ *
  */
 
 #ifndef BOOST_APPLICATION_READY_TO_USE_ASPECTS_HPP

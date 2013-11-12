@@ -16,17 +16,17 @@
 // -----------------------------------------------------------------------------
 
 /*!
- * Configuration file used by Boost.Application. 
- *  
- * Unicode setup for Windows, System Error Handle 
- * and C++11/Boost feature Select area handled here. 
- *  
+ * Configuration file used by Boost.Application.
+ *
+ * Unicode setup for Windows, System Error Handle
+ * and C++11/Boost feature Select area handled here.
+ *
  */
 
-#ifndef BOOST_APPLICATION_CONFIG_HPP                  
+#ifndef BOOST_APPLICATION_CONFIG_HPP
 #define BOOST_APPLICATION_CONFIG_HPP
 
-#include <boost/config.hpp> 
+#include <boost/config.hpp>
 #include <boost/application/system_error.hpp>
 #include <boost/application/version.hpp>
 #include <boost/application/detail/typeindex.hpp>
@@ -46,7 +46,7 @@
 #   include <boost/make_shared.hpp>
 #   include <boost/unordered_map.hpp>
 #else // auto detect
-#   ifndef BOOST_NO_CXX11_SMART_PTR 
+#   ifndef BOOST_NO_CXX11_SMART_PTR
 #      include <memory>
 #   else
 #      include <boost/shared_ptr.hpp>
@@ -65,7 +65,7 @@
 #   endif
 #endif
 
-// check if compiler provide some STL features of c++11 
+// check if compiler provide some STL features of c++11
 // that we use by the library, else use boost.
 
 // force selection
@@ -74,16 +74,16 @@
 #elif defined( BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST )
 #   define BOOST_APPLICATION_FEATURE_NS_SELECT boost
 #else // auto detect
-// BOOST_APPLICATION_FEATURE_NS_SELECT is used to select correct ns 
+// BOOST_APPLICATION_FEATURE_NS_SELECT is used to select correct ns
 // on class members.
-#   ifndef BOOST_NO_CXX11_SMART_PTR 
+#   ifndef BOOST_NO_CXX11_SMART_PTR
 #      define BOOST_APPLICATION_FEATURE_NS_SELECT std
 #   else
 #      define BOOST_APPLICATION_FEATURE_NS_SELECT boost
 #   endif
 #endif
 
-// BOOST_APPLICATION_FEATURE_SELECT is used to select correct ns 
+// BOOST_APPLICATION_FEATURE_SELECT is used to select correct ns
 // on functin/method scope.
 #define BOOST_APPLICATION_FEATURE_SELECT                          \
    using BOOST_APPLICATION_FEATURE_NS_SELECT::make_shared;        \
@@ -93,7 +93,7 @@
    using BOOST_APPLICATION_FEATURE_NS_SELECT::static_pointer_cast;
 
 // error handle for Boost.Application lib, based on Boost.System.
-// user can set this macro for example to BOOST_THROW_EXCEPTION 
+// user can set this macro for example to BOOST_THROW_EXCEPTION
 // if they whant to use Boost.Exception.
 
 #define BOOST_APPLICATION_THROW(EX) throw EX

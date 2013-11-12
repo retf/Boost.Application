@@ -25,7 +25,7 @@
 #include <boost/thread/thread.hpp>
 #include <boost/lambda/lambda.hpp>
 
-// Note that singularity is in approval process, 
+// Note that singularity is in approval process,
 // refer to the above link to know more:
 // http://www.boost.org/community/review_schedule.html
 #include <boost/singularity/singularity.hpp>
@@ -44,23 +44,23 @@ namespace boost { namespace application {
       typedef CharType char_type;
       typedef std::basic_string<char_type> string_type;
 
-      common_application_impl_(const main_parameter &main, 
+      common_application_impl_(const main_parameter &main,
                                signal_binder &sb,
-                               application::context &context, 
+                               application::context &context,
                                boost::system::error_code& ec)
          : application_impl(parameter, context)
          , main_parameter_(main)
-      {     
+      {
          sb.start();
       }
 
-      common_application_impl_(const main_singleton &main, 
+      common_application_impl_(const main_singleton &main,
                                signal_binder &sb,
-                               singularity<application::context> &context, 
+                               singularity<application::context> &context,
                                boost::system::error_code& ec)
          : application_impl(singleton, context.get_global())
          , main_singleton_(main)
-      {       
+      {
          sb.start();
       }
 
@@ -95,7 +95,7 @@ namespace boost { namespace application {
    typedef common_application_impl_<character_types::char_type> common_application_impl;
    // wchar_t / char
 
-}} // boost::application 
+}} // boost::application
 
 #endif // BOOST_APPLICATION_COMMON_APPLICATION_IMPL_HPP
 

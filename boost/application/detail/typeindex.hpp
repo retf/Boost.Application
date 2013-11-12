@@ -31,4 +31,3 @@
 #endif
 
 #endif // BOOST_APPLICATION_DETAIL_TYPEINDEX_HPP
-       

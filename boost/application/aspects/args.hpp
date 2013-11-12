@@ -27,10 +27,10 @@ namespace boost { namespace application {
     * An aspect that will hold args, and provide a easy way to access they
     * or user can extrat args from it to use with Program_options,
     * getopts or argp and so on.
-    * 
+    *
     */
    template <typename CharType>
-   class args_          
+   class args_
    {
    public:
 
@@ -44,17 +44,17 @@ namespace boost { namespace application {
        * \param argc An argc from main.
        * \param argc An argv from main.
        */
-      args_(int argc, char_type *argv[]) 
-      {  
+      args_(int argc, char_type *argv[])
+      {
          for(int i=0; i <argc; i++)
             arguments_.push_back(argv[i]);
       }
 
       /*!
        * Get a argc as provided by main.
-       * 
+       *
        * \return an argc variable.
-       *      
+       *
        */
       int argc() const
       {
@@ -63,20 +63,20 @@ namespace boost { namespace application {
 
       /*!
        * Get a argv as provided by main.
-       * 
+       *
        * \return an argv variable.
-       *      
+       *
        */
-      char_type** argv() 
+      char_type** argv()
       {
          return &arguments_[0];
       }
 
       /*!
        * Get a vector of args.
-       * 
+       *
        * \return an vector of args.
-       *      
+       *
        */
       std::vector< string_type > arg_vector()
       {
@@ -88,7 +88,7 @@ namespace boost { namespace application {
       }
 
    private:
-      
+
       std::vector<char_type*> arguments_;
 
    };
@@ -100,7 +100,7 @@ namespace boost { namespace application {
    // args versions for Multi-Byte string and Unicode string
    typedef args_<character_types::char_type> args;
    // wchar_t / char
-      
+
 }} // boost::application
 
 #endif // BOOST_APPLICATION_ARGS_ASPECT_HPP

@@ -21,7 +21,7 @@
 
 namespace boost { namespace application {
 
-   class pause_handler : public handler        
+   class pause_handler : public handler
    {
    public:
       pause_handler(const parameter_callback& callback)
@@ -31,7 +31,7 @@ namespace boost { namespace application {
          : handler(callback)  {}
    };
 
-   class pause_handler_default_behaviour : public pause_handler        
+   class pause_handler_default_behaviour : public pause_handler
    {
    public:
       pause_handler_default_behaviour(const parameter_callback& callback)

@@ -24,19 +24,19 @@
 namespace boost { namespace application {
 
    // library session
-   inline library_type<character_types::string_type> 
+   inline library_type<character_types::string_type>
       library(const character_types::char_type *s)
    {
       return library_type<character_types::string_type>(s);
    }
 
-   inline library_type<character_types::string_type> 
+   inline library_type<character_types::string_type>
       library(const character_types::string_type &s)
    {
       return library_type<character_types::string_type>(s);
    }
 
-   inline library_type<character_types::string_type> 
+   inline library_type<character_types::string_type>
       library(const boost::filesystem::path &p)
    {
 #if defined(BOOST_APPLICATION_STD_WSTRING)
@@ -47,18 +47,18 @@ namespace boost { namespace application {
    }
 
    // symbol session
-   inline symbol_type<character_types::string_type> 
+   inline symbol_type<character_types::string_type>
       symbol(const character_types::char_type *s)
    {
       return symbol_type<character_types::string_type>(s);
    }
 
-   inline symbol_type<character_types::string_type> 
+   inline symbol_type<character_types::string_type>
       symbol(const character_types::string_type &s)
    {
       return symbol_type<character_types::string_type>(s);
    }
-	
+
 }} // boost::application
 
 #endif // BOOST_APPLICATION_SHARED_LIBRARY_INITIALIZERS_HPP

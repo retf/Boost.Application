@@ -50,7 +50,6 @@ namespace boost { namespace application {
 
    };
 
-}} // boost::application 
+}} // boost::application
 
 #endif // BOOST_APPLICATION_DETAIL_APPLICATION_IMPL_HPP
-       

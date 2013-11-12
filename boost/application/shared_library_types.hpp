@@ -28,10 +28,10 @@ namespace boost { namespace application {
     * class, and using it many types can be
     * handled, e.g. wide string, string, paths
     * and so on.
-    * 
+    *
     */
    template <typename String>
-   class library_type 
+   class library_type
       : public base_type<String>
    {
    public:
@@ -46,10 +46,10 @@ namespace boost { namespace application {
     * class, and using it many types can be
     * handled, e.g. wide string, string
     * and so on.
-    * 
+    *
     */
    template <typename String>
-   class symbol_type 
+   class symbol_type
       : public base_type<String>
    {
    public:

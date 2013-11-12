@@ -22,7 +22,7 @@
 namespace boost { namespace application {
 
    template <typename String>
-   class setup_type  
+   class setup_type
       : public base_type<String>
    {
    public:

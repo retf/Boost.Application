@@ -37,20 +37,20 @@
 namespace boost { namespace application {
 
    /*!
-    * \brief This class hold a application mode system. 
-    *  
-    * common : Can be seen as Terminal/Console/Interactive 
-    *          aplication type. 
-    *  
-    * An application mode is a collection of aspects that 
-    * define application instantiation and behaviour. 
-    *  
-    * The usual use of this class is to pass it as 
-    * template param on launch free function. 
-    * 
+    * \brief This class hold a application mode system.
+    *
+    * common : Can be seen as Terminal/Console/Interactive
+    *          aplication type.
+    *
+    * An application mode is a collection of aspects that
+    * define application instantiation and behaviour.
+    *
+    * The usual use of this class is to pass it as
+    * template param on launch free function.
+    *
     */
 
-   class common 
+   class common
    {
 
    public:
@@ -60,24 +60,24 @@ namespace boost { namespace application {
        *
        * \param myapp An user application functor class.
        *
-       * \param sm The signal manager of application, that will be used 
-       *           internaly by application type. 
+       * \param sm The signal manager of application, that will be used
+       *           internaly by application type.
        *           User can customize this instance.
        *
        * \param context An context of application, that hold all
        *        aspects.
-       * 
-       * \param ec Variable (boost::system::error_code) that will be 
+       *
+       * \param ec Variable (boost::system::error_code) that will be
        *        set to the result of the operation.
-       * 
+       *
        * Check ec for errors.
-       * 
+       *
        */
       template <typename Application, typename SignalManager>
-      common(Application& myapp, SignalManager &sm, 
+      common(Application& myapp, SignalManager &sm,
          application::context &context, boost::system::error_code& ec)
          : impl_(new common_application_impl(
-                 boost::bind<int>( &Application::operator(), &myapp, _1), sm, 
+                 boost::bind<int>( &Application::operator(), &myapp, _1), sm,
                  context, ec))
       {
          if(ec) return;
@@ -99,25 +99,25 @@ namespace boost { namespace application {
        * \param context An context of application, that hold all
        *        aspects.
        *
-       * \param sm The signal manager of application, that will be used 
-       *           internaly by application type. 
+       * \param sm The signal manager of application, that will be used
+       *           internaly by application type.
        *           User can customize this instance.
-       * 
-       * \param ec Variable (boost::system::error_code) that will be 
+       *
+       * \param ec Variable (boost::system::error_code) that will be
        *        set to the result of the operation.
-       * 
+       *
        * Check ec for errors.
-       * 
+       *
        */
 
       template <typename Application, typename SignalManager>
-      common(Application& myapp, SignalManager &sm, 
-         singularity<application::context> &context, 
+      common(Application& myapp, SignalManager &sm,
+         singularity<application::context> &context,
          boost::system::error_code& ec)
          : impl_(new common_application_impl(
-                 boost::bind<int>( &Application::operator(), &myapp), sm, 
+                 boost::bind<int>( &Application::operator(), &myapp), sm,
                  context, ec))
-      {        
+      {
          if(ec) return;
 
          // default aspects patterns added to this kind of application
@@ -142,7 +142,7 @@ namespace boost { namespace application {
        * Destruct an common application.
        *
        */
-      virtual ~common() 
+      virtual ~common()
       {
          impl_->get_context().use_aspect<status>().state(status::stoped);
       }
@@ -153,7 +153,6 @@ namespace boost { namespace application {
 
    };
 
-}} // boost::application 
+}} // boost::application
 
 #endif // BOOST_APPLICATION_COMMON_APPLICATION_HPP
-       

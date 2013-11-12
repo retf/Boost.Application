@@ -18,7 +18,7 @@
 
 #include <boost/application/config.hpp>
 
-// This enable we to use csbl:: and internally the library select correct 
+// This enable we to use csbl:: and internally the library select correct
 // names, e.g. : csbl::unique_ptr will be boost::shared_ptr or std::shared_ptr
 
 namespace boost { namespace application { namespace csbl {
@@ -26,7 +26,6 @@ namespace boost { namespace application { namespace csbl {
 
 BOOST_APPLICATION_FEATURE_SELECT
 
-}}} // boost::application::csbl 
+}}} // boost::application::csbl
 
 #endif // BOOST_APPLICATION_DETAIL_CSBL_HPP
-       

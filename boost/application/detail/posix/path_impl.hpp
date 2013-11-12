@@ -19,7 +19,7 @@
 #include <boost/application/config.hpp>
 #include <boost/application/base_type.hpp>
 #include <boost/filesystem/path.hpp>
-#include <boost/filesystem/operations.hpp> 
+#include <boost/filesystem/operations.hpp>
 #include <boost/thread.hpp>
 
 namespace boost { namespace application {
@@ -37,7 +37,7 @@ namespace boost { namespace application {
       typedef std::basic_string<char_type> string_type;
 
       // Get module path name
-      path_impl_(int argc, char_type *argv[], 
+      path_impl_(int argc, char_type *argv[],
                 filesystem::path& path, boost::system::error_code &ec)
       {
          // http://stackoverflow.com/questions/1023306/finding-current-executables-path-without-proc-self-exe
@@ -46,14 +46,14 @@ namespace boost { namespace application {
          char_type resolved_path[PATH_MAX];
 
          // realpath -returns the canonicalized absolute pathname
-         if (realpath (command.c_str(), resolved_path) == 0) 
-         { 
+         if (realpath (command.c_str(), resolved_path) == 0)
+         {
             ec = boost::application::last_error_code();
-         } 
-         else 
+         }
+         else
          {
             path = string_type(resolved_path);
-         }    
+         }
       }
    };
 
@@ -65,7 +65,7 @@ namespace boost { namespace application {
    typedef path_impl_<character_types::char_type> path_impl;
    // wchar_t / char
 
-}} // boost::application 
+}} // boost::application
 
 #endif // BOOST_APPLICATION_DETAIL_POSIX_PATH_IMPL_HPP
 

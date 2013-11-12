@@ -23,21 +23,21 @@ namespace boost { namespace application {
 
    /*!
     * \brief This aspect class is used internaly by applications types (modes)
-    * 
+    *
     * Indicates the current state of application,
     * 3 ways are possible:
     *
-    * - application_stoped 
+    * - application_stoped
     * - application_running
     * - application_paused (used only on server appliation on windows side)
-    * 
+    *
     */
-   class status 
+   class status
    {
       friend class server;
       friend class common;
 
-   public:  
+   public:
       // application current state
       enum application_state {
          stoped = 0,
@@ -50,14 +50,14 @@ namespace boost { namespace application {
        *
        * \param state The state of application.
        */
-      status(application_state state) 
+      status(application_state state)
          :  application_state_(state) {}
 
       /*!
        * Retreaves current state of application.
-       * 
+       *
        * \return the state of application.
-       *      
+       *
        */
       application_state state() {
          return application_state_;
@@ -65,9 +65,9 @@ namespace boost { namespace application {
 
       /*!
        * Sets the current state of application.
-       * 
+       *
        * \param state The state of application.
-       *      
+       *
        */
       void state(application_state state) {
          application_state_ = state;
@@ -86,7 +86,7 @@ namespace boost { namespace application {
       application_state application_state_;
 
    };
-   
+
 }} // boost::application
 
 #endif // BOOST_APPLICATION_STATUS_ASPECT_HPP

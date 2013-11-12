@@ -30,8 +30,8 @@ namespace boost { namespace application {
    {
    public:
 
-      windows_scm(DWORD dw_desired_access) 
-      {	
+      windows_scm(DWORD dw_desired_access)
+      {
          boost::system::error_code ec;
          open(dw_desired_access, ec);
 
@@ -41,8 +41,8 @@ namespace boost { namespace application {
          }
       }
 
-      windows_scm(DWORD dw_desired_access, boost::system::error_code &ec) 
-      {	
+      windows_scm(DWORD dw_desired_access, boost::system::error_code &ec)
+      {
          open(dw_desired_access, ec);
       }
 
@@ -59,11 +59,11 @@ namespace boost { namespace application {
    protected:
 
       void open(DWORD dw_desired_access, boost::system::error_code &ec)
-      {	
+      {
          // open the SCM on this machine.
          handle_ = OpenSCManager(NULL, NULL, dw_desired_access);
 
-         if (handle_ == NULL) 
+         if (handle_ == NULL)
          {
             ec = last_error_code();
          }
@@ -120,7 +120,7 @@ namespace boost { namespace application {
    protected:
 
       // This method check if a given service (by name) is installed
-      virtual bool is_installed(boost::system::error_code &ec) 
+      virtual bool is_installed(boost::system::error_code &ec)
       {
          windows_scm scm(SC_MANAGER_ENUMERATE_SERVICE, ec);
 
@@ -136,14 +136,14 @@ namespace boost { namespace application {
          DWORD dwResumedHandle = 0;
 
          // Query services
-         BOOL ret_value = EnumServicesStatus(scm.get(), SERVICE_WIN32, 
-         SERVICE_STATE_ALL, &service, sizeof(ENUM_SERVICE_STATUS), 
+         BOOL ret_value = EnumServicesStatus(scm.get(), SERVICE_WIN32,
+         SERVICE_STATE_ALL, &service, sizeof(ENUM_SERVICE_STATUS),
          &dwBytesNeeded, &dwServicesReturned, &dwResumedHandle);
 
-         if (!ret_value) 
+         if (!ret_value)
          {
             // Need big buffer
-            if (ERROR_MORE_DATA == GetLastError()) 
+            if (ERROR_MORE_DATA == GetLastError())
             {
                // Set the buffer
                DWORD dwBytes = sizeof(ENUM_SERVICE_STATUS) + dwBytesNeeded;
@@ -151,12 +151,12 @@ namespace boost { namespace application {
                pServices = new ENUM_SERVICE_STATUS [dwBytes];
 
                // Now query again for services
-               EnumServicesStatus(scm.get(), SERVICE_WIN32, SERVICE_STATE_ALL, 
-               pServices, dwBytes, &dwBytesNeeded, 
+               EnumServicesStatus(scm.get(), SERVICE_WIN32, SERVICE_STATE_ALL,
+               pServices, dwBytes, &dwBytesNeeded,
                &dwServicesReturned, &dwResumedHandle);
 
                // now traverse each service to get information
-               for (unsigned iIndex = 0; iIndex < dwServicesReturned; iIndex++) 
+               for (unsigned iIndex = 0; iIndex < dwServicesReturned; iIndex++)
                {
                   std::basic_string<char_type> service;
                   service = (pServices + iIndex)->lpServiceName;
@@ -183,7 +183,7 @@ namespace boost { namespace application {
          }
 
          return false;
-      } 
+      }
 
       std::basic_string<char_type> service_name_;
 
@@ -231,7 +231,7 @@ namespace boost { namespace application {
    protected:
 
       // This method uninstall a given service (by name) on current machine
-      void uninstall_service(boost::system::error_code &ec) 
+      void uninstall_service(boost::system::error_code &ec)
       {
          boost::filesystem::path path(service_path_name_);
 
@@ -247,7 +247,7 @@ namespace boost { namespace application {
          // Open this service for DELETE access
          SC_HANDLE hservice = OpenService(scm.get(), service_name_.c_str(), DELETE);
 
-         if (hservice == NULL) 
+         if (hservice == NULL)
          {
             ec = last_error_code();
             return;
@@ -266,17 +266,17 @@ namespace boost { namespace application {
          LONG error;
 
 #if defined(BOOST_APPLICATION_STD_WSTRING)
-         std::basic_string<char_type> subKey = 
+         std::basic_string<char_type> subKey =
             L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\" + service_path_name_;
 
-#else      
-         std::basic_string<char_type> subKey = 
+#else
+         std::basic_string<char_type> subKey =
             "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\" + service_path_name_;
 #endif
 
          error = RegDeleteKey(HKEY_LOCAL_MACHINE, subKey.c_str());
 
-         if (error != NO_ERROR) 
+         if (error != NO_ERROR)
          {
             ec = last_error_code();
          }
@@ -301,9 +301,9 @@ namespace boost { namespace application {
 
       template <typename T>
       install_windows_service_(
-         const setup_type<T> &service_name, 
-         const setup_type<T> &service_display_name, 
-         const setup_type<T> &service_description, 
+         const setup_type<T> &service_name,
+         const setup_type<T> &service_display_name,
+         const setup_type<T> &service_description,
          const setup_type<T> &service_path_name)
       {
          service_name_ = service_name.get();
@@ -349,41 +349,41 @@ namespace boost { namespace application {
          windows_scm scm(SC_MANAGER_CREATE_SERVICE);
 
          // Append the switch that causes the process to run as a service.
-         // std::string pathname = service_path_name + TEXT(" --server");   
+         // std::string pathname = service_path_name + TEXT(" --server");
 
          // Add this service to the SCM's database.
          SC_HANDLE hservice = CreateService(
-            scm.get(), 
-            service_name_.c_str(), 
+            scm.get(),
+            service_name_.c_str(),
             service_display_name_.c_str(),
-            SERVICE_CHANGE_CONFIG, 
-            SERVICE_WIN32_OWN_PROCESS, 
-            SERVICE_AUTO_START, 
+            SERVICE_CHANGE_CONFIG,
+            SERVICE_WIN32_OWN_PROCESS,
+            SERVICE_AUTO_START,
             SERVICE_ERROR_NORMAL,
-            service_path_name_.c_str(), 
-            NULL, 
-            NULL, 
+            service_path_name_.c_str(),
+            NULL,
+            NULL,
             NULL, // service dependencies
-            NULL, 
+            NULL,
             NULL);
 
-         if (hservice == NULL) 
+         if (hservice == NULL)
          {
             ec = last_error_code();
             return;
          }
 
          char_type serviceDescription[2048];
-   
+
 #if defined(BOOST_APPLICATION_STD_WSTRING)
-         wcscpy_s(serviceDescription, sizeof(serviceDescription), 
+         wcscpy_s(serviceDescription, sizeof(serviceDescription),
                   service_description_.c_str());
-#else      
-         strcpy_s(serviceDescription, sizeof(serviceDescription), 
+#else
+         strcpy_s(serviceDescription, sizeof(serviceDescription),
                   service_description_.c_str());
 #endif
 
-         SERVICE_DESCRIPTION sd = { 
+         SERVICE_DESCRIPTION sd = {
             serviceDescription
          };
 
@@ -393,8 +393,8 @@ namespace boost { namespace application {
          register_application(ec);
       }
 
-      // The App Paths registry subkeys are used to register and control the behavior 
-      // of the system on behalf of applications. 
+      // The App Paths registry subkeys are used to register and control the behavior
+      // of the system on behalf of applications.
       // Note: if returns 5 (Access is denied) - you need run app as admin.
       void register_application(boost::system::error_code &ec)
       {
@@ -407,35 +407,35 @@ namespace boost { namespace application {
          LONG error;
 
 #if defined(BOOST_APPLICATION_STD_WSTRING)
-         sub_key = L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\" 
+         sub_key = L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\"
             + path.filename().wstring();
-#else      
-         sub_key = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\" 
+#else
+         sub_key = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\"
             + path.filename().string();
 #endif
 
-         error = RegCreateKeyEx(HKEY_LOCAL_MACHINE, sub_key.c_str(), 0, NULL, 
-                                REG_OPTION_NON_VOLATILE, KEY_SET_VALUE, NULL, 
+         error = RegCreateKeyEx(HKEY_LOCAL_MACHINE, sub_key.c_str(), 0, NULL,
+                                REG_OPTION_NON_VOLATILE, KEY_SET_VALUE, NULL,
                                 &hkey, NULL);
 
-         if (error != NO_ERROR) 
+         if (error != NO_ERROR)
          {
             if (hkey != NULL) RegCloseKey(hkey);
-            
+
             ec = last_error_code();
             return;
          }
 
 #if defined(BOOST_APPLICATION_STD_WSTRING)
         default_entry = path.wstring();
-#else      
+#else
         default_entry = path.string();
 #endif
-    
-         error = RegSetValueEx(hkey, NULL, 0, REG_EXPAND_SZ, (PBYTE) 
+
+         error = RegSetValueEx(hkey, NULL, 0, REG_EXPAND_SZ, (PBYTE)
                                default_entry.c_str(), default_entry.length());
 
-         if (error != NO_ERROR) 
+         if (error != NO_ERROR)
          {
             if (hkey != NULL) RegCloseKey(hkey);
             ec = last_error_code();
@@ -444,14 +444,14 @@ namespace boost { namespace application {
 
 #if defined(BOOST_APPLICATION_STD_WSTRING)
         path_entry = path.branch_path().wstring();
-#else      
+#else
         path_entry = path.branch_path().string();
 #endif
 
-         error = RegSetValueEx(hkey, TEXT("path"), 0, REG_EXPAND_SZ, 
+         error = RegSetValueEx(hkey, TEXT("path"), 0, REG_EXPAND_SZ,
                                (PBYTE) path_entry.c_str(), path_entry.length());
 
-         if (error != NO_ERROR) 
+         if (error != NO_ERROR)
          {
             if (hkey != NULL) RegCloseKey(hkey);
             ec = last_error_code();
@@ -472,8 +472,8 @@ namespace boost { namespace application {
    typedef install_windows_service_<character_types::char_type> install_windows_service;
    // wchar_t / char
 
-}} // boost::application 
+}} // boost::application
 
 #endif // BOOST_APPLICATION_IMPL_WINDOWS_SERVICE_SETUP_HPP
-		
+
 
