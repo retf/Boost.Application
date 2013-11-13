@@ -118,7 +118,7 @@ Now if you compile on [@http://en.wikipedia.org/wiki/Windows_service Windows], a
 In oder to use a Windows service, you have to install it. 
 Installation makes the SCM aware of the service and cause the SCM to add it to the list of services that appears in Services Console of Control Painel.
 
-Refer to [@../html/boost_application/other_features.html#boost_application.other_features.setup_service "Setup for Windows Service"] to know how add code that enable instalation on windows,
+Refer to [@../html/boost_application/windows_specifics.html#boost_application.windows_specifics.setup_service "Setup for Windows Service"] to know how add code that enable instalation on windows,
 
 After instalation you can see your service on SCM.
 

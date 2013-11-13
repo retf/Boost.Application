@@ -28,7 +28,6 @@ Limit Single Instance [@http://www.boost.org/libs/application/example/limit_sing
 Limit Single Instance (interprocess) [@http://www.boost.org/libs/application/example/limit_single_instance_boost_interprocess_named_mutex.cpp (limit_single_instance_boost_interprocess_named_mutex.cpp)] 
 Limit Single Instance Using Callback [@http://www.boost.org/libs/application/example/limit_single_instance_callback.cpp (limit_single_instance_callback.cpp)]
 Limit Single Instance Using Singularity [@http://www.boost.org/libs/application/example/limit_single_instance_callback_using_singularity.cpp (limit_single_instance_callback_using_singularity.cpp)]
-Windows Service Setup [@http://www.boost.org/libs/application/example/service_setup.cpp (service_setup.cpp)]
 Plug-in System [@http://www.boost.org/libs/application/example/shared_library_load_plugin.cpp (shared_library_load_plugin.cpp)]
 ]
 
@@ -39,6 +38,20 @@ Termination Handler Signal Customization [@http://www.boost.org/libs/application
 Wait For Termination Request Customization [@http://www.boost.org/libs/application/example/my_own_wait_for_termination_request.cpp (my_own_wait_for_termination_request.cpp)] 
 ]
 
+
+[* Windows specifics]
+
+[pre
+Windows Service Setup [@http://www.boost.org/libs/application/example/service_setup.cpp (service_setup.cpp)]
+]
+
+[* POSIX specifics]
+
+[pre
+Self-pipe [@http://www.boost.org/libs/application/example/selfpipe/selfpipe.cpp (selfpipe.cpp)]
+]
+
+
 [* Other Aspects]
 
 [pre
@@ -47,8 +60,6 @@ Wait For Termination Request Customization [@http://www.boost.org/libs/applicati
 Termination Handler [@http://www.boost.org/libs/application/example/termination_handler.cpp (termination_handler.cpp)] 
 Wait For Termination Request [@http://www.boost.org/libs/application/example/wait_for_termination_request.cpp (wait_for_termination_request.cpp)] 
 ]
-
-
 
 [* Tutorial]
 

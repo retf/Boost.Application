@@ -9,7 +9,7 @@
 This session present ideas from Boost Mailing list to be implemented on Boost.Application. If you have any idea, or want contribute with this lib in anyway, let me know!
 
 [section TODO]
- * On POSIX/UNIX provide 'selfpipe' for SIGNALS handle like proposed by 'Stanislav Ivochkin' on mailing list discussion.
+ * nothing until the moment.
 [endsect]
 
 [section Future Releases]

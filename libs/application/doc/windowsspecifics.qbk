@@ -1,0 +1,55 @@
+[/
+    Copyright 2013 Renato Tegon Forti
+    Distributed under the Boost Software License, Version 1.0.
+    (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+/]
+
+
+
+[section Windows specifics]
+
+Boost.Application have some specifics on each side, here the user that uses Windows system need be aware.
+
+[/
+# --------------------------------------------------------------------------------
+# setup_service
+# --------------------------------------------------------------------------------
+]
+
+[section:setup_service Setup for Windows Service] 
+
+Boost.Application provides a setup code, that can be added to to enable installation/uninstallation of windows service application.
+
+[import ../example/service_setup.cpp]
+[wss]
+
+This example shows how to use windows service setup module to provide a installation system to application using program_options.
+
+[pre
+[*Installation]
+windows_service_setup.exe -i --name "My Service" --path "c:\myservice\service.exe"
+windows_service_setup.exe -i --name "My Service" --path "c:\myservice\service.exe" --display "My Service"
+windows_service_setup.exe -i --name "My Service" --path "c:\myservice\service.exe" --display "My Service" --description "Service Description"
+
+[*Check Installation]
+windows_service_setup.exe -c --name "My Service" 
+
+[*Uninstallation]
+windows_service_setup.exe -u --name "My Service" --path "c:\myservice\service.exe" 
+]
+
+[important 
+Note that you need run this AS ADMIN.
+]
+
+[note
+Note that when arg name are not priovided, the name will be the name of executable, in this case, service name will be: 'windows_service_setup'
+]
+
+[tip
+The sample 'simple_server application.cpp' has the setup code embed on it. This shows a way to incorporate all required code into a single executable.
+]
+
+[endsect]
+
+[endsect]

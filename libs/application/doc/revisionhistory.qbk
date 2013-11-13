@@ -6,11 +6,17 @@
 
 [section Revision History]
 
+[h5 0.4.1]
+
+On POSIX/UNIX now we provide 'selfpipe' for SIGNALS handle like proposed by 'Stanislav Ivochkin' on mailing list discussion.
+
+[@https://github.com/retf/Boost.Application Version 0.4.1.b (Current)]
+
 [h5 0.4]
 
 Boost.Application 0.4 (Aspect Based Design) 
 
-[@https://github.com/retf/Boost.Application Version 0.4.b (Current)]
+[@https://github.com/retf/Boost.Application Version 0.4.b]
 
 [h5 0.3]
 

@@ -27,6 +27,7 @@
 [include tutorial.qbk]
 [include customization.qbk]
 [include otherfeatures.qbk]
+[include windowsspecifics.qbk]
 [include posixspecifics.qbk]
 [include faq.qbk]
 [include dependencies.qbk]
