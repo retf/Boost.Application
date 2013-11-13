@@ -6,10 +6,10 @@
 
 [section Dependencies]
 
-The Boost.Application is a header only library, but it depends of the following libraries, and they must be available in order to compile programs that use Boost.Application:
+The Boost.Application is a header only library, but it depends on the following libraries, and they must be available in order to compile programs that use Boost.Application:
 
 * Boost.System for the boost::system::error_code and boost::system::system_error classes.
-* Boost.Thead for creating a service thread and synchronization. Windows Service blocks the main thread so, then service thread function would need to be called from a boost thread.
+* Boost.Thread for creating a service thread and synchronization. Windows Service blocks the main thread so, then service thread function would need to be called from a boost thread.
 * Boost.Function, Bind for creation of a callbak system and others.
 * Boost.Asio for SIGNALs. 
 * Boost.Singularity for singleton version. 
