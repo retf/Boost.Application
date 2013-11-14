@@ -23,8 +23,12 @@
 #include <boost/application/config.hpp>
 #include <boost/application/base_type.hpp>
 
+// platform usage
+#if defined( BOOST_WINDOWS_API )
+#elif defined( BOOST_POSIX_API )
 #include <unistd.h>
 #include <fcntl.h>
+#endif
 
 namespace boost { namespace application { 
 
