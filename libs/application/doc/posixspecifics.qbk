@@ -25,6 +25,10 @@ In default form a SIGNAL can interrupt your program at any time. E.g.: while any
 
 The problem is that the default signal handler is not re-entrant, and if you need that your signal handlers to be re-entrant, you can use Self-pipe aspect.
 
+In Self-pipe a 'pipe' is used as queue (you just write some bytes to one end and read some bytes from the other end), and this queue is used to notify the other side that an 'event', or a SIGNAL has arrived.
+
+User can use 'select' system call to monitors the reading end of this pipe, to know when SIGNAL arrives.
+
 [import ../example/selfpipe/selfpipe.cpp]
 [selfpipe]
 

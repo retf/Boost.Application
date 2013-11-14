@@ -53,8 +53,8 @@ public:
 	 
       int ready = 0; 
 
-      /*<<Use select posix sustem call to waith for SIGUSR2 signal, unsing our self-pipe>>*/
-      while ((ready = select(3, &readfds, NULL, NULL, NULL)) == -1 && errno == EINTR)
+      /*<<Use select posix system call to waith for SIGUSR2 signal, unsing our self-pipe>>*/
+      while ((ready = select(selfpipe->read_fd() + 1, &readfds, NULL, NULL, NULL)) == -1 && errno == EINTR)
       {
          /*<<SIGUSR2 signal are received, notify work thread using signal_usr2_received_>>*/
          signal_usr2_received_ = true;
@@ -83,7 +83,7 @@ protected:
 
 private:
 
-   bool signal_usr2_received_;
+   volatile bool signal_usr2_received_;
 
 };
 
