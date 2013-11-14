@@ -1,9 +1,6 @@
 [section:introduction Introduction]
 
-[caution
-This documentatuion is in "Work in Progress" status.
-[@https://github.com/retf/Boost.Application DOWNLOAD THE LIB]
-]
+[caution This is not yet an official Boost C++ library. It wasn't reviewed and can't be downloaded from www.boost.org. This beta is available to boost community to know real interest and get comments for refinement.The intention is to submit library to formal review, if community think that it is interesting!]
 
 Boost.Application provides a application environment, or start point to any people that want a basic infrastructure to build an system application on Windows or Unix Variants (e.g. Linux, MacOS).
 
@@ -26,6 +23,9 @@ Here's a simple example of how to construct a application with Boost.Application
 
 Refer to [@../html/boost_application/roadmap.html "road map"] to know all required/optional steps to build a complete application using Boost.Application. To high level design overview, refer to [@../html/boost_application/design_overview.html '"design overview"']
 
-[caution This is not yet an official Boost C++ library. It wasn't reviewed and can't be downloaded from www.boost.org. This beta is available to boost community to know real interest and get comments for refinement.The intention is to submit library to formal review, if community think that it is interesting!]
+[caution
+This documentatuion is in "Work in Progress" status.
+[@https://github.com/retf/Boost.Application DOWNLOAD THE LIB]
+]
 
 [endsect]

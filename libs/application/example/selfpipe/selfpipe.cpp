@@ -32,12 +32,33 @@ inline application::context& this_application() {
 // my functor application
 
 //[selfpipe
+
+class sigal_state
+{
+   boost::mutex mutex_;
+   bool signal_; 
+
+public:
+
+   sigal_state() 
+      : signal_(false) {}
+
+   void alarm()
+   {
+      boost::lock_guard<boost::mutex> lock(mutex_);
+      signal_ = !signal_;
+   }
+
+   bool state()
+   {
+      boost::lock_guard<boost::mutex> lock(mutex_);
+      return signal_;
+   }
+};
+
 class myapp
 {
 public:
-
-   myapp()
-      : signal_usr2_received_(false){ }
 
    int operator()()
    {
@@ -50,20 +71,23 @@ public:
 
       /*<<Launch a work thread>>*/
       boost::thread thread(&myapp::worker, this);
-	 
-      int ready = 0; 
 
-      /*<<Use select posix system call to waith for SIGUSR2 signal, unsing our self-pipe>>*/
-      while ((ready = select(selfpipe->read_fd() + 1, &readfds, NULL, NULL, NULL)) == -1 && errno == EINTR)
-      {
+      /*<<Use select posix system call to wait for SIGUSR2 signal, using our self-pipe>>*/
+      int retval = select(selfpipe->read_fd() + 1, &readfds, NULL, NULL, NULL);
+
+      if(retval == -1 && errno == EINTR) 
+      {  
+         std::cout << "A signal was caught!" << std::endl;
+
          /*<<SIGUSR2 signal are received, notify work thread using signal_usr2_received_>>*/
-         signal_usr2_received_ = true;
+         sigal_state_.alarm();
 
          /*<<Wait for the end of the work>>*/
          thread.join(); 
-         break;
-      }   
-              
+      }
+      else
+         return 1;
+
       return 0;
    }
 
@@ -71,7 +95,7 @@ protected:
 
    void worker()
    {
-      while(!signal_usr2_received_)
+      while(!sigal_state_.state())
       {
          boost::this_thread::sleep(boost::posix_time::seconds(1));
          std::cout << "working..." << std::endl;
@@ -83,7 +107,7 @@ protected:
 
 private:
 
-   volatile bool signal_usr2_received_;
+   sigal_state sigal_state_;
 
 };
 
