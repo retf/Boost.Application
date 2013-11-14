@@ -37,36 +37,29 @@ class myapp
 public:
 
    myapp()
-      : signal_usr2_received_(false)
-   {
-   }
+      : signal_usr2_received_(false){ }
 
    int operator()()
    {
       boost::shared_ptr<application::posix::selfpipe> selfpipe 
          = this_application().get_aspect<application::posix::selfpipe>();
 
-      struct sigaction sa;
-      memset(&sa, 0, sizeof(sa));
-
-      sa.sa_handler = siganal_handler;
-      sa.sa_flags = SA_RESTART;
-
-      sigaction(SIGUSR2, &sa, NULL);
-
       fd_set readfds;
       FD_ZERO(&readfds);
       FD_SET(selfpipe->read_fd(), &readfds);
 
-      // launch a work thread
+      /*<<Launch a work thread>>*/
       boost::thread thread(&myapp::worker, this);
 	 
       int ready = 0; 
+
       /*<<Use select posix sustem call to waith for SIGUSR2 signal, unsing our self-pipe>>*/
       while ((ready = select(3, &readfds, NULL, NULL, NULL)) == -1 && errno == EINTR)
       {
-         /*<<SIGUSR2 signal are received, stop application>>*/
+         /*<<SIGUSR2 signal are received, notify work thread using signal_usr2_received_>>*/
          signal_usr2_received_ = true;
+
+         /*<<Wait for the end of the work>>*/
          thread.join(); 
          break;
       }   
@@ -75,19 +68,6 @@ public:
    }
 
 protected:
-
-   /*<<Define your custon siganl handler>>*/
-   static void siganal_handler(int signum)
-   {
-      boost::shared_ptr<application::posix::selfpipe> selfpipe 
-         = this_application().get_aspect<application::posix::selfpipe>();
-
-      if(signum == SIGUSR2) 
-      {
-         /*<<Notify application in case of reception of SIGUSR2 signal, unsing self-pipe>>*/
-         selfpipe->poke(); 
-      }
-   }
 
    void worker()
    {
@@ -101,10 +81,39 @@ protected:
       std::cout << "other end work..." << std::endl;
    }
 
-
 private:
 
    bool signal_usr2_received_;
+
+};
+
+/*<<Define a new signal_manager to act on SIGUSR2>>*/
+class signal_usr2 : public application::signal_manager
+{
+public:
+
+   /*<< Customize SIGNALS bind >>*/
+   signal_usr2(singularity<application::context> &cxt)
+      : application::signal_manager(cxt)
+   {
+      application::handler::parameter_callback callback 
+         = boost::bind<bool>(&signal_usr2::signal_usr2_handler, this);
+
+      /*<< Define signal bind >>*/
+      bind(SIGUSR2,  callback); 
+   }
+
+   /*<< Define signal callback >>*/
+   bool signal_usr2_handler()
+   {
+      boost::shared_ptr<application::posix::selfpipe> selfpipe 
+         = this_application().get_aspect<application::posix::selfpipe>();
+
+      /*<<Notify application in case of reception of SIGUSR2 signal, unsing self-pipe>>*/
+      selfpipe->poke();
+
+      return false;
+   }
 
 };
 
@@ -120,7 +129,8 @@ int main(int argc, char *argv[])
    this_application().add_aspect<application::posix::selfpipe>(
       boost::make_shared<application::posix::selfpipe>());
 	  
-   int ret = application::launch<application::common>(app, global_context);
+   signal_usr2 sm(global_context);
+   int ret = application::launch<application::common>(app, sm, global_context);
 
    boost::singularity<application::context>::destroy();
 

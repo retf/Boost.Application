@@ -28,6 +28,11 @@
 #include <boost/application/aspects/termination_handler.hpp>
 #include <boost/application/aspects/wait_for_termination_request.hpp>
 
+// Note that singularity is in approval process,
+// refer to the above link to know more:
+// http://www.boost.org/community/review_schedule.html
+#include <boost/singularity/singularity.hpp>
+
 namespace boost { namespace application {
 
    // This is an attempt to make things more flexible,
@@ -51,6 +56,17 @@ namespace boost { namespace application {
    public:
       explicit signal_binder(context &cxt)
          : context_(cxt)
+         , signals_(io_service_)
+         , io_service_thread_(0)
+      {
+         signals_.async_wait(
+            boost::bind(&signal_binder::signal_handler, this,
+            boost::asio::placeholders::error,
+            boost::asio::placeholders::signal_number));
+      }
+
+      explicit signal_binder(singularity<context> &cxt)
+         : context_(cxt.get_global())
          , signals_(io_service_)
          , io_service_thread_(0)
       {
@@ -276,6 +292,18 @@ namespace boost { namespace application {
 
       signal_manager(application::context &context)
          : signal_binder(context)
+      {
+         boost::system::error_code ec;
+
+         register_signals(ec);
+
+         if(ec)
+            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR(
+            "signal_manager() failed");
+      }
+
+      signal_manager(singularity<context> &cxt)
+         : signal_binder(cxt)
       {
          boost::system::error_code ec;
 
