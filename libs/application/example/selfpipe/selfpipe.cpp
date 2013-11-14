@@ -41,8 +41,8 @@ public:
 
    int operator()()
    {
-      boost::shared_ptr<application::posix::selfpipe> selfpipe 
-         = this_application().get_aspect<application::posix::selfpipe>();
+      boost::shared_ptr<application::selfpipe> selfpipe 
+         = this_application().get_aspect<application::selfpipe>();
 
       fd_set readfds;
       FD_ZERO(&readfds);
@@ -106,8 +106,8 @@ public:
    /*<< Define signal callback >>*/
    bool signal_usr2_handler()
    {
-      boost::shared_ptr<application::posix::selfpipe> selfpipe 
-         = this_application().get_aspect<application::posix::selfpipe>();
+      boost::shared_ptr<application::selfpipe> selfpipe 
+         = this_application().get_aspect<application::selfpipe>();
 
       /*<<Notify application in case of reception of SIGUSR2 signal, unsing self-pipe>>*/
       selfpipe->poke();

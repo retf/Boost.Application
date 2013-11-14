@@ -26,84 +26,99 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-namespace boost { namespace application { namespace posix {
+namespace boost { namespace application { 
 
-   /*!
-    * \brief POSIX platform specific aspect that implement self-pipe trick.
-    *        
-    */
-   class selfpipe : noncopyable
-   {
-   
-   public:
-   
-      selfpipe()
+   namespace posix {
+
+      /*!
+       * \brief POSIX platform specific aspect that implement self-pipe trick.
+       *        
+       */
+      class selfpipe : noncopyable
       {
-         boost::system::error_code ec;
-
-         setup(ec);
-
-         if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("selfpipe() failed");
-      }
       
-      selfpipe(boost::system::error_code &ec)
-      {
-         setup(ec);
-      }
+      public:
       
-      virtual ~selfpipe()
-      {
-         teardown();
-      }
-   
-   protected:
-
-      void setup(boost::system::error_code &ec) 
-      {
-         if (pipe(fd_) == -1)
+         selfpipe()
          {
-            ec = last_error_code(); return;
+            boost::system::error_code ec;
+
+            setup(ec);
+
+            if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("selfpipe() failed");
+         }
+         
+         selfpipe(boost::system::error_code &ec)
+         {
+            setup(ec);
+         }
+         
+         virtual ~selfpipe()
+         {
+            teardown();
+         }
+      
+      protected:
+
+         void setup(boost::system::error_code &ec) 
+         {
+            if (pipe(fd_) == -1)
+            {
+               ec = last_error_code(); return;
+            }
+
+            fcntl(fd_[readfd], F_SETFL, 
+               fcntl(fd_[readfd], F_GETFL) | O_NONBLOCK);
+
+            fcntl(fd_[writefd], F_SETFL, 
+               fcntl(fd_[writefd], F_GETFL) | O_NONBLOCK);
          }
 
-         fcntl(fd_[readfd], F_SETFL, 
-            fcntl(fd_[readfd], F_GETFL) | O_NONBLOCK);
+         void teardown() 
+         {
+            close(fd_[readfd]);
+            close(fd_[writefd]);
+         }
 
-         fcntl(fd_[writefd], F_SETFL, 
-            fcntl(fd_[writefd], F_GETFL) | O_NONBLOCK);
-      }
+      public:
 
-      void teardown() 
-      {
-         close(fd_[readfd]);
-         close(fd_[writefd]);
-      }
+         int read_fd() const 
+         { 
+            return fd_[readfd]; 
+         }
+   	  
+         int write_fd() const 
+         { 
+            return fd_[writefd]; 
+         }
+   	  
+         void poke() 
+         { 
+            write(fd_[writefd], "", 1); 
+         }
 
-   public:
+      private:
+      
+         enum { readfd = 0, writefd = 1 };
 
-      int read_fd() const 
-      { 
-         return fd_[readfd]; 
-      }
-	  
-      int write_fd() const 
-      { 
-         return fd_[writefd]; 
-      }
-	  
-      void poke() 
-      { 
-         write(fd_[writefd], "", 1); 
-      }
+         int fd_[2];
+   	  
+      }; // selfpipe
 
-   private:
-   
-      enum { readfd = 0, writefd = 1 };
+   } // posix
 
-      int fd_[2];
-	  
-   };
+// platform usage
+#if defined( BOOST_WINDOWS_API )
+// not available
+// using windows::self_pipe;
+#   error "Sorry, no selfpipe are available for this platform."
+#elif defined( BOOST_POSIX_API )
+   using posix::selfpipe;
+#else
+#   error "Sorry, selfpipe are available for this platform."
+#endif
 
-}}} // boost::application::posix
+}} // boost::application::posix
 
 #endif // BOOST_APPLICATION_SELFPIPE_ASPECT_HPP
 
