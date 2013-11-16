@@ -19,6 +19,7 @@
 #include <iostream>
 #include <boost/application.hpp>
 #include <boost/application/aspects/selfpipe.hpp>
+#include <boost/logic/tribool.hpp>
 
 using namespace boost;
 
@@ -33,33 +34,34 @@ inline application::context& this_application() {
 
 //[selfpipe
 
-class sigal_state
+class selfpipe_state
 {
    boost::mutex mutex_;
-   int state_; 
+   boost::logic::tribool state_; 
 
 public:
 
-   sigal_state() 
-      : state_(0) {}
+   selfpipe_state() 
+      : state_(false) {}
 
-   void alarm()
+   void signal()
    {
       boost::lock_guard<boost::mutex> lock(mutex_);
-      state_ = !state_;
+      state_ = true;
    }
 
-   void error(int errno)
+   void error()
    {
       boost::lock_guard<boost::mutex> lock(mutex_);
-      state_ = errno;
+      state_ = boost::logic::indeterminate;
    }
 
-   int state()
+   boost::logic::tribool state()
    {
       boost::lock_guard<boost::mutex> lock(mutex_);
       return state_;
    }
+
 };
 
 class myapp
@@ -82,14 +84,10 @@ public:
       int retval = select(selfpipe->read_fd() + 1, &readfds, 0, 0, 0);
 
       if(retval == -1 && errno == EINTR) 
-      {  
          /*<<SIGUSR2 signal are received, notify work thread using signal_usr2_received_>>*/
-         sigal_state_.alarm();
-      }
+         selfpipe_state_.signal();
       else
-      {
-         sigal_state_.error(errno);
-      }
+         selfpipe_state_.error();
 
       /*<<Wait for the end of the work>>*/
       thread.join();
@@ -101,10 +99,15 @@ protected:
 
    void worker()
    {
-      while(sigal_state_.state() == 0)
+      while(selfpipe_state_.state() == false)
       {
          boost::this_thread::sleep(boost::posix_time::seconds(1));
          std::cout << "working..." << std::endl;
+      }
+
+      // select fail
+      if(selfpipe_state_.state() == boost::logic::indeterminate) {
+         std::cout << "other end work when we have an error..." << std::endl;
       }
 
       boost::this_thread::sleep(boost::posix_time::seconds(1));
@@ -113,7 +116,7 @@ protected:
 
 private:
 
-   sigal_state sigal_state_;
+   selfpipe_state selfpipe_state_;
 
 };
 
