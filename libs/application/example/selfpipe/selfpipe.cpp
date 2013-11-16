@@ -36,23 +36,29 @@ inline application::context& this_application() {
 class sigal_state
 {
    boost::mutex mutex_;
-   bool signal_; 
+   int state_; 
 
 public:
 
    sigal_state() 
-      : signal_(false) {}
+      : state_(0) {}
 
    void alarm()
    {
       boost::lock_guard<boost::mutex> lock(mutex_);
-      signal_ = !signal_;
+      state_ = !state_;
    }
 
-   bool state()
+   void error(int errno)
    {
       boost::lock_guard<boost::mutex> lock(mutex_);
-      return signal_;
+      state_ = errno;
+   }
+
+   int state()
+   {
+      boost::lock_guard<boost::mutex> lock(mutex_);
+      return state_;
    }
 };
 
@@ -73,20 +79,20 @@ public:
       boost::thread thread(&myapp::worker, this);
 
       /*<<Use select posix system call to wait for SIGUSR2 signal, using our self-pipe>>*/
-      int retval = select(selfpipe->read_fd() + 1, &readfds, NULL, NULL, NULL);
+      int retval = select(selfpipe->read_fd() + 1, &readfds, 0, 0, 0);
 
       if(retval == -1 && errno == EINTR) 
       {  
-         std::cout << "A signal was caught!" << std::endl;
-
          /*<<SIGUSR2 signal are received, notify work thread using signal_usr2_received_>>*/
          sigal_state_.alarm();
-
-         /*<<Wait for the end of the work>>*/
-         thread.join(); 
       }
       else
-         return 1;
+      {
+         sigal_state_.error(errno);
+      }
+
+      /*<<Wait for the end of the work>>*/
+      thread.join();
 
       return 0;
    }
@@ -95,7 +101,7 @@ protected:
 
    void worker()
    {
-      while(!sigal_state_.state())
+      while(sigal_state_.state() == 0)
       {
          boost::this_thread::sleep(boost::posix_time::seconds(1));
          std::cout << "working..." << std::endl;
