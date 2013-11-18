@@ -50,6 +50,13 @@ project
 
    test-suite application
       : 
+	  
+	  #
+      # application fundation
+      #
+      [ run aspect_map_test.cpp ]
+      #
+      #
 
       #
       # common application
