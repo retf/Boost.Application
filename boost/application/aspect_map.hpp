@@ -23,6 +23,7 @@
 // 22-10-2013 dd-mm-yyyy - Renato Forti - Add replace_aspect method
 // 23-10-2013 dd-mm-yyyy - Renato Forti - Add remove_aspect method
 // 25-10-2013 dd-mm-yyyy - Renato Forti - Enable use of csbl::
+// 18-11-2013 dd-mm-yyyy - Renato Forti - Operations are thread safe now
 //
 // -----------------------------------------------------------------------------
 
@@ -32,9 +33,9 @@
 #include <boost/config.hpp>
 #include <boost/application/config.hpp>
 #include <boost/application/detail/csbl.hpp>
+#include <boost/thread.hpp>
 
 #include <utility>
-
 
 namespace boost{
    namespace application {
@@ -48,6 +49,8 @@ namespace boost{
 
             map_type aspects_;
 
+            mutable boost::mutex mutex_;
+
          public:
 
             /*!
@@ -60,21 +63,8 @@ namespace boost{
             template <class T>
             void add_aspect(csbl::shared_ptr<T> asp)
             {
-// todo: move to func
-#if defined( BOOST_APPLICATION_FEATURE_NS_SELECT_STD )
-               key_type ti = typeid(T);
-#elif defined( BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST )
-               key_type ti = type_id<T>();
-#else // auto detect
-#   ifndef BOOST_NO_CXX11_HDR_TYPEINDEX
-               key_type ti = typeid(T);
-#   else
-               key_type ti = type_id<T>();
-#   endif
-#endif
-               if (!aspects_.insert(std::make_pair(ti, asp)).second)
-                  throw std::logic_error(
-                     std::string("Type ") + ti.name() + " already added as an aspect");
+               boost::lock_guard<boost::mutex> lock(mutex_);
+               add_aspect(asp, lock);
             }
 
             /*!
@@ -103,6 +93,8 @@ namespace boost{
             template <class T>
             csbl::shared_ptr<T> get_aspect()
             {
+               boost::lock_guard<boost::mutex> lock(mutex_);
+
                map_type::const_iterator it = aspects_.find(key_type(typeid(T)));
 
                if (aspects_.cend() == it)
@@ -123,6 +115,8 @@ namespace boost{
             template <class T>
             csbl::shared_ptr<const T> get_aspect() const
             {
+               boost::lock_guard<boost::mutex> lock(mutex_);
+
                map_type::const_iterator it = aspects_.find(key_type(typeid(T)));
 
                if (aspects_.cend() == it)
@@ -141,6 +135,8 @@ namespace boost{
             template <class T>
             T& use_aspect()
             {
+               boost::lock_guard<boost::mutex> lock(mutex_);
+
                map_type::const_iterator it = aspects_.find(key_type(typeid(T)));
 
                if (aspects_.cend() == it)
@@ -161,6 +157,8 @@ namespace boost{
             template <class T>
             T const& use_aspect() const
             {
+               boost::lock_guard<boost::mutex> lock(mutex_);
+
                map_type::const_iterator it = aspects_.find(key_type(typeid(T)));
 
                if (aspects_.cend() == it)
@@ -180,18 +178,17 @@ namespace boost{
             template <class T>
             void replace_aspect(csbl::shared_ptr<T> asp)
             {
-// todo: move to func
-#if defined( BOOST_APPLICATION_FEATURE_NS_SELECT_STD )
-               key_type ti = typeid(T);
-#elif defined( BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST )
-               key_type ti = type_id<T>();
-#else // auto detect
-#   ifndef BOOST_NO_CXX11_HDR_TYPEINDEX
-               key_type ti = typeid(T);
-#   else
-               key_type ti = type_id<T>();
-#   endif
-#endif
+               boost::lock_guard<boost::mutex> lock(mutex_);
+
+               if (!(aspects_.cend() != aspects_.find(key_type(typeid(T)))))
+               {
+                  throw std::logic_error(
+                     std::string("Type ") + key_type(typeid(T)).name() +
+                     " is not on the pool");
+               }
+
+               key_type ti = csbl::get_type_id<T>();
+
                if(aspects_.erase(ti))
                   aspects_.insert(std::make_pair(ti, asp));
             }
@@ -201,20 +198,18 @@ namespace boost{
              *
              */
             template <class T>
-            void remove_aspect(csbl::shared_ptr<T> asp)
+            void remove_aspect()
             {
-// todo: move to func
-#if defined( BOOST_APPLICATION_FEATURE_NS_SELECT_STD )
-               key_type ti = typeid(T);
-#elif defined( BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST )
-               key_type ti = type_id<T>();
-#else // auto detect
-#   ifndef BOOST_NO_CXX11_HDR_TYPEINDEX
-               key_type ti = typeid(T);
-#   else
-               key_type ti = type_id<T>();
-#   endif
-#endif
+               boost::lock_guard<boost::mutex> lock(mutex_);
+
+               if (!(aspects_.cend() != aspects_.find(key_type(typeid(T)))))
+               {
+                  throw std::logic_error(
+                     std::string("Type ") + key_type(typeid(T)).name() +
+                     " is not on the pool");
+               }
+
+               key_type ti = csbl::get_type_id<T>();
 
                aspects_.erase(ti);
             }
@@ -231,12 +226,25 @@ namespace boost{
             template <class T>
             bool add_aspect_if_not_exists(csbl::shared_ptr<T> asp)
             {
-               if (!has_aspect<T>()) {
-                  add_aspect<T>(asp);
+               boost::lock_guard<boost::mutex> lock(mutex_);
+
+               if (!(aspects_.cend() != aspects_.find(key_type(typeid(T))))) {
+                  add_aspect(asp, lock);
                   return true;
                }
 
                return false;
+            }
+
+         protected:
+
+            template <class T>
+            void add_aspect(csbl::shared_ptr<T> asp, boost::lock_guard<boost::mutex> &lock)
+            {
+               key_type ti = csbl::get_type_id<T>();
+               if (!aspects_.insert(std::make_pair(ti, asp)).second)
+                  throw std::logic_error(
+                     std::string("Type ") + ti.name() + " already added as an aspect");
             }
 
    }; // aspect_map

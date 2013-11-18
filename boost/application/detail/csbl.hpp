@@ -26,6 +26,16 @@ namespace boost { namespace application { namespace csbl {
 
 BOOST_APPLICATION_FEATURE_SELECT
 
+   template <class T>
+   inline  type_index get_type_id() {
+#ifndef BOOST_NO_CXX11_HDR_TYPEINDEX
+      return typeid(T);
+#else
+      return type_id<T>();
+#endif
+
+   }
+
 }}} // boost::application::csbl
 
 #endif // BOOST_APPLICATION_DETAIL_CSBL_HPP

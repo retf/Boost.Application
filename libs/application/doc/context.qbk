@@ -4,9 +4,27 @@
     (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 /]
 
-[section:context Using Application Context]
+[section:context Apects and Application Context]
 A central concept on Boost.Application is the 'aspects' that can be added to application context. 
 
+[section Application Context]
+
+User is free to add any aspect to Application Context, and many operations are available (thread-safe) to manipulate the 'aspect pool' of application, see below the complete list of methods available on Application Context Aspect Pool.
+
+[table:acamm Application Context Aspect Manipulation Methods
+    [[Operation Name]                     [Params]                                                                                                     [Return]                                                                                                                                [Condition]]
+    [[add_aspect]                         [shared_ptr of aspect that you want add to the pool. Use make_shared<T> to contruct aspect.]                 [void]                                                                                                                                  [The aspect can not exist on the pool or an exception (std::logic_error) will be thrown.]]
+    [[has_aspect]                         [None. User need provide a type of aspect as template param]                                                 [True if aspect exist on the pool]                                                                                                      [none]]
+    [[get_aspect]                         [None. User need provide a type of aspect as template param]                                                 [shared_ptr of aspect that you want to use or void shared_ptr if aspect don't exist.]                                                   [none]]
+    [[use_aspect]                         [None. User need provide a type of aspect as template param]                                                 [Reference of T (aspect)]                                                                                                               [The aspect must exist on the pool or an exception (std::logic_error) will be thrown.]]
+    [[replace_aspect]                     [None. User need provide a type of aspect as template param]                                                 [void]                                                                                                                                  [The aspect must exist on the pool or an exception (std::logic_error) will be thrown.]]
+    [[remove_aspect]                      [None. User need provide a type of aspect as template param]                                                 [void]                                                                                                                                  [The aspect must exist on the pool or an exception (std::logic_error) will be thrown.]]
+    [[add_aspect_if_not_exists]           [shared_ptr of aspect that you want add to the pool. Use make_shared<T> to contruct aspect.]                 [true if the aspect did not exist and was successfully added, if the aspect already exists, returns false and nothing is done]                                                                                            [none]]
+]
+[endsect]
+
+[section Ready-to-use Aspects]
+ 
 Boost.Application provide a wide class of ready-to-use 'aspects' and user is free to customize or define anyone that he needs, basically we can classify the ready-to-use aspects in 2 groups:
 
 [table:sca Simple or Common that can be any class
@@ -38,6 +56,8 @@ To know how customize an Aspect, refer to [@../html/boost_application/customizat
 For sample, the following code show the use of 'path' aspect.
 [import ../example/path.cpp]
 [path]
+
+[endsect]
 
 [endsect]
 
