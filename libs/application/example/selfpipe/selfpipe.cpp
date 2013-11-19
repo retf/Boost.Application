@@ -80,14 +80,25 @@ public:
       /*<<Launch a work thread>>*/
       boost::thread thread(&myapp::worker, this);
 
-      /*<<Use select posix system call to wait for SIGUSR2 signal, using our self-pipe>>*/
-      int retval = select(selfpipe->read_fd() + 1, &readfds, 0, 0, 0);
+      int retval = 0;
 
-      if(retval == -1 && errno == EINTR) 
-         /*<<SIGUSR2 signal are received, notify work thread using signal_usr2_received_>>*/
-         selfpipe_state_.signal();
-      else
+      /*<<Use select posix system call to wait for SIGUSR2 signal, using our self-pipe>>*/
+      while((retval = select(selfpipe->read_fd() + 1, &readfds, 0, 0, 0)) == -1 && errno == EINTR) // block and wait
+      {
+         // nothing here, restart when signal is catch
+         std::cout << "signal is catch" << std::endl;
+      }
+      // we are poked
+
+      if(retval == -1) 
+      {
          selfpipe_state_.error();
+      }
+      else
+      {
+         /*<<Was poked, notify work thread using selfpipe_state_>>*/
+         selfpipe_state_.signal();
+      } 
 
       /*<<Wait for the end of the work>>*/
       thread.join();
@@ -129,16 +140,29 @@ public:
    signal_usr2(singularity<application::context> &cxt)
       : application::signal_manager(cxt)
    {
-      application::handler::parameter_callback callback 
+      application::handler::parameter_callback callback1 
+         = boost::bind<bool>(&signal_usr2::signal_usr1_handler, this);
+
+      application::handler::parameter_callback callback2 
          = boost::bind<bool>(&signal_usr2::signal_usr2_handler, this);
 
-      /*<< Define signal bind >>*/
-      bind(SIGUSR2,  callback); 
+      /*<< Define signal bind >>*/ 
+      bind(SIGUSR1, callback1); 
+      bind(SIGUSR2, callback2); 
+   }
+
+   bool signal_usr1_handler()
+   {
+      std::cout << "signal_usr1_handler" << std::endl;
+
+      return false;
    }
 
    /*<< Define signal callback >>*/
    bool signal_usr2_handler()
    {
+      std::cout << "signal_usr2_handler" << std::endl;
+
       boost::shared_ptr<application::selfpipe> selfpipe 
          = this_application().get_aspect<application::selfpipe>();
 
@@ -147,7 +171,6 @@ public:
 
       return false;
    }
-
 };
 
 // main

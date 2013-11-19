@@ -4,10 +4,8 @@
     (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 /]
 
-[section:context Apects and Application Context]
+[section:context Application Context]
 A central concept on Boost.Application is the 'aspects' that can be added to application context. 
-
-[section Application Context]
 
 User is free to add any aspect to Application Context, and many operations are available (thread-safe) to manipulate the 'aspect pool' of application, see below the complete list of methods available on Application Context Aspect Pool.
 
@@ -21,43 +19,8 @@ User is free to add any aspect to Application Context, and many operations are a
     [[remove_aspect]                      [None. User need provide a type of aspect as template param]                                                 [void]                                                                                                                                  [The aspect must exist on the pool or an exception (std::logic_error) will be thrown.]]
     [[add_aspect_if_not_exists]           [shared_ptr of aspect that you want add to the pool. Use make_shared<T> to contruct aspect.]                 [true if the aspect did not exist and was successfully added, if the aspect already exists, returns false and nothing is done]                                                                                            [none]]
 ]
-[endsect]
 
-[section Ready-to-use Aspects]
- 
-Boost.Application provide a wide class of ready-to-use 'aspects' and user is free to customize or define anyone that he needs, basically we can classify the ready-to-use aspects in 2 groups:
-
-[table:sca Simple or Common that can be any class
-    [[Aspect Name]                        [Aspect Contract Class]         [Aspect Final Class]                             [Aspect Functionality]]
-    [[args]                               [args]                          [args (same class)]                              [Provide functionality for handling arguments of the application]]
-    [[path]                               [path]                          [path_default_behaviour]                         [Provide functionality for handling paths of the application]]
-    [[run_mode]                           [run_mode]                      [run_mode (same class)]                          [Provide information of application running mode (common or server)]]
-    [[status]                             [status]                        [status (same class)]                            [Provide information about current satatus of application (sopped, running or paused)]]
-    [[wait_for_termination_request]       [wait_for_termination_request]  [wait_for_termination_request_default_behaviour] [Provide functionality for wait for task completion]]
-
-]
-
-[table:hc Handler, that has a callback associated to it
-    [[Aspect Name]                        [Aspect Contract Class]         [Aspect Final Class]                             [Aspect Functionality]]
-    [[pause_handler]                      [pause_handler]                 [pause_handler_default_behaviour]                [When 'pause' event is detected, fire a user defined callback]]
-    [[resume_handler]                     [resume_handler]                [resume_handler_default_behaviour]               [When 'resume' event is detected, fire a user defined callback]]
-    [[termination_handler]                [termination_handler]           [termination_handler_default_behaviour]          [When 'stop' signal/event is detected, fire a user defined callback]]
-    [[limit_single_instance]              [limit_single_instance]         [limit_single_instance_default_behaviour]        [When single instance feature is enabled, fire a user defined callback to handle it]]
-
-]
-
-To know how customize an Aspect, refer to [@../html/boost_application/customization.html#boost_application.customization.customize_handlers 'Customize Aspects']
-
-
-[note	
-	   Note that that the application launch<mode> tie 'run_mode' and 'status' aspects to application context in automatic way.
-]
-
-For sample, the following code show the use of 'path' aspect.
-[import ../example/path.cpp]
-[path]
-
-[endsect]
+Refer to [@boost/application/entity/aspect_map.html Context (aspect_map)] reference to know more detail about provided methods.
 
 [endsect]
 

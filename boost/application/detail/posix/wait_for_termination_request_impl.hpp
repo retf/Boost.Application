@@ -16,11 +16,14 @@
 #ifndef BOOST_APPLICATION_WAIT_FOR_TERMINATION_REQUEST_IMPL_HPP
 #define BOOST_APPLICATION_WAIT_FOR_TERMINATION_REQUEST_IMPL_HPP
 
-#include  <stdio.h>
-#include  <signal.h>
+#include <stdio.h>
+#include <signal.h>
+
+#include <boost/application/aspects/selfpipe.hpp>
 
 namespace boost { namespace application {
 
+    /*
    class wait_for_termination_request_impl : noncopyable
       // http://www.cs.kent.edu/~farrell/sp/lectures/signals.html
    {
@@ -36,6 +39,7 @@ namespace boost { namespace application {
          //sigaddset(&sset, SIGINT);
          //sigaddset(&sset, SIGQUIT);
          //sigaddset(&sset, SIGTERM);
+
          sigaddset(&sset, SIGUSR1);
 
          sigprocmask(SIG_BLOCK, &sset, NULL);
@@ -44,14 +48,70 @@ namespace boost { namespace application {
          sigwait(&sset, &sig);
       }
 
-      void proceed() {
+      void proceed() 
+	  {
          raise(SIGUSR1);
+      }
+   };
+   */
+   
+   class wait_for_termination_request_impl : noncopyable
+   {
+   public:
+
+      // will wait for termination request
+      void wait()
+      {
+         fd_set readfds;
+         FD_ZERO(&readfds);
+         FD_SET(selfpipe_.read_fd(), &readfds);
+
+         // block and wait
+         while(select(selfpipe_.read_fd() + 1, &readfds, 0, 0, 0) == -1 && errno == EINTR)
+         {
+            // nothing here, restart when signal is catch
+         }
+      }
+
+      void proceed() 
+      {
+         selfpipe_.poke();
       }
 
    private:
 
-   };
+      application::selfpipe selfpipe_;
 
+   };
+ 
+   /*
+   class wait_for_termination_request_impl : noncopyable
+   {
+   public:
+
+      wait_for_termination_request_impl()
+         : run_(true)
+      {
+      }
+
+      // will wait for termination request
+      void wait()
+      {
+         while (run_) { boost::this_thread::yield(); }
+      }
+
+      void proceed() 
+      {
+         run_ = false;
+      }
+
+   private:
+
+      bool run_;
+
+   }; 
+   */
+ 
 }} // boost::application
 
 #endif // BOOST_APPLICATION_WAIT_FOR_TERMINATION_REQUEST_IMPL_HPP

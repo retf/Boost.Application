@@ -220,43 +220,49 @@ namespace boost { namespace application {
       {
          if (!ec)
          {
-            if(handler_map_[signal_number].first.parameter_callback_is_valid())
-            {
-               handler::parameter_callback* parameter;
-
-               if(handler_map_[signal_number].first.callback(parameter))
-               {
-                  if((*parameter)(context_))
-                  {
-                     // user tell us to call second callback
-                     if(handler_map_[signal_number].second.callback(parameter))
-                        (*parameter)(context_);
-                  }
-
-                  return;
-               }
-            }
-
-            if(handler_map_[signal_number].first.singleton_callback_is_valid())
-            {
-               handler::singleton_callback* singleton = 0;
-
-               if(handler_map_[signal_number].first.callback(singleton))
-               {
-                  if((*singleton)())
-                  {
-                     // user tell us to call second callback
-                     if(handler_map_[signal_number].second.callback(singleton))
-                        (*singleton)();
-                  }
-
-                  return ;
-               }
-            }
+            boost::thread thread(&signal_binder::spawn, this, signal_number);
          }
       }
 
    protected:
+
+      void spawn(int signal_number)
+      {
+         if(handler_map_[signal_number].first.parameter_callback_is_valid())
+         {
+            handler::parameter_callback* parameter;
+
+            if(handler_map_[signal_number].first.callback(parameter))
+            {
+               if((*parameter)(context_))
+               {
+                  // user tell us to call second callback
+                  if(handler_map_[signal_number].second.callback(parameter))
+                     (*parameter)(context_);
+               
+               }
+
+               return;
+            }
+         }
+
+         if(handler_map_[signal_number].first.singleton_callback_is_valid())
+         {
+            handler::singleton_callback* singleton = 0;
+
+            if(handler_map_[signal_number].first.callback(singleton))
+            {
+               if((*singleton)())
+               {
+                  // user tell us to call second callback
+                  if(handler_map_[signal_number].second.callback(singleton))
+                     (*singleton)();
+               }
+
+               return ;
+            }
+         }
+      }
 
       application::context &context_;
 

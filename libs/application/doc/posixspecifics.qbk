@@ -8,6 +8,10 @@
 
 Boost.Application have some specifics on each side, here the user that uses POSIX system need be aware.
 
+[/
+  NOW WE USE SELFPIPE ON wait_for_termination_request
+/]
+[/
 [section Reserved SIGNAL(SIGUSR1) ]
 
 On POSIX the SIGNAL 'SIGUSR1' is used internaly be wait_for_termination_request (wait_for_termination_request_impl).
@@ -16,6 +20,7 @@ If you need of 'SIGUSR1' on your application, you need customize an new wait_for
 [@../html/boost_application/customization.html#boost_application.customization.customize_handlers 'Customize Aspects']
 
 [endsect]
+/]
 
 [section Self-pipe ]
 
