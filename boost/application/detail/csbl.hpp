@@ -28,10 +28,17 @@ BOOST_APPLICATION_FEATURE_SELECT
 
    template <class T>
    inline  type_index get_type_id() {
-#ifndef BOOST_NO_CXX11_HDR_TYPEINDEX
+
+#if defined( BOOST_APPLICATION_FEATURE_NS_SELECT_STD )
       return typeid(T);
-#else
+#elif defined( BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST )
       return type_id<T>();
+#else // auto detect
+#   ifndef BOOST_NO_CXX11_HDR_TYPEINDEX
+      return typeid(T);
+#   else
+      return type_id<T>();
+#   endif
 #endif
 
    }
