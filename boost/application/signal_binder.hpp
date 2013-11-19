@@ -218,16 +218,22 @@ namespace boost { namespace application {
       void signal_handler(const boost::system::error_code& ec,
          int signal_number)
       {
-         if (!ec)
-         {
-            boost::thread thread(&signal_binder::spawn, this, signal_number);
-         }
+         boost::thread thread(&signal_binder::spawn, this, ec, signal_number);
+
+         // triggers again
+         signals_.async_wait(
+            boost::bind(&signal_binder::signal_handler, this,
+            boost::asio::placeholders::error,
+            boost::asio::placeholders::signal_number));
       }
 
    protected:
 
-      void spawn(int signal_number)
+      void spawn(const boost::system::error_code& ec, int signal_number)
       {
+         if (ec)
+            return;
+
          if(handler_map_[signal_number].first.parameter_callback_is_valid())
          {
             handler::parameter_callback* parameter;
@@ -259,9 +265,11 @@ namespace boost { namespace application {
                      (*singleton)();
                }
 
-               return ;
+               return;
             }
          }
+
+
       }
 
       application::context &context_;
