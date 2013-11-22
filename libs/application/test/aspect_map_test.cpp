@@ -45,14 +45,14 @@ int test_main(int argc, char** argv)
       application::aspect_map my_aspect_map;
       my_aspect_map.insert<my_aspect_test>(boost::make_shared<my_aspect_test>("HI"));
 
-      BOOST_CHECK(!(!my_aspect_map.find<my_aspect_test>()));
+      BOOST_CHECK(my_aspect_map.find<my_aspect_test>());
    }
 
    {
       application::aspect_map my_aspect_map;
       my_aspect_map.insert<my_aspect_test>(boost::make_shared<my_aspect_test>("HI"));
 
-      BOOST_CHECK((my_aspect_map.find<my_aspect_test>()->say_hi()  == "HI"));
+      BOOST_CHECK(my_aspect_map.find<my_aspect_test>()->say_hi()  == "HI");
    }
 
    {
@@ -61,7 +61,7 @@ int test_main(int argc, char** argv)
 
       my_aspect_map.exchange<my_aspect_test>(boost::make_shared<my_aspect_test>("HI_REPLACED"));
       
-      BOOST_CHECK((my_aspect_map.find<my_aspect_test>()->say_hi()== "HI_REPLACED"));
+      BOOST_CHECK(my_aspect_map.find<my_aspect_test>()->say_hi()== "HI_REPLACED");
    }
 
    {
@@ -70,7 +70,7 @@ int test_main(int argc, char** argv)
 
       my_aspect_map.erase<my_aspect_test>();
       
-      BOOST_CHECK((my_aspect_map.find<my_aspect_test>() == false));
+      BOOST_CHECK(my_aspect_map.find<my_aspect_test>() == false);
    }
 
    // others
@@ -86,9 +86,8 @@ int test_main(int argc, char** argv)
       application::aspect_map my_aspect_map;
       my_aspect_map.insert<my_aspect_test>(boost::make_shared<my_aspect_test>("HI"));
       
-      BOOST_CHECK(my_aspect_map.empty());
+      BOOST_CHECK(!my_aspect_map.empty());
    }
-   
 
    {
       application::aspect_map my_aspect_map;
@@ -96,7 +95,7 @@ int test_main(int argc, char** argv)
 
       my_aspect_map.clear();
       
-      BOOST_CHECK(!my_aspect_map.empty());
+      BOOST_CHECK(my_aspect_map.empty());
    }
 
    //
@@ -107,6 +106,8 @@ int test_main(int argc, char** argv)
       application::aspect_map my_aspect_map;
 
       strict_lock<application::aspect_map> guard(my_aspect_map); 
+
+      // atomic
       {
          my_aspect_map.insert<my_aspect_test>(boost::make_shared<my_aspect_test>("HI"), guard);
 
@@ -116,13 +117,13 @@ int test_main(int argc, char** argv)
 
          my_aspect_map.erase<my_aspect_test>(guard);
 
-         BOOST_CHECK((!my_aspect_map.find<my_aspect_test>(guard)));
+         BOOST_CHECK(!my_aspect_map.find<my_aspect_test>(guard));
 
          my_aspect_map.insert<my_aspect_test>(boost::make_shared<my_aspect_test>("HI"), guard);
 
          my_aspect_map.exchange<my_aspect_test>(boost::make_shared<my_aspect_test>("HI_REPLACED"), guard);
 
-         BOOST_CHECK((my_aspect_map.find<my_aspect_test>(guard)->say_hi() == "HI_REPLACED"));
+         BOOST_CHECK(my_aspect_map.find<my_aspect_test>(guard)->say_hi() == "HI_REPLACED");
       }
    }
 
