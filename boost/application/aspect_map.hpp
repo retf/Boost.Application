@@ -1,254 +1,401 @@
-
-//////////////////////////////////////////////////////////////////////////////
-//
-// (C) Copyright Vicente J. Botet Escriba 2013.
-// Distributed under the Boost Software License, Version 1.0.
-// (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-//
-// See http://www.boost.org/libs/role for documentation.
-//
-//////////////////////////////////////////////////////////////////////////////
-
-/**
- * @file
- * @brief Defines the aspect map.
- *
- * Uses typeindex as internal key.
- *
- */
-
-
-// Changes
-//
-// 22-10-2013 dd-mm-yyyy - Renato Forti - Add replace_aspect method
-// 23-10-2013 dd-mm-yyyy - Renato Forti - Add remove_aspect method
-// 25-10-2013 dd-mm-yyyy - Renato Forti - Enable use of csbl::
-// 18-11-2013 dd-mm-yyyy - Renato Forti - Operations are thread safe now
-//
+// aspect_map.hpp -----------------------------------------------------------//
 // -----------------------------------------------------------------------------
 
-#ifndef BOOST_APPLICATION_ENTITY_ASPECT_MAP_HPP
-#define BOOST_APPLICATION_ENTITY_ASPECT_MAP_HPP
+// Copyright 2013 Vicente J. Botet Escriba.
+// Copyright 2013 Renato Tegon Forti.
+
+// Distributed under the Boost Software License, Version 1.0.
+// See http://www.boost.org/LICENSE_1_0.txt
+
+// -----------------------------------------------------------------------------
+
+// The new aspect_map thread safe class prototype
+
+#ifndef BOOST_APPLICATION_ASPECT_MAP_HPP
+#define BOOST_APPLICATION_ASPECT_MAP_HPP
+
+#include <utility>
 
 #include <boost/config.hpp>
 #include <boost/application/config.hpp>
 #include <boost/application/detail/csbl.hpp>
+
 #include <boost/thread.hpp>
+#include <boost/thread/strict_lock.hpp>
+#include <boost/thread/lockable_adapter.hpp>
 
-#include <utility>
+namespace boost { namespace application { 
 
-namespace boost{
-   namespace application {
-      namespace entity {
+   /*! 
+    * \brief The aspect_map class implementation. 
+    *  
+    * This is a base class for application context. 
+    * This class provides all methods to aspects manipulation available 
+    * to user. 
+    *  
+    * This class used 'lock' object as 'permit' that gives you rights 
+    * to manipulate aspects on it. 
+    *
+    * Internal and External locking Version that can be used as part of an 
+    * atomic transaction are available.
+    *  
+    * <STRONG> Thread Safe: </STRONG> Yes <BR>
+    * <STRONG> Exception Safe: </STRONG>  Yes  
+    * 
+    */
+   class aspect_map
+      : public basic_lockable_adapter<recursive_mutex>
+   {
+      typedef size_t size_type;
 
-         class aspect_map
+      typedef csbl::type_index key_type;
+      typedef csbl::shared_ptr<void> value_type;
+      typedef csbl::unordered_map<key_type, value_type> map_type;
+
+      map_type aspects_;
+
+   public:
+
+      // New Thread Safe Interface
+      // Internal locking and external locking support
+ 
+      /*
+       * Lookup a aspect and return the shared_ptr<T> of it. 
+       * Internal locking Version.
+       *
+       * \b Effects: If the the aspect associated to the type T exists,
+       *             returns an shared_ptr<T> of it; otherwise a disengaged 
+       *             object.
+       *
+       * \return The pointer /c shared_ptr aspect or nullptr /c shared_ptr
+       *         if aspect don't exists.
+       * \throw Nothing.
+       */
+
+      // old get_aspect
+      template <class T>
+      csbl::shared_ptr<T> find()
+      {
+         strict_lock<aspect_map> guard(*this); 
+         return find<T>(guard);
+      }
+
+      /*
+       * Lookup a aspect and return the shared_ptr<T> of it. 
+       * External locking Version, can be used as part of an atomic transaction.
+       *
+       * \b Effects: If the the aspect associated to the type T exists,
+       *             returns an shared_ptr<T> of it; otherwise a disengaged 
+       *             object.
+       *
+       * \return The pointer /c shared_ptr aspect or nullptr /c shared_ptr
+       *         if aspect don't exists.
+       * \throw std::logic_error if guard hold Wrong Object; 
+       *        Does not owns correct lock.
+       */
+
+      // old get_aspect
+      template <class T>
+      csbl::shared_ptr<T> find(strict_lock<aspect_map>& guard)
+      {
+         ensure_correct_lock(guard);
+         map_type::const_iterator it = aspects_.find(key_type(typeid(T)));
+
+         if (aspects_.cend() == it)
+            return csbl::shared_ptr<T>();
+
+         return csbl::static_pointer_cast<T>(it->second);
+      }
+
+      /*
+       * Checks if aspect associated to the type T exists
+       * Internal locking Version.
+       *
+       * The name count is chosen for sake of consistency with existing associative
+       * container requirements and std::map.
+       *
+       * \b Effects: If the the aspect associated to the type T exists,
+       *             returns an shared_ptr<T> of it; otherwise a disengaged 
+       *             object.
+       *
+       * \return 1 if aspect is present; 0 otherwise.
+       * \throw Nothing.
+       */
+
+      // old has_aspect 
+      template <class T>
+      size_type count() const
+      {
+         strict_lock<aspect_map> guard(*this); 
+         return count(guard);
+      }
+
+      /*
+       * Checks if aspect associated to the type T exists
+       * External locking Version, can be used as part of an atomic transaction.
+       *
+       * The name count is chosen for sake of consistency with existing associative
+       * container requirements and std::map.
+       *
+       * \b Effects: If the the aspect associated to the type T exists,
+       *             returns an shared_ptr<T> of it; otherwise a disengaged 
+       *             object.
+       *
+       * \return 1 if aspect is present; 0 otherwise.
+       * \throw Nothing.
+       */
+      
+      // old has_aspect 
+      template <class T>
+      size_type count(strict_lock<aspect_map>& guard) const
+      {
+         ensure_correct_lock(guard);
+         if(find<T>(guard))
+            return 1;
+
+         return 0;
+      }
+       
+      /*!
+       * Insert a aspect if its aspect id (key_type(T)) is not already present.
+       * Internal locking Version.
+       *
+       * \b Effects: Insert aspect if id (key_type(T)) key is not present
+       *
+       * \pre <tt> asp.get() != nullptr </tt>
+       * \post <tt> get_aspect<T>.get() != nullptr </tt>
+       *
+       * \param asp The aspect that you want to add to the aspect_map. 
+       * \return An <tt> shared_ptr </tt> of aspect of the type T previously 
+       *         associated with the given aspect type (key_type(T)), 
+       *         or a disengaged <tt> shared_ptr </tt> if the key was 
+       *         not present.
+       * \throw Any exception throw due to resources unavailable.
+       */
+
+      // old add_aspect
+      template <class T>
+      csbl::shared_ptr<T> insert(csbl::shared_ptr<T> asp)
+      {
+         strict_lock<aspect_map> guard(*this); 
+         return insert<T>(asp, guard);
+      }
+
+      /*!
+       * Insert a aspect if its aspect id (key_type(T)) is not already present.
+       * External locking Version, can be used as part of an atomic transaction.
+       *
+       * \b Effects: Insert aspect if id (key_type(T)) key is not present
+       *
+       * \pre <tt> asp.get() != nullptr </tt>
+       * \post <tt> get_aspect<T>.get() != nullptr </tt>
+       *
+       * \param asp The aspect that you want to add to the aspect_map. 
+       * \return An <tt> shared_ptr </tt> of aspect of the type T previously 
+       *         associated with the given aspect type (key_type(T)), 
+       *         or a disengaged <tt> shared_ptr </tt> if the key was 
+       *         not present.
+       * \throw std::logic_error if guard hold Wrong Object; 
+       *        Does not owns correct lock, or any exception throw due to 
+       *        resources unavailable.
+       */
+
+      // old add_aspect
+      template <class T>
+      csbl::shared_ptr<T> insert(csbl::shared_ptr<T> asp, 
+         strict_lock<aspect_map>& guard)
+      {
+         ensure_correct_lock(guard);
+         key_type ti = csbl::get_type_id<T>();
+
+         csbl::shared_ptr<T> temp = find<T>(guard);
+
+         if(temp)
+            return temp;
+
+         aspects_.insert(std::make_pair(ti, asp));
+         return csbl::shared_ptr<T>();
+      }
+          
+      /*! 
+       * Exchange a stored aspect to another one.
+       * Internal locking Version.
+       *
+       * \b Effects: Insert aspect if its key is not present, otherwise replace 
+       *             existing aspect with new aspect.
+       *
+       * \pre <tt> asp.get() != nullptr </tt>
+       * \post <tt> get_aspect<T>.get() != nullptr </tt>
+       *
+       * \param asp The aspect that you want to add/exchange. 
+       * \return An <tt> shared_ptr </tt> of aspect of the type T previously 
+       *         associated with the given aspect type (key_type(T)), 
+       *         or a disengaged <tt> shared_ptr </tt> if the key was 
+       *         not present.
+       * \throw Nothing.
+       */
+
+      // old replace_aspect
+      template <class T>
+      csbl::shared_ptr<T> exchange(csbl::shared_ptr<T> asp) 
+      {
+         strict_lock<aspect_map> guard(*this); 
+         return exchange(asp, guard);
+      }
+
+      /*! 
+       * Exchange a stored aspect to another one.
+       * External locking Version, can be used as part of an atomic transaction.
+       *
+       * \b Effects: Insert aspect if its key is not present, otherwise replace 
+       *             existing aspect with new aspect.
+       *
+       * \pre <tt> asp.get() != nullptr </tt>
+       * \post <tt> get_aspect<T>.get() != nullptr </tt>
+       *
+       * \param asp The aspect that you want to add/exchange. 
+       * \return An <tt> shared_ptr </tt> of aspect of the type T previously 
+       *         associated with the given aspect type (key_type(T)), 
+       *         or a disengaged <tt> shared_ptr </tt> if the key was 
+       *         not present.
+       * \throw std::logic_error if guard hold Wrong Object; 
+       *        Does not owns correct lock.
+       */
+
+      // old replace_aspect
+      template <class T>
+      csbl::shared_ptr<T> exchange(csbl::shared_ptr<T> asp,
+         strict_lock<aspect_map>& guard) 
+      {
+         ensure_correct_lock(guard);
+         key_type ti = csbl::get_type_id<T>();
+
+         csbl::shared_ptr<T> temp = find<T>(guard);
+
+         if(temp)
          {
-            typedef csbl::type_index key_type;
-            typedef csbl::shared_ptr<void> value_type;
-            typedef csbl::unordered_map<key_type, value_type> map_type;
+            aspects_.erase(ti);
+         }
 
-            map_type aspects_;
+         aspects_.insert(std::make_pair(ti, asp));
+         return csbl::shared_ptr<T>();
+      }
+    
+      /*! 
+       * Remove a stored aspect of the aspect_map.
+       * Internal locking Version.
+       *
+       * \b Effects: Erase object with given aspect type (key_type(T)) from the 
+       *             container, if such is present.
+       * \return An <tt> shared_ptr </tt> of aspect of the type T previously 
+       *         associated with the given aspect type (key_type(T)), 
+       *         or a disengaged <tt> shared_ptr </tt> if the key was 
+       *         not present.
+       * \throw Nothing.
+       */
 
-            mutable boost::mutex mutex_;
+      // remove
+      template <class T>
+      csbl::shared_ptr<T> erase() 
+      {
+         strict_lock<aspect_map> guard(*this); 
+         return erase<T>(guard);
+      }
 
-         public:
+      /*! 
+       * Remove a stored aspect of the aspect_map.
+       * External locking Version, can be used as part of an atomic transaction.
+       *
+       * \b Effects: Erase object with given aspect type (key_type(T)) from the 
+       *             container, if such is present.
+       * \return An <tt> shared_ptr </tt> of aspect of the type T previously 
+       *         associated with the given aspect type (key_type(T)), 
+       *         or a disengaged <tt> shared_ptr </tt> if the key was 
+       *         not present.
+       * \throw std::logic_error if guard hold Wrong Object; 
+       *        Does not owns correct lock.
+       */
 
-            /*!
-             * Add a new aspect to the aspect map, throws an exception of type
-             * std::logic_error on error.
-             *
-             * \param asp Shared Ptr of aspect to be added.
-             *
-             */
-            template <class T>
-            void add_aspect(csbl::shared_ptr<T> asp)
-            {
-               boost::lock_guard<boost::mutex> lock(mutex_);
-               add_aspect(asp, lock);
-            }
+      // old remove_aspect
+      template <class T>
+      csbl::shared_ptr<T> erase(strict_lock<aspect_map>& guard) 
+      {
+         ensure_correct_lock(guard);
 
-            /*!
-             * Check if aspect exist on aspect map.
-             *
-             * \param Template type of aspect.
-             *
-             * \return True if aspect exist.
-             *
-             */
-            template <class T>
-            bool has_aspect() const
-            {
-               return aspects_.cend() != aspects_.find(key_type(typeid(T)));
-            }
+         key_type ti = csbl::get_type_id<T>();
 
-            /*!
-             * Get a stored aspect of the aspect map.
-             *
-             * \param asp Shared Ptr of aspect to be added.
-             *
-             * \return Shared Ptr of aspect or null Shared Ptr if aspect don't
-             *         exist.
-             *
-             */
-            template <class T>
-            csbl::shared_ptr<T> get_aspect()
-            {
-               boost::lock_guard<boost::mutex> lock(mutex_);
+         csbl::shared_ptr<T> temp = find<T>(guard);
 
-               map_type::const_iterator it = aspects_.find(key_type(typeid(T)));
+         if(temp)
+         {
+            aspects_.erase(ti);
+            return temp;
+         }
 
-               if (aspects_.cend() == it)
-                  return csbl::shared_ptr<T>();
+         return csbl::shared_ptr<T>();
+      }
 
-               return csbl::static_pointer_cast<T>(it->second);
-            }
+      /*! 
+       * Estimate of the number of aspects in the container.
+       *
+       * \b Effects: This function does not modify the container in any way.
+       *
+       * \return Estimate of the number of aspects in the container. The 
+       *         estimate is exact if no modications occur during the 
+       *         invocation.
+       * \throw Nothing.
+       */
 
-            /*!
-             * Get a stored aspect of the aspect map (const version).
-             *
-             * \param asp Shared Ptr of aspect to be added.
-             *
-             * \return Shared Ptr of aspect or null Shared Ptr if aspect don't
-             *         exist.
-             *
-             */
-            template <class T>
-            csbl::shared_ptr<const T> get_aspect() const
-            {
-               boost::lock_guard<boost::mutex> lock(mutex_);
+      size_type size() const
+      {
+         return aspects_.size();
+      }
 
-               map_type::const_iterator it = aspects_.find(key_type(typeid(T)));
 
-               if (aspects_.cend() == it)
-                  return csbl::shared_ptr<T>();
+      /*! 
+       * Checks if container is empty
+       *
+       * \b Effects: This function does not modify the container in any way.
+       *
+       * \return Returns whether the map container is empty 
+       *         (i.e. whether its size is 0).
+       * 
+       * \throw Nothing.
+       */
+   
+      bool empty() const
+      {
+         return (size() != 0);
+      }
 
-               return csbl::static_pointer_cast<const T>(it->second);
-            }
+      /*! 
+       * Clear container.
+       * Internal locking Version Only.
+       *
+       * \b Effects:  Erases all aspects from the container
+       * 
+       * \throw Nothing.
+       */
 
-            /*!
-             * Use a stored aspect of the aspect map, throws an exception of type
-             * std::logic_error on error.
-             *
-             * \return The aspect reference.
-             *
-             */
-            template <class T>
-            T& use_aspect()
-            {
-               boost::lock_guard<boost::mutex> lock(mutex_);
+      void clear() 
+      {
+         strict_lock<aspect_map> guard(*this); 
+         aspects_.clear();
+      }
 
-               map_type::const_iterator it = aspects_.find(key_type(typeid(T)));
+   private:
 
-               if (aspects_.cend() == it)
-                  throw std::logic_error(
-                     std::string("Type ") + key_type(typeid(T)).name() +
-                     " is not an aspect");
-
-               return *csbl::static_pointer_cast<T>(it->second);
-            }
-
-            /*!
-             * Use a stored aspect of the aspect map, throws an exception of type
-             * std::logic_error on error.
-             *
-             * \return The aspect reference.
-             *
-             */
-            template <class T>
-            T const& use_aspect() const
-            {
-               boost::lock_guard<boost::mutex> lock(mutex_);
-
-               map_type::const_iterator it = aspects_.find(key_type(typeid(T)));
-
-               if (aspects_.cend() == it)
-                  throw std::logic_error(
-                     std::string("Type ") + key_type(typeid(T)).name() +
-                     " is not an aspect");
-
-               return *csbl::static_pointer_cast<T>(it->second);
-            }
-
-            /*!
-             * Replace a stored aspect to another one.
-             *
-             * \param asp Shared Ptr of aspect to be added.
-             *
-             */
-            template <class T>
-            void replace_aspect(csbl::shared_ptr<T> asp)
-            {
-               boost::lock_guard<boost::mutex> lock(mutex_);
-
-               if (!(aspects_.cend() != aspects_.find(key_type(typeid(T)))))
-               {
-                  throw std::logic_error(
-                     std::string("Type ") + key_type(typeid(T)).name() +
-                     " is not on the pool");
-               }
-
-               key_type ti = csbl::get_type_id<T>();
-
-               if(aspects_.erase(ti))
-                  aspects_.insert(std::make_pair(ti, asp));
-            }
-
-            /*!
-             * Remove a stored aspect.
-             *
-             */
-            template <class T>
-            void remove_aspect()
-            {
-               boost::lock_guard<boost::mutex> lock(mutex_);
-
-               if (!(aspects_.cend() != aspects_.find(key_type(typeid(T)))))
-               {
-                  throw std::logic_error(
-                     std::string("Type ") + key_type(typeid(T)).name() +
-                     " is not on the pool");
-               }
-
-               key_type ti = csbl::get_type_id<T>();
-
-               aspects_.erase(ti);
-            }
-
-            /*!
-             * Add a new aspect to the aspect pool if it don't already exists
-             * on aspect pool of application context.
-             *
-             * \return true if the aspect did not exist and was successfully added,
-             *         if the aspect already exists, returns false and
-             *         nothing is done.
-             *
-             */
-            template <class T>
-            bool add_aspect_if_not_exists(csbl::shared_ptr<T> asp)
-            {
-               boost::lock_guard<boost::mutex> lock(mutex_);
-
-               if (!(aspects_.cend() != aspects_.find(key_type(typeid(T))))) {
-                  add_aspect(asp, lock);
-                  return true;
-               }
-
-               return false;
-            }
-
-         protected:
-
-            template <class T>
-            void add_aspect(csbl::shared_ptr<T> asp, boost::lock_guard<boost::mutex> &lock)
-            {
-               key_type ti = csbl::get_type_id<T>();
-               if (!aspects_.insert(std::make_pair(ti, asp)).second)
-                  throw std::logic_error(
-                     std::string("Type ") + ti.name() + " already added as an aspect");
-            }
+      inline void ensure_correct_lock(boost::strict_lock<aspect_map>& guard) 
+      {
+         if (!guard.owns_lock(this))
+            throw std::logic_error("Locking Error: Wrong Object Locked");
+      }
 
    }; // aspect_map
 
-} } } // boost::application::entity
+#ifdef NOTDEF
+#endif 
 
-#endif // BOOST_APPLICATION_ENTITY_ASPECT_MAP_HPP
+} }  // boost::application:
+
+#endif // BOOST_APPLICATION_ASPECT_MAP_HPP

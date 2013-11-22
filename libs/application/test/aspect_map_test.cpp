@@ -37,58 +37,93 @@ public:
 int test_main(int argc, char** argv)
 {   
 	 
-   // test add_aspect / has_aspect
-   {
-      application::entity::aspect_map my_aspect_map;
-      my_aspect_map.add_aspect<my_aspect_test>(boost::make_shared<my_aspect_test>("HI"));
+   //
+   // Internal locking Version.
+   //
 
-      BOOST_CHECK(my_aspect_map.has_aspect<my_aspect_test>());
+   {
+      application::aspect_map my_aspect_map;
+      my_aspect_map.insert<my_aspect_test>(boost::make_shared<my_aspect_test>("HI"));
+
+      BOOST_CHECK(!(!my_aspect_map.find<my_aspect_test>()));
    }
 
-   // test get_aspect
    {
-      application::entity::aspect_map my_aspect_map;
-      my_aspect_map.add_aspect<my_aspect_test>(boost::make_shared<my_aspect_test>("HI"));
+      application::aspect_map my_aspect_map;
+      my_aspect_map.insert<my_aspect_test>(boost::make_shared<my_aspect_test>("HI"));
+
+      BOOST_CHECK((my_aspect_map.find<my_aspect_test>()->say_hi()  == "HI"));
+   }
+
+   {
+      application::aspect_map my_aspect_map;
+      my_aspect_map.insert<my_aspect_test>(boost::make_shared<my_aspect_test>("HI"));
+
+      my_aspect_map.exchange<my_aspect_test>(boost::make_shared<my_aspect_test>("HI_REPLACED"));
       
-      boost::shared_ptr<my_aspect_test> aspect 
-         = my_aspect_map.get_aspect<my_aspect_test>();
-
-      BOOST_CHECK(aspect->say_hi() == "HI");
+      BOOST_CHECK((my_aspect_map.find<my_aspect_test>()->say_hi()== "HI_REPLACED"));
    }
 
-   // test use_aspect
    {
-      application::entity::aspect_map my_aspect_map;
-      my_aspect_map.add_aspect<my_aspect_test>(boost::make_shared<my_aspect_test>("HI"));
+      application::aspect_map my_aspect_map;
+      my_aspect_map.insert<my_aspect_test>(boost::make_shared<my_aspect_test>("HI"));
+
+      my_aspect_map.erase<my_aspect_test>();
       
-      BOOST_CHECK(my_aspect_map.use_aspect<my_aspect_test>().say_hi()== "HI");
+      BOOST_CHECK((my_aspect_map.find<my_aspect_test>() == false));
    }
 
-   // test replace_aspect
+   // others
+   
    {
-      application::entity::aspect_map my_aspect_map;
-      my_aspect_map.add_aspect<my_aspect_test>(boost::make_shared<my_aspect_test>("HI"));
-
-      my_aspect_map.replace_aspect<my_aspect_test>(boost::make_shared<my_aspect_test>("HI_REPLACED"));
+      application::aspect_map my_aspect_map;
+      my_aspect_map.insert<my_aspect_test>(boost::make_shared<my_aspect_test>("HI"));
       
-      BOOST_CHECK(my_aspect_map.use_aspect<my_aspect_test>().say_hi()== "HI_REPLACED");
+      BOOST_CHECK(my_aspect_map.size());
    }
 
-   // test remove_aspect
    {
-      application::entity::aspect_map my_aspect_map;
-      my_aspect_map.add_aspect<my_aspect_test>(boost::make_shared<my_aspect_test>("HI"));
-
-      my_aspect_map.remove_aspect<my_aspect_test>();
+      application::aspect_map my_aspect_map;
+      my_aspect_map.insert<my_aspect_test>(boost::make_shared<my_aspect_test>("HI"));
       
-      BOOST_CHECK(my_aspect_map.has_aspect<my_aspect_test>() == false);
+      BOOST_CHECK(my_aspect_map.empty());
+   }
+   
+
+   {
+      application::aspect_map my_aspect_map;
+      my_aspect_map.insert<my_aspect_test>(boost::make_shared<my_aspect_test>("HI"));
+
+      my_aspect_map.clear();
+      
+      BOOST_CHECK(!my_aspect_map.empty());
    }
 
-   // test add_aspect_if_not_exists
+   //
+   // External locking Version, operations can be combined.
+   //
+
    {
-      application::entity::aspect_map my_aspect_map;
-      BOOST_CHECK(my_aspect_map.add_aspect_if_not_exists<my_aspect_test>(boost::make_shared<my_aspect_test>("HI")));
-      BOOST_CHECK(my_aspect_map.add_aspect_if_not_exists<my_aspect_test>(boost::make_shared<my_aspect_test>("HI")) == false);
+      application::aspect_map my_aspect_map;
+
+      strict_lock<application::aspect_map> guard(my_aspect_map); 
+      {
+         my_aspect_map.insert<my_aspect_test>(boost::make_shared<my_aspect_test>("HI"), guard);
+
+         boost::shared_ptr<my_aspect_test> myaspect = my_aspect_map.find<my_aspect_test>(guard);
+
+         BOOST_CHECK(myaspect);
+
+         my_aspect_map.erase<my_aspect_test>(guard);
+
+         BOOST_CHECK((!my_aspect_map.find<my_aspect_test>(guard)));
+
+         my_aspect_map.insert<my_aspect_test>(boost::make_shared<my_aspect_test>("HI"), guard);
+
+         my_aspect_map.exchange<my_aspect_test>(boost::make_shared<my_aspect_test>("HI_REPLACED"), guard);
+
+         BOOST_CHECK((my_aspect_map.find<my_aspect_test>(guard)->say_hi() == "HI_REPLACED"));
+      }
    }
 
    return 0;
