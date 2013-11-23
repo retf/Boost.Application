@@ -336,6 +336,75 @@ namespace boost { namespace application {
       }
 
       /*! 
+       * Insert a aspect, performing a reduction if given aspect 
+       * type (key_type(T)) is already present.
+       *
+       * \b Effects: Insert aspect if aspect type (key_type(T)) is not present; 
+       *             otherwise insert f(old, obj.second), where old is the 
+       *             mapped values of the existing item. 
+       *             Functor f may be invoked multiple times
+       *
+       * \pre <tt> asp.get() != nullptr </tt>
+       * \post <tt> get_aspect<T>.get() != nullptr </tt>
+       *
+       *
+       * \return An <tt> shared_ptr </tt> of aspect of the type T previously 
+       *         associated with the given aspect type (key_type(T)), 
+       *         or a disengaged <tt> shared_ptr </tt> if the key was 
+       *         not present.
+       *
+       * \throw Any exception throw due to resources unavailable.
+       */
+      template<class T, class F> 
+      shared_ptr<T> reduce(shared_ptr<T>& asp, F f) 
+      {
+         strict_lock<aspect_map> guard(*this); 
+         return reduce<T, F>(asp, f, guard);
+      }
+
+      /*! 
+       * Insert a aspect, performing a reduction if given aspect 
+       * type (key_type(T)) is already present.
+       *
+       * \b Effects: Insert aspect if aspect type (key_type(T)) is not present; 
+       *             otherwise insert f(old, obj.second), where old is the 
+       *             mapped values of the existing item. 
+       *             Functor f may be invoked multiple times
+       *
+       * \pre <tt> asp.get() != nullptr </tt>
+       * \post <tt> get_aspect<T>.get() != nullptr </tt>
+       *
+       * \return An <tt> shared_ptr </tt> of aspect of the type T previously 
+       *         associated with the given aspect type (key_type(T)), 
+       *         or a disengaged <tt> shared_ptr </tt> if the key was 
+       *         not present.
+       *
+       * \throw std::logic_error if guard hold Wrong Object; 
+       *        Does not owns correct lock, or any exception throw due to 
+       *        resources unavailable.
+       */
+      template<class T, class F> 
+      shared_ptr<T> reduce(shared_ptr<T>& asp, F f, strict_lock<aspect_map>& guard) 
+      {
+         ensure_correct_lock(guard);
+         key_type ti = csbl::get_type_id<T>();
+
+         csbl::shared_ptr<T> tmp = find<T>(guard);
+
+         if (tmp) 
+         {
+            csbl::shared_ptr<T> red = f(tmp, asp) ;
+            aspects_.erase(ti);
+            aspects_.insert(std::make_pair(ti, red));
+       
+            return tmp;
+         }
+
+         aspects_.insert(std::make_pair(ti, asp));
+         return csbl::shared_ptr<T>();
+      }
+
+      /*! 
        * Estimate of the number of aspects in the container.
        *
        * \b Effects: This function does not modify the container in any way.
@@ -345,12 +414,10 @@ namespace boost { namespace application {
        *         invocation.
        * \throw Nothing.
        */
-
       size_type size() const
       {
          return aspects_.size();
       }
-
 
       /*! 
        * Checks if container is empty
@@ -362,7 +429,6 @@ namespace boost { namespace application {
        * 
        * \throw Nothing.
        */
-   
       bool empty() const
       {
          return (size() != 0);
@@ -376,7 +442,6 @@ namespace boost { namespace application {
        * 
        * \throw Nothing.
        */
-
       void clear() 
       {
          strict_lock<aspect_map> guard(*this); 
