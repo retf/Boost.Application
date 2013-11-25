@@ -70,7 +70,7 @@ public:
       // dump args
 
       std::vector<std::string> arg_vector = 
-         context->use_aspect<application::args>().arg_vector();
+         context->find<application::args>()->arg_vector();
 
       my_log_file_ << "-----------------------------" << std::endl;
       my_log_file_ << "---------- Arg List ---------" << std::endl;
@@ -87,7 +87,7 @@ public:
       // run logic
 
       boost::shared_ptr<application::status> st =          
-         context->get_aspect<application::status>();
+         context->find<application::status>();
 
       int count = 0;
       while(st->state() != application::status::stoped)
@@ -105,7 +105,7 @@ public:
    int operator()(application::context& context)
    {
       std::string logfile 
-         = context.use_aspect<application::path>().executable_path().string() + "/log.txt";
+         = context.find<application::path>()->executable_path().string() + "/log.txt";
       
       my_log_file_.open(logfile.c_str());
       my_log_file_ << "Start Log..." << std::endl;
@@ -113,7 +113,7 @@ public:
       // launch a work thread
       boost::thread thread(&myapp::worker, this, &context);
       
-      context.use_aspect<application::wait_for_termination_request>().wait();
+      context.find<application::wait_for_termination_request>()->wait();
 
       // to run direct
       // worker(&context);
@@ -155,11 +155,13 @@ private:
 
 bool setup(application::context& context)
 {
+   strict_lock<application::aspect_map> guard(context); 
+
    boost::shared_ptr<application::args> myargs 
-      = context.get_aspect<application::args>();
+      = context.find<application::args>(guard);
 
    boost::shared_ptr<application::path> mypath 
-      = context.get_aspect<application::path>();
+      = context.find<application::path>(guard);
    
 // provide setup for windows service   
 #if defined(BOOST_WINDOWS_API)      
@@ -224,10 +226,10 @@ int main(int argc, char *argv[])
 
    // my server aspects
 
-   app_context.add_aspect<application::path>(
+   app_context.insert<application::path>(
       boost::make_shared<application::path_default_behaviour>(argc, argv));
 
-   app_context.add_aspect<application::args>(
+   app_context.insert<application::args>(
       boost::make_shared<application::args>(argc, argv));
 
    // add termination handler
@@ -235,7 +237,7 @@ int main(int argc, char *argv[])
    application::handler::parameter_callback termination_callback 
       = boost::bind<bool>(&myapp::stop, &app, _1);
 
-   app_context.add_aspect<application::termination_handler>(
+   app_context.insert<application::termination_handler>(
       boost::make_shared<application::termination_handler_default_behaviour>(termination_callback));
    
    // To  "pause/resume" works, is required to add the 2 handlers.
@@ -247,7 +249,7 @@ int main(int argc, char *argv[])
    application::handler::parameter_callback pause_callback 
       = boost::bind<bool>(&myapp::pause, &app, _1);
 
-   app_context.add_aspect<application::pause_handler>(
+   app_context.insert<application::pause_handler>(
       boost::make_shared<application::pause_handler_default_behaviour>(pause_callback));
 
    // windows only : add resume handler
@@ -255,7 +257,7 @@ int main(int argc, char *argv[])
    application::handler::parameter_callback resume_callback 
       = boost::bind<bool>(&myapp::resume, &app, _1);
 
-   app_context.add_aspect<application::resume_handler>(
+   app_context.insert<application::resume_handler>(
       boost::make_shared<application::resume_handler_default_behaviour>(resume_callback));
 
 #endif     

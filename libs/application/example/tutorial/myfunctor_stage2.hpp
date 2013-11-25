@@ -30,7 +30,7 @@ public:
    { 
       /*<< Retrieves 'status' aspect from your context >>*/
       boost::shared_ptr<application::status> st =          
-         context.get_aspect<application::status>();
+         context.find<application::status>();
 
       /*<< Check 'aspect' status 'state' >>*/
       while(st->state() != application::status::stoped)

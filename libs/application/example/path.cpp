@@ -36,7 +36,7 @@ public:
 
 	    /*<< Use 'path' aspect on your logic >>*/ 
       boost::shared_ptr<application::path> path 
-         = context.get_aspect<application::path>();
+         = context.find<application::path>();
 
       std::cout << "executable_path      : " << path->executable_path()      << std::endl;
       std::cout << "current_path         : " << path->current_path()         << std::endl;
@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
    application::context app_context;
 
    /*<< Add 'path' aspect to context pool of application, it will be available for future use >>*/ 
-   app_context.add_aspect<application::path>(
+   app_context.insert<application::path>(
      boost::make_shared<application::path_default_behaviour>(argc, argv));
 
    return application::launch<application::common>(app, app_context);

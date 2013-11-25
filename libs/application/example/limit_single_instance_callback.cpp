@@ -24,7 +24,7 @@
 #include <boost/uuid/string_generator.hpp>
 #include <boost/bind.hpp>
 
-using namespace boost::application;
+using namespace boost;
 
 //[lsic
 class myapp
@@ -32,13 +32,15 @@ class myapp
 public:
 
    // param
-   int operator()(context& context)
+   int operator()(application::context& context)
    {
+      boost::shared_ptr<application::args> args =
+         context.find<application::args>();
       
-      if( context.has_aspect<args>())
+      if(args)
       {
          std::vector<std::string> arg_vector = 
-            context.use_aspect<args>().arg_vector();
+            args->arg_vector();
 
          // only print args on screen
          for(std::vector<std::string>::iterator it = arg_vector.begin(); 
@@ -47,13 +49,13 @@ public:
          }
       }
 
-      context.use_aspect<wait_for_termination_request>().wait();
+      context.find<application::wait_for_termination_request>()->wait();
 
       return 0;
    }
 
    /*<< Define a cllback that will handle if a new instance of application should continue or exit >>*/
-   bool instace_aready_running(context &context)
+   bool instace_aready_running(application::context &context)
    {
       char type;
       do
@@ -80,18 +82,18 @@ public:
 int main(int argc, char *argv[])
 {   
    myapp app;
-   context app_context;
+   application::context app_context;
 
    boost::uuids::string_generator gen;
    /*<< Define a unique identity to application >>*/
    boost::uuids::uuid appuuid = gen("{9F66E4AD-ECA5-475D-8784-4BAA329EF9F2}");
 
-   handler::parameter_callback callback 
+   application::handler::parameter_callback callback 
       = boost::bind<bool>(&myapp::instace_aready_running, &app, _1);
 
-   app_context.add_aspect<limit_single_instance>(
-      boost::make_shared<limit_single_instance_default_behaviour>(appuuid, callback));
+   app_context.insert<application::limit_single_instance>(
+      boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, callback));
 
-   return launch<common>(app, app_context);
+   return application::launch<application::common>(app, app_context);
 }
 //]

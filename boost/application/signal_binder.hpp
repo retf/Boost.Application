@@ -1,4 +1,4 @@
-// common_application.hpp ----------------------------------------------------//
+// signal_binder.hpp --------------------------------------------------------//
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2013 Renato Tegon Forti
@@ -332,17 +332,19 @@ namespace boost { namespace application {
 
       virtual void register_signals(boost::system::error_code& ec)
       {
-         BOOST_APPLICATION_FEATURE_SELECT
+         strict_lock<application::aspect_map> guard(context_); 
 
-         context_.add_aspect_if_not_exists<wait_for_termination_request>(
-            shared_ptr<wait_for_termination_request>(
-               new wait_for_termination_request_default_behaviour));
-
-         if(context_.has_aspect<termination_handler>())
+         if(!context_.find<wait_for_termination_request>(guard))
          {
-            shared_ptr<termination_handler> th =
-               context_.get_aspect<termination_handler>();
+            context_.insert<wait_for_termination_request>(csbl::shared_ptr<wait_for_termination_request>(
+               new wait_for_termination_request_default_behaviour), guard);
+         }
 
+         csbl::shared_ptr<termination_handler> th =
+               context_.find<termination_handler>();
+
+         if(th)
+         {
             handler::parameter_callback callback
                = boost::bind<bool>(
                &signal_manager::termination_signal_handler, this, _1);
@@ -361,10 +363,10 @@ namespace boost { namespace application {
       virtual bool termination_signal_handler(application::context &context)
       {
          // we need set application_state to stop
-         context_.use_aspect<status>().state(status::stoped);
+         context_.find<status>()->state(status::stoped);
 
          // and signalize wait_for_termination_request
-         context_.use_aspect<wait_for_termination_request>().proceed();
+         context_.find<wait_for_termination_request>()->proceed();
 
          // this is not used
          return false;

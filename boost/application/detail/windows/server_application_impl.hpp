@@ -136,12 +136,12 @@ namespace boost { namespace application {
       //
 
       bool stop(void)
-      {
-         if(context_.has_aspect<termination_handler>())
-         {
-            csbl::shared_ptr<termination_handler> th =
-               context_.get_aspect<termination_handler>();
+      {  
+         csbl::shared_ptr<termination_handler> th =
+               context_.find<termination_handler>();
 
+         if(th)
+         {
             handler::parameter_callback* parameter = 0;
 
             if(th->callback(parameter))
@@ -170,15 +170,15 @@ namespace boost { namespace application {
       }
 
       bool pause(void)
-      {
-         if(context_.has_aspect<pause_handler>())
-         {
-            csbl::shared_ptr<pause_handler> th =
-               context_.get_aspect<pause_handler>();
+      {    
+         csbl::shared_ptr<pause_handler> ph =
+            context_.find<pause_handler>();
 
+         if(ph)
+         {
             handler::parameter_callback* parameter = 0;
 
-            if(th->callback(parameter))
+            if(ph->callback(parameter))
             {
                if((*parameter)(context_))
                {
@@ -189,7 +189,7 @@ namespace boost { namespace application {
 
             handler::singleton_callback* singleton = 0;
 
-            if(th->callback(singleton))
+            if(ph->callback(singleton))
             {
                if((*singleton)())
                {
@@ -204,15 +204,15 @@ namespace boost { namespace application {
       }
 
       bool resume(void)
-      {
-        if(context_.has_aspect<resume_handler>())
-         {
-            csbl::shared_ptr<resume_handler> th =
-               context_.get_aspect<resume_handler>();
+      {      
+        csbl::shared_ptr<resume_handler> rh =
+           context_.find<resume_handler>();
 
+        if(rh)
+        {
             handler::parameter_callback* parameter = 0;
 
-            if(th->callback(parameter))
+            if(rh->callback(parameter))
             {
                if((*parameter)(context_))
                {
@@ -222,7 +222,7 @@ namespace boost { namespace application {
 
             handler::singleton_callback* singleton = 0;
 
-            if(th->callback(singleton))
+            if(rh->callback(singleton))
             {
                if((*singleton)())
                {
@@ -242,6 +242,12 @@ namespace boost { namespace application {
       // Handle SCM signals
       void service_handler(DWORD dwOpcode)
       {
+         csbl::shared_ptr<status> st = 
+            context_.find<status>();
+
+         csbl::shared_ptr<wait_for_termination_request> tr =
+            context_.find<wait_for_termination_request>();
+
          switch (dwOpcode)
          {
             case SERVICE_CONTROL_STOP:
@@ -257,9 +263,9 @@ namespace boost { namespace application {
                   return;
                }
 
-               context_.use_aspect<status>().state(status::stoped);
-               context_.use_aspect<wait_for_termination_request>().proceed();
-
+               if(st) st->state(status::stoped);
+               if(tr) tr->proceed();
+              
                if (!send_status_to_scm(SERVICE_STOPPED, 0, 0))
                {
                   terminate(GetLastError());
@@ -281,7 +287,7 @@ namespace boost { namespace application {
                   return;
                }
 
-               context_.use_aspect<status>().state(status::paused);
+               if(st) st->state(status::paused);
 
                if (!send_status_to_scm(SERVICE_PAUSED, 0, 0))
                {
@@ -304,7 +310,7 @@ namespace boost { namespace application {
                   return;
                }
 
-               context_.use_aspect<status>().state(status::running);
+               if(st) st->state(status::running);
 
                if (!send_status_to_scm(SERVICE_RUNNING, 0, 0))
                {
@@ -347,13 +353,13 @@ namespace boost { namespace application {
 
          // invoke client code to check if we will accept and handle stop.
          // this also will show stop link in SCM
-         if(context_.has_aspect<termination_handler>())
+         if(context_.find<termination_handler>())
          {
             accepted_controls = SERVICE_ACCEPT_STOP | SERVICE_ACCEPT_SHUTDOWN;
          }
 
          // user code accept pause
-         if(context_.has_aspect<pause_handler>() && context_.has_aspect<resume_handler>())
+         if(context_.find<pause_handler>() && context_.find<resume_handler>())
          {
             accepted_controls |= SERVICE_ACCEPT_PAUSE_CONTINUE;
          }
@@ -498,7 +504,7 @@ namespace boost { namespace application {
 
       void work_thread(int argc, char_type** argv)
       {
-         context_.replace_aspect<application::args>(
+         context_.exchange<application::args>(
             csbl::make_shared<application::args>(argc, argv));
 
          if(type_ == parameter)

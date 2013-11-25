@@ -45,7 +45,7 @@ public:
    {
       std::cout << "Test" << std::endl;
       boost::shared_ptr<args> myargs 
-         = this_application().get_aspect<args>();
+         = this_application().find<args>();
 
       if (myargs)
       {
@@ -58,7 +58,7 @@ public:
          }
       }
 
-      this_application().use_aspect<wait_for_termination_request>().wait();
+      this_application().find<wait_for_termination_request>()->wait();
 
       return 0;
    }
@@ -101,10 +101,10 @@ int main(int argc, char *argv[])
 
    // use aspects
 
-   this_application().add_aspect<args>(
+   this_application().insert<args>(
       boost::make_shared<args>(argc, argv));
 
-   this_application().add_aspect<limit_single_instance>(
+   this_application().insert<limit_single_instance>(
       boost::make_shared<limit_single_instance_default_behaviour>(appuuid, callback));
 
    int ret = launch<common>(app, global_context);

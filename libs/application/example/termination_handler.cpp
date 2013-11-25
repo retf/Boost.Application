@@ -68,7 +68,7 @@ public:
       // launch a work thread
       boost::thread thread(boost::bind(&myapp::work_thread, this));
 	  
-      context.use_aspect<wait_for_termination_request>().wait();
+      context.find<wait_for_termination_request>()->wait();
 
       return 0;
    }
@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
    handler::parameter_callback callback 
       = boost::bind<bool>(&myapp::stop, &app, _1);
 
-   app_context.add_aspect<termination_handler>(
+   app_context.insert<termination_handler>(
       boost::make_shared<termination_handler_default_behaviour>(callback));
 
    return launch<common>(app, app_context);

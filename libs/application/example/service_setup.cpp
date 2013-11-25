@@ -49,7 +49,7 @@ public:
          << "(Note that you need run this AS ADMIN!)" << std::endl;
 
       boost::shared_ptr<application::args> myargs 
-         = context.get_aspect<application::args>();
+         = context.find<application::args>();
 
       // define our simple installation schema options
       po::options_description install("service options");
@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
       windows_service_setup app;
       application::context app_context;
 
-      app_context.add_aspect<application::args>(
+      app_context.insert<application::args>(
          boost::make_shared<application::args>(argc, argv));
 
       return application::launch<application::common>(app, app_context);

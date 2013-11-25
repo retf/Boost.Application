@@ -84,11 +84,17 @@ namespace boost { namespace application {
 
          // default aspects patterns added to this kind of application
 
-         impl_->get_context().add_aspect_if_not_exists<run_mode>(
-            csbl::make_shared<run_mode>(run_mode::common));
+         if(!impl_->get_context().find<run_mode>())
+         {
+             impl_->get_context().insert<run_mode>(
+               csbl::make_shared<run_mode>(run_mode::common));
+         }
 
-         impl_->get_context().add_aspect_if_not_exists<status>(
-            csbl::make_shared<status>(status::running));
+         if(!impl_->get_context().find<status>())
+         {
+             impl_->get_context().insert<status>(
+               csbl::make_shared<status>(status::running));
+         }
       }
 
       /*!
@@ -122,11 +128,17 @@ namespace boost { namespace application {
 
          // default aspects patterns added to this kind of application
 
-         impl_->get_context().add_aspect_if_not_exists<run_mode>(
-            csbl::make_shared<run_mode>(run_mode::common));
+         if(!impl_->get_context().find<run_mode>())
+         {
+             impl_->get_context().insert<run_mode>(
+               csbl::make_shared<run_mode>(run_mode::common));
+         }
 
-         impl_->get_context().add_aspect_if_not_exists<status>(
-            csbl::make_shared<status>(status::running));
+         if(!impl_->get_context().find<status>())
+         {
+             impl_->get_context().insert<status>(
+               csbl::make_shared<status>(status::running));
+         }
       }
 
       /*!
@@ -144,7 +156,7 @@ namespace boost { namespace application {
        */
       virtual ~common()
       {
-         impl_->get_context().use_aspect<status>().state(status::stoped);
+         impl_->get_context().find<status>()->state(status::stoped);
       }
 
    private:

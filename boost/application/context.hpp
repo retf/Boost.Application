@@ -50,7 +50,7 @@ namespace boost { namespace application {
     *
     */
    class context
-      : public entity::aspect_map, noncopyable
+      : public aspect_map, noncopyable
    {
    public:
       // nothing here! Reserved for future use.

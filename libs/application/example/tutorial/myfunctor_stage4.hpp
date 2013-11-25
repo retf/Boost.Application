@@ -27,13 +27,13 @@ public:
    int operator()(application::context& context)
    {
       std::string logfile 
-         = context.use_aspect<application::path>().executable_path().string() + "/log.txt";
+         = context.find<application::path>()->executable_path().string() + "/log.txt";
       
       my_log_file_.open(logfile.c_str());
       my_log_file_ << "Start Log..." << std::endl;
 
       /*<< Here we use wait_for_termination_request instead application loop >>*/
-      context.use_aspect<application::wait_for_termination_request>().wait();
+      context.find<application::wait_for_termination_request>()->wait();
 
       return 0;
    }

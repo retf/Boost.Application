@@ -48,7 +48,7 @@ public:
 
       std::cout << "Test" << std::endl;
       shared_ptr<application::args> myargs 
-         = this_application().get_aspect<application::args>();
+         = this_application().find<application::args>();
 
       if (myargs)
       {
@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
  
    boost::singularity<application::context>::create_global();
 
-   this_application().add_aspect<application::args>(
+   this_application().insert<application::args>(
       boost::make_shared<application::args>(argc, argv));
 
    int ret = application::launch<application::common>(app, global_context);

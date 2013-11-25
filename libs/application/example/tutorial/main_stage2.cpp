@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
       = boost::bind<bool>(&myapp::stop, &app, _1);
 
    /*<< Tie stop to termination_handler using default behaviour >>*/
-   app_context.add_aspect<application::termination_handler>(
+   app_context.insert<application::termination_handler>(
       boost::make_shared<application::termination_handler_default_behaviour>(termination_callback));
 
    /*<< Starts the application as a common application type. >>*/

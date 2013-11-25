@@ -32,11 +32,12 @@ public:
    // param
    int operator()(application::context& context)
    {
-      
-      if(context.has_aspect<application::args>())
+      boost::shared_ptr<application::args> args =
+         context.find<application::args>();
+
+      if(args)
       {
-         std::vector<std::string> arg_vector = 
-            context.use_aspect<application::args>().arg_vector();
+         std::vector<std::string> arg_vector = args->arg_vector();
 
          // only print args on screen
          for(std::vector<std::string>::iterator it = arg_vector.begin(); 
@@ -45,7 +46,7 @@ public:
          }
       }
 
-      context.use_aspect<application::wait_for_termination_request>().wait();
+      context.find<application::wait_for_termination_request>()->wait();
 
       return 0;
    }
@@ -60,7 +61,7 @@ int main(int argc, char *argv[])
 
    boost::uuids::string_generator gen;
 
-   app_context.add_aspect<application::limit_single_instance>(
+   app_context.insert<application::limit_single_instance>(
       boost::make_shared<application::limit_single_instance_default_behaviour>(
          gen("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}")));
 

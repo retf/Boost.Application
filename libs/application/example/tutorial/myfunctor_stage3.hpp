@@ -25,7 +25,7 @@ public:
    
    int operator()(application::context& context)
    {
-      context.use_aspect<application::wait_for_termination_request>().wait();
+      context.find<application::wait_for_termination_request>()->wait();
       return 0;
    }
 

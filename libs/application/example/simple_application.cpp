@@ -35,7 +35,7 @@ public:
    {
       /*<<Make use of an 'aspect'>>*/
       boost::shared_ptr<application::args> myargs 
-         = context.get_aspect<application::args>();
+         = context.find<application::args>();
 
       if (myargs)
       {
@@ -66,11 +66,12 @@ int main(int argc, char *argv[])
    application::context app_context;
 
    /*<<Add an aspect for future use. An 'aspect' can be customized, or new aspects can be created>>*/  
-   app_context.add_aspect<application::args>(
+   app_context.insert<application::args>(
       boost::make_shared<application::args>(argc, argv));
 
    /*<<Start the application on the desired mode (common, server)>>*/  
    return application::launch<application::common>(app, app_context);
 }
 //]
+
 

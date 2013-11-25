@@ -56,7 +56,7 @@ public:
       // launch a work thread
       boost::thread thread(boost::bind(&myapp::work_thread, this));
 	  
-      context.use_aspect<wait_for_termination_request>().wait();
+      context.find<wait_for_termination_request>()->wait();
 
       return 0;
    }
@@ -94,14 +94,14 @@ public:
       std::cout << "exiting..." << std::endl;
 #elif defined( BOOST_POSIX_API )
       std::ofstream my_log_file;
-      my_log_file.open((context.use_aspect<
-         path>().executable_path().string() + "/log_stop.txt").c_str());
+      my_log_file.open((context.find<
+         path>()->executable_path().string() + "/log_stop.txt").c_str());
       my_log_file << ":0)-" << std::endl;
       my_log_file.close();
 #endif
 
       shared_ptr<wait_for_termination_request> th 
-         = context.get_aspect<wait_for_termination_request>();
+         = context.find<wait_for_termination_request>();
 
       th->proceed();
 
@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
    myapp app;
    context app_context;
 
-   app_context.add_aspect<path>(
+   app_context.insert<path>(
       boost::make_shared<path_default_behaviour>(argc, argv));
 
    // we will customize our signals behaviour

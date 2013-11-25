@@ -40,13 +40,13 @@ public:
       // launch a work thread
       boost::thread thread(boost::bind(&my_server::work_thread, this, &context));
 
-      plugin_path_ = context.use_aspect<
-         application::path>().executable_path().string() 
+      plugin_path_ = context.find<
+         application::path>()->executable_path().string() 
           + "/uuid_plugin" + application::shared_library::suffix();
 
       plugin_.load(application::library(plugin_path_));
 
-      context.use_aspect<application::wait_for_termination_request>().wait();
+      context.find<application::wait_for_termination_request>()->wait();
       thread.join(); // the last connection need be served to app exit, comment this to exit quick
 
       return 0;
@@ -80,7 +80,7 @@ protected:
       using boost::asio::ip::tcp;
 
       shared_ptr<application::status> st =          
-         context->get_aspect<application::status>();
+         context->find<application::status>();
 
       try
       {
@@ -172,10 +172,10 @@ int main(int argc, char *argv[])
 
       // my server aspects
 
-      app_context.add_aspect<application::path>(
+      app_context.insert<application::path>(
          make_shared<application::path_default_behaviour>(argc, argv));
 
-      app_context.add_aspect<application::args>(
+      app_context.insert<application::args>(
          make_shared<application::args>(argc, argv));
 
       // add termination handler
@@ -183,7 +183,7 @@ int main(int argc, char *argv[])
       application::handler::parameter_callback termination_callback 
          = boost::bind<bool>(&my_server::stop, &app, _1);
 
-      app_context.add_aspect<application::termination_handler>(
+      app_context.insert<application::termination_handler>(
          make_shared<application::termination_handler_default_behaviour>(termination_callback));
 
       // To  "pause/resume" works, is required to add the 2 handlers.
@@ -195,7 +195,7 @@ int main(int argc, char *argv[])
       application::handler::parameter_callback pause_callback 
          = boost::bind<bool>(&my_server::pause, &app, _1);
 
-      app_context.add_aspect<application::pause_handler>(
+      app_context.insert<application::pause_handler>(
          make_shared<application::pause_handler_default_behaviour>(pause_callback));
 
       // windows only : add resume handler
@@ -203,7 +203,7 @@ int main(int argc, char *argv[])
       application::handler::parameter_callback resume_callback 
          = boost::bind<bool>(&my_server::resume, &app, _1);
 
-      app_context.add_aspect<application::resume_handler>(
+      app_context.insert<application::resume_handler>(
          make_shared<application::resume_handler_default_behaviour>(resume_callback));
 
    #endif     

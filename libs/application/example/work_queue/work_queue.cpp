@@ -126,7 +126,7 @@ public:
       add_task(gaussian_blur<6>( boost::bind<void>( &myapp::add_result, this, _1 ))); 
       add_task(gaussian_blur<9>( boost::bind<void>( &myapp::add_result, this, _1 ))); 
      
-      context.use_aspect<application::wait_for_termination_request>().wait();
+      context.find<application::wait_for_termination_request>()->wait();
 
       return 0;
    }
@@ -173,7 +173,7 @@ int main(int argc, char *argv[])
    application::handler::parameter_callback callback 
       = boost::bind<bool>(&myapp::stop, &app, _1);
 
-   app_context.add_aspect<application::termination_handler>(
+   app_context.insert<application::termination_handler>(
       make_shared<application::termination_handler_default_behaviour>(callback));
       
    return application::launch<application::common>(app, app_context);

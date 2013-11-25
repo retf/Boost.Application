@@ -32,7 +32,7 @@ public:
       // use ctrl to get state of your application...
 
       std::cout << "your application logic!" << std::endl;
-      context.use_aspect<application::wait_for_termination_request>().wait();
+      context.find<application::wait_for_termination_request>()->wait();
 
       return 0;
    }
@@ -66,7 +66,7 @@ int main(int argc, char** argv)
    application::handler::parameter_callback termination_callback 
       = boost::bind<bool>(&my_application_functor_class::stop, &app, _1);
 
-   app_context.add_aspect<application::termination_handler>(
+   app_context.insert<application::termination_handler>(
       boost::make_shared<
          application::termination_handler_default_behaviour>(termination_callback));
 

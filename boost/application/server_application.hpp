@@ -74,11 +74,17 @@ namespace boost { namespace application {
       {
          // default aspects patterns added to this kind of application
 
-         context.add_aspect_if_not_exists<run_mode>(
-            csbl::make_shared<run_mode>(run_mode::server));
+         if(!context.find<run_mode>())
+         {
+             context.insert<run_mode>(
+               csbl::make_shared<run_mode>(run_mode::server));
+         }
 
-         context.add_aspect_if_not_exists<status>(
-            csbl::make_shared<status>(status::running));
+         if(!context.find<status>())
+         {
+             context.insert<status>(
+               csbl::make_shared<status>(status::running));
+         }
 
          // need be created after run_mode, status
 
@@ -113,11 +119,17 @@ namespace boost { namespace application {
 
          // default aspects patterns added to this kind of application
 
-        context.get_global().add_aspect_if_not_exists<run_mode>(
-            csbl::make_shared<run_mode>(run_mode::server));
+         if(!context.get_global().find<run_mode>())
+         {
+             context.get_global().insert<run_mode>(
+               csbl::make_shared<run_mode>(run_mode::server));
+         }
 
-        context.get_global().add_aspect_if_not_exists<status>(
-            csbl::make_shared<status>(status::running));
+         if(!context.get_global().find<status>(guard))
+         {
+             context.get_global().insert<status>(
+               csbl::make_shared<status>(status::running));
+         }
 
          // need be created after run_mode, status
 
@@ -141,7 +153,7 @@ namespace boost { namespace application {
        */
       virtual ~server()
       {
-         impl_->get_context().use_aspect<status>().state(status::stoped);
+         impl_->get_context().find<status>()->state(status::stoped);
       }
 
    private:

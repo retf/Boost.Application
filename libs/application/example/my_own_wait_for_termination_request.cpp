@@ -35,7 +35,7 @@ public:
       std::cout << "Test" << std::endl;
 	  
 	  /*<< Use your custon handler >>*/
-      context.use_aspect<application::wait_for_termination_request>().wait();
+      context.find<application::wait_for_termination_request>()->wait();
 
       return 0;
    }
@@ -71,13 +71,13 @@ int main(int argc, char *argv[])
    myapp app;
    application::context app_context;
 
-   app_context.add_aspect<application::args>(
+   app_context.insert<application::args>(
       boost::make_shared<application::args>(argc, argv));
  
    // if user do this, the default behavoiur will be ignored, 
    // and the user behaviour will be executed by application::server
    /*<< Add your custon handler to context aspect pool of application >>*/ 
-   app_context.add_aspect< application::wait_for_termination_request>(
+   app_context.insert< application::wait_for_termination_request>(
       shared_ptr<application::wait_for_termination_request>(
          new wait_for_termination_request_my_behaviour));
 

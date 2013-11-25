@@ -68,7 +68,7 @@ int main(int argc, char* argv[])
       my_application_functor_class app;
       application::context app_context;
 
-      app_context.add_aspect<application::args>(
+      app_context.insert<application::args>(
          boost::make_shared<application::args>(argc, argv));
 
       return application::launch<application::common>(app, app_context);

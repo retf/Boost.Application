@@ -31,7 +31,7 @@ public:
 
       // recovery needed aspect
       shared_ptr<application::args> myargs 
-         = context.get_aspect<application::args>();
+         = context.find<application::args>();
 
       using boost::asio::ip::tcp;
 
@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
 
       // aspects
 
-      app_context.add_aspect<application::args>(
+      app_context.insert<application::args>(
          make_shared<application::args>(argc, argv));
 
       // app instantiation

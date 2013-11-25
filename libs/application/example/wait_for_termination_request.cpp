@@ -33,7 +33,7 @@ public:
    {
       std::cout << "Test" << std::endl;
       boost::shared_ptr<application::args> myargs 
-         = context.get_aspect<application::args>();
+         = context.find<application::args>();
 
       if (myargs)
       {
@@ -46,7 +46,7 @@ public:
          }
       }
 	  
-      context.use_aspect<application::wait_for_termination_request>().wait();
+      context.find<application::wait_for_termination_request>()->wait();
 
       return 0;
    }
@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
    myapp app;
    application::context app_context;
 
-   app_context.add_aspect<application::args>(
+   app_context.insert<application::args>(
       boost::make_shared<application::args>(argc, argv));
 
    return application::launch<application::common>(app, app_context);
