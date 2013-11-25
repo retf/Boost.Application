@@ -124,10 +124,10 @@ namespace boost { namespace application {
 
       // old has_aspect 
       template <class T>
-      size_type count() const
+      size_type count()
       {
          strict_lock<aspect_map> guard(*this); 
-         return count(guard);
+         return count<T>(guard);
       }
 
       /*
@@ -147,7 +147,7 @@ namespace boost { namespace application {
       
       // old has_aspect 
       template <class T>
-      size_type count(strict_lock<aspect_map>& guard) const
+      size_type count(strict_lock<aspect_map>& guard)
       {
          ensure_correct_lock(guard);
          if(find<T>(guard))
