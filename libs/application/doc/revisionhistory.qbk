@@ -6,6 +6,12 @@
 
 [section Revision History]
 
+[h5 0.4.2]
+
+aspect_map now is Thread-Safe.
+
+[@https://github.com/retf/Boost.Application Version 0.4.2.b (Current)]
+
 [h5 0.4.1]
 
 On POSIX/UNIX now we provide 'selfpipe' for SIGNALS handle like proposed by 'Stanislav Ivochkin' on mailing list discussion.

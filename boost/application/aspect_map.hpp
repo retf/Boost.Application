@@ -356,7 +356,7 @@ namespace boost { namespace application {
        * \throw Any exception throw due to resources unavailable.
        */
       template<class T, class F> 
-      shared_ptr<T> reduce(shared_ptr<T>& asp, F f) 
+      shared_ptr<T> reduce(shared_ptr<T> asp, F f) 
       {
          strict_lock<aspect_map> guard(*this); 
          return reduce<T, F>(asp, f, guard);
@@ -384,7 +384,7 @@ namespace boost { namespace application {
        *        resources unavailable.
        */
       template<class T, class F> 
-      shared_ptr<T> reduce(shared_ptr<T>& asp, F f, strict_lock<aspect_map>& guard) 
+      shared_ptr<T> reduce(shared_ptr<T> asp, F f, strict_lock<aspect_map>& guard) 
       {
          ensure_correct_lock(guard);
          key_type ti = csbl::get_type_id<T>();

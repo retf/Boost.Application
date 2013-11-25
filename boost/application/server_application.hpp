@@ -125,7 +125,7 @@ namespace boost { namespace application {
                csbl::make_shared<run_mode>(run_mode::server));
          }
 
-         if(!context.get_global().find<status>(guard))
+         if(!context.get_global().find<status>())
          {
              context.get_global().insert<status>(
                csbl::make_shared<status>(status::running));

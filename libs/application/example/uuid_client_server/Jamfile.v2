@@ -41,7 +41,7 @@ project
    # our uuid plugin lib
 lib uuid_plugin_library : plugin.cpp ; 
 install install-bin 
-  : plugin_library : 
+  : uuid_plugin_library : 
   <target-os>windows:<location>"C:/test/boost/application" 
       <target-os>linux:<location>/test/boost/application ; 
 

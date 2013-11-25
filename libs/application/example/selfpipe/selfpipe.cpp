@@ -71,7 +71,7 @@ public:
    int operator()()
    {
       boost::shared_ptr<application::selfpipe> selfpipe 
-         = this_application().get_aspect<application::selfpipe>();
+         = this_application().find<application::selfpipe>();
 
       fd_set readfds;
       FD_ZERO(&readfds);
@@ -164,7 +164,7 @@ public:
       std::cout << "signal_usr2_handler" << std::endl;
 
       boost::shared_ptr<application::selfpipe> selfpipe 
-         = this_application().get_aspect<application::selfpipe>();
+         = this_application().find<application::selfpipe>();
 
       /*<<Notify application in case of reception of SIGUSR2 signal, unsing self-pipe>>*/
       selfpipe->poke();
@@ -182,7 +182,7 @@ int main(int argc, char *argv[])
    boost::singularity<application::context>::create_global();
    
    /*<<Add selfpipe to application context>>*/
-   this_application().add_aspect<application::posix::selfpipe>(
+   this_application().insert<application::posix::selfpipe>(
       boost::make_shared<application::posix::selfpipe>());
 	  
    signal_usr2 sm(global_context);

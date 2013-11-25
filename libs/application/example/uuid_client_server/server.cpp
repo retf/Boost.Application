@@ -16,8 +16,8 @@
 
 #include <fstream>
 
-#include <boost\application.hpp>
-#include <boost\program_options.hpp>
+#include <boost/application.hpp>
+#include <boost/program_options.hpp>
 
 // Plugin API
 #include "plugin_api.hpp"

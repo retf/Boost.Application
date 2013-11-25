@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------------
-// simple_server_application_help.cpp : examples that show how use Application
+// simple_server_application_help.cpp : help only 
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2013 Renato Tegon Forti
@@ -33,7 +33,7 @@ public:
       // Do some thing
 
       // [[k]]
-      context.use_aspect<application::wait_for_termination_request>().wait();
+      context.find<application::wait_for_termination_request>()->wait();
 
       return 0;
    }
@@ -60,12 +60,12 @@ int main(int argc, char *argv[])
 
    // [[c]]
    /*<< Add 'path aspect' to application context >>*/
-   app_context.add_aspect<application::path>(
+   app_context.insert<application::path>(
       boost::make_shared<application::path_default_behaviour>(argc, argv));
 
    // [[c]]
    /*<< Add 'args aspect' to application context >>*/
-   app_context.add_aspect<application::args>(
+   app_context.insert<application::args>(
       boost::make_shared<application::args>(argc, argv));
 
    // [[d]]
@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
 
    // [[d]]
    /*<< Add a 'termination_callback' to our application context >>*/
-   app_context.add_aspect<application::termination_handler>(
+   app_context.insert<application::termination_handler>(
       boost::make_shared<application::termination_handler_default_behaviour>(termination_callback));
 
    // [[h]]
