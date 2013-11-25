@@ -3,6 +3,11 @@
 
 This section lists all the bibliographic references cited by this documentation.
 
+* Andrei Alexandrescu. [@http://www.informit.com/articles/article.aspx?p=25298&seqNum=5 Multithreading and the C++ Type System] (Threads Synchronization)
+* Anthony Williams, Vicente J. Botet Escriba [@http://www.boost.org/doc/libs/1_55_0/doc/html/thread/synchronization.html Boost Threads Synchronization] (Threads Synchronization)
+* Arch D. Robison, Anton Malakhov, Artur Laksberg. [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3425.html Concurrent Unordered Associative Containers for C++] (Containers Concurrent Access)
+* Arch D. Robison, Anton Potapov, Anton Malakhov. [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3732.pdf Value-Oriented Concurrent Unordered Containers] (Containers Concurrent Access)
+* Arch D. Robison. 9@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3712.pdf Policy-Based Design for Safe Destruction in Concurrent Containers] (Containers Concurrent Access)
 * Dave Lennert. [@http://cjh.polyplex.org/software/daemon.pdf How To Write a UNIX Daemon] (Unix Daemon)
 * Devin Watson. [@http://www.netzmafia.de/skripten/unix/linux-daemon-howto.html Linux Daemon Writing HOWTO] (Linux Daemon)
 * W. Richard Stevens, Stephen A. Rago. [@http://www.amazon.com/Programming-Environment-Addison-Wesley-Professional-Computing/dp/0321637739/ref=sr_1_1?s=books&ie=UTF8&qid=1379593264&sr=1-1&keywords=advanced+unix+programming+3rd+edition Advanced Programming in the UNIX Environment] (Unix Daemon)
@@ -14,6 +19,6 @@ This section lists all the bibliographic references cited by this documentation.
 * Wikipedia. [@http://en.wikipedia.org/wiki/Unix_signal Unix Signal] (Unix Signals)
 * Enderunix. [@http://www.enderunix.org/docs/eng/daemon.php Unix Daemon Server Programming] (Unix Daemon)
 
-
 [endsect]
+
 
