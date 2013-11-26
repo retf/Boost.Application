@@ -268,8 +268,6 @@ namespace boost { namespace application {
                return;
             }
          }
-
-
       }
 
       application::context &context_;
@@ -301,7 +299,7 @@ namespace boost { namespace application {
          boost::system::error_code& ec)
          : signal_binder(context)
       {
-         register_signals(ec);
+         parameter_register_signals(ec);
       }
 
       signal_manager(application::context &context)
@@ -309,19 +307,26 @@ namespace boost { namespace application {
       {
          boost::system::error_code ec;
 
-         register_signals(ec);
+         parameter_register_signals(ec);
 
          if(ec)
             BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR(
             "signal_manager() failed");
       }
 
-      signal_manager(singularity<context> &cxt)
-         : signal_binder(cxt)
+      signal_manager(singularity<context> &context,
+         boost::system::error_code& ec)
+         : signal_binder(context)
+      {
+         singleton_register_signals(ec);
+      }
+
+      signal_manager(singularity<context> &context)
+         : signal_binder(context)
       {
          boost::system::error_code ec;
 
-         register_signals(ec);
+         singleton_register_signals(ec);
 
          if(ec)
             BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR(
@@ -330,24 +335,32 @@ namespace boost { namespace application {
 
    protected:
 
-      virtual void register_signals(boost::system::error_code& ec)
+      virtual csbl::shared_ptr<termination_handler> setup_termination_brhaviour()
       {
          strict_lock<application::aspect_map> guard(context_); 
 
          if(!context_.find<wait_for_termination_request>(guard))
          {
-            context_.insert<wait_for_termination_request>(csbl::shared_ptr<wait_for_termination_request>(
-               new wait_for_termination_request_default_behaviour), guard);
+            context_.insert<wait_for_termination_request>(
+               csbl::shared_ptr<wait_for_termination_request>(
+                  new wait_for_termination_request_default_behaviour), guard);
          }
 
-         csbl::shared_ptr<termination_handler> th =
-               context_.find<termination_handler>();
+         return context_.find<termination_handler>(guard);
+      }
+
+      // parameter version
+
+      virtual void parameter_register_signals(boost::system::error_code& ec)
+      {
+         csbl::shared_ptr<termination_handler> th 
+            = setup_termination_brhaviour();
 
          if(th)
          {
             handler::parameter_callback callback
                = boost::bind<bool>(
-               &signal_manager::termination_signal_handler, this, _1);
+               &signal_manager::parameter_termination_signal_handler, this, _1);
 
             bind(SIGINT,  th->get_handler(), callback, ec);
             if(ec) return;
@@ -360,7 +373,43 @@ namespace boost { namespace application {
          }
       }
 
-      virtual bool termination_signal_handler(application::context &context)
+      virtual bool parameter_termination_signal_handler(application::context &context)
+      {
+         // we need set application_state to stop
+         context_.find<status>()->state(status::stoped);
+
+         // and signalize wait_for_termination_request
+         context_.find<wait_for_termination_request>()->proceed();
+
+         // this is not used
+         return false;
+      }
+
+      // singleton version
+
+      virtual void singleton_register_signals(boost::system::error_code& ec)
+      {
+         csbl::shared_ptr<termination_handler> th 
+            = setup_termination_brhaviour();
+
+         if(th)
+         {
+            handler::singleton_callback callback
+               = boost::bind<bool>(
+               &signal_manager::singleton_termination_signal_handler, this);
+
+            bind(SIGINT,  th->get_handler(), callback, ec);
+            if(ec) return;
+
+            bind(SIGTERM, th->get_handler(), callback, ec);
+            if(ec) return;
+
+            bind(SIGABRT, th->get_handler(), callback, ec);
+            if(ec) return;
+         }
+      }
+
+      virtual bool singleton_termination_signal_handler(void)
       {
          // we need set application_state to stop
          context_.find<status>()->state(status::stoped);

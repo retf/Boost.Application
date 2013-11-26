@@ -204,7 +204,7 @@ namespace boost { namespace application {
    inline int launch(Application& app,
       singularity<application::context> &context, boost::system::error_code& ec)
    {
-      signal_manager sm(context.get_global(), ec); // our default signal manager
+      signal_manager sm(context, ec); // our default signal manager
 
       if(ec) return 0;
 
