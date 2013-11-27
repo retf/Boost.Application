@@ -231,6 +231,8 @@ namespace boost { namespace application {
 
       void spawn(const boost::system::error_code& ec, int signal_number)
       {
+         boost::lock_guard<boost::mutex> lock(mutex_);
+
          if (ec)
             return;
 
@@ -282,6 +284,9 @@ namespace boost { namespace application {
       asio::signal_set signals_;
 
       boost::thread *io_service_thread_;
+
+      // to sync spawn
+      boost::mutex mutex_;
    };
 
    /*!

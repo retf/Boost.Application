@@ -20,7 +20,7 @@ In the Boost.Application, the '[*aspects handlers]' is the way that you can defi
 The user can define the handler using one of two types of signature available.
 
   1. Parameter Version
-  2. Void Version (To be used with Boost.Singularity)
+  2. Singleton Version (To be used with Boost.Singularity)
 
 The handler defined using a param signature, looks like:
 
@@ -52,10 +52,15 @@ bool stop(context &context)
    while( !std::cin.fail() && type!='y' && type!='n' );
 
    if(type == 'y')
-      // tell to app mode engine to continue.
+   {
+      // return true to tell to the 'application mode engine' to stop application.
+      // This implies:
+      // 1. The 'application mode engine' will set the 'application 'status' aspect to status::stoped;
+      // 2. The 'application mode engine' will signalize the 'application 'wait_for_termination_request' aspect to release.
       return true;
+   }
 
-   // tell to app mode engine to exit.
+   // tell to 'application mode engine' to continue application (ignore requisited action)
    return false;
 }
 // ...
