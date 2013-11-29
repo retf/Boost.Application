@@ -5,12 +5,12 @@
 
 // For more information, see http://www.boost.org
 
-#define BOOST_ALL_DYN_LINK
-#define BOOST_LIB_DIAGNOSTIC
+// #define BOOST_ALL_DYN_LINK
+// #define BOOST_LIB_DIAGNOSTIC
 
 #include <iostream>
-#include <boost/test/minimal.hpp>
 #include <boost/application.hpp>
+#include <boost/test/minimal.hpp>
 
 using namespace boost;
 

@@ -5,8 +5,8 @@
 
 // For more information, see http://www.boost.org
 
-#include <boost/test/minimal.hpp>
 #include <boost/application/shared_library.hpp>
+#include <boost/test/minimal.hpp>
 
 #if defined( BOOST_WINDOWS_API )
    const boost::filesystem::path shared_library_path("C:/test/boost/application/test_library.dll");
