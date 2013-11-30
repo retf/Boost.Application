@@ -60,12 +60,11 @@ bool stop(context &context)
       return true;
    }
 
-   // tell to 'application mode engine' to continue application (ignore requisited action)
+   // tell the 'application mode engine' to continue application (ignore requisited action)
    return false;
 }
 // ...
 };
 ```
-
 [endsect]
 

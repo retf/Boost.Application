@@ -69,6 +69,7 @@ namespace boost { namespace application {
          , main_thread_(0)
          , launch_thread_(0)
          , result_code_(0)
+         , terminate_event_(0)
       {
          sb.start();
          initialize(ec);
@@ -80,6 +81,7 @@ namespace boost { namespace application {
          , launch_thread_(0)
          , main_singleton_(main)
          , result_code_(0)
+         , terminate_event_(0)
       {
          sb.start();
          initialize(ec);

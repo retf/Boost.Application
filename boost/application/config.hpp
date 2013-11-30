@@ -107,18 +107,35 @@
 // define BOOST_APPLICATION_TROWN_MY_OWN_EXCEPTION if you want
 // THROW your own EXCEPTION
 #if defined(BOOST_APPLICATION_TROWN_MY_OWN_EXCEPTION)
+
 #define BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR(what) \
    BOOST_APPLICATION_TROWN_MY_OWN_EXCEPTION( \
       what " : " + boost::system::error_code( \
          last_error(),  \
             boost::system::system_category()).message(),  \
                last_error())
+
+#define BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(what, ec) \
+   BOOST_APPLICATION_TROWN_MY_OWN_EXCEPTION( \
+      what " : " + ec.message(),  \
+         ec.value())
+
 #else
+
+// use this version if you have not recovered the 'c' ie right after the error.
+// this version recovery 'ec' internaly.
 #define BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR(what) \
    BOOST_APPLICATION_THROW(boost::system::system_error( \
       boost::system::error_code(last_error(), \
          boost::system::system_category()), \
             BOOST_APPLICATION_SOURCE_LOCATION what))
+
+// use this version when you already have the value of 'ec', ie you already 
+// called 'last_error'.
+#define BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(what, ec) \
+   BOOST_APPLICATION_THROW(boost::system::system_error( \
+      ec, BOOST_APPLICATION_SOURCE_LOCATION what))
+
 #endif
 
 #endif // BOOST_APPLICATION_CONFIG_HPP

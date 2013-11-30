@@ -244,7 +244,8 @@ namespace boost { namespace application {
       boost::system::error_code ec; int ret = 0;
       ret = launch<ApplicationMode>(app, sm, context, ec);
 
-      if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("launch() failed");
+      if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
+	     "launch() failed", ec);
 
       return ret;
    }
@@ -277,7 +278,8 @@ namespace boost { namespace application {
       boost::system::error_code ec; int ret = 0;
       ret = launch<ApplicationMode>(app, sm, context, ec);
 
-      if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("launch() failed");
+      if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
+	     "launch() failed", ec);
 
       return ret;
    }
@@ -304,7 +306,8 @@ namespace boost { namespace application {
       boost::system::error_code ec; int ret = 0;
       ret = launch<ApplicationMode>(app, context, ec);
 
-      if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("launch() failed");
+      if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
+	     "launch() failed", ec);
 
       return ret;
    }
@@ -332,7 +335,8 @@ namespace boost { namespace application {
       boost::system::error_code ec; int ret = 0;
       ret = launch<ApplicationMode>(app, context, ec);
 
-      if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("launch() failed");
+      if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
+	     "launch() failed", ec);
 
       return ret;
    }

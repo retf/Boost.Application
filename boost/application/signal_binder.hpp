@@ -100,7 +100,8 @@ namespace boost { namespace application {
          boost::system::error_code ec;
          bind(signal_number, h, handler(), ec);
 
-         if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("bind() failed");
+         if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
+            "bind() failed", ec);
       }
 
       /*!
@@ -122,7 +123,8 @@ namespace boost { namespace application {
          bind(signal_number, h1, h2, ec);
 
          if(ec)
-            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("bind() failed");
+            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
+            "bind() failed", ec);
       }
 
        /*!
@@ -172,7 +174,8 @@ namespace boost { namespace application {
          unbind(signal_number, ec);
 
          if(ec)
-            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("unbind() failed");
+            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
+               "unbind() failed", ec);
       }
 
       /*!
@@ -315,8 +318,8 @@ namespace boost { namespace application {
          parameter_register_signals(ec);
 
          if(ec)
-            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR(
-            "signal_manager() failed");
+            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
+               "signal_manager() failed", ec);
       }
 
       signal_manager(singularity<context> &context,
@@ -334,8 +337,8 @@ namespace boost { namespace application {
          singleton_register_signals(ec);
 
          if(ec)
-            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR(
-            "signal_manager() failed");
+            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
+               "signal_manager() failed", ec);
       }
 
    protected:

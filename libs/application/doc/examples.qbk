@@ -36,6 +36,7 @@ Plug-in System [@http://www.boost.org/libs/application/example/shared_library_lo
 [pre
 Termination Handler Signal Customization [@http://www.boost.org/libs/application/example/my_own_termination_handler.cpp (my_own_termination_handler.cpp)] 
 Wait For Termination Request Customization [@http://www.boost.org/libs/application/example/my_own_wait_for_termination_request.cpp (my_own_wait_for_termination_request.cpp)] 
+Define My Own Exception [@http://www.boost.org/libs/application/example/myexception.cpp (myexception.cpp)] 
 ]
 
 

@@ -77,7 +77,7 @@ namespace boost { namespace application {
       common(Application& myapp, SignalManager &sm,
          application::context &context, boost::system::error_code& ec)
          : impl_(new common_application_impl(
-                 boost::bind<int>( &Application::operator(), &myapp, _1), sm,
+                 boost::bind<int>(&Application::operator(), &myapp, _1), sm,
                  context, ec))
       {
          if(ec) return;
@@ -121,7 +121,7 @@ namespace boost { namespace application {
          singularity<application::context> &context,
          boost::system::error_code& ec)
          : impl_(new common_application_impl(
-                 boost::bind<int>( &Application::operator(), &myapp), sm,
+                 boost::bind<int>(&Application::operator(), &myapp), sm,
                  context, ec))
       {
          if(ec) return;

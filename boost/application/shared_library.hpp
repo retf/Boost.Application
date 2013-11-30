@@ -94,7 +94,8 @@ namespace boost { namespace application {
          impl_ = new shared_library_impl(sl, ec);
 
          if(ec)
-            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("shared_library() failed");
+            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
+			   "shared_library() failed", ec);
       }
 
       /*!
@@ -141,7 +142,8 @@ namespace boost { namespace application {
          impl_ = new shared_library_impl(sl, mode, ec);
 
          if(ec)
-            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("shared_library() failed");
+            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
+			   "shared_library() failed", ec);
       }
 
       /*!
@@ -214,7 +216,8 @@ namespace boost { namespace application {
          impl_->load(sl, ec);
 
          if(ec)
-            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("load() failed");
+            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
+			   "load() failed", ec);
       }
 
       /*!
@@ -265,7 +268,8 @@ namespace boost { namespace application {
          impl_->load(sl, mode, ec);
 
          if(ec)
-            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("load() failed");
+            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
+			   "load() failed", ec);
       }
 
       /*!
@@ -358,7 +362,8 @@ namespace boost { namespace application {
          void* symbol_addr = impl_->get_symbol(sb, ec);
 
          if(ec)
-            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("get_symbol() failed");
+            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
+			   "get_symbol() failed", ec);
 
          return symbol_addr;
       }
@@ -412,7 +417,8 @@ namespace boost { namespace application {
          void* symbol_addr = impl_->get_symbol(sb, ec);
 
          if(ec)
-            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("operator() failed");
+            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
+			   "operator() failed", ec);
 
          return symbol_addr;
       }

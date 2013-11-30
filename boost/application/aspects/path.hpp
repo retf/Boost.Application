@@ -192,7 +192,8 @@ namespace boost { namespace application {
          : impl_(new path_impl(argc, argv, module_path_name_, ec_))
       {
          if(ec_)
-            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("path_default_behaviour() failed");
+            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
+			   "path_default_behaviour() failed", ec_);
       }
 
    private:

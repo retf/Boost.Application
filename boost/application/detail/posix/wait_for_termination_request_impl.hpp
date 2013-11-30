@@ -23,7 +23,33 @@
 
 namespace boost { namespace application {
 
-    /*
+#if defined( USE_POSIX_WAIT_FOR_TERMINATION_REQUEST_YELD_BASED )
+   class wait_for_termination_request_impl : noncopyable
+   {
+   public:
+
+      wait_for_termination_request_impl()
+         : run_(true)
+      {
+      }
+
+      // will wait for termination request
+      void wait()
+      {
+         while (run_) { boost::this_thread::yield(); }
+      }
+
+      void proceed() 
+      {
+         run_ = false;
+      }
+
+   private:
+
+      bool run_;
+
+   }; 
+#elif defined( USE_POSIX_WAIT_FOR_TERMINATION_REQUEST_SIGUSR1_BASED )
    class wait_for_termination_request_impl : noncopyable
       // http://www.cs.kent.edu/~farrell/sp/lectures/signals.html
    {
@@ -49,12 +75,11 @@ namespace boost { namespace application {
       }
 
       void proceed() 
-	  {
+	    {
          raise(SIGUSR1);
       }
    };
-   */
-   
+#else // DRFAULT WAY
    class wait_for_termination_request_impl : noncopyable
    {
    public:
@@ -83,35 +108,8 @@ namespace boost { namespace application {
       application::selfpipe selfpipe_;
 
    };
- 
-   /*
-   class wait_for_termination_request_impl : noncopyable
-   {
-   public:
+#endif
 
-      wait_for_termination_request_impl()
-         : run_(true)
-      {
-      }
-
-      // will wait for termination request
-      void wait()
-      {
-         while (run_) { boost::this_thread::yield(); }
-      }
-
-      void proceed() 
-      {
-         run_ = false;
-      }
-
-   private:
-
-      bool run_;
-
-   }; 
-   */
- 
 }} // boost::application
 
 #endif // BOOST_APPLICATION_WAIT_FOR_TERMINATION_REQUEST_IMPL_HPP

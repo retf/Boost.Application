@@ -165,7 +165,8 @@ namespace boost { namespace application {
          boost::system::error_code ec;
 
          bool result = lock(ec);
-         if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("lock() failed");
+         if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
+		    "lock() failed", ec);
 
          return result;
       }
@@ -316,7 +317,8 @@ namespace boost { namespace application {
          boost::system::error_code ec;
 
          bool result = lock(ec);
-         if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("lock() failed");
+         if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
+		    "lock() failed", ec);
 
          return result;
       }

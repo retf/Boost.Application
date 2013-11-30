@@ -37,7 +37,8 @@ namespace boost { namespace application {
 
          if(ec)
          {
-            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("OpenSCManager() failed");
+            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
+			   "OpenSCManager() failed", ec);
          }
       }
 
@@ -111,7 +112,8 @@ namespace boost { namespace application {
 
          if(ec)
          {
-            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("is_installed() failed");
+            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
+			   "is_installed() failed", ec);
          }
 
          return installed;
@@ -224,7 +226,8 @@ namespace boost { namespace application {
 
          if(ec)
          {
-            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("uninstall() failed");
+            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR(
+			   "uninstall() failed", ec);
          }
       }
 
@@ -329,7 +332,8 @@ namespace boost { namespace application {
 
          if(ec)
          {
-            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR("install() failed");
+            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
+			   "install() failed", ec);
          }
       }
 
