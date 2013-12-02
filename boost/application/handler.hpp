@@ -179,7 +179,7 @@ namespace boost { namespace application {
       /*!
        * Retrieves handler.
        *
-       * \return the hanlder istance.
+       * \return the handler instance.
        *
        */
       handler &get_handler()

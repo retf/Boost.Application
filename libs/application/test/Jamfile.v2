@@ -52,11 +52,13 @@ project
    test-suite application
       : 
 	  
-	  #
+	    #
       # application fundation
       #
       [ run aspect_map_test.cpp ]
-	    [ run signal_binder_test.cpp ]
+      [ run signal_binder_test.cpp ]
+      [ run handler_test.cpp ]
+	    [ run launch_test.cpp ]
       #
       #
 
@@ -80,6 +82,14 @@ project
       [ run shared_library_load_test.cpp ]
       [ run shared_library_search_symbol_test.cpp ]
       [ run shared_library_get_symbol_test.cpp ]
+      #
+      #
+
+      #
+      # aspects
+      #
+      [ run args_aspect_test.cpp ]
+      [ run path_aspect_test.cpp ]
       #
       #
       ;

@@ -56,7 +56,6 @@ namespace boost { namespace application {
          : application_impl(parameter, context)
          , main_parameter_(main)
       {
-
          process_id_ = daemonize(ec);
          sb.start(); // need be started after daemonize
       }
@@ -66,9 +65,8 @@ namespace boost { namespace application {
                                singularity<application::context> &context,
                                boost::system::error_code& ec)
          : application_impl(singleton, context.get_global())
-         , main_singleton(main)
+         , main_singleton_(main)
       {
-
          process_id_ = daemonize(ec);
          sb.start(); // need be started after daemonize
       }
@@ -77,9 +75,15 @@ namespace boost { namespace application {
       {
          switch(type_)
          {
-           case parameter: return main_parameter_(context_);
-           case singleton: return main_singleton_();
-           default: BOOST_ASSERT_MSG(false, "boost::application type is not implemented");
+           case parameter: 
+              return main_parameter_(context_);
+           case singleton: 
+              return main_singleton_();
+           default: 
+           BOOST_ASSERT_MSG(false, 
+                            "boost::application handler type is not "
+                            "implemented, must be 'parameter' or "
+                            "'singleton' type");
          }
          return 0;
       }

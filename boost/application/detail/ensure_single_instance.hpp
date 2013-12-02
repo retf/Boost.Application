@@ -79,3 +79,4 @@ namespace boost { namespace application { namespace detail {
 }}} // boost::application
 
 #endif // BOOST_APPLICATION_DETAIL_ENSURE_SINGLE_INSTANCE_HPP
+
