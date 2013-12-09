@@ -44,7 +44,7 @@ public:
    my_signal_manager(application::context &context)
       : signal_manager(context)
    {
-      application::handler::parameter_callback callback
+      application::handler<>::parameter_callback callback
          = boost::bind<bool>(&my_signal_manager::stop, this, _1);
 
       bind(SIGINT,  callback);
@@ -53,7 +53,7 @@ public:
    my_signal_manager(boost::singularity<application::context> &context)
       : signal_manager(context)
    {
-      application::handler::singleton_callback callback
+      application::handler<>::singleton_callback callback
          = boost::bind<bool>(&my_signal_manager::stop, this);
 
       bind(SIGINT,  callback);

@@ -26,9 +26,9 @@ namespace boost { namespace application {
 
    // run_mode unique identifier generator
    template <typename T>
-   T new_run_mode() 
+   T new_run_mode()
    {
-      static boost::atomic<T> id = -1;
+      static boost::atomic<T> id(-1);
       return ++id;
    }
 
