@@ -45,6 +45,13 @@ public:
           << "</html>"
           ;
 
+      boost::shared_ptr<apache_log> apachelog = context.find<apache_log>();
+      if(apachelog)
+      {
+         // log something on apache log file
+         apachelog->information("Page requested!");
+      }
+
       return htm.str();
    }
 };

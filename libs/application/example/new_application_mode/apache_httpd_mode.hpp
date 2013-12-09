@@ -63,6 +63,29 @@ private:
    std::string content_type_;
 };
 
+class apache_log
+{
+   friend class apache2_httpd_mod;
+
+public:
+   apache_log(request_rec *r)
+      : r_(r) { }
+
+   void error(const std::string& msg)
+   {
+      ap_log_error(APLOG_MARK, APLOG_NOERRNO | APLOG_ERR, 0, r_->server, msg.c_str());
+   }
+
+   void information(const std::string& msg)
+   {
+      ap_log_error(APLOG_MARK, APLOG_NOERRNO | APLOG_INFO, 0, r_->server, msg.c_str());
+   }
+
+private:
+   request_rec *r_;
+
+};
+
 //
 // apache2_httpd_mod application mode
 //
@@ -79,19 +102,22 @@ public:
    }
 
    template <typename Application, typename CustomType>
-   apache2_httpd_mod(Application& myapp, CustomType &ct, context &cxt, boost::system::error_code& ec)
-    
+   apache2_httpd_mod(Application& myapp, CustomType &ct, 
+      context &cxt, boost::system::error_code& ec)
+      : error_(OK) 
    {
       handle_request(myapp, ct, cxt);
    }
 
    template <typename Application, typename CustomType>
-   apache2_httpd_mod(Application& myapp, CustomType &ct, boost::singularity<context> &cxt, boost::system::error_code& ec)
+   apache2_httpd_mod(Application& myapp, CustomType &ct, 
+      boost::singularity<context> &cxt, boost::system::error_code& ec)
+      : error_(OK) 
    {
       handle_request(myapp, ct, cxt.get_global());
    }
 
-   int run() { return OK; }
+   int run() { return error_; }
 
 protected:
 
@@ -119,6 +145,9 @@ protected:
       
       if(http_get_verb)
       {
+         // apache log 
+         cxt.insert<apache_log>(csbl::make_shared<apache_log>(&ct));
+
          csbl::shared_ptr<content_type> contenttype = 
             cxt.find<content_type>();
 
@@ -133,20 +162,30 @@ protected:
 
          if(http_get_verb->callback(parameter))
          {
-            ap_rputs((*parameter)(cxt).c_str(), &ct);
+            ap_rputs((*parameter)(cxt).c_str(), &ct); return;
          }
 
          handler<std::string>::singleton_callback* singleton = 0;
 
          if(http_get_verb->callback(singleton))
          {
-            ap_rputs((*singleton)().c_str(), &ct);
+            ap_rputs((*singleton)().c_str(), &ct); return;
          }
       }
 
       // Add other http verbs 
-      // TODO...
+      // ...
+
+      // we need set application_state to stop
+      cxt.find<status>()->state(status::stoped);
+
+      // we cant find any handler, generate apache error
+      error_ = HTTP_INTERNAL_SERVER_ERROR;
    }
+
+private:
+
+   int error_;
 
 };
 
