@@ -63,8 +63,12 @@ extern "C" int myhandle(request_rec *r)
 
    application::context app_context;
 
+   app_context.insert<web_app_name>(
+      boost::make_shared<web_app_name>("boostapp"));
+
    handler<std::string>::parameter_callback my_http_get_verb
-      = boost::bind<std::string>(&my_apache2_httpd_content_generator_mod::get, &app, _1);
+      = boost::bind<std::string>(
+         &my_apache2_httpd_content_generator_mod::get, &app, _1);
 
    app_context.insert<http_get_verb_handler>(
       boost::make_shared<
@@ -72,4 +76,15 @@ extern "C" int myhandle(request_rec *r)
 
    return application::launch<apache2_httpd_mod>(app, *r, app_context);
 }
-BOOST_APPLICATION_APACHE_REGISTER_TEST_MY_MODE(myhandle)
+
+// register request function and mod on apache server
+BOOST_APPLICATION_APACHE_REGISTER_TEST_MY_MODE(myhandle, my_boost_app_mod)
+
+/*
+   On httpd.conf, add:
+
+   LoadModule my_boost_app_mod E:\project.boost.app.v5\libs\application\vc11ide\Debug\application_mode_apache_http_mod.dll
+   <Location /boostapp>
+      SetHandler boostapp
+   </Locatio>
+*/

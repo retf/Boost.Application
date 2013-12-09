@@ -63,6 +63,19 @@ private:
    std::string content_type_;
 };
 
+class web_app_name
+{
+   friend class apache2_httpd_mod;
+
+public:
+   web_app_name(const std::string& web_app_name)
+      : web_app_name_ (web_app_name)
+   {}
+
+private:
+   std::string web_app_name_;
+};
+
 class apache_log
 {
    friend class apache2_httpd_mod;
@@ -138,6 +151,18 @@ protected:
             csbl::make_shared<status>(status::running));
       }
 
+      csbl::shared_ptr<web_app_name> appname = cxt.find<web_app_name>();
+
+      if(!appname)
+      {
+         error_ = DECLINED; return;
+      }
+
+      if (strcmp(ct.handler, appname->web_app_name_.c_str())) 
+      {
+         error_ = DECLINED; return;
+      }
+
       // GET
 
       csbl::shared_ptr<http_get_verb_handler> http_get_verb =
@@ -180,7 +205,8 @@ protected:
       cxt.find<status>()->state(status::stoped);
 
       // we cant find any handler, generate apache error
-      error_ = HTTP_INTERNAL_SERVER_ERROR;
+      error_ = HTTP_METHOD_NOT_ALLOWED;
+      // error_ = HTTP_INTERNAL_SERVER_ERROR;
    }
 
 private:
@@ -189,14 +215,14 @@ private:
 
 };
 
-#define BOOST_APPLICATION_APACHE_REGISTER_TEST_MY_MODE(h)                      \
+#define BOOST_APPLICATION_APACHE_REGISTER_TEST_MY_MODE(h, m)                   \
 extern "C"                                                                     \
 void boost_application_register_hooks(apr_pool_t *p)                           \
 {	                                                                            \
    ap_hook_handler(h, NULL, NULL, APR_HOOK_MIDDLE);                            \
 }                                                                              \
                                                                                \
-module AP_MODULE_DECLARE_DATA md = {                                           \
+module AP_MODULE_DECLARE_DATA m = {                                            \
     STANDARD20_MODULE_STUFF,                                                   \
     NULL,                                                                      \
     NULL,                                                                      \
