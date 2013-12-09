@@ -97,10 +97,10 @@ namespace boost { namespace application {
        *          arrives.
        *
        */
-      void bind(int signal_number, const handler& h)
+      void bind(int signal_number, const handler<>& h)
       {
          boost::system::error_code ec;
-         bind(signal_number, h, handler(), ec);
+         bind(signal_number, h, handler<>(), ec);
 
          if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
             "bind() failed", ec);
@@ -119,7 +119,7 @@ namespace boost { namespace application {
        *           first handler return true;
        *
        */
-      void bind(int signal_number, const handler& h1, const handler& h2)
+      void bind(int signal_number, const handler<>& h1, const handler<>& h2)
       {
          boost::system::error_code ec;
          bind(signal_number, h1, h2, ec);
@@ -138,10 +138,10 @@ namespace boost { namespace application {
        *          arrives.
        *
        */
-      void bind(int signal_number, const handler& h,
+      void bind(int signal_number, const handler<>& h,
          boost::system::error_code& ec)
       {
-         bind(signal_number, h, handler(), ec);
+         bind(signal_number, h, handler<>(), ec);
       }
 
       /*!
@@ -157,7 +157,7 @@ namespace boost { namespace application {
        *           first handler return true;
        *
        */
-      void bind(int signal_number, const handler& h1, const handler& h2,
+      void bind(int signal_number, const handler<>& h1, const handler<>& h2,
          boost::system::error_code& ec)
       {
          signals_.add(signal_number, ec);
@@ -243,7 +243,7 @@ namespace boost { namespace application {
 
          if(handler_map_[signal_number].first.parameter_callback_is_valid())
          {
-            handler::parameter_callback* parameter;
+            handler<>::parameter_callback* parameter;
 
             if(handler_map_[signal_number].first.callback(parameter))
             {
@@ -261,7 +261,7 @@ namespace boost { namespace application {
 
          if(handler_map_[signal_number].first.singleton_callback_is_valid())
          {
-            handler::singleton_callback* singleton = 0;
+            handler<>::singleton_callback* singleton = 0;
 
             if(handler_map_[signal_number].first.callback(singleton))
             {
@@ -283,7 +283,7 @@ namespace boost { namespace application {
 
       // signal < handler / handler>
       // if first handler returns true, the second handler are called
-      csbl::unordered_map<int, std::pair<handler, handler> > handler_map_;
+      csbl::unordered_map<int, std::pair<handler<>, handler<> > > handler_map_;
 
       asio::io_service io_service_;
       asio::signal_set signals_;
@@ -368,7 +368,7 @@ namespace boost { namespace application {
 
          if(th)
          {
-            handler::parameter_callback callback
+            handler<>::parameter_callback callback
                = boost::bind<bool>(
                &signal_manager::parameter_termination_signal_handler, this, _1);
 
@@ -404,7 +404,7 @@ namespace boost { namespace application {
 
          if(th)
          {
-            handler::singleton_callback callback
+            handler<>::singleton_callback callback
                = boost::bind<bool>(
                &signal_manager::singleton_termination_signal_handler, this);
 

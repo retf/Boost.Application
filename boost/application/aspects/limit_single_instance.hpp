@@ -40,17 +40,17 @@ namespace boost { namespace application {
      *        class implementation of wait_for_termination_request aspect.
      *
      */
-   class limit_single_instance : public handler
+   class limit_single_instance : public handler<>
    {
    public:
 
       limit_single_instance() {}
 
       limit_single_instance(const parameter_callback& callback)
-         : handler(callback) {}
+         : handler<>(callback) {}
 
       limit_single_instance(const singleton_callback& callback)
-         : handler(callback)  {}
+         : handler<>(callback)  {}
 
       virtual ~limit_single_instance() {}
 

@@ -53,6 +53,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "myexception", "myexception.vcxproj", "{710BF4EB-7F98-4D60-8A41-95940B51F5F1}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "application_mode_apache_httpd_mod", "application_mode_apache_httpd_mod.vcxproj", "{1FCFD195-439E-4789-BAA4-1B28F31604E6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -159,6 +161,10 @@ Global
 		{710BF4EB-7F98-4D60-8A41-95940B51F5F1}.Debug|Win32.Build.0 = Debug|Win32
 		{710BF4EB-7F98-4D60-8A41-95940B51F5F1}.Release|Win32.ActiveCfg = Release|Win32
 		{710BF4EB-7F98-4D60-8A41-95940B51F5F1}.Release|Win32.Build.0 = Release|Win32
+		{1FCFD195-439E-4789-BAA4-1B28F31604E6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1FCFD195-439E-4789-BAA4-1B28F31604E6}.Debug|Win32.Build.0 = Debug|Win32
+		{1FCFD195-439E-4789-BAA4-1B28F31604E6}.Release|Win32.ActiveCfg = Release|Win32
+		{1FCFD195-439E-4789-BAA4-1B28F31604E6}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

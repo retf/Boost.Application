@@ -46,12 +46,14 @@ namespace boost { namespace application {
      * if your return false the application mechanism will exit.
      *
      */
+   
+   template<class HandlerReturnType = bool>
    class handler
    {
    public:
 
-      typedef boost::function< bool (context&) > parameter_callback;
-      typedef boost::function< bool (void)     > singleton_callback;
+      typedef boost::function< HandlerReturnType (context&) > parameter_callback;
+      typedef boost::function< HandlerReturnType (void)     > singleton_callback;
 
       /*!
        * Constructs an void handler.

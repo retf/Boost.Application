@@ -61,9 +61,9 @@ namespace boost { namespace application {
     *
     * \param app User application functor instance.
     *
-    * \param sm The signal manager of application, that will be passed
+    * \param ct The custom type of application, that will be passed
     *        as paramenter to application type istead a default
-    *        signal manager instance. User can customize this instance.
+    *        custom type instance. User can customize this instance.
     *
     * \param context The context of application, that will be passed
     *        as paramenter to application operator and populated
@@ -79,8 +79,8 @@ namespace boost { namespace application {
     *
     */
    template <typename ApplicationMode, typename Application,
-      typename SignalManager>
-   inline int launch(Application& app, SignalManager& sm, context &cxt,
+      typename CustomType>
+   inline int launch(Application& app, CustomType& ct, context &cxt,
       system::error_code& ec)
    {
       // the ensure_single_instance tell us to exit?
@@ -96,7 +96,7 @@ namespace boost { namespace application {
 
       // we need that Application Mode start function, because in server
       // implementation, we need start it on a new thread.
-      return ApplicationMode(app, sm, cxt, ec).run();
+      return ApplicationMode(app, ct, cxt, ec).run();
    }
 
    /*!
@@ -106,9 +106,9 @@ namespace boost { namespace application {
     *
     * \param app User application functor instance.
     *
-    * \param sm The signal manager of application, that will be passed
+    * \param ct The custom type of application, that will be passed
     *        as paramenter to application type istead a default
-    *        signal manager instance. User can customize this instance.
+    *        custom type instance. User can customize this instance.
     *
     * \param context The "singularity" context of application,
     *        that will be passed as paramenter to application operator
@@ -124,8 +124,8 @@ namespace boost { namespace application {
     *
     */
    template <typename ApplicationMode, typename Application,
-      typename SignalManager>
-   inline int launch(Application& app, SignalManager& sm,
+      typename CustomType>
+   inline int launch(Application& app, CustomType& ct,
       singularity<context> &cxt,
       system::error_code& ec)
    {
@@ -143,7 +143,7 @@ namespace boost { namespace application {
 
       // we need that Application Mode start function, because in server
       // implementation, we need start it on a new thread.
-      return ApplicationMode(app, sm, cxt, ec).run();
+      return ApplicationMode(app, ct, cxt, ec).run();
    }
 
    /*!
@@ -170,11 +170,11 @@ namespace boost { namespace application {
    inline int launch(Application& app, context &cxt,
       system::error_code& ec)
    {
-      signal_manager sm(cxt, ec); // our default signal manager
+      signal_manager ct(cxt, ec); // our default custom type
 
       if(ec) return 0;
 
-      return launch<ApplicationMode>(app, sm, cxt, ec);
+      return launch<ApplicationMode>(app, ct, cxt, ec);
    }
 
    // singularity version, the ec (boost::system::error_code& ec) will be
@@ -204,11 +204,11 @@ namespace boost { namespace application {
    inline int launch(Application& app,
       singularity<context> &cxt, system::error_code& ec)
    {
-      signal_manager sm(cxt, ec); // our default signal manager
+      signal_manager ct(cxt, ec); // our default custom type
 
       if(ec) return 0;
 
-      return launch<ApplicationMode>(app, sm, cxt, ec);
+      return launch<ApplicationMode>(app, ct, cxt, ec);
    }
 
    // throws an exception of type boost::system::system_error launch versions
@@ -222,9 +222,9 @@ namespace boost { namespace application {
     *
     * \param app User application functor instance.
     *
-    * \param sm The signal manager of application, that will be passed
+    * \param ct The custom type of application, that will be passed
     *        as paramenter to application type istead a default
-    *        signal manager instance. User can customize this instance.
+    *        custom type instance. User can customize this instance.
     *
     * \param context The context of application, that will be passed
     *        as paramenter to application operator and populated
@@ -237,12 +237,12 @@ namespace boost { namespace application {
     *
     */
    template <typename ApplicationMode, typename Application,
-      typename SignalManager>
-   inline int launch(Application& app, SignalManager& sm,
+      typename CustomType>
+   inline int launch(Application& app, CustomType& ct,
       context &cxt)
    {
       system::error_code ec; int ret = 0;
-      ret = launch<ApplicationMode>(app, sm, cxt, ec);
+      ret = launch<ApplicationMode>(app, ct, cxt, ec);
 
       if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
 	     "launch() failed", ec);
@@ -256,9 +256,9 @@ namespace boost { namespace application {
     *
     * \param app User application functor instance.
     *
-    * \param sm The signal manager of application, that will be passed
+    * \param ct The custom type of application, that will be passed
     *        as paramenter to application type istead a default
-    *        signal manager instance. User can customize this instance.
+    *        custom type instance. User can customize this instance.
     *
     * \param context The "singularity" context of application,
     *        that will be passed as paramenter to application operator
@@ -271,12 +271,12 @@ namespace boost { namespace application {
     *
     */
    template <typename ApplicationMode, typename Application,
-      typename SignalManager>
-   inline int launch(Application& app, SignalManager& sm,
+      typename CustomType>
+   inline int launch(Application& app, CustomType& ct,
       singularity<application::context> &cxt)
    {
       system::error_code ec; int ret = 0;
-      ret = launch<ApplicationMode>(app, sm, cxt, ec);
+      ret = launch<ApplicationMode>(app, ct, cxt, ec);
 
       if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
 	     "launch() failed", ec);

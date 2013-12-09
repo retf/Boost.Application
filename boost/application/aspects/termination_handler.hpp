@@ -21,14 +21,14 @@
 
 namespace boost { namespace application {
 
-   class termination_handler : public handler
+   class termination_handler : public handler<>
    {
    public:
       termination_handler(const parameter_callback& callback)
-         : handler(callback) {}
+         : handler<>(callback) {}
 
       termination_handler(const singleton_callback& callback)
-         : handler(callback)  {}
+         : handler<>(callback)  {}
    };
 
    class termination_handler_default_behaviour : public termination_handler

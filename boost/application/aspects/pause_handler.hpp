@@ -21,14 +21,14 @@
 
 namespace boost { namespace application {
 
-   class pause_handler : public handler
+   class pause_handler : public handler<>
    {
    public:
       pause_handler(const parameter_callback& callback)
-         : handler(callback) {}
+         : handler<>(callback) {}
 
       pause_handler(const singleton_callback& callback)
-         : handler(callback)  {}
+         : handler<>(callback)  {}
    };
 
    class pause_handler_default_behaviour : public pause_handler

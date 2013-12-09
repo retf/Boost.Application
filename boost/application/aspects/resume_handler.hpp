@@ -21,14 +21,14 @@
 
 namespace boost { namespace application {
 
-   class resume_handler : public handler
+   class resume_handler : public handler<>
    {
    public:
       resume_handler(const parameter_callback& callback)
-         : handler(callback) {}
+         : handler<>(callback) {}
 
       resume_handler(const singleton_callback& callback)
-         : handler(callback)  {}
+         : handler<>(callback)  {}
    };
 
    class resume_handler_default_behaviour : public resume_handler

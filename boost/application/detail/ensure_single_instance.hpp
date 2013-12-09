@@ -42,7 +42,7 @@ namespace boost { namespace application { namespace detail {
 
          // check if we have any callback to call
 
-         handler::parameter_callback* parameter = 0;
+         handler<>::parameter_callback* parameter = 0;
 
          if(ol->callback(parameter))
          {
@@ -55,7 +55,7 @@ namespace boost { namespace application { namespace detail {
             return true;
          }
 
-         handler::singleton_callback* singleton = 0;
+         handler<>::singleton_callback* singleton = 0;
 
          if(ol->callback(singleton))
          {

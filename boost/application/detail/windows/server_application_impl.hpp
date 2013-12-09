@@ -144,7 +144,7 @@ namespace boost { namespace application {
 
          if(th)
          {
-            handler::parameter_callback* parameter = 0;
+            handler<>::parameter_callback* parameter = 0;
 
             if(th->callback(parameter))
             {
@@ -155,7 +155,7 @@ namespace boost { namespace application {
                }
             }
 
-            handler::singleton_callback* singleton = 0;
+            handler<>::singleton_callback* singleton = 0;
 
             if(th->callback(singleton))
             {
@@ -178,7 +178,7 @@ namespace boost { namespace application {
 
          if(ph)
          {
-            handler::parameter_callback* parameter = 0;
+            handler<>::parameter_callback* parameter = 0;
 
             if(ph->callback(parameter))
             {
@@ -189,7 +189,7 @@ namespace boost { namespace application {
                }
             }
 
-            handler::singleton_callback* singleton = 0;
+            handler<>::singleton_callback* singleton = 0;
 
             if(ph->callback(singleton))
             {
@@ -212,7 +212,7 @@ namespace boost { namespace application {
 
         if(rh)
         {
-            handler::parameter_callback* parameter = 0;
+            handler<>::parameter_callback* parameter = 0;
 
             if(rh->callback(parameter))
             {
@@ -222,7 +222,7 @@ namespace boost { namespace application {
                }
             }
 
-            handler::singleton_callback* singleton = 0;
+            handler<>::singleton_callback* singleton = 0;
 
             if(rh->callback(singleton))
             {
