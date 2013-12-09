@@ -130,7 +130,7 @@
          boost::system::system_category()), \
             BOOST_APPLICATION_SOURCE_LOCATION what))
 
-// use this version when you already have the value of 'ec', ie you already 
+// use this version when you already have the value of 'ec', ie you already
 // called 'last_error'.
 #define BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(what, ec) \
    BOOST_APPLICATION_THROW(boost::system::system_error( \

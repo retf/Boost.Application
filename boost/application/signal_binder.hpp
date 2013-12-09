@@ -31,7 +31,8 @@
 // Note that singularity is in approval process,
 // refer to the above link to know more:
 // http://www.boost.org/community/review_schedule.html
-#include <boost/singularity/singularity.hpp>
+//#include <boost/singularity/singularity.hpp>
+#include <singularity.hpp>
 
 namespace boost { namespace application {
 
@@ -252,7 +253,7 @@ namespace boost { namespace application {
                   // user tell us to call second callback
                   if(handler_map_[signal_number].second.callback(parameter))
                      (*parameter)(context_);
-               
+
                }
 
                return;
@@ -347,7 +348,7 @@ namespace boost { namespace application {
 
       virtual csbl::shared_ptr<termination_handler> setup_termination_brhaviour()
       {
-         strict_lock<application::aspect_map> guard(context_); 
+         strict_lock<application::aspect_map> guard(context_);
 
          if(!context_.find<wait_for_termination_request>(guard))
          {
@@ -363,7 +364,7 @@ namespace boost { namespace application {
 
       virtual void parameter_register_signals(boost::system::error_code& ec)
       {
-         csbl::shared_ptr<termination_handler> th 
+         csbl::shared_ptr<termination_handler> th
             = setup_termination_brhaviour();
 
          if(th)
@@ -399,7 +400,7 @@ namespace boost { namespace application {
 
       virtual void singleton_register_signals(boost::system::error_code& ec)
       {
-         csbl::shared_ptr<termination_handler> th 
+         csbl::shared_ptr<termination_handler> th
             = setup_termination_brhaviour();
 
          if(th)

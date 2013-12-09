@@ -44,24 +44,24 @@ public:
    my_signal_manager(application::context &context)
       : signal_manager(context)
    {
-      application::handler::parameter_callback callback 
+      application::handler::parameter_callback callback
          = boost::bind<bool>(&my_signal_manager::stop, this, _1);
 
-      bind(SIGINT,  callback); 
+      bind(SIGINT,  callback);
    }
 
    my_signal_manager(boost::singularity<application::context> &context)
       : signal_manager(context)
    {
-      application::handler::singleton_callback callback 
+      application::handler::singleton_callback callback
          = boost::bind<bool>(&my_signal_manager::stop, this);
 
-      bind(SIGINT,  callback); 
+      bind(SIGINT,  callback);
    }
 
    bool stop(application::context &context)
    {
-      shared_ptr<application::wait_for_termination_request> th 
+      application::csbl::shared_ptr<application::wait_for_termination_request> th
          = context.find<application::wait_for_termination_request>();
 
       th->proceed();
@@ -71,7 +71,7 @@ public:
 
    bool stop()
    {
-      shared_ptr<application::wait_for_termination_request> th 
+      application::csbl::shared_ptr<application::wait_for_termination_request> th
          = this_application().find<application::wait_for_termination_request>();
 
       th->proceed();
@@ -81,10 +81,10 @@ public:
 };
 
 int test_main(int argc, char** argv)
-{   
+{
    application::context app_context;
 
-   // common 
+   // common
 
    {
       myapp_parameter app;
@@ -177,10 +177,10 @@ int test_main(int argc, char** argv)
       myapp_parameter app;
       application::context cxt;
 
-      try 
+      try
       {
          int ret = application::launch<application::server>(app, cxt);
-      } 
+      }
       catch(boost::system::system_error& se)
       {
          BOOST_CHECK(se.error_code() == 1063);
@@ -191,10 +191,10 @@ int test_main(int argc, char** argv)
       myapp_singleton app;
       boost::singularity<application::context>::create_global();
 
-      try 
+      try
       {
          int ret = application::launch<application::server>(app, global_context);
-      } 
+      }
       catch(boost::system::system_error& se)
       {
          BOOST_CHECK(se.error_code() == 1063);
@@ -230,10 +230,10 @@ int test_main(int argc, char** argv)
       application::context cxt;
       my_signal_manager sm(cxt);
 
-      try 
+      try
       {
          int ret = application::launch<application::server>(app, sm, cxt);
-      } 
+      }
       catch(boost::system::system_error& se)
       {
          BOOST_CHECK(se.error_code() == 1063);
@@ -245,10 +245,10 @@ int test_main(int argc, char** argv)
       boost::singularity<application::context>::create_global();
       my_signal_manager sm(global_context);
 
-      try 
+      try
       {
          int ret = application::launch<application::server>(app, sm, global_context);
-      } 
+      }
       catch(boost::system::system_error& se)
       {
          BOOST_CHECK(se.error_code() == 1063);

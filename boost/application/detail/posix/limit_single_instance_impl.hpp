@@ -95,7 +95,7 @@ namespace boost { namespace application {
 
       string_type name_;
 
-      BOOST_APPLICATION_FEATURE_NS_SELECT::
+      boost::
          scoped_ptr<interprocess::shared_memory_object> create_shared_memory_or_die_;
 
       bool owns_lock_;

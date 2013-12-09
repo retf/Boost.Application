@@ -13,7 +13,9 @@ import testing ;
 project
    : source-location .
    : requirements
-
+        <include>../../..
+        <include>../../../../Singularity
+        <include>../../../../type_index
    # windows
 
    # msvc
@@ -37,7 +39,7 @@ project
       <library>/boost/filesystem//boost_filesystem
       <library>/boost/date_time//boost_date_time
       <library>/boost/thread//boost_thread
-      <library>../../test/build//boost_test_exec_monitor
+      <library>/boost/test//boost_test_exec_monitor
       <threading>multi
       ;
 {
@@ -47,13 +49,13 @@ project
    install install-bin 
       : test_library : 
       <target-os>windows:<location>"C:/test/boost/application" 
-      <target-os>linux:<location>/test/boost/application ; 
-
+      <target-os>linux:<location>/test/boost/application 
+      ; 
+  
    test-suite application
       : 
-	  
 	    #
-      # application fundation
+      # application foundation
       #
       [ run aspect_map_test.cpp ]
       [ run signal_binder_test.cpp ]
@@ -79,9 +81,9 @@ project
       #
       # shared library
       #
-      [ run shared_library_load_test.cpp ]
-      [ run shared_library_search_symbol_test.cpp ]
-      [ run shared_library_get_symbol_test.cpp ]
+      #[ run shared_library_load_test.cpp ]
+      #[ run shared_library_search_symbol_test.cpp ]
+      #[ run shared_library_get_symbol_test.cpp ]
       #
       #
 

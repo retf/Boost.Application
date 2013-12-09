@@ -12,6 +12,8 @@
    const boost::filesystem::path shared_library_path("C:/test/boost/application/test_library.dll");
 #elif defined( BOOST_POSIX_API )
    const boost::filesystem::path shared_library_path("/test/boost/application/libtest_library.so");
+#elif defined( BOOST_MAC_API )
+   const boost::filesystem::path shared_library_path("/test/boost/application/libtest_library.dylib");
 #else
 #  error "Sorry, no boost application are available for this platform."
 #endif
@@ -65,7 +67,7 @@ int test_main(int, char*[])
    }
 
    {
-      shared_library sl;      
+      shared_library sl;
       boost::system::error_code ec;
       sl.load(library(shared_library_path), load_with_altered_search_path, ec);
       BOOST_CHECK(sl.is_loaded());
