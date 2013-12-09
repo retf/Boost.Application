@@ -163,6 +163,16 @@ protected:
          error_ = DECLINED; return;
       }
 
+      // we allow only GET
+      
+      // Add other http verbs 
+      // ...
+
+      if(ct.method_number != M_GET)
+      {
+         error_ = HTTP_METHOD_NOT_ALLOWED; return;
+      }
+         
       // GET
 
       csbl::shared_ptr<http_get_verb_handler> http_get_verb =
@@ -198,15 +208,11 @@ protected:
          }
       }
 
-      // Add other http verbs 
-      // ...
-
       // we need set application_state to stop
       cxt.find<status>()->state(status::stoped);
 
       // we cant find any handler, generate apache error
-      error_ = HTTP_METHOD_NOT_ALLOWED;
-      // error_ = HTTP_INTERNAL_SERVER_ERROR;
+      error_ = HTTP_INTERNAL_SERVER_ERROR;
    }
 
 private:
@@ -216,9 +222,9 @@ private:
 };
 
 #define BOOST_APPLICATION_APACHE_REGISTER_TEST_MY_MODE(h, m)                   \
-extern "C"                                                                     \
+extern "C" {                                                                   \
 void boost_application_register_hooks(apr_pool_t *p)                           \
-{	                                                                            \
+{                                                                              \
    ap_hook_handler(h, NULL, NULL, APR_HOOK_MIDDLE);                            \
 }                                                                              \
                                                                                \
@@ -230,6 +236,6 @@ module AP_MODULE_DECLARE_DATA m = {                                            \
     NULL,                                                                      \
     NULL,                                                                      \
     boost_application_register_hooks                                           \
-};
+}; }
 
 #endif // BOOST_APPLICATION_MY_APPLICATION_MODE_HPP

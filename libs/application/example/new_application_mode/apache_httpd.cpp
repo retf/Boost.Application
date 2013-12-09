@@ -83,8 +83,25 @@ BOOST_APPLICATION_APACHE_REGISTER_TEST_MY_MODE(myhandle, my_boost_app_mod)
 /*
    On httpd.conf, add:
 
-   LoadModule my_boost_app_mod E:\project.boost.app.v5\libs\application\vc11ide\Debug\application_mode_apache_http_mod.dll
-   <Location /boostapp>
-      SetHandler boostapp
-   </Locatio>
+LoadModule my_boost_app_mod path_of_my_mod\application_mode_apache_httpd_mod.dll
+<Location /boostapp>
+  SetHandler boostapp
+</Location>
+
+   And start apache httpd and on your favorite navegator, access:
+   http://localhost:8080/boostapp
+
+   You will see: Hello! 
+
+   <html>
+    <head>
+        <title>Boost.Application Test</title>
+    </head>
+    <body>
+        <h1> Hello! </h1>
+    </body>
+   </html>
+
+   on it!
+
 */
