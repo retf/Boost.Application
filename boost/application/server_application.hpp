@@ -21,6 +21,7 @@
 #include <boost/application/context.hpp>
 #include <boost/application/detail/csbl.hpp>
 #include <boost/application/application_initializers.hpp>
+#include <boost/application/application_mode_register.hpp>
 // platform dependent
 #if defined( BOOST_WINDOWS_API )
 #include <boost/application/detail/windows/server_application_impl.hpp>
@@ -46,9 +47,15 @@ namespace boost { namespace application {
     * template param on launch free function.
     *
     */
-   class server
+   class server 
    {
    public:
+
+      static int mode()
+      {
+         static int id = new_run_mode<int>();
+         return id;
+      }
 
       /*!
        * Creates a server application.
@@ -77,7 +84,7 @@ namespace boost { namespace application {
          if(!context.find<run_mode>())
          {
              context.insert<run_mode>(
-               csbl::make_shared<run_mode>(run_mode::server));
+               csbl::make_shared<run_mode>(mode()));
          }
 
          if(!context.find<status>())
@@ -122,7 +129,7 @@ namespace boost { namespace application {
          if(!context.get_global().find<run_mode>())
          {
              context.get_global().insert<run_mode>(
-               csbl::make_shared<run_mode>(run_mode::server));
+               csbl::make_shared<run_mode>(mode()));
          }
 
          if(!context.get_global().find<status>())

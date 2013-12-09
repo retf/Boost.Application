@@ -226,7 +226,7 @@ namespace boost { namespace application {
 
          if(ec)
          {
-            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR(
+            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
 			   "uninstall() failed", ec);
          }
       }

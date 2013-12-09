@@ -33,7 +33,8 @@ public:
    /*<<Define the application operator that will receive a application context>>*/
    int operator()(application::context& context)
    {
-      /*<<Make use of an 'aspect'>>*/
+
+      /*<<Make use of an'aspect'>>*/
       boost::shared_ptr<application::args> myargs 
          = context.find<application::args>();
 

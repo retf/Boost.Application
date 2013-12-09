@@ -80,11 +80,11 @@ namespace boost { namespace application {
     */
    template <typename ApplicationMode, typename Application,
       typename SignalManager>
-   inline int launch(Application& app, SignalManager& sm, context &context,
-      boost::system::error_code& ec)
+   inline int launch(Application& app, SignalManager& sm, context &cxt,
+      system::error_code& ec)
    {
       // the ensure_single_instance tell us to exit?
-      bool we_need_exit = detail::ensure_single_instance(context, ec);
+      bool we_need_exit = detail::ensure_single_instance(cxt, ec);
 
       if(ec) return 0;
       if(we_need_exit) return 0;
@@ -96,7 +96,7 @@ namespace boost { namespace application {
 
       // we need that Application Mode start function, because in server
       // implementation, we need start it on a new thread.
-      return ApplicationMode(app, sm, context, ec).run();
+      return ApplicationMode(app, sm, cxt, ec).run();
    }
 
    /*!
@@ -126,12 +126,12 @@ namespace boost { namespace application {
    template <typename ApplicationMode, typename Application,
       typename SignalManager>
    inline int launch(Application& app, SignalManager& sm,
-      singularity<application::context> &context,
-      boost::system::error_code& ec)
+      singularity<context> &cxt,
+      system::error_code& ec)
    {
       // the ensure_single_instance tell us to exit?
       bool we_need_exit =
-         detail::ensure_single_instance(context.get_global(), ec);
+         detail::ensure_single_instance(cxt.get_global(), ec);
 
       if(ec) return 0;
       if(we_need_exit) return 0;
@@ -143,7 +143,7 @@ namespace boost { namespace application {
 
       // we need that Application Mode start function, because in server
       // implementation, we need start it on a new thread.
-      return ApplicationMode(app, sm, context, ec).run();
+      return ApplicationMode(app, sm, cxt, ec).run();
    }
 
    /*!
@@ -167,14 +167,14 @@ namespace boost { namespace application {
     *
     */
    template <typename ApplicationMode, typename Application>
-   inline int launch(Application& app, application::context &context,
-      boost::system::error_code& ec)
+   inline int launch(Application& app, context &cxt,
+      system::error_code& ec)
    {
-      signal_manager sm(context, ec); // our default signal manager
+      signal_manager sm(cxt, ec); // our default signal manager
 
       if(ec) return 0;
 
-      return launch<ApplicationMode>(app, sm, context, ec);
+      return launch<ApplicationMode>(app, sm, cxt, ec);
    }
 
    // singularity version, the ec (boost::system::error_code& ec) will be
@@ -202,13 +202,13 @@ namespace boost { namespace application {
     */
    template <typename ApplicationMode, typename Application>
    inline int launch(Application& app,
-      singularity<application::context> &context, boost::system::error_code& ec)
+      singularity<context> &cxt, system::error_code& ec)
    {
-      signal_manager sm(context, ec); // our default signal manager
+      signal_manager sm(cxt, ec); // our default signal manager
 
       if(ec) return 0;
 
-      return launch<ApplicationMode>(app, sm, context, ec);
+      return launch<ApplicationMode>(app, sm, cxt, ec);
    }
 
    // throws an exception of type boost::system::system_error launch versions
@@ -239,10 +239,10 @@ namespace boost { namespace application {
    template <typename ApplicationMode, typename Application,
       typename SignalManager>
    inline int launch(Application& app, SignalManager& sm,
-      application::context &context)
+      context &cxt)
    {
-      boost::system::error_code ec; int ret = 0;
-      ret = launch<ApplicationMode>(app, sm, context, ec);
+      system::error_code ec; int ret = 0;
+      ret = launch<ApplicationMode>(app, sm, cxt, ec);
 
       if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
 	     "launch() failed", ec);
@@ -273,10 +273,10 @@ namespace boost { namespace application {
    template <typename ApplicationMode, typename Application,
       typename SignalManager>
    inline int launch(Application& app, SignalManager& sm,
-      singularity<application::context> &context)
+      singularity<application::context> &cxt)
    {
-      boost::system::error_code ec; int ret = 0;
-      ret = launch<ApplicationMode>(app, sm, context, ec);
+      system::error_code ec; int ret = 0;
+      ret = launch<ApplicationMode>(app, sm, cxt, ec);
 
       if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
 	     "launch() failed", ec);
@@ -301,10 +301,10 @@ namespace boost { namespace application {
     *
     */
    template <typename ApplicationMode, typename Application>
-   inline int launch(Application& app, application::context &context)
+   inline int launch(Application& app, application::context &cxt)
    {
-      boost::system::error_code ec; int ret = 0;
-      ret = launch<ApplicationMode>(app, context, ec);
+      system::error_code ec; int ret = 0;
+      ret = launch<ApplicationMode>(app, cxt, ec);
 
       if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
 	     "launch() failed", ec);
@@ -330,10 +330,10 @@ namespace boost { namespace application {
     */
    template <typename ApplicationMode, typename Application>
    inline int launch(Application& app,
-      singularity<application::context> &context)
+      singularity<context> &cxt)
    {
-      boost::system::error_code ec; int ret = 0;
-      ret = launch<ApplicationMode>(app, context, ec);
+      system::error_code ec; int ret = 0;
+      ret = launch<ApplicationMode>(app, cxt, ec);
 
       if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
 	     "launch() failed", ec);

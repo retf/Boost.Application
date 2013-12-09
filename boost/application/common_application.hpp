@@ -21,6 +21,7 @@
 //#include <boost/application/detail/app.hpp>
 #include <boost/application/detail/csbl.hpp>
 #include <boost/application/application_initializers.hpp>
+#include <boost/application/application_mode_register.hpp>
 // internal aspects
 #include <boost/application/aspects/status.hpp>
 #include <boost/application/aspects/run_mode.hpp>
@@ -55,6 +56,12 @@ namespace boost { namespace application {
 
    public:
 
+      static int mode()
+      {
+         static int id = new_run_mode<int>();
+         return id;
+      }
+
       /*!
        * Creates a common application.
        *
@@ -87,7 +94,7 @@ namespace boost { namespace application {
          if(!impl_->get_context().find<run_mode>())
          {
              impl_->get_context().insert<run_mode>(
-               csbl::make_shared<run_mode>(run_mode::common));
+               csbl::make_shared<run_mode>(mode()));
          }
 
          if(!impl_->get_context().find<status>())
@@ -131,7 +138,7 @@ namespace boost { namespace application {
          if(!impl_->get_context().find<run_mode>())
          {
              impl_->get_context().insert<run_mode>(
-               csbl::make_shared<run_mode>(run_mode::common));
+               csbl::make_shared<run_mode>(mode()));
          }
 
          if(!impl_->get_context().find<status>())

@@ -34,24 +34,14 @@ namespace boost { namespace application {
     */
    class run_mode
    {
-      friend class server;
-      friend class common;
-
    public:
-
-      // application types / modes
-      enum application_run_mode {
-         common = 0,
-         server,
-         direct // not created by the launcher
-      };
 
       /*!
        * Constructs an run_mode aspect.
        *
        * \param run_mode The mode of application.
        */
-      run_mode(application_run_mode run_mode)
+      run_mode(int run_mode)
          : application_run_mode_(run_mode) {}
 
       /*!
@@ -60,7 +50,7 @@ namespace boost { namespace application {
        * \return the mode of application.
        *
        */
-      application_run_mode mode() {
+      int mode() {
          return application_run_mode_;
       }
 
@@ -70,17 +60,17 @@ namespace boost { namespace application {
        * \param mode The mode of application.
        *
        */
-      void mode(application_run_mode mode) {
+      void mode(int mode) {
          application_run_mode_ = mode;
       }
 
-      bool operator==(application_run_mode mode) const {
+      bool operator==(int mode) const {
          return mode == application_run_mode_;
       }
 
    private:
 
-      application_run_mode application_run_mode_;
+      int application_run_mode_;
 
    };
 

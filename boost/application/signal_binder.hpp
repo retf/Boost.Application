@@ -38,6 +38,8 @@ namespace boost { namespace application {
    // This is an attempt to make things more flexible,
    // this allow user to define your own sinal -> handler map
 
+   struct not_required {};
+
    // forward declaration.
    template <class T> class common_application_impl_;
    template <class T> class server_application_impl_;
