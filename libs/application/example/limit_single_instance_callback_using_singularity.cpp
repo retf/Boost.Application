@@ -96,7 +96,7 @@ int main(int argc, char *argv[])
  
    boost::singularity<context>::create_global();
    
-   handler::parameter_callback callback 
+   handler<>::parameter_callback callback 
       = boost::bind<bool>(&myapp::instace_aready_running, &app);
 
    // use aspects

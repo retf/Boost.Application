@@ -30,21 +30,21 @@ int main(int argc, char *argv[])
       boost::make_shared<application::args>(argc, argv));
 
    /*<< Termination handler tie >>*/
-   application::handler::parameter_callback termination_callback 
+   application::handler<>::parameter_callback termination_callback 
       = boost::bind<bool>(&myapp::stop, &app, _1);
 
    app_context.insert<application::termination_handler>(
       boost::make_shared<application::termination_handler_default_behaviour>(termination_callback));
 
    /*<< Pause handler tie  >>*/
-   application::handler::parameter_callback pause_callback 
+   application::handler<>::parameter_callback pause_callback 
       = boost::bind<bool>(&myapp::pause, &app, _1);
 
    app_context.insert<application::pause_handler>(
       boost::make_shared<application::pause_handler_default_behaviour>(pause_callback));
 
    /*<< Resume handler tie  >>*/
-   application::handler::parameter_callback resume_callback 
+   application::handler<>::parameter_callback resume_callback 
       = boost::bind<bool>(&myapp::resume, &app, _1);
 
    app_context.insert<application::resume_handler>(

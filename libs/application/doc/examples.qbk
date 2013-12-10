@@ -39,6 +39,12 @@ Wait For Termination Request Customization [@http://www.boost.org/libs/applicati
 Define My Own Exception [@http://www.boost.org/libs/application/example/myexception.cpp (myexception.cpp)] 
 ]
 
+[* Library extension]
+
+[pre
+Apache httpd Application Mode [@http://www.boost.org/libs/application/example/new_application_mode/apache_httpd_mode.hpp (apache_httpd_mode.hpp)]
+Use of Apache httpd Application Mode [@http://www.boost.org/libs/application/example/new_application_mode/apache_httpd.cpp (apache_httpd.cpp)]
+]
 
 [* Windows specifics]
 
@@ -51,7 +57,6 @@ Windows Service Setup [@http://www.boost.org/libs/application/example/service_se
 [pre
 Self-pipe [@http://www.boost.org/libs/application/example/selfpipe/selfpipe.cpp (selfpipe.cpp)]
 ]
-
 
 [* Other Aspects]
 

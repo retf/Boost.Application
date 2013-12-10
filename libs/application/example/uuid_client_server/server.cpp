@@ -180,7 +180,7 @@ int main(int argc, char *argv[])
 
       // add termination handler
 
-      application::handler::parameter_callback termination_callback 
+      application::handler<>::parameter_callback termination_callback 
          = boost::bind<bool>(&my_server::stop, &app, _1);
 
       app_context.insert<application::termination_handler>(
@@ -192,7 +192,7 @@ int main(int argc, char *argv[])
 
       // windows only : add pause handler
      
-      application::handler::parameter_callback pause_callback 
+      application::handler<>::parameter_callback pause_callback 
          = boost::bind<bool>(&my_server::pause, &app, _1);
 
       app_context.insert<application::pause_handler>(
@@ -200,7 +200,7 @@ int main(int argc, char *argv[])
 
       // windows only : add resume handler
 
-      application::handler::parameter_callback resume_callback 
+      application::handler<>::parameter_callback resume_callback 
          = boost::bind<bool>(&my_server::resume, &app, _1);
 
       app_context.insert<application::resume_handler>(

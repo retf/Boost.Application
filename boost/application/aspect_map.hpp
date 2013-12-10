@@ -65,7 +65,7 @@ namespace boost { namespace application {
       // New Thread Safe Interface
       // Internal locking and external locking support
 
-      /*
+      /*!
        * Lookup a aspect and return the shared_ptr<T> of it.
        * Internal locking Version.
        *
@@ -78,7 +78,6 @@ namespace boost { namespace application {
        * \throw Nothing.
        */
 
-      // old get_aspect
       template <class T>
       csbl::shared_ptr<T> find()
       {
@@ -86,7 +85,7 @@ namespace boost { namespace application {
          return find<T>(guard);
       }
 
-      /*
+      /*!
        * Lookup a aspect and return the shared_ptr<T> of it.
        * External locking Version, can be used as part of an atomic transaction.
        *
@@ -100,7 +99,6 @@ namespace boost { namespace application {
        *        Does not owns correct lock.
        */
 
-      // old get_aspect
       template <class T>
       csbl::shared_ptr<T> find(strict_lock<aspect_map>& guard)
       {
@@ -113,7 +111,7 @@ namespace boost { namespace application {
          return csbl::static_pointer_cast<T>(it->second);
       }
 
-      /*
+      /*!
        * Checks if aspect associated to the type T exists
        * Internal locking Version.
        *
@@ -128,7 +126,6 @@ namespace boost { namespace application {
        * \throw Nothing.
        */
 
-      // old has_aspect
       template <class T>
       size_type count()
       {
@@ -136,7 +133,7 @@ namespace boost { namespace application {
          return count<T>(guard);
       }
 
-      /*
+      /*!
        * Checks if aspect associated to the type T exists
        * External locking Version, can be used as part of an atomic transaction.
        *
@@ -151,7 +148,6 @@ namespace boost { namespace application {
        * \throw Nothing.
        */
 
-      // old has_aspect
       template <class T>
       size_type count(strict_lock<aspect_map>& guard)
       {
@@ -180,7 +176,6 @@ namespace boost { namespace application {
        * \throw Any exception throw due to resources unavailable.
        */
 
-      // old add_aspect
       template <class T>
       csbl::shared_ptr<T> insert(csbl::shared_ptr<T> asp)
       {
@@ -207,7 +202,6 @@ namespace boost { namespace application {
        *        resources unavailable.
        */
 
-      // old add_aspect
       template <class T>
       csbl::shared_ptr<T> insert(csbl::shared_ptr<T> asp,
          strict_lock<aspect_map>& guard)
@@ -242,7 +236,6 @@ namespace boost { namespace application {
        * \throw Nothing.
        */
 
-      // old replace_aspect
       template <class T>
       csbl::shared_ptr<T> exchange(csbl::shared_ptr<T> asp)
       {
@@ -269,7 +262,6 @@ namespace boost { namespace application {
        *        Does not owns correct lock.
        */
 
-      // old replace_aspect
       template <class T>
       csbl::shared_ptr<T> exchange(csbl::shared_ptr<T> asp,
          strict_lock<aspect_map>& guard)
@@ -301,7 +293,6 @@ namespace boost { namespace application {
        * \throw Nothing.
        */
 
-      // remove
       template <class T>
       csbl::shared_ptr<T> erase()
       {
@@ -323,7 +314,6 @@ namespace boost { namespace application {
        *        Does not owns correct lock.
        */
 
-      // old remove_aspect
       template <class T>
       csbl::shared_ptr<T> erase(strict_lock<aspect_map>& guard)
       {

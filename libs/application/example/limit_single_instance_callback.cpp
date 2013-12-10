@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
    /*<< Define a unique identity to application >>*/
    boost::uuids::uuid appuuid = gen("{9F66E4AD-ECA5-475D-8784-4BAA329EF9F2}");
 
-   application::handler::parameter_callback callback 
+   application::handler<>::parameter_callback callback 
       = boost::bind<bool>(&myapp::instace_aready_running, &app, _1);
 
    app_context.insert<application::limit_single_instance>(

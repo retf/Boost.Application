@@ -170,7 +170,7 @@ int main(int argc, char *argv[])
    myapp app;
    application::context app_context;
    
-   application::handler::parameter_callback callback 
+   application::handler<>::parameter_callback callback 
       = boost::bind<bool>(&myapp::stop, &app, _1);
 
    app_context.insert<application::termination_handler>(

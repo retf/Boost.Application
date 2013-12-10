@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
    application::context app_context;
 
    /*<< Create bind to stop handler >>*/
-   application::handler::parameter_callback termination_callback 
+   application::handler<>::parameter_callback termination_callback 
       = boost::bind<bool>(&myapp::stop, &app, _1);
 
    /*<< Tie stop to termination_handler using default behaviour >>*/

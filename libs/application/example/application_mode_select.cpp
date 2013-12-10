@@ -76,7 +76,7 @@ int main(int argc, char** argv)
 
    // add termination handler
 
-   application::handler::parameter_callback termination_callback 
+   application::handler<>::parameter_callback termination_callback 
       = boost::bind<bool>(&my_application_functor_class::stop, &app, _1);
 
    app_context.insert<application::termination_handler>(

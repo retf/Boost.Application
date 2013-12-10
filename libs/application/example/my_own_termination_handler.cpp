@@ -72,7 +72,7 @@ public:
    my_signal_manager(context &context)
       : signal_manager(context)
    {
-      handler::parameter_callback callback 
+      handler<>::parameter_callback callback 
          = boost::bind<bool>(&my_signal_manager::stop, this, _1);
 
       // define my own signal / handler

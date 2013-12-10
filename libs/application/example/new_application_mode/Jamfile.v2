@@ -11,6 +11,11 @@ project
         <include>../../..
         <include>../../../../Singularity
         <include>../../../../type_index
+		<target-os>linux:<include>/usr/include/apache2/
+        <target-os>linux:<include>/usr/include/apr-1.0/
+		<target-os>windows:<include>C:\Program Files (x86)\Apache Software Foundation\Apache2.2
+		
+
 
    # windows
 
@@ -37,65 +42,8 @@ project
       <library>/boost/test//boost_test_exec_monitor
       <threading>multi
       ;
-	
-   # our example plugin lib
-   lib plugin_library : plugin_library.cpp ; 
-   install install-bin 
-      : plugin_library : 
-      <target-os>windows:<location>"C:/test/boost/application" 
-      <target-os>linux:<location>/test/boost/application ; 
-	  
-	  
-# test compilation/configuration
-# exe test 
-#    : test.cpp 
-#    ;
 
-exe simple_application
-   : simple_application.cpp
+lib apache_httpd
+   : apache_httpd.cpp
    ;
    
-exe path
-   : path.cpp
-   ;
-   
-exe simple_application_using_singularity 
-   : simple_application_using_singularity.cpp 
-   ;
-
-exe wait_for_termination_request
-   : wait_for_termination_request.cpp 
-   ;
-
-exe my_own_wait_for_termination_request
-   : my_own_wait_for_termination_request.cpp
-   ;
-
-exe termination_handler
-   : termination_handler.cpp
-   ;
-
-exe my_own_termination_handler
-   : my_own_termination_handler.cpp
-   ;
-
-exe limit_single_instance
-   : limit_single_instance.cpp
-   ;
-
-exe simple_server_application
-   : simple_server_application.cpp
-   ;
-   
-# shared library sub-system
-   
-exe shared_library_load_plugin  
-   : shared_library_load_plugin.cpp
-   ;
-   
-# windows only
-
-exe service_setup
-   : service_setup.cpp
-   : <build>no <target-os>windows:<build>yes 
-   ;	

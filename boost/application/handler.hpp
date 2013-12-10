@@ -28,7 +28,7 @@ namespace boost { namespace application {
      *
      * This callback is used on all handlers that application can define.
      *
-     * The application library supprt 2 versions, the first receive a
+     * The application library support 2 versions, the first receive a
      * application context as param, and the signature looks like:
      *
      * bool instace_aready_running(context &context);
@@ -36,10 +36,10 @@ namespace boost { namespace application {
      * The second version assumes that you are using Boost.Singularity,
      * then no parameter was passed, and the signature looks like:
      *
-     * bool instace_aready_running(context &context);
+     * bool instace_aready_running(void);
      *
      * All callbacks are executed by user selected "application mode"
-     * the return value indicates to application mechanism how behave.
+     * the return is a Template that can be defined be the user.
      *
      * In case of our sample, if your return true from
      * instace_aready_running the application mechanism will continue,
