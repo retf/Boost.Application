@@ -1,4 +1,4 @@
-// application_types.hpp ------------------------------------------------------//
+// application_types.hpp -----------------------------------------------------//
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2012 Renato Tegon Forti
@@ -32,5 +32,5 @@ namespace boost { namespace application {
 
 }} // boost::application
 
-#endif // BOOST_APPLICATION_SHARED_LIBRARY_TYPES_HPP
+#endif // BOOST_APPLICATION_APPLICATION_TYPES_HPP
 

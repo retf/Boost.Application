@@ -1,4 +1,4 @@
-// launch.hpp  --------------------------------------------------------------//
+// launch.hpp  ---------------------------------------------------------------//
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2013 Renato Tegon Forti
@@ -30,7 +30,7 @@
 // Note that singularity is in approval process,
 // refer to the above link to know more:
 // http://www.boost.org/community/review_schedule.html
-//#include <boost/singularity/singularity.hpp>
+// #include <boost/singularity/singularity.hpp>
 #include <singularity.hpp>
 
 namespace boost { namespace application {
@@ -41,8 +41,8 @@ namespace boost { namespace application {
     *
     * In this version 2 flavors of application are supported:
     *
-    * - common_application
-    * - server_application
+    * - common
+    * - server
     *
     * The "launch" function can create any of this types, and launch
     * will aready setup/add default control aspects to application context.
@@ -247,7 +247,7 @@ namespace boost { namespace application {
       ret = launch<ApplicationMode>(app, ct, cxt, ec);
 
       if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
-	     "launch() failed", ec);
+	       "launch() failed", ec);
 
       return ret;
    }
@@ -281,7 +281,7 @@ namespace boost { namespace application {
       ret = launch<ApplicationMode>(app, ct, cxt, ec);
 
       if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
-	     "launch() failed", ec);
+	       "launch() failed", ec);
 
       return ret;
    }
@@ -309,7 +309,7 @@ namespace boost { namespace application {
       ret = launch<ApplicationMode>(app, cxt, ec);
 
       if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
-	     "launch() failed", ec);
+	       "launch() failed", ec);
 
       return ret;
    }
@@ -338,7 +338,7 @@ namespace boost { namespace application {
       ret = launch<ApplicationMode>(app, cxt, ec);
 
       if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
-	     "launch() failed", ec);
+	       "launch() failed", ec);
 
       return ret;
    }
@@ -346,3 +346,4 @@ namespace boost { namespace application {
 }} // boost::application
 
 #endif // BOOST_APPLICATION_LAUNCH_HPP
+

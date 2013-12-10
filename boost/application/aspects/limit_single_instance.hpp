@@ -1,4 +1,4 @@
-//  limit_single_instance.hpp -----------------------------------------------//
+//  limit_single_instance.hpp ------------------------------------------------//
 // -----------------------------------------------------------------------------
 
 //  Copyright 2011-2012 Renato Tegon Forti
@@ -35,11 +35,11 @@
 
 namespace boost { namespace application {
 
-    /*!
-     * \brief A contract class to be used by the user on your own
-     *        class implementation of wait_for_termination_request aspect.
-     *
-     */
+   /*!
+    * \brief A contract class to be used by the user on your own
+    *        class implementation of wait_for_termination_request aspect.
+    *
+    */
    class limit_single_instance : public handler<>
    {
    public:
@@ -166,7 +166,7 @@ namespace boost { namespace application {
 
          bool result = lock(ec);
          if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
-		    "lock() failed", ec);
+            "lock() failed", ec);
 
          return result;
       }
@@ -199,6 +199,7 @@ namespace boost { namespace application {
 
    };
 
+// this is a not official version
 #if defined( ENABLE_BOOST_INTERPROCESS_NAMED_MUTEX )
 
    /*!
@@ -213,7 +214,7 @@ namespace boost { namespace application {
       : public limit_single_instance
    {
    public:
-       /*!
+      /*!
        * Constructs an limit_single_instance.
        *
        * \param app_uuid An Uuid (Boost.Uuid) that identify a application.
@@ -318,7 +319,7 @@ namespace boost { namespace application {
 
          bool result = lock(ec);
          if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
-		    "lock() failed", ec);
+           "lock() failed", ec);
 
          return result;
       }
@@ -357,6 +358,7 @@ namespace boost { namespace application {
 
 #endif
 
-} }  // boost::application
+}}  // boost::application
 
 #endif // BOOST_APPLICATION_LIMIT_SINGLE_INSTANCE_ASPECT_HPP
+

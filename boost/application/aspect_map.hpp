@@ -1,4 +1,4 @@
-// aspect_map.hpp -----------------------------------------------------------//
+// aspect_map.hpp ------------------------------------------------------------//
 // -----------------------------------------------------------------------------
 
 // Copyright 2013 Vicente J. Botet Escriba.
@@ -461,3 +461,4 @@ namespace boost { namespace application {
 } }  // boost::application:
 
 #endif // BOOST_APPLICATION_ASPECT_MAP_HPP
+

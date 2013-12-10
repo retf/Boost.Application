@@ -35,12 +35,12 @@
 namespace boost { namespace application {
 
    /*!
-    * \brief This class hold a application mode system.
+    * \brief This class hold a 'server' application mode system.
     *
     * server : Can be seen as Server (log-time duration)
     *          aplication type.
     *
-    * An application mode is a collection of aspects that
+    * An application mode is a collection of aspects and a class 'mode' that
     * define application instantiation and behaviour.
     *
     * The usual use of this class is to pass it as
@@ -51,6 +51,10 @@ namespace boost { namespace application {
    {
    public:
 
+      /*!
+       * Retrieves a id that identify application run mode. 
+       *  
+       */
       static int mode()
       {
          static int id = new_run_mode<int>();

@@ -1,4 +1,4 @@
-// signal_binder.hpp --------------------------------------------------------//
+// signal_binder.hpp ---------------------------------------------------------//
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2013 Renato Tegon Forti
@@ -38,8 +38,6 @@ namespace boost { namespace application {
 
    // This is an attempt to make things more flexible,
    // this allow user to define your own sinal -> handler map
-
-   struct not_required {};
 
    // forward declaration.
    template <class T> class common_application_impl_;
@@ -346,7 +344,8 @@ namespace boost { namespace application {
 
    protected:
 
-      virtual csbl::shared_ptr<termination_handler> setup_termination_brhaviour()
+      virtual csbl::shared_ptr<termination_handler>
+         setup_termination_behaviour()
       {
          strict_lock<application::aspect_map> guard(context_);
 
@@ -365,7 +364,7 @@ namespace boost { namespace application {
       virtual void parameter_register_signals(boost::system::error_code& ec)
       {
          csbl::shared_ptr<termination_handler> th
-            = setup_termination_brhaviour();
+            = setup_termination_behaviour();
 
          if(th)
          {
@@ -384,7 +383,8 @@ namespace boost { namespace application {
          }
       }
 
-      virtual bool parameter_termination_signal_handler(application::context &context)
+      virtual bool parameter_termination_signal_handler(
+         application::context &context)
       {
          // we need set application_state to stop
          context_.find<status>()->state(status::stoped);
@@ -401,7 +401,7 @@ namespace boost { namespace application {
       virtual void singleton_register_signals(boost::system::error_code& ec)
       {
          csbl::shared_ptr<termination_handler> th
-            = setup_termination_brhaviour();
+            = setup_termination_behaviour();
 
          if(th)
          {
@@ -436,3 +436,4 @@ namespace boost { namespace application {
 }} // boost::application
 
 #endif // BOOST_APPLICATION_SIGNAL_MANAGER_HPP
+

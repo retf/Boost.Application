@@ -18,7 +18,6 @@
 
 #include <boost/application/config.hpp>
 #include <boost/application/context.hpp>
-//#include <boost/application/detail/app.hpp>
 #include <boost/application/detail/csbl.hpp>
 #include <boost/application/application_initializers.hpp>
 #include <boost/application/application_mode_register.hpp>
@@ -38,12 +37,12 @@
 namespace boost { namespace application {
 
    /*!
-    * \brief This class hold a application mode system.
+    * \brief This class hold a 'common' application mode system.
     *
     * common : Can be seen as Terminal/Console/Interactive
     *          aplication type.
     *
-    * An application mode is a collection of aspects that
+    * An application mode is a collection of aspects and a class 'mode' that
     * define application instantiation and behaviour.
     *
     * The usual use of this class is to pass it as
@@ -56,6 +55,10 @@ namespace boost { namespace application {
 
    public:
 
+      /*!
+       * Retrieves a id that identify application run mode. 
+       *  
+       */
       static int mode()
       {
          static int id = new_run_mode<int>();
@@ -175,3 +178,4 @@ namespace boost { namespace application {
 }} // boost::application
 
 #endif // BOOST_APPLICATION_COMMON_APPLICATION_HPP
+

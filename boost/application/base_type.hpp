@@ -21,6 +21,12 @@
 
 namespace boost { namespace application {
 
+   // use it if you want indicate to 'launch' that 'CustomType' is not necessary
+   // int launch(Application& app, CustomType& ct, ...
+   struct not_necessary {};
+   // as launch<common>(app, not_necessary());
+   // 
+
    /*!
     * \brief This is a fundamental type for Boost.Application.
     *

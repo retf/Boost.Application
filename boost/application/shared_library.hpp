@@ -1,4 +1,4 @@
-// shared_library.hpp -------------------------------------------------------//
+// shared_library.hpp --------------------------------------------------------//
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2013 Renato Tegon Forti
@@ -35,29 +35,6 @@ namespace boost { namespace application {
     *        symbols.
     *
     * Provides a means to extend your application using plugins way.
-    *
-    * The simplest use is as:
-    *
-    * // library.cpp
-    * // ...
-    * extern "C" std::string LIBRARY_API lib_do_anything(int x);
-    * // ...
-    * std::string lib_do_anything(int x)
-    * {
-    *    return boost::lexical_cast<std::string>(x*x);
-    * };
-    *
-    * // app.cpp
-    * // ...
-    * typedef std::string (*my_plugin_function) (int);
-    * // ...
-    * int main()
-    * {
-    *    shared_library sl(library("/my/plugin.so"));
-    *    std::cout <<
-    *       ((my_plugin_function) sl(symbol("lib_do_anything")))(10)
-    *           << std::endl;
-    * }
     *
     */
    class shared_library  : public noncopyable
@@ -143,7 +120,7 @@ namespace boost { namespace application {
 
          if(ec)
             BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
-			   "shared_library() failed", ec);
+               "shared_library() failed", ec);
       }
 
       /*!
@@ -217,7 +194,7 @@ namespace boost { namespace application {
 
          if(ec)
             BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
-			   "load() failed", ec);
+               "load() failed", ec);
       }
 
       /*!
@@ -269,7 +246,7 @@ namespace boost { namespace application {
 
          if(ec)
             BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
-			   "load() failed", ec);
+               "load() failed", ec);
       }
 
       /*!
@@ -363,7 +340,7 @@ namespace boost { namespace application {
 
          if(ec)
             BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
-			   "get_symbol() failed", ec);
+               "get_symbol() failed", ec);
 
          return symbol_addr;
       }
@@ -418,7 +395,7 @@ namespace boost { namespace application {
 
          if(ec)
             BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
-			   "operator() failed", ec);
+               "operator() failed", ec);
 
          return symbol_addr;
       }

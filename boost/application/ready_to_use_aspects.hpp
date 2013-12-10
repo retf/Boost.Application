@@ -1,4 +1,4 @@
-// ready_to_use_aspects.hpp  --------------------------------------------------//
+// ready_to_use_aspects.hpp  -------------------------------------------------//
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2013 Renato Tegon Forti
@@ -24,3 +24,4 @@
 #include <boost/application/aspects/termination_handler.hpp>
 
 #endif // BOOST_APPLICATION_READY_TO_USE_ASPECTS_HPP
+

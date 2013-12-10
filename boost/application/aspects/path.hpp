@@ -1,4 +1,4 @@
-// path.hpp  ---------------------------------------------------------------//
+// path.hpp ------------------------------------------------------------------//
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2013 Renato Tegon Forti
@@ -17,6 +17,7 @@
 #define BOOST_APPLICATION_ASPECT_PATH_HPP
 
 #include <boost/application/config.hpp>
+#include <boost/application/detail/csbl.hpp>
 #if defined( BOOST_WINDOWS_API )
 #include <boost/application/detail/windows/path_impl.hpp>
 #elif defined( BOOST_POSIX_API )
@@ -178,7 +179,8 @@ namespace boost { namespace application {
        *        set to the result of the operation.
        *
        */
-      path_default_behaviour_(int argc, char_type *argv[], boost::system::error_code &ec)
+      path_default_behaviour_(int argc, char_type *argv[], 
+                              boost::system::error_code &ec)
          : impl_(new path_impl(argc, argv, module_path_name_, ec)) {}
 
       /*!
@@ -193,12 +195,12 @@ namespace boost { namespace application {
       {
          if(ec_)
             BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
-			   "path_default_behaviour() failed", ec_);
+               "path_default_behaviour() failed", ec_);
       }
 
    private:
-     BOOST_APPLICATION_FEATURE_NS_SELECT::
-        shared_ptr<path_impl> impl_;
+
+      csbl::shared_ptr<path_impl> impl_;
 
       boost::system::error_code ec_;
 

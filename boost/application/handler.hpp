@@ -1,4 +1,4 @@
-//  handler.hpp ------------------------------------------------------------//
+//  handler.hpp --------------------------------------------------------------//
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2013 Renato Tegon Forti
@@ -52,8 +52,11 @@ namespace boost { namespace application {
    {
    public:
 
-      typedef boost::function< HandlerReturnType (context&) > parameter_callback;
-      typedef boost::function< HandlerReturnType (void)     > singleton_callback;
+      typedef boost::function< HandlerReturnType (context&) >
+         parameter_callback;
+
+      typedef boost::function< HandlerReturnType (void)     >
+         singleton_callback;
 
       /*!
        * Constructs an void handler.
@@ -198,4 +201,5 @@ namespace boost { namespace application {
 
 }} // boost::application
 
-#endif // BOOST_APPLICATION_ASPECT_TERMINATION_HANDLER_HPP
+#endif // BOOST_APPLICATION_HANDLER_HPP
+

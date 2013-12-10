@@ -17,6 +17,7 @@
 #define BOOST_APPLICATION_WAIT_FOR_TERMINATION_REQUEST_ASPECT_HPP
 
 #include <boost/application/config.hpp>
+#include <boost/application/detail/csbl.hpp>
 #if defined( BOOST_WINDOWS_API )
 #include <boost/application/detail/windows/wait_for_termination_request_impl.hpp>
 #elif defined( BOOST_POSIX_API )
@@ -27,17 +28,16 @@
 
 namespace boost { namespace application {
 
-    /*!
-     * \brief A contract class to be used by the user on your own
-     *        class implementation of wait_for_termination_request aspect.
-     *
-     */
+   /*!
+    * \brief A contract class to be used by the user on your own
+    *        class implementation of wait_for_termination_request aspect.
+    *
+    */
    class wait_for_termination_request : noncopyable
    {
    public:
       wait_for_termination_request() {}
       virtual ~wait_for_termination_request() {}
-
 
       /*!
        * Wait for termination request that need be
@@ -63,7 +63,7 @@ namespace boost { namespace application {
    {
    public:
       wait_for_termination_request_default_behaviour()
-         : impl_(new wait_for_termination_request_impl()) {}
+         : impl_(new wait_for_termination_request_impl()){}
 
       /*!
        * Wait for termination request.
@@ -82,8 +82,8 @@ namespace boost { namespace application {
       }
 
    private:
-      BOOST_APPLICATION_FEATURE_NS_SELECT::
-         shared_ptr<wait_for_termination_request_impl> impl_;
+
+      csbl::shared_ptr<wait_for_termination_request_impl> impl_;
 
    };
 

@@ -24,12 +24,7 @@ namespace boost { namespace application {
    /*!
     * \brief This aspect class is used internaly by applications types (modes)
     *
-    * Indicates how the application was created,
-    * 3 ways are possible:
-    *
-    * - created by the launcher as a Server (application_server)
-    * - created by an app launcher as Common/Interactive (application_common)
-    * - created directly by User (application_direct)
+    * Indicates how the application was created.
     *
     */
    class run_mode
