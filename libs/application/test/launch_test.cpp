@@ -183,7 +183,7 @@ int test_main(int argc, char** argv)
       }
       catch(boost::system::system_error& se)
       {
-         BOOST_CHECK(se.error_code() == 1063);
+         BOOST_CHECK(se.code().value() == 1063);
       }
    }
 
@@ -197,7 +197,7 @@ int test_main(int argc, char** argv)
       }
       catch(boost::system::system_error& se)
       {
-         BOOST_CHECK(se.error_code() == 1063);
+         BOOST_CHECK(se.code().value() == 1056);
       }
 
       boost::singularity<application::context>::destroy();
@@ -209,7 +209,7 @@ int test_main(int argc, char** argv)
 
       boost::system::error_code ec;
       int ret = application::launch<application::server>(app, cxt, ec);
-      BOOST_CHECK(ec.value() == 1063);
+      BOOST_CHECK(ec.value() == 1056);
    }
 
    {
@@ -218,7 +218,7 @@ int test_main(int argc, char** argv)
 
       boost::system::error_code ec;
       int ret = application::launch<application::server>(app, global_context, ec);
-      BOOST_CHECK(ec.value() == 1063);
+      BOOST_CHECK(ec.value() == 1056);
 
       boost::singularity<application::context>::destroy();
    }
@@ -236,7 +236,7 @@ int test_main(int argc, char** argv)
       }
       catch(boost::system::system_error& se)
       {
-         BOOST_CHECK(se.error_code() == 1063);
+         BOOST_CHECK(se.code().value() == 1056);
       }
    }
 
@@ -251,7 +251,7 @@ int test_main(int argc, char** argv)
       }
       catch(boost::system::system_error& se)
       {
-         BOOST_CHECK(se.error_code() == 1063);
+         BOOST_CHECK(se.code().value() == 1056);
       }
 
       boost::singularity<application::context>::destroy();
@@ -264,7 +264,7 @@ int test_main(int argc, char** argv)
 
       boost::system::error_code ec;
       int ret = application::launch<application::server>(app, sm, cxt, ec);
-      BOOST_CHECK(ec.value() == 1063);
+      BOOST_CHECK(ec.value() == 1056);
    }
 
    {
@@ -274,7 +274,7 @@ int test_main(int argc, char** argv)
 
       boost::system::error_code ec;
       int ret = application::launch<application::server>(app, sm, global_context, ec);
-      BOOST_CHECK(ec.value() == 1063);
+      BOOST_CHECK(ec.value() == 1056);
 
       boost::singularity<application::context>::destroy();
    }
@@ -364,6 +364,7 @@ int test_main(int argc, char** argv)
 
    return 0;
 }
+
 
 
 

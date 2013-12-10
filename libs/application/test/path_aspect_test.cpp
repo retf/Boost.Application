@@ -27,7 +27,7 @@ int test_main(int argc, char** argv)
 
    if (GetModuleFileName(0, module_name, sizeof(module_name)) > 0)
    {
-      module_path_name = string_type(module_name);
+      module_path_name = std::string(module_name);
    }
 #elif defined( BOOST_POSIX_API )
    std::string command = argv[0];
@@ -67,6 +67,4 @@ int test_main(int argc, char** argv)
 
    return 0;
 }
-
-
 
