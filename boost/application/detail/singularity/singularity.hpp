@@ -109,7 +109,7 @@ template <class T> typename singularity_instance<T>::ptrtype singularity_instanc
 } // detail namespace
 
 // And now, presenting the singularity class itself.
-template <class T, template <class T> class M = single_threaded>
+template <class T, template <class X> class M = single_threaded>
 class singularity
 {
 public:
