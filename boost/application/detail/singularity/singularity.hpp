@@ -34,7 +34,13 @@
 #define SINGULARITY_HPP
 
 #include <exception>
+#include <boost/config.hpp>
+
+#if defined( BOOST_NO_CXX11_SMART_PTR )
 #include <boost/scoped_ptr.hpp>
+#endif
+
+#if defined( BOOST_NO_CXX11_VARIADIC_TEMPLATES )
 #include <boost/mpl/assert.hpp>
 #include <boost/preprocessor/control/if.hpp>
 #include <boost/preprocessor/punctuation/comma_if.hpp>
@@ -45,6 +51,7 @@
 #include <boost/preprocessor/arithmetic/div.hpp>
 #include <boost/preprocessor/arithmetic/mod.hpp>
 #include "detail/pow2.hpp"
+#endif
 
 #include "singularity_policies.hpp"
 
@@ -98,13 +105,21 @@ namespace detail {
 // model, only one singularity of type T can be created.
 template <class T> struct singularity_instance
 {
-    typedef ::boost::scoped_ptr<T> ptrtype;
     static bool get_enabled;
-    static ptrtype ptr;
+#if defined( BOOST_NO_CXX11_SMART_PTR )
+    typedef ::boost::scoped_ptr<T> ptrtype;
+    static ::boost::scoped_ptr<T> ptr;
+#else
+    static std::unique_ptr<T> ptr;
+#endif
 };
 
 template <class T> bool singularity_instance<T>::get_enabled = false;
+#if defined( BOOST_NO_CXX11_SMART_PTR )
 template <class T> typename singularity_instance<T>::ptrtype singularity_instance<T>::ptr(0);
+#else
+template <class T> std::unique_ptr<T> singularity_instance<T>::ptr(nullptr);
+#endif
 
 } // detail namespace
 
@@ -113,6 +128,8 @@ template <class T, template <class X> class M = single_threaded>
 class singularity
 {
 public:
+
+#if defined( BOOST_NO_CXX11_VARIADIC_TEMPLATES )
 // Generate the 2^(n+1)-1 which is O(2^n) create(...) function overloads
 // where n is the maximum number of constructor arguments.
 //
@@ -163,6 +180,37 @@ BOOST_PP_REPEAT(BOOST_PP_INC(BOOST_SINGULARITY_PERFECT_FORWARD_ARG_SIZE), \
 #undef SINGULARITY_CREATE_BODY
 #undef SINGULARITY_CREATE_ENABLE_GET_BODY
 #undef SINGULARITY_CREATE_ARGUMENTS
+
+#else
+
+    template <class ...A>
+    static inline T& create(A && ...args)
+    {
+        M<T> guard;
+        (void)guard;
+
+        verify_not_created();
+
+        detail::singularity_instance<T>::get_enabled = false;
+        detail::singularity_instance<T>::ptr.reset(new T(std::forward<A>(args)...));
+        return *detail::singularity_instance<T>::ptr;
+    }
+
+    template <class ...A>
+    static inline T& create_global(A && ...args)
+    {
+        M<T> guard;
+        (void)guard;
+
+        verify_not_created();
+
+        detail::singularity_instance<T>::get_enabled = true;
+        detail::singularity_instance<T>::ptr.reset(new T(std::forward<A>(args)...));
+        return *detail::singularity_instance<T>::ptr;
+    }
+
+
+#endif
 
 // Generates: Family of create(...) functions
 #define SINGULARITY_CREATE_ARGUMENTS(z, n, text) BOOST_PP_COMMA_IF(n) A##n & arg##n
@@ -217,6 +265,9 @@ BOOST_PP_REPEAT(BOOST_PP_INC(BOOST_SINGULARITY_PERFECT_FORWARD_ARG_SIZE), \
             BOOST_THROW_EXCEPTION(singularity_already_destroyed());
         }
 
+#if !defined( BOOST_NO_CXX11_SMART_PTR )
+        delete detail::singularity_instance<T>::ptr.get();
+#endif
         detail::singularity_instance<T>::ptr.reset();
     }
 
