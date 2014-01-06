@@ -32,7 +32,7 @@
 // refer to the above link to know more:
 // http://www.boost.org/community/review_schedule.html
 //#include <boost/singularity/singularity.hpp>
-#include <singularity.hpp>
+#include <boost/application/detail/singularity/singularity.hpp>
 
 namespace boost { namespace application {
 
