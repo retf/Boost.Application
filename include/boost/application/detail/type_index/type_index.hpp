@@ -23,7 +23,7 @@
 /// even if RTTI is disabled) used instead of this class.  
 
 #include <boost/config.hpp>
-#include <boost/type_index/type_info.hpp>
+#include "type_info.hpp"
 
 // MSVC is capable of calling typeid(T) even when RTTI is off
 #if (!defined(BOOST_NO_RTTI) && !defined(BOOST_TYPE_INDEX_FORCE_NO_RTTI_COMPATIBILITY)) || defined(BOOST_MSVC)
@@ -208,7 +208,7 @@ inline std::size_t hash_value(type_index const& v) BOOST_NOEXCEPT {
 
 #else // (!defined(BOOST_NO_RTTI) && !defined(BOOST_TYPE_INDEX_FORCE_NO_RTTI_COMPATIBILITY)) || defined(BOOST_MSVC)
 
-#include <boost/type_index/template_index.hpp>
+#include <template_index.hpp>
 namespace boost {
 
 typedef template_index type_index;

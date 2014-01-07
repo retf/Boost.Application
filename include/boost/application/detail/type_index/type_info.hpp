@@ -328,7 +328,7 @@ inline std::size_t hash_value(type_info const& v) BOOST_NOEXCEPT {
 } // namespace boost
 
 #else // !defined(BOOST_NO_RTTI) && !defined(BOOST_TYPE_INDEX_FORCE_NO_RTTI_COMPATIBILITY)
-#   include <boost/type_index/template_info.hpp>
+#   include <template_info.hpp>
 #   include <boost/static_assert.hpp>
 
 namespace boost {

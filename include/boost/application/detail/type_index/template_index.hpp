@@ -21,7 +21,7 @@
 /// boost::template_index is just a typedef of boost::template_info, that combines functionality
 /// of boost::type_info and boost::type_index but can work with RTTI disabled.
 
-#include <boost/type_index/template_info.hpp>
+#include "template_info.hpp"
 
 namespace boost {
 

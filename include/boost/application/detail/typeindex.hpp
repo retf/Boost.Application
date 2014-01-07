@@ -23,7 +23,7 @@
 #elif defined( BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST )
 #   include "type_index/type_info.hpp"
 #   include "type_index/type_index.hpp"
-#   include "type_index/template_info.h-pp"
+#   include "type_index/template_info.hpp"
 #   include "type_index/template_index.hpp"
 #else
 #   ifndef BOOST_NO_CXX11_HDR_TYPEINDEX
@@ -31,7 +31,7 @@
 #   else
 #      include "type_index/type_info.hpp"
 #      include "type_index/type_index.hpp"
-#      include "type_index/template_info.h-pp"
+#      include "type_index/template_info.hpp"
 #      include "type_index/template_index.hpp"
 #   endif
 #endif
