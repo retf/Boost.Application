@@ -385,8 +385,8 @@ namespace boost { namespace application {
          char_type serviceDescription[2048];
 
 #if defined(BOOST_APPLICATION_STD_WSTRING)
-         wcscpy_s(serviceDescription, sizeof(serviceDescription),
-                  service_description_.c_str());
+         wcscpy_s(serviceDescription, sizeof(serviceDescription) / sizeof(serviceDescription[0]),
+             service_description_.c_str());
 #else
          strcpy_s(serviceDescription, sizeof(serviceDescription),
                   service_description_.c_str());
