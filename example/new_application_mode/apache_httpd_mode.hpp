@@ -10,7 +10,6 @@
 
 #include <boost/application/config.hpp>
 #include <boost/application/context.hpp>
-//#include <boost/application/detail/app.hpp>
 #include <boost/application/detail/csbl.hpp>
 #include <boost/application/application_initializers.hpp>
 #include <boost/application/application_mode_register.hpp>
@@ -114,28 +113,28 @@ public:
       return id;
    }
 
-   template <typename Application, typename CustomType>
-   apache2_httpd_mod(Application& myapp, CustomType &ct, 
+   template <typename Application, typename RequestRec>
+   apache2_httpd_mod(Application& myapp, RequestRec &rr, 
       context &cxt, boost::system::error_code& ec)
       : error_(OK) 
    {
-      handle_request(myapp, ct, cxt);
+      handle_request(myapp, rr, cxt);
    }
 
-   template <typename Application, typename CustomType>
-   apache2_httpd_mod(Application& myapp, CustomType &ct, 
+   template <typename Application, typename RequestRec>
+   apache2_httpd_mod(Application& myapp, RequestRec &rr, 
       boost::singularity<context> &cxt, boost::system::error_code& ec)
       : error_(OK) 
    {
-      handle_request(myapp, ct, cxt.get_global());
+      handle_request(myapp, rr, cxt.get_global());
    }
 
    int run() { return error_; }
 
 protected:
 
-   template <typename Application, typename CustomType>
-   void handle_request(Application& myapp, CustomType &ct, context &cxt)
+   template <typename Application, typename RequestRec>
+   void handle_request(Application& myapp, RequestRec &rr, context &cxt)
    {
       // default impl aspects
 
@@ -158,7 +157,7 @@ protected:
          error_ = DECLINED; return;
       }
 
-      if (strcmp(ct.handler, appname->web_app_name_.c_str())) 
+      if (strcmp(rr.handler, appname->web_app_name_.c_str())) 
       {
          error_ = DECLINED; return;
       }
@@ -168,7 +167,7 @@ protected:
       // Add other http verbs 
       // ...
 
-      if(ct.method_number != M_GET)
+      if(rr.method_number != M_GET)
       {
          error_ = HTTP_METHOD_NOT_ALLOWED; return;
       }
@@ -181,15 +180,15 @@ protected:
       if(http_get_verb)
       {
          // apache log 
-         cxt.insert<apache_log>(csbl::make_shared<apache_log>(&ct));
+         cxt.insert<apache_log>(csbl::make_shared<apache_log>(&rr));
 
          csbl::shared_ptr<content_type> contenttype = 
             cxt.find<content_type>();
 
          if(contenttype)
-            ap_set_content_type(&ct, contenttype->content_type_.c_str());
+            ap_set_content_type(&rr, contenttype->content_type_.c_str());
          else
-            ap_set_content_type(&ct, "text/html;charset=ascii");
+            ap_set_content_type(&rr, "text/html;charset=ascii");
 
          // check if we have any callback to call
 
@@ -197,14 +196,14 @@ protected:
 
          if(http_get_verb->callback(parameter))
          {
-            ap_rputs((*parameter)(cxt).c_str(), &ct); return;
+            ap_rputs((*parameter)(cxt).c_str(), &rr); return;
          }
 
          handler<std::string>::singleton_callback* singleton = 0;
 
          if(http_get_verb->callback(singleton))
          {
-            ap_rputs((*singleton)().c_str(), &ct); return;
+            ap_rputs((*singleton)().c_str(), &rr); return;
          }
       }
 
@@ -239,3 +238,4 @@ module AP_MODULE_DECLARE_DATA m = {                                            \
 }; }
 
 #endif // BOOST_APPLICATION_MY_APPLICATION_MODE_HPP
+

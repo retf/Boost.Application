@@ -40,7 +40,12 @@ public:
           << "   </head>"
           << ""
           << "   <body>"
-          << "      <h1> Hello! </h1>"
+          << "      <h1> Hello Boost.Application Version " 
+          << application::library_version_string() << "!"
+          << "      </h1>"
+          << "      <br/>"
+          << "      Apache HTTPd Mod."
+          << "      <br/>"
           << "   </body>"
           << "</html>"
           ;

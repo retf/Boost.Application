@@ -307,14 +307,15 @@ namespace boost { namespace application {
          const setup_type<T> &service_name,
          const setup_type<T> &service_display_name,
          const setup_type<T> &service_description,
-         const setup_type<T> &service_path_name)
+         const setup_type<T> &service_path_name,
+         const setup_type<T> &service_option_string = setup_type<T>(""))
       {
          service_name_ = service_name.get();
          service_display_name_ = service_display_name.get();
          service_description_ = service_description.get();
          service_path_name_ = service_path_name.get();
+         service_option_string_ = service_option_string.get();
       }
-
 
       virtual ~install_windows_service_()
       {
@@ -352,8 +353,12 @@ namespace boost { namespace application {
 
          windows_scm scm(SC_MANAGER_CREATE_SERVICE);
 
+         std::basic_string<char_type> pathname = service_path_name_;
          // Append the switch that causes the process to run as a service.
-         // std::string pathname = service_path_name + TEXT(" --server");
+         if(service_option_string_.size()) {
+            pathname = service_path_name_ + service_option_string_;
+            // e.g. c:\myservice\service.exe --s
+         }
 
          // Add this service to the SCM's database.
          SC_HANDLE hservice = CreateService(
@@ -364,7 +369,7 @@ namespace boost { namespace application {
             SERVICE_WIN32_OWN_PROCESS,
             SERVICE_AUTO_START,
             SERVICE_ERROR_NORMAL,
-            service_path_name_.c_str(),
+            pathname.c_str(),
             NULL,
             NULL,
             NULL, // service dependencies
@@ -469,6 +474,7 @@ namespace boost { namespace application {
       std::basic_string<char_type> service_display_name_;
       std::basic_string<char_type> service_description_;
       std::basic_string<char_type> service_path_name_;
+      std::basic_string<char_type> service_option_string_;
 
    }; // install_windows_service
 
