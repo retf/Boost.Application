@@ -15,6 +15,10 @@ contact: re.tf@acm.org
 
 [Online Docs] (http://www.dokfile.com/appbeta4/docs/libs/application/doc/html/index.html)
 
+###Articles
+
+[Creating a New Application Mode] (http://www.codeproject.com/Articles/695937/Creating-a-New-Application-Mode)
+
 ###Installation Notes
 
 Boost.Application uses two libraries that are not part of boost yet, you need install these libraries on you boost:
