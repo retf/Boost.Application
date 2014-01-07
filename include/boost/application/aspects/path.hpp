@@ -174,7 +174,7 @@ namespace boost { namespace application {
        * Constructs an path_default_behaviour_.
        *
        * \param argc An argc from main.
-       * \param argc An argv from main.
+       * \param argv An argv from main.
        * \param ec Variable (boost::system::error_code) that will be
        *        set to the result of the operation.
        *
@@ -187,7 +187,7 @@ namespace boost { namespace application {
        * Constructs an path_default_behaviour_.
        *
        * \param argc An argc from main.
-       * \param argc An argv from main.
+       * \param argv An argv from main.
        *
        */
       path_default_behaviour_(int argc, char_type *argv[])
