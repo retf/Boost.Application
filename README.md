@@ -3,6 +3,8 @@
 * This release will be identified as : 0.4
 * To get 0.3 (older version) refer to: [0.3] (https://sourceforge.net/projects/boostapp/)
 
+In line with new Boost Git Structure
+
 contact: re.tf@acm.org
 
 ###Acknowledgements
@@ -21,6 +23,8 @@ Boost.Application uses two libraries that are not part of boost yet, you need in
 * [Singularity] (https://github.com/cppmaven/Singularity)
 
 Full Reference (http://www.boost.org/community/review_schedule.html)
+
+Building: Detailed instructions can be found [here] (https://svn.boost.org/trac/boost/wiki/TryModBoost).
 
 ### Questions, suggestions or bugs, please send an email to: 
 
