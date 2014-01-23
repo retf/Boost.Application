@@ -46,11 +46,6 @@ project
 
    # our test lib for shared library tests
    lib test_library : test_library.cpp ; 
-   install install-bin 
-      : test_library : 
-      <target-os>windows:<location>"C:/test/boost/application" 
-      <target-os>linux:<location>/test/boost/application 
-      ; 
   
    test-suite application
       : 
