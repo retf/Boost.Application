@@ -265,9 +265,6 @@ BOOST_PP_REPEAT(BOOST_PP_INC(BOOST_SINGULARITY_PERFECT_FORWARD_ARG_SIZE), \
             BOOST_THROW_EXCEPTION(singularity_already_destroyed());
         }
 
-#if !defined( BOOST_NO_CXX11_SMART_PTR )
-        delete detail::singularity_instance<T>::ptr.get();
-#endif
         detail::singularity_instance<T>::ptr.reset();
     }
 
