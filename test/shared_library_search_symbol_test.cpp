@@ -8,19 +8,13 @@
 #include <boost/application/shared_library.hpp>
 #include <boost/test/minimal.hpp>
 
-#if defined( BOOST_WINDOWS_API )
-   const boost::filesystem::path shared_library_path("C:/test/boost/application/test_library.dll");
-#elif defined( BOOST_POSIX_API )
-   const boost::filesystem::path shared_library_path("/test/boost/application/libtest_library.so");
-#else
-#  error "Sorry, no boost application are available for this platform."
-#endif
-
 // Unit Tests
 
-int test_main(int, char*[])
+int test_main(int argc, char* argv[])
 {
    using namespace boost::application;
+
+   const boost::filesystem::path shared_library_path(argv[1]);
 
    {
       shared_library sl(library(shared_library_path));

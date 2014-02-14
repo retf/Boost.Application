@@ -76,9 +76,9 @@ project
       #
       # shared library
       #
-      #[ run shared_library_load_test.cpp ]
-      #[ run shared_library_search_symbol_test.cpp ]
-      #[ run shared_library_get_symbol_test.cpp ]
+      [ run shared_library_load_test.cpp : : test_library ]
+      [ run shared_library_search_symbol_test.cpp : : test_library ]
+      [ run shared_library_get_symbol_test.cpp : : test_library ]
       #
       #
 
