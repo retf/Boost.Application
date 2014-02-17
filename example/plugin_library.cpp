@@ -52,3 +52,53 @@ void delete_my_plugin(my_plugin_api* myplugin)
 }
 //]
 
+
+// platform dependent initialization sample
+//
+
+#if defined( BOOST_WINDOWS_API )
+
+// return TRUE on success and FALSE if an error occurs. returning
+// FALSE will cause the library to be unloaded.
+BOOL WINAPI DllMain
+(
+    HINSTANCE hinstDLL,
+    DWORD fdwReason,
+    LPVOID lpReserved
+)
+{
+    switch (fdwReason)
+    {
+    case DLL_PROCESS_ATTACH:
+        // add initialization code...
+        break;
+    case DLL_PROCESS_DETACH:
+        // add clean-up code...
+        break;
+    }
+
+    return (TRUE);
+}
+
+#elif defined( BOOST_POSIX_API )
+
+// GCC
+void __attribute__ ((constructor)) my_load(void);
+void __attribute__ ((destructor)) my_unload(void);
+
+// called when the library is loaded and before dlopen() returns
+void my_load(void)
+{
+   // Add initialization code…
+}
+
+// called when the library is unloaded and before dlclose() returns
+void my_unload(void)
+{
+   // Add clean-up code…
+}
+
+#endif
+
+
+

@@ -75,6 +75,10 @@ exe termination_handler
    : termination_handler.cpp
    ;
 
+exe termination_handler_using_singularity
+   : termination_handler_using_singularity.cpp
+   ;
+   
 exe my_own_termination_handler
    : my_own_termination_handler.cpp
    ;
