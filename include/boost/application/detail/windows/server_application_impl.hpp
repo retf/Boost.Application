@@ -34,7 +34,7 @@
 // Note that singularity is in approval process,
 // refer to the above link to know more:
 // http://www.boost.org/community/review_schedule.html
-#include <boost/singularity/singularity.hpp>
+#include <boost/application/detail/singularity/singularity.hpp>
 
 #ifdef BOOST_MSVC
 #  pragma warning(push)
