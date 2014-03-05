@@ -20,6 +20,28 @@
 
 #if defined( BOOST_POSIX_API )
 #include <dlfcn.h>
+#elif defined( BOOST_WINDOWS_API )
+// workaround [
+#   ifndef LOAD_LIBRARY_SEARCH_APPLICATION_DIR
+#      define LOAD_LIBRARY_SEARCH_APPLICATION_DIR 0x00000200
+#   endif
+
+#   ifndef LOAD_LIBRARY_SEARCH_DEFAULT_DIRS
+#      define LOAD_LIBRARY_SEARCH_DEFAULT_DIRS    0x00001000
+#   endif
+
+#   ifndef LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR
+#      define LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR    0x00000100
+#   endif
+
+#   ifndef LOAD_LIBRARY_SEARCH_SYSTEM32
+#      define LOAD_LIBRARY_SEARCH_SYSTEM32        0x00000800
+#   endif
+
+#   ifndef LOAD_LIBRARY_SEARCH_USER_DIRS
+#      define LOAD_LIBRARY_SEARCH_USER_DIRS       0x00000400
+#   endif
+// ] end workaround
 #endif
 
 namespace boost { namespace application {
@@ -163,6 +185,19 @@ namespace boost { namespace application {
       load_library_as_datafile                = LOAD_LIBRARY_AS_DATAFILE,            // 0x00000002
       load_library_as_datafile_exclusive      = LOAD_LIBRARY_AS_DATAFILE_EXCLUSIVE,  // 0x00000040
       load_library_as_image_resource          = LOAD_LIBRARY_AS_IMAGE_RESOURCE,      // 0x00000020
+
+      // About LOAD_LIBRARY_SEARCH_APPLICATION_DIR, 
+      //       LOAD_LIBRARY_SEARCH_DEFAULT_DIRS, 
+      //       LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR,
+      //       LOAD_LIBRARY_SEARCH_SYSTEM32 and
+      //       LOAD_LIBRARY_SEARCH_USER_DIRS
+      //
+      // Minimum supported client :  Windows 8 
+      // Minimum supported server : Windows Server 2012 
+      //
+      // To Windows 7, Windows Server 2008 R2, Windows Vista, 
+      // and Windows Server 2008: KB2533623 must be installed on the target platform.
+
 #   ifndef _USING_V110_SDK71_
       // when user uses: Visual Studio 2012 - Windows XP (v110_xp), we need hide following enums :
       load_library_search_application_dir     = LOAD_LIBRARY_SEARCH_APPLICATION_DIR, // 0x00000200
@@ -172,6 +207,7 @@ namespace boost { namespace application {
       load_library_search_user_dirs           = LOAD_LIBRARY_SEARCH_USER_DIRS,       // 0x00000400
       // <-
 #   endif
+
       load_with_altered_search_path           = LOAD_WITH_ALTERED_SEARCH_PATH        // 0x00000008
 #elif defined( BOOST_POSIX_API )
       // posix
