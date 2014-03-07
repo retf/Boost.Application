@@ -1,0 +1,72 @@
+I) Installation
+
+1) Substitute your daemon’s name for “mydaemon”.
+
+sudo cp /etc/init.d/skeleton /etc/init.d/mydaemon
+sudo chmod +x /etc/init.d/mydaemon
+sudo vi /etc/init.d/mydaemon
+
+2) Update your start/stop script.
+
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+DESC="Description of the service"
+NAME=daemonexecutablename
+DAEMON=/usr/bin/$NAME
+DAEMON_ARGS="--options args"
+PIDFILE=/var/run/$NAME.pid
+SCRIPTNAME=/etc/init.d/$NAME
+
+Update DESC to a meaningful description of your daemon.
+Update NAME to the exact name of your daemon.
+
+3) Update your daemon to exec.
+
+sudo chmod +x /usr/bin/mydaemon
+
+II) Management
+
+a) Run your Daemon
+
+sudo /etc/init.d/mydaemon start
+
+b) Stop your Daemon
+
+sudo /etc/init.d/mydaemon stop
+
+c) Restart your Daemon
+
+sudo /etc/init.d/mydaemon restart
+
+d) Automatically Start your Daemon
+
+This command tells your system to start your daemon automatically when the system starts:
+
+update-rc.d mydaemon defaults 99
+
+To keep your daemon from starting, if needed:
+
+update-rc.d -f mydaemon remove
+
+List running daemons
+
+e) Well-behaved daemons generally create a PID file in /var/run/. List that directory and your have a fair list of running daemons.
+
+sudo ls /var/run/
+
+f) Get PID for a particular daemon
+
+If you know the name of a daemon and want to see if it is running and get its PID, use pgrep.
+
+pgrep mydaemon
+
+g) Also useful is the ps command, which list processes.
+
+ps aux
+
+The aux switch limits output to processes not associated with a terminal.
+
+h) Show programs running as daemons
+
+This line attempts to show programs that are running as daemons.
+
+which `ps aux | cut -c 66- | cut -d\  -f 1` | sort | uniq

@@ -301,19 +301,23 @@ namespace boost { namespace application {
    public:
 
       typedef value_type char_type;
-
+			
       template <typename T>
       install_windows_service_(
          const setup_type<T> &service_name,
          const setup_type<T> &service_display_name,
          const setup_type<T> &service_description,
-         const setup_type<T> &service_path_name,
+         const setup_type<T> &service_path_name,		 
+         const setup_type<T> &service_user = setup_type<T>(""),
+         const setup_type<T> &service_password = setup_type<T>(""),
          const setup_type<T> &service_option_string = setup_type<T>(""))
       {
          service_name_ = service_name.get();
          service_display_name_ = service_display_name.get();
          service_description_ = service_description.get();
          service_path_name_ = service_path_name.get();
+         service_user_ = service_user.get();
+         service_password_ = service_password.get();
          service_option_string_ = service_option_string.get();
       }
 
@@ -380,6 +384,42 @@ namespace boost { namespace application {
          {
             ec = last_error_code();
             return;
+         }
+		 
+		   bool succeed = false;
+
+         // grant user "Login as a Service" permission.
+         if ( !service_user_.empty() ) 
+         {
+            std::basic_string<char_type> actual_service_user;
+            if ( service_user_.find(std::basic_string<char_type>("\\")) ==  std::basic_string<char_type>::npos ) 
+            {
+               actual_service_user = std::basic_string<char_type>(".\\") + service_user_;
+            }
+            else 
+            {
+               actual_service_user = service_user_;
+            }
+	
+            // If the function succeeds, the return value is nonzero.
+            succeed = ::ChangeServiceConfig(
+               hservice,                   // service handle
+               SERVICE_NO_CHANGE,          // service type
+               SERVICE_NO_CHANGE,          // start type
+               SERVICE_NO_CHANGE,          // error control
+               NULL,                       // path
+               NULL,                       // load order group
+               NULL,                       // tag id
+               NULL,                       // dependencies
+               actual_service_user.c_str(),      // user account
+               service_password_.c_str(),  // user account password
+               NULL );                     // service display name
+
+            if ( !succeed )
+            {
+               ec = last_error_code();
+               return;
+            }
          }
 
          char_type serviceDescription[2048];
@@ -475,6 +515,9 @@ namespace boost { namespace application {
       std::basic_string<char_type> service_description_;
       std::basic_string<char_type> service_path_name_;
       std::basic_string<char_type> service_option_string_;
+	  
+	  std::basic_string<char_type> service_user_;
+	  std::basic_string<char_type> service_password_;
 
    }; // install_windows_service
 

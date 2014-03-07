@@ -71,19 +71,15 @@
 // force selection
 #if defined( BOOST_APPLICATION_FEATURE_NS_SELECT_STD )
 #   define BOOST_APPLICATION_FEATURE_NS_SELECT std
-#   define BOOST_APPLICATION_TYPE_INDEX_SELECT std
 #elif defined( BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST )
 #   define BOOST_APPLICATION_FEATURE_NS_SELECT boost
-#   define BOOST_APPLICATION_TYPE_INDEX_SELECT boost::typeind
 #else // auto detect
 // BOOST_APPLICATION_FEATURE_NS_SELECT is used to select correct ns
 // on class members.
 #   ifndef BOOST_NO_CXX11_SMART_PTR
 #      define BOOST_APPLICATION_FEATURE_NS_SELECT std
-#      define BOOST_APPLICATION_TYPE_INDEX_SELECT std
 #   else
 #      define BOOST_APPLICATION_FEATURE_NS_SELECT boost
-#      define BOOST_APPLICATION_TYPE_INDEX_SELECT boost::typeind
 #   endif
 #endif
 
@@ -92,7 +88,7 @@
 #define BOOST_APPLICATION_FEATURE_SELECT                                       \
    using BOOST_APPLICATION_FEATURE_NS_SELECT::make_shared;                     \
    using BOOST_APPLICATION_FEATURE_NS_SELECT::shared_ptr;                      \
-   using BOOST_APPLICATION_TYPE_INDEX_SELECT::type_index;                      \
+   using BOOST_APPLICATION_FEATURE_NS_SELECT::type_index;                      \
    using BOOST_APPLICATION_FEATURE_NS_SELECT::unordered_map;                   \
    using BOOST_APPLICATION_FEATURE_NS_SELECT::static_pointer_cast;
 

@@ -25,7 +25,9 @@
 // platform dependent
 #if defined( BOOST_WINDOWS_API )
 #include <boost/application/detail/windows/server_application_impl.hpp>
-#include <boost/application/detail/windows/service_setup.hpp>
+// moved to examples folder: 
+// #include <boost/application/detail/windows/service_setup.hpp>
+// example/setup/windows/setup/service_setup.hpp
 #elif defined( BOOST_POSIX_API )
 #include <boost/application/detail/posix/server_application_impl.hpp>
 #else
