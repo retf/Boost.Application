@@ -27,12 +27,6 @@
 #include <boost/application/detail/ensure_single_instance.hpp>
 #include <boost/application/detail/csbl.hpp>
 
-// Note that singularity is in approval process,
-// refer to the above link to know more:
-// http://www.boost.org/community/review_schedule.html
-// #include <boost/singularity/singularity.hpp>
-#include <singularity.hpp>
-
 namespace boost { namespace application {
 
    /*!
@@ -128,12 +122,12 @@ namespace boost { namespace application {
    template <typename ApplicationMode, typename Application,
       typename CustomType>
    inline int launch(Application& app, CustomType& ct,
-      singularity<context> &cxt,
+      global_context_ptr cxt,
       system::error_code& ec)
    {
       // the ensure_single_instance tell us to exit?
       bool we_need_exit =
-         detail::ensure_single_instance(cxt.get_global(), ec);
+         detail::ensure_single_instance(*cxt.get(), ec);
 
       if(ec) return 0;
       if(we_need_exit) return 0;
@@ -204,7 +198,7 @@ namespace boost { namespace application {
     */
    template <typename ApplicationMode, typename Application>
    inline int launch(Application& app,
-      singularity<context> &cxt, system::error_code& ec)
+      global_context_ptr cxt, system::error_code& ec)
    {
       signal_manager ct(cxt, ec); // our default custom type
 
@@ -275,7 +269,7 @@ namespace boost { namespace application {
    template <typename ApplicationMode, typename Application,
       typename CustomType>
    inline int launch(Application& app, CustomType& ct,
-      singularity<application::context> &cxt)
+      global_context_ptr cxt)
    {
       system::error_code ec; int ret = 0;
       ret = launch<ApplicationMode>(app, ct, cxt, ec);
@@ -332,7 +326,7 @@ namespace boost { namespace application {
     */
    template <typename ApplicationMode, typename Application>
    inline int launch(Application& app,
-      singularity<context> &cxt)
+      global_context_ptr cxt)
    {
       system::error_code ec; int ret = 0;
       ret = launch<ApplicationMode>(app, cxt, ec);

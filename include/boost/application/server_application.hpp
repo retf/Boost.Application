@@ -126,21 +126,21 @@ namespace boost { namespace application {
        */
       template <typename Application, typename SignalManager>
       server(Application& myapp, SignalManager &sm,
-             singularity<application::context> &context,
+             global_context_ptr context,
              boost::system::error_code& ec)
       {
 
          // default aspects patterns added to this kind of application
 
-         if(!context.get_global().find<run_mode>())
+         if(!context->find<run_mode>())
          {
-             context.get_global().insert<run_mode>(
+             context->insert<run_mode>(
                csbl::make_shared<run_mode>(mode()));
          }
 
-         if(!context.get_global().find<status>())
+         if(!context->find<status>())
          {
-             context.get_global().insert<status>(
+             context->insert<status>(
                csbl::make_shared<status>(status::running));
          }
 

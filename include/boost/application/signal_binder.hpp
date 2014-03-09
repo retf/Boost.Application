@@ -28,12 +28,6 @@
 #include <boost/application/aspects/termination_handler.hpp>
 #include <boost/application/aspects/wait_for_termination_request.hpp>
 
-// Note that singularity is in approval process,
-// refer to the above link to know more:
-// http://www.boost.org/community/review_schedule.html
-//#include <boost/singularity/singularity.hpp>
-#include <singularity.hpp>
-
 namespace boost { namespace application {
 
    // This is an attempt to make things more flexible,
@@ -53,6 +47,8 @@ namespace boost { namespace application {
    {
       template<class> friend class common_application_impl_;
       template<class> friend class server_application_impl_;
+   private:
+      application::global_context_ptr context_ptr_;
 
    public:
       explicit signal_binder(context &cxt)
@@ -66,8 +62,9 @@ namespace boost { namespace application {
             boost::asio::placeholders::signal_number));
       }
 
-      explicit signal_binder(singularity<context> &cxt)
-         : context_(cxt.get_global())
+      explicit signal_binder(global_context_ptr cxt)
+         : context_ptr_(cxt)
+         , context_(*cxt.get())
          , signals_(io_service_)
          , io_service_thread_(0)
       {
@@ -277,7 +274,6 @@ namespace boost { namespace application {
       application::context &context_;
 
    private:
-
       // signal < handler / handler>
       // if first handler returns true, the second handler are called
       csbl::unordered_map<int, std::pair<handler<>, handler<> > > handler_map_;
@@ -319,14 +315,14 @@ namespace boost { namespace application {
                "signal_manager() failed", ec);
       }
 
-      signal_manager(singularity<context> &context,
+      signal_manager(global_context_ptr context,
          boost::system::error_code& ec)
          : signal_binder(context)
       {
          singleton_register_signals(ec);
       }
 
-      signal_manager(singularity<context> &context)
+      signal_manager(global_context_ptr context)
          : signal_binder(context)
       {
          boost::system::error_code ec;

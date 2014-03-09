@@ -32,6 +32,15 @@
 
 namespace boost { namespace application {
 
+namespace detail {
+   template <class T> struct T_instance
+   {
+      static csbl::shared_ptr<T> ptr;
+   };
+
+   template <class T> csbl::shared_ptr<T> T_instance<T>::ptr;
+} //application::detail
+
    /*!
     * \brief This class is the base of Boost.Application.
     *        This class can hold any apect, and user can add one,
@@ -48,13 +57,59 @@ namespace boost { namespace application {
     * you can use one of the ready-to-use aspects provided by library,
     * or define your own aspects.
     *
+    *
+    *
     */
-   class context
+   class basic_context
       : public aspect_map, noncopyable
    {
    public:
       // nothing here! Reserved for future use.
    };
+
+
+
+   class global_context : public basic_context
+   {
+   public:
+      static void create()
+      {
+         boost::mutex::scoped_lock(lock);
+         if(already_created())
+            throw std::logic_error("global context is already created");
+         instance_t::ptr.reset(new context_t());
+      }
+      static void destroy()
+      {
+         boost::mutex::scoped_lock(lock);
+         if(!already_created())
+         throw std::logic_error("no global context to destroy");
+         instance_t::ptr.reset();
+      }
+      static inline csbl::shared_ptr<global_context> get()
+      {
+         boost::mutex::scoped_lock(lock);
+         if(!already_created())
+            throw std::logic_error("global context is already created");
+         return instance_t::ptr;
+      }
+   protected:
+      global_context() { }
+   private:
+      typedef global_context context_t;
+      typedef detail::T_instance<context_t> instance_t;
+      typedef csbl::shared_ptr<context_t> context_ptr_t;
+      static inline bool already_created() {
+          return (instance_t::ptr != 0);
+      }
+      static boost::mutex lock;
+   };
+   boost::mutex global_context::lock;
+
+
+   typedef basic_context context;
+   typedef csbl::shared_ptr<global_context> global_context_ptr;
+   typedef csbl::shared_ptr<basic_context> context_ptr;
 
 }} // boost::application
 
