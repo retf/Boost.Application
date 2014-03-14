@@ -72,25 +72,26 @@ namespace detail {
    class global_context : public basic_context
    {
    public:
-      static void create()
+      static inline csbl::shared_ptr<global_context> create()
       {
          boost::mutex::scoped_lock(lock);
          if(already_created())
-            throw std::logic_error("global context is already created");
+            BOOST_THROW_EXCEPTION(std::logic_error("global context is already created"));
          instance_t::ptr.reset(new context_t());
+         return instance_t::ptr;
       }
-      static void destroy()
+      static inline void destroy()
       {
          boost::mutex::scoped_lock(lock);
          if(!already_created())
-         throw std::logic_error("no global context to destroy");
+         BOOST_THROW_EXCEPTION(std::logic_error("no global context to destroy"));
          instance_t::ptr.reset();
       }
       static inline csbl::shared_ptr<global_context> get()
       {
          boost::mutex::scoped_lock(lock);
          if(!already_created())
-            throw std::logic_error("global context is already created");
+            BOOST_THROW_EXCEPTION(std::logic_error("there is no global context"));
          return instance_t::ptr;
       }
    protected:
