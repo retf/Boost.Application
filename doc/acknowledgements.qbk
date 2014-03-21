@@ -10,7 +10,8 @@ A special thanks goes to [*Vicente J. Botet Escriba] that helped a lot on all ar
 
 Thanks to (chronological order):
 
-[*Benjamin Dieckmann] for your comments and help on posix side.[br]
+[*Sergei Nikulov] for provided fixes and patches.[br]
+[*Benjamin Dieckmann] for your comments and help on posix side and the singleton implementation inside lib.[br]
 [*Stanislav Ivochkin] for your comments and self-pipe aspect design.[br]
 [*Julian Gonggrijp] for your comments to improving the ease of use.[br]
 [*Jarrad Waterloo] for your comments and directions.

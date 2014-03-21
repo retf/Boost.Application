@@ -80,61 +80,16 @@ namespace boost { namespace application {
     *         to O.S.
     *
     */
+
    template <typename ApplicationMode, typename Application,
-      typename CustomType>
-   inline int launch(Application& app, CustomType& ct, context &cxt,
+      typename CustomType, typename Context>
+   inline int launch(Application& app, CustomType& ct, Context &cxt,
       system::error_code& ec)
    {
       // the ensure_single_instance tell us to exit?
-      bool we_need_exit = detail::ensure_single_instance(cxt, ec);
-
-      if(ec) return 0;
-      if(we_need_exit) return 0;
-
-      // all ok, istantiate application mode and start user code.
-
-      // tie ApplicationMode and User code, and then start it, after that,
-      // get result code.
-
-      // we need that Application Mode start function, because in server
-      // implementation, we need start it on a new thread.
-      return ApplicationMode(app, ct, cxt, ec).run();
-   }
-
-   /*!
-    * Creates a application, the ec ( boost::system::error_code& ec)
-    * will be set to the result of the operation, they should be
-    * tested for errors.
-    *
-    * \param app User application functor instance.
-    *
-    * \param ct The custom type of application, that will be passed
-    *        as paramenter to application type istead a default
-    *        custom type instance. User can customize this instance.
-    *
-    * \param context The "singularity" context of application,
-    *        that will be passed as paramenter to application operator
-    *        and populated with defaul aspects, depending on type of
-    *        application that are passed as ApplicationMode.
-    *
-    * \param ec Variable (boost::system::error_code) that will be
-    *        set to the result of the operation.
-    *
-    * \return the return of application operator of user functor
-    *         class that usually need be returned by main function
-    *         to O.S.
-    *
-    */
-   template <typename ApplicationMode, typename Application,
-      typename CustomType>
-   inline int launch(Application& app, CustomType& ct,
-      singularity<context> &cxt,
-      system::error_code& ec)
-   {
-      // the ensure_single_instance tell us to exit?
-      bool we_need_exit =
-         detail::ensure_single_instance(cxt.get_global(), ec);
-
+     
+      bool we_need_exit = detail::ensure_single_instance<Context>()(cxt, ec); 
+     
       if(ec) return 0;
       if(we_need_exit) return 0;
 
@@ -168,43 +123,9 @@ namespace boost { namespace application {
     *         to O.S.
     *
     */
-   template <typename ApplicationMode, typename Application>
-   inline int launch(Application& app, context &cxt,
+   template <typename ApplicationMode, typename Application, typename Context>
+   inline int launch(Application& app, Context &cxt,
       system::error_code& ec)
-   {
-      signal_manager ct(cxt, ec); // our default custom type
-
-      if(ec) return 0;
-
-      return launch<ApplicationMode>(app, ct, cxt, ec);
-   }
-
-   // singularity version, the ec (boost::system::error_code& ec) will be
-   // set to the result of the operation, they should be tested for errors.
-
-   /*!
-    * Creates a application, the ec ( boost::system::error_code& ec)
-    * will be set to the result of the operation, they should be
-    * tested for errors.
-    *
-    * \param app User application functor instance.
-    *
-    * \param context The "singularity" context of application,
-    *        that will be passed as paramenter to application operator
-    *        and populated with defaul aspects, depending on type of
-    *        application that are passed as ApplicationMode.
-    *
-    * \param ec Variable (boost::system::error_code) that will be
-    *        set to the result of the operation.
-    *
-    * \return the return of application operator of user functor
-    *         class that usually need be returned by main function
-    *         to O.S.
-    *
-    */
-   template <typename ApplicationMode, typename Application>
-   inline int launch(Application& app,
-      singularity<context> &cxt, system::error_code& ec)
    {
       signal_manager ct(cxt, ec); // our default custom type
 
@@ -215,9 +136,6 @@ namespace boost { namespace application {
 
    // throws an exception of type boost::system::system_error launch versions
 
-   // param version, throws an exception of type
-   // boost::system::system_error on error.
-
    /*!
     * Creates a application, throws an exception of type
     * boost::system::system_error on error.
@@ -239,43 +157,9 @@ namespace boost { namespace application {
     *
     */
    template <typename ApplicationMode, typename Application,
-      typename CustomType>
+      typename CustomType, typename Context>
    inline int launch(Application& app, CustomType& ct,
-      context &cxt)
-   {
-      system::error_code ec; int ret = 0;
-      ret = launch<ApplicationMode>(app, ct, cxt, ec);
-
-      if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
-	       "launch() failed", ec);
-
-      return ret;
-   }
-
-   /*!
-    * Creates a application, throws an exception of type
-    * boost::system::system_error on error.
-    *
-    * \param app User application functor instance.
-    *
-    * \param ct The custom type of application, that will be passed
-    *        as paramenter to application type istead a default
-    *        custom type instance. User can customize this instance.
-    *
-    * \param context The "singularity" context of application,
-    *        that will be passed as paramenter to application operator
-    *        and populated with defaul aspects, depending on type of
-    *        application that are passed as ApplicationMode.
-    *
-    * \return the return of application operator of user functor
-    *         class that usually need be returned by main function
-    *         to O.S.
-    *
-    */
-   template <typename ApplicationMode, typename Application,
-      typename CustomType>
-   inline int launch(Application& app, CustomType& ct,
-      singularity<application::context> &cxt)
+      Context &cxt)
    {
       system::error_code ec; int ret = 0;
       ret = launch<ApplicationMode>(app, ct, cxt, ec);
@@ -302,37 +186,8 @@ namespace boost { namespace application {
     *         to O.S.
     *
     */
-   template <typename ApplicationMode, typename Application>
-   inline int launch(Application& app, application::context &cxt)
-   {
-      system::error_code ec; int ret = 0;
-      ret = launch<ApplicationMode>(app, cxt, ec);
-
-      if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
-	       "launch() failed", ec);
-
-      return ret;
-   }
-
-   /*!
-    * Creates a application, throws an exception of type
-    * boost::system::system_error on error.
-    *
-    * \param app User application functor instance.
-    *
-    * \param context The "singularity" context of application,
-    *        that will be passed as paramenter to application operator
-    *        and populated with defaul aspects, depending on type of
-    *        application that are passed as ApplicationMode.
-    *
-    * \return the return of application operator of user functor
-    *         class that usually need be returned by main function
-    *         to O.S.
-    *
-    */
-   template <typename ApplicationMode, typename Application>
-   inline int launch(Application& app,
-      singularity<context> &cxt)
+   template <typename ApplicationMode, typename Application, typename Context>
+   inline int launch(Application& app, Context &cxt)
    {
       system::error_code ec; int ret = 0;
       ret = launch<ApplicationMode>(app, cxt, ec);
@@ -346,4 +201,3 @@ namespace boost { namespace application {
 }} // boost::application
 
 #endif // BOOST_APPLICATION_LAUNCH_HPP
-

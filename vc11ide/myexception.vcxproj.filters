@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\example\simple_application.cpp">
+    <ClCompile Include="..\example\myexception.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

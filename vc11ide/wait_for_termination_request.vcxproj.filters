@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\example\simple_application.cpp">
+    <ClCompile Include="..\example\wait_for_termination_request.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -6,6 +6,10 @@
 
 [section Revision History]
 
+[h5 0.4.5]
+
+In line with the last Boost.TypeIndex (typeind::type_index)
+
 [h5 0.4.4]
 
 New sample that show how user can extend the lib(new_application_mode)

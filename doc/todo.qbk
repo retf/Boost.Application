@@ -9,7 +9,13 @@
 This session present ideas from Boost Mailing list to be implemented on Boost.Application. If you have any idea, or want contribute with this lib in anyway, let me know!
 
 [section TODO]
- * nothing until the moment.
+
+ * Refectory installation code (windows) and move it to examples folder;
+ * Remove Boost.Singularity and make a way to context be used as singleton (This already started -> https://github.com/retf/Boost.Application/tree/feature/remove_singularity)
+ * Finish tests cases;
+ * Revise / improve (a lot) the documentation;
+ * Provide more real samples, like web server, smtp server and so on.
+
 [endsect]
 
 [section Future Releases]

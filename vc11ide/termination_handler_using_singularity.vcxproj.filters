@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\example\tutorial\main_stage3.cpp">
+    <ClCompile Include="..\example\termination_handler_using_singularity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

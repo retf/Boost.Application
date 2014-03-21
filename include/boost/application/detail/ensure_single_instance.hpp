@@ -25,7 +25,8 @@ namespace boost { namespace application { namespace detail {
 
    // check single_instance aspect and runs the requested behavior,
    // returns true to indicate that application needs exit.
-   inline bool ensure_single_instance(context &cxt,
+
+   inline bool check(context &cxt,
       boost::system::error_code& ec)
    { 
       csbl::shared_ptr<limit_single_instance> ol =
@@ -75,6 +76,22 @@ namespace boost { namespace application { namespace detail {
       // continue / no restriction
       return false;
    }
+
+   template <class T> struct ensure_single_instance {
+      bool operator()(T &cxt, boost::system::error_code& ec)
+      {
+         return check(cxt, ec);
+      }
+   };
+
+   template <> struct ensure_single_instance< 
+         singularity<application::context> > {
+      bool operator()(singularity<application::context> &cxt, 
+         boost::system::error_code& ec)
+      {
+         return check(cxt.get_global(), ec);
+      }
+   };
 
 }}} // boost::application
 
