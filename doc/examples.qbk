@@ -9,7 +9,7 @@
 
 [pre
 Simplest Common Aplication [@http://www.boost.org/libs/application/example/simple_application.cpp (simple_application.cpp)] 
-Simplest Common Aplication Using Singularity [@http://www.boost.org/libs/application/example/simple_application_using_singularity.cpp (simple_application_using_singularity.cpp)] 
+Simplest Common Aplication with global Context [@http://www.boost.org/libs/application/example/simple_application_with_global_context.cpp (simple_application_with_global_context.cpp)] 
 ]
 
 [* Server Application]
@@ -27,7 +27,7 @@ Handling Errors (ex version) [@http://www.boost.org/libs/application/example/han
 Limit Single Instance [@http://www.boost.org/libs/application/example/limit_single_instance.cpp (limit_single_instance.cpp)] 
 Limit Single Instance (interprocess) [@http://www.boost.org/libs/application/example/limit_single_instance_boost_interprocess_named_mutex.cpp (limit_single_instance_boost_interprocess_named_mutex.cpp)] 
 Limit Single Instance Using Callback [@http://www.boost.org/libs/application/example/limit_single_instance_callback.cpp (limit_single_instance_callback.cpp)]
-Limit Single Instance Using Singularity [@http://www.boost.org/libs/application/example/limit_single_instance_callback_using_singularity.cpp (limit_single_instance_callback_using_singularity.cpp)]
+Limit Single Instance with global Context [@http://www.boost.org/libs/application/example/limit_single_instance_callback_with_global_context.cpp (limit_single_instance_callback_with_global_context.cpp)]
 Plug-in System [@http://www.boost.org/libs/application/example/shared_library_load_plugin.cpp (shared_library_load_plugin.cpp)]
 ]
 

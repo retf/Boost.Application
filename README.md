@@ -21,12 +21,9 @@ contact: re.tf@acm.org
 
 ###Installation Notes
 
-Boost.Application uses two libraries that are not part of boost yet, you need install these libraries on you boost:
+Boost.Application uses a libraries that is not part of boost yet, you need install this library manually:
 
 * [TypeIndex] (https://github.com/apolukhin/type_index/zipball/master)
-* [Singularity] (https://github.com/cppmaven/Singularity)
-
-Note: An new experimental version that removes the 'Singularity' dependency can be found [here] (https://github.com/retf/Boost.Application/tree/feature/remove_singularity)! Contributed by [eslbaer] (https://github.com/eslbaer)!
 
 Full Reference (http://www.boost.org/community/review_schedule.html)
 

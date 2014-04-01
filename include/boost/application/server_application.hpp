@@ -115,7 +115,7 @@ namespace boost { namespace application {
        *           internaly by application type.
        *           User can customize this instance.
        *
-       * \param context An singularity context of application, that hold all
+       * \param context A shared_ptr to global_context of application, that hold all
        *        aspects.
        *
        * \param ec Variable (boost::system::error_code) that will be

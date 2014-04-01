@@ -106,7 +106,7 @@ namespace boost { namespace application {
     *        as paramenter to application type istead a default
     *        custom type instance. User can customize this instance.
     *
-    * \param context The "singularity" context of application,
+    * \param cxt A shared_ptr to global_context of application,
     *        that will be passed as paramenter to application operator
     *        and populated with defaul aspects, depending on type of
     *        application that are passed as ApplicationMode.
@@ -173,7 +173,7 @@ namespace boost { namespace application {
       return launch<ApplicationMode>(app, ct, cxt, ec);
    }
 
-   // singularity version, the ec (boost::system::error_code& ec) will be
+   // global_context version, the ec (boost::system::error_code& ec) will be
    // set to the result of the operation, they should be tested for errors.
 
    /*!
@@ -183,7 +183,7 @@ namespace boost { namespace application {
     *
     * \param app User application functor instance.
     *
-    * \param context The "singularity" context of application,
+    * \param cxt A shared_ptr to global_context of application,
     *        that will be passed as paramenter to application operator
     *        and populated with defaul aspects, depending on type of
     *        application that are passed as ApplicationMode.
@@ -256,7 +256,7 @@ namespace boost { namespace application {
     *        as paramenter to application type istead a default
     *        custom type instance. User can customize this instance.
     *
-    * \param context The "singularity" context of application,
+    * \param cxt A shared_ptr to global_context of application,
     *        that will be passed as paramenter to application operator
     *        and populated with defaul aspects, depending on type of
     *        application that are passed as ApplicationMode.
@@ -314,7 +314,7 @@ namespace boost { namespace application {
     *
     * \param app User application functor instance.
     *
-    * \param context The "singularity" context of application,
+    * \param cxt A shared_ptr to global_context of application,
     *        that will be passed as paramenter to application operator
     *        and populated with defaul aspects, depending on type of
     *        application that are passed as ApplicationMode.

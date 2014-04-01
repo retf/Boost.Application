@@ -9,7 +9,6 @@ project
    : source-location .
    : requirements
         <include>../../..
-        <include>../../../../Singularity
         <include>../../../../type_index
 
    # windows
@@ -59,8 +58,8 @@ exe path
    : path.cpp
    ;
    
-exe simple_application_using_singularity 
-   : simple_application_using_singularity.cpp 
+exe simple_application_with_global_context
+   : simple_application_with_global_context.cpp
    ;
 
 exe wait_for_termination_request
@@ -75,8 +74,8 @@ exe termination_handler
    : termination_handler.cpp
    ;
 
-exe termination_handler_using_singularity
-   : termination_handler_using_singularity.cpp
+exe termination_handler_with_global_context
+   : termination_handler_with_global_context.cpp
    ;
    
 exe my_own_termination_handler

@@ -1,13 +1,10 @@
 // -----------------------------------------------------------------------------
-// simple_application_using_singularity.cpp : examples that show how use 
+// simple_application_with_global_context.cpp : examples that show how use
 // Boost.Application to make a simplest interactive (terminal) application 
-// using Boost.singularity
+// using global_context
 //
 // Note 1: The Boost.Application (Aspects v4) and this sample are in 
 //         development process.
-//
-// Note 2: The Boost.Singularity is in approval process, 
-//         refer boost.org to know more.
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2013 Renato Tegon Forti
@@ -28,7 +25,7 @@
 
 using namespace boost;
 
-// singularity access 
+// singleton access
 
 inline application::global_context_ptr this_application() {
    return application::global_context::get();
@@ -40,7 +37,7 @@ class myapp
 {
 public:
 
-   // singularity, no param
+   // singleton, no param
    int operator()()
    {
       BOOST_APPLICATION_FEATURE_SELECT
@@ -77,6 +74,8 @@ int main(int argc, char *argv[])
       boost::make_shared<application::args>(argc, argv));
 
    int ret = application::launch<application::common>(app, ctx);
+
+   application::global_context::destroy();
 
    return ret;
 }

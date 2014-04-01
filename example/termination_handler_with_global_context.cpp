@@ -28,7 +28,7 @@
 using namespace boost;
 
 
-// singularity access 
+// singleton access
 
 inline application::global_context_ptr this_application() {
    return application::global_context::get();
@@ -116,6 +116,8 @@ int main(int argc, char *argv[])
       boost::make_shared<application::termination_handler_default_behaviour>(callback));
 
    int ret =  application::launch<application::common>(app, ctx);
+
+   application::global_context::destroy();
 
    return ret;
 }
