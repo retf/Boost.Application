@@ -29,6 +29,7 @@
 #include <boost/application/config.hpp>
 #include <boost/application/detail/csbl.hpp>
 #include <boost/application/aspect_map.hpp>
+#include <boost/thread/shared_lock_guard.hpp>
 
 namespace boost { namespace application {
 
@@ -89,7 +90,7 @@ namespace detail {
       }
       static inline csbl::shared_ptr<global_context> get()
       {
-         boost::mutex::scoped_lock(lock);
+         boost::shared_lock_guard<boost::shared_mutex> sm(lock);
          if(!already_created())
             BOOST_THROW_EXCEPTION(std::logic_error("there is no global context"));
          return instance_t::ptr;
@@ -103,9 +104,9 @@ namespace detail {
       static inline bool already_created() {
           return (instance_t::ptr != 0);
       }
-      static boost::mutex lock;
+      static boost::shared_mutex lock;
    };
-   boost::mutex global_context::lock;
+   boost::shared_mutex global_context::lock;
 
 
    typedef basic_context context;
