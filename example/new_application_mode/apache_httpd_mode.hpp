@@ -123,10 +123,10 @@ public:
 
    template <typename Application, typename RequestRec>
    apache2_httpd_mod(Application& myapp, RequestRec &rr, 
-      boost::singularity<context> &cxt, boost::system::error_code& ec)
+      boost::application::global_context_ptr cxt, boost::system::error_code& ec)
       : error_(OK) 
    {
-      handle_request(myapp, rr, cxt.get_global());
+      handle_request(myapp, rr, *cxt.get());
    }
 
    int run() { return error_; }

@@ -62,9 +62,9 @@ namespace boost { namespace application {
 
       server_application_impl_(const main_singleton &main,
                                signal_binder &sb,
-                               singularity<application::context> &context,
+                               global_context_ptr context,
                                boost::system::error_code& ec)
-         : application_impl(singleton, context.get_global())
+         : application_impl(singleton, context)
          , main_singleton_(main)
       {
          process_id_ = daemonize(ec);

@@ -1,13 +1,10 @@
 // -----------------------------------------------------------------------------
-// simple_application_using_singularity.cpp : examples that show how use 
+// simple_application_with_global_context.cpp : examples that show how use
 // Boost.Application to make a simplest interactive (terminal) application 
-// using Boost.singularity
+// using global_context
 //
 // Note 1: The Boost.Application (Aspects v4) and this sample are in 
 //         development process.
-//
-// Note 2: The Boost.Singularity is in approval process, 
-//         refer boost.org to know more.
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2013 Renato Tegon Forti
@@ -28,11 +25,10 @@
 
 using namespace boost;
 
-// singularity access 
+// singleton access
 
-boost::singularity<application::context> global_context;
-inline application::context& this_application() {
-   return global_context.get_global();
+inline application::global_context_ptr this_application() {
+   return application::global_context::get();
 }
 
 // my functor application
@@ -41,14 +37,14 @@ class myapp
 {
 public:
 
-   // singularity, no param
+   // singleton, no param
    int operator()()
    {
       BOOST_APPLICATION_FEATURE_SELECT
 
       std::cout << "Test" << std::endl;
       shared_ptr<application::args> myargs 
-         = this_application().find<application::args>();
+         = this_application()->find<application::args>();
 
       if (myargs)
       {
@@ -69,17 +65,17 @@ public:
 // main
 
 int main(int argc, char *argv[])
-{   
+{
    myapp app;
  
-   boost::singularity<application::context>::create_global();
+   application::global_context_ptr ctx = application::global_context::create();
 
-   this_application().insert<application::args>(
+   this_application()->insert<application::args>(
       boost::make_shared<application::args>(argc, argv));
 
-   int ret = application::launch<application::common>(app, global_context);
+   int ret = application::launch<application::common>(app, ctx);
 
-   boost::singularity<application::context>::destroy();
+   application::global_context::destroy();
 
    return ret;
 }

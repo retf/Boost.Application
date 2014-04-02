@@ -24,6 +24,8 @@ namespace boost { namespace application {
 
    class application_impl : noncopyable
    {
+   private:
+      global_context_ptr context_ptr_;
 
    public:
       enum instantiation_type
@@ -38,6 +40,13 @@ namespace boost { namespace application {
       {
       }
 
+      application_impl(instantiation_type type, global_context_ptr cxt)
+         : context_ptr_(cxt)
+         , type_(type)
+         , context_(*cxt.get())
+      {
+      }
+
       context &get_context()
       {
          return context_;
@@ -47,7 +56,6 @@ namespace boost { namespace application {
 
       instantiation_type type_;
       context &context_;
-
    };
 
 }} // boost::application

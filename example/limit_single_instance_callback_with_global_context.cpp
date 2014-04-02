@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------------
-// limit_single_instance_callback_using_singularity.cpp : 
+// limit_single_instance_callback_with_global_context.cpp :
 //examples that show how use Boost.Application to make a simplest interactive 
 // (terminal) application 
 //
@@ -27,11 +27,10 @@
 
 using namespace boost::application;
 
-// singularity access 
+// singleton access
 
-boost::singularity<context> global_context;
-inline context& this_application() {
-   return global_context.get_global();
+inline global_context_ptr this_application() {
+   return global_context::get();
 }
 
 // my functor application
@@ -40,12 +39,12 @@ class myapp
 {
 public:
 
-   // singularity, no param
+   // singleton, no param
    int operator()()
    {
       std::cout << "Test" << std::endl;
       boost::shared_ptr<args> myargs 
-         = this_application().find<args>();
+         = this_application()->find<args>();
 
       if (myargs)
       {
@@ -58,7 +57,7 @@ public:
          }
       }
 
-      this_application().find<wait_for_termination_request>()->wait();
+      this_application()->find<wait_for_termination_request>()->wait();
 
       return 0;
    }
@@ -94,22 +93,22 @@ int main(int argc, char *argv[])
    boost::uuids::string_generator gen;
    boost::uuids::uuid appuuid = gen("{9F63E4AD-ECA5-475D-8784-4BAA329EF9F3}");
  
-   boost::singularity<context>::create_global();
+   global_context_ptr ctx = global_context::create();
    
    handler<>::singleton_callback callback 
       = boost::bind<bool>(&myapp::instace_aready_running, &app);
 
    // use aspects
 
-   this_application().insert<args>(
+   this_application()->insert<args>(
       boost::make_shared<args>(argc, argv));
 
-   this_application().insert<limit_single_instance>(
+   this_application()->insert<limit_single_instance>(
       boost::make_shared<limit_single_instance_default_behaviour>(appuuid, callback));
 
-   int ret = launch<common>(app, global_context);
+   int ret = launch<common>(app, ctx);
 
-   boost::singularity<context>::destroy();
+   global_context::destroy();
 
    return ret;
 }

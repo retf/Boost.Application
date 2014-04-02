@@ -23,11 +23,10 @@
 
 using namespace boost;
 
-// singularity access 
+// singleton access
 
-boost::singularity<application::context> global_context;
-inline application::context& this_application() {
-   return global_context.get_global();
+inline application::global_context_ptr this_application() {
+   return application::global_context::get();
 }
 
 // my functor application
@@ -71,7 +70,7 @@ public:
    int operator()()
    {
       boost::shared_ptr<application::selfpipe> selfpipe 
-         = this_application().find<application::selfpipe>();
+         = this_application()->find<application::selfpipe>();
 
       fd_set readfds;
       FD_ZERO(&readfds);
@@ -137,13 +136,13 @@ class signal_usr2 : public application::signal_manager
 public:
 
    /*<< Customize SIGNALS bind >>*/
-   signal_usr2(singularity<application::context> &cxt)
+   signal_usr2(application::global_context_ptr cxt)
       : application::signal_manager(cxt)
    {
-      application::handler::parameter_callback callback1 
+      application::handler<>::parameter_callback callback1
          = boost::bind<bool>(&signal_usr2::signal_usr1_handler, this);
 
-      application::handler::parameter_callback callback2 
+      application::handler<>::parameter_callback callback2
          = boost::bind<bool>(&signal_usr2::signal_usr2_handler, this);
 
       /*<< Define signal bind >>*/ 
@@ -164,7 +163,7 @@ public:
       std::cout << "signal_usr2_handler" << std::endl;
 
       boost::shared_ptr<application::selfpipe> selfpipe 
-         = this_application().find<application::selfpipe>();
+         = this_application()->find<application::selfpipe>();
 
       /*<<Notify application in case of reception of SIGUSR2 signal, unsing self-pipe>>*/
       selfpipe->poke();
@@ -179,16 +178,14 @@ int main(int argc, char *argv[])
 {   
    myapp app;
  
-   boost::singularity<application::context>::create_global();
+   application::global_context_ptr ctx = application::global_context::create();
    
    /*<<Add selfpipe to application context>>*/
-   this_application().insert<application::posix::selfpipe>(
+   this_application()->insert<application::posix::selfpipe>(
       boost::make_shared<application::posix::selfpipe>());
 	  
-   signal_usr2 sm(global_context);
-   int ret = application::launch<application::common>(app, sm, global_context);
-
-   boost::singularity<application::context>::destroy();
+   signal_usr2 sm(ctx);
+   int ret = application::launch<application::common>(app, sm, ctx);
 
    return ret;
 }

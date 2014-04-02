@@ -14,11 +14,6 @@
 
 using namespace boost;
 
-boost::singularity<application::context> global_context;
-inline application::context& this_application() {
-   return global_context.get_global();
-}
-
 class myapp_parameter
 {
 public:
@@ -50,7 +45,7 @@ public:
       bind(SIGINT,  callback);
    }
 
-   my_signal_manager(boost::singularity<application::context> &context)
+   my_signal_manager(boost::application::global_context_ptr context)
       : signal_manager(context)
    {
       application::handler<>::singleton_callback callback
@@ -72,7 +67,7 @@ public:
    bool stop()
    {
       application::csbl::shared_ptr<application::wait_for_termination_request> th
-         = this_application().find<application::wait_for_termination_request>();
+         = application::global_context::get()->find<application::wait_for_termination_request>();
 
       th->proceed();
 
@@ -95,11 +90,11 @@ int test_main(int argc, char** argv)
 
    {
       myapp_singleton app;
-      boost::singularity<application::context>::create_global();
+      application::global_context::create();
 
-      BOOST_CHECK(!application::launch<application::common>(app, global_context));
+      BOOST_CHECK(!application::launch<application::common>(app, application::global_context::get()));
 
-      boost::singularity<application::context>::destroy();
+      application::global_context::destroy();
    }
 
    {
@@ -113,13 +108,13 @@ int test_main(int argc, char** argv)
 
    {
       myapp_singleton app;
-      boost::singularity<application::context>::create_global();
+      application::global_context::create();
 
       boost::system::error_code ec;
-      BOOST_CHECK(!application::launch<application::common>(app, global_context, ec));
+      BOOST_CHECK(!application::launch<application::common>(app, application::global_context::get(), ec));
       BOOST_CHECK(!ec);
 
-      boost::singularity<application::context>::destroy();
+      application::global_context::destroy();
    }
 
    // sm
@@ -134,13 +129,13 @@ int test_main(int argc, char** argv)
 
    {
       myapp_singleton app;
-      boost::singularity<application::context>::create_global();
+      application::global_context::create();
 
-      my_signal_manager sm(global_context);
+      my_signal_manager sm(application::global_context::get());
 
-      BOOST_CHECK(!application::launch<application::common>(app, sm, global_context));
+      BOOST_CHECK(!application::launch<application::common>(app, sm, application::global_context::get()));
 
-      boost::singularity<application::context>::destroy();
+      application::global_context::destroy();
    }
 
    {
@@ -155,14 +150,14 @@ int test_main(int argc, char** argv)
 
    {
       myapp_singleton app;
-      boost::singularity<application::context>::create_global();
-      my_signal_manager sm(global_context);
+      application::global_context::create();
+      my_signal_manager sm(application::global_context::get());
 
       boost::system::error_code ec;
-      BOOST_CHECK(!application::launch<application::common>(app, sm, global_context, ec));
+      BOOST_CHECK(!application::launch<application::common>(app, sm, application::global_context::get(), ec));
       BOOST_CHECK(!ec);
 
-      boost::singularity<application::context>::destroy();
+      application::global_context::destroy();
    }
 
    // server
@@ -189,18 +184,18 @@ int test_main(int argc, char** argv)
 
    {
       myapp_singleton app;
-      boost::singularity<application::context>::create_global();
+      application::global_context::create();
 
       try
       {
-         int ret = application::launch<application::server>(app, global_context);
+         int ret = application::launch<application::server>(app, application::global_context::get());
       }
       catch(boost::system::system_error& se)
       {
          BOOST_CHECK(se.code().value() == 1056);
       }
 
-      boost::singularity<application::context>::destroy();
+      application::global_context::destroy();
    }
 
    {
@@ -214,13 +209,13 @@ int test_main(int argc, char** argv)
 
    {
       myapp_singleton app;
-      boost::singularity<application::context>::create_global();
+      application::global_context::create();
 
       boost::system::error_code ec;
-      int ret = application::launch<application::server>(app, global_context, ec);
+      int ret = application::launch<application::server>(app, application::global_context::get(), ec);
       BOOST_CHECK(ec.value() == 1056);
 
-      boost::singularity<application::context>::destroy();
+      application::global_context::destroy();
    }
 
    // sm
@@ -242,19 +237,19 @@ int test_main(int argc, char** argv)
 
    {
       myapp_singleton app;
-      boost::singularity<application::context>::create_global();
-      my_signal_manager sm(global_context);
+      application::global_context::create();
+      my_signal_manager sm(application::global_context::get());
 
       try
       {
-         int ret = application::launch<application::server>(app, sm, global_context);
+         int ret = application::launch<application::server>(app, sm, application::global_context::get());
       }
       catch(boost::system::system_error& se)
       {
          BOOST_CHECK(se.code().value() == 1056);
       }
 
-      boost::singularity<application::context>::destroy();
+      application::global_context::destroy();
    }
 
    {
@@ -269,14 +264,14 @@ int test_main(int argc, char** argv)
 
    {
       myapp_singleton app;
-      boost::singularity<application::context>::create_global();
-      my_signal_manager sm(global_context);
+      application::global_context::create();
+      my_signal_manager sm(application::global_context::get());
 
       boost::system::error_code ec;
-      int ret = application::launch<application::server>(app, sm, global_context, ec);
+      int ret = application::launch<application::server>(app, sm, application::global_context::get(), ec);
       BOOST_CHECK(ec.value() == 1056);
 
-      boost::singularity<application::context>::destroy();
+      application::global_context::destroy();
    }
 
 #elif defined( BOOST_POSIX_API )
@@ -290,11 +285,11 @@ int test_main(int argc, char** argv)
 
     {
       myapp_singleton app;
-      boost::singularity<application::context>::create_global();
+      application::global_context::create();
 
-      BOOST_CHECK(!application::launch<application::server>(app, global_context));
+      BOOST_CHECK(!application::launch<application::server>(app, application::global_context::get()));
 
-      boost::singularity<application::context>::destroy();
+      application::global_context::destroy();
    }
 
    {
@@ -308,13 +303,13 @@ int test_main(int argc, char** argv)
 
    {
       myapp_singleton app;
-      boost::singularity<application::context>::create_global();
+      application::global_context::create();
 
       boost::system::error_code ec;
-      BOOST_CHECK(!application::launch<application::server>(app, global_context, ec));
+      BOOST_CHECK(!application::launch<application::server>(app, application::global_context::get(), ec));
       BOOST_CHECK(!ec);
 
-      boost::singularity<application::context>::destroy();
+      application::global_context::destroy();
    }
 
    // sm
@@ -329,13 +324,13 @@ int test_main(int argc, char** argv)
 
    {
       myapp_singleton app;
-      boost::singularity<application::context>::create_global();
+      application::global_context::create();
 
-      my_signal_manager sm(global_context);
+      my_signal_manager sm(application::global_context::get());
 
-      BOOST_CHECK(!application::launch<application::server>(app, sm, global_context));
+      BOOST_CHECK(!application::launch<application::server>(app, sm, application::global_context::get()));
 
-      boost::singularity<application::context>::destroy();
+      application::global_context::destroy();
    }
 
    {
@@ -350,14 +345,14 @@ int test_main(int argc, char** argv)
 
    {
       myapp_singleton app;
-      boost::singularity<application::context>::create_global();
-      my_signal_manager sm(global_context);
+      application::global_context::create();
+      my_signal_manager sm(application::global_context::get());
 
       boost::system::error_code ec;
-      BOOST_CHECK(!application::launch<application::server>(app, sm, global_context, ec));
+      BOOST_CHECK(!application::launch<application::server>(app, sm, application::global_context::get(), ec));
       BOOST_CHECK(!ec);
 
-      boost::singularity<application::context>::destroy();
+      application::global_context::destroy();
    }
 
 #endif

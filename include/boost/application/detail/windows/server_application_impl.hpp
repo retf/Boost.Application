@@ -31,12 +31,6 @@
 #include <boost/thread/thread.hpp>
 #include <boost/lambda/lambda.hpp>
 
-// Note that singularity is in approval process,
-// refer to the above link to know more:
-// http://www.boost.org/community/review_schedule.html
-// #include <singularity/singularity.hpp>
-#include <singularity.hpp>
-
 #ifdef BOOST_MSVC
 #  pragma warning(push)
 #  pragma warning(disable : 4251 4231 4660)
@@ -76,8 +70,8 @@ namespace boost { namespace application {
          initialize(ec);
       }
 
-      server_application_impl_(const main_singleton &main, signal_binder &sb, singularity<application::context> &context, boost::system::error_code& ec)
-         : application_impl(singleton, context.get_global())
+      server_application_impl_(const main_singleton &main, signal_binder &sb, global_context_ptr context, boost::system::error_code& ec)
+         : application_impl(singleton, context)
          , main_thread_(0)
          , launch_thread_(0)
          , main_singleton_(main)

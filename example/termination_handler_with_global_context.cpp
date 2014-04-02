@@ -25,14 +25,13 @@
 #include <boost/bind.hpp>
 #include <boost/thread/thread.hpp>
 
-using namespace boost::application;
+using namespace boost;
 
 
-// singularity access 
+// singleton access
 
-boost::singularity<context> global_context;
-inline context& this_application() {
-   return global_context.get_global();
+inline application::global_context_ptr this_application() {
+   return application::global_context::get();
 }
 
 
@@ -77,7 +76,7 @@ public:
       // launch a work thread
       boost::thread thread(boost::bind(&myapp::work_thread, this));
 	  
-      this_application().find<wait_for_termination_request>()->wait();
+      this_application()->find<application::wait_for_termination_request>()->wait();
 
       return 0;
    }
@@ -108,17 +107,17 @@ int main(int argc, char *argv[])
 {   
    myapp app; 
    
-   boost::singularity<context>::create_global();
+   application::global_context_ptr ctx = application::global_context::create();
 
-   handler<>::singleton_callback callback 
+   application::handler<>::singleton_callback callback
       = boost::bind<bool>(&myapp::stop, &app);
 
-   this_application().insert<termination_handler>(
-      boost::make_shared<termination_handler_default_behaviour>(callback));
+   this_application()->insert<application::termination_handler>(
+      boost::make_shared<application::termination_handler_default_behaviour>(callback));
 
-   int ret =  launch<common>(app, global_context);
+   int ret =  application::launch<application::common>(app, ctx);
 
-   boost::singularity<context>::destroy();
+   application::global_context::destroy();
 
    return ret;
 }

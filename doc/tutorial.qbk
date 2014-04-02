@@ -41,7 +41,7 @@ The application operator can be defined using a param signature, e.g.:
    int operator()(context &context)
 ```
    
-Or using Boost.singularity version, e.g.:
+Or using global_context, e.g.:
 
 ```
    int operator()(void)

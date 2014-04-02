@@ -128,7 +128,7 @@ namespace boost { namespace application {
 
       template <typename Application, typename SignalManager>
       common(Application& myapp, SignalManager &sm,
-         singularity<application::context> &context,
+         global_context_ptr context,
          boost::system::error_code& ec)
          : impl_(new common_application_impl(
                  boost::bind<int>(&Application::operator(), &myapp), sm,

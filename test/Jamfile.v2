@@ -57,6 +57,7 @@ project
       [ run handler_test.cpp ]
       [ run launch_test.cpp ]
       [ run ensure_single_instance_test.cpp ]
+      [ run global_context_test.cpp ]
       #
       #
 

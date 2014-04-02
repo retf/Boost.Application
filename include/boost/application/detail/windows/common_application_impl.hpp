@@ -25,12 +25,6 @@
 #include <boost/thread/thread.hpp>
 #include <boost/lambda/lambda.hpp>
 
-// Note that singularity is in approval process,
-// refer to the above link to know more:
-// http://www.boost.org/community/review_schedule.html
-//#include <singularity/singularity.hpp>
-#include <singularity.hpp>
-
 namespace boost { namespace application {
 
    template <typename CharType>
@@ -57,9 +51,9 @@ namespace boost { namespace application {
 
       common_application_impl_(const main_singleton &main,
                                signal_binder &sb,
-                               singularity<application::context> &context,
+                               global_context_ptr context,
                                boost::system::error_code& ec)
-         : application_impl(singleton, context.get_global())
+         : application_impl(singleton, context)
          , main_singleton_(main)
       {
          sb.start();
