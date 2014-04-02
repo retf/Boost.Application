@@ -95,9 +95,11 @@ int main(int argc, char *argv[])
  
    global_context_ptr ctx = global_context::create();
    
+   // way 1
+   /*
    handler<>::singleton_callback callback 
       = boost::bind<bool>(&myapp::instace_aready_running, &app);
-
+   
    // use aspects
 
    this_application()->insert<args>(
@@ -105,6 +107,12 @@ int main(int argc, char *argv[])
 
    this_application()->insert<limit_single_instance>(
       boost::make_shared<limit_single_instance_default_behaviour>(appuuid, callback));
+   */
+
+   // way 2
+   this_application().insert<limit_single_instance>(
+      boost::make_shared<limit_single_instance_default_behaviour>(appuuid, 
+         make_singleton_callback<bool>(app, &myapp::instace_aready_running)));
 
    int ret = launch<common>(app, ctx);
 

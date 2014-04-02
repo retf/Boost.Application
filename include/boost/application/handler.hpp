@@ -199,6 +199,36 @@ namespace boost { namespace application {
 
    };
 
+   typedef handler<bool> dafault_handler;
+
+   /*!
+    * Util free function to create a 'parameter' callback
+    *
+    * \return a boost::function<ReturnType (context&) > callback 
+    *         to be used on handler class.
+    *
+    */
+   template< typename HandlerReturnType, typename App, typename Handler >
+   boost::function< HandlerReturnType (context&) > 
+      make_parameter_callback(App& app, Handler h)
+   {
+      return boost::bind< HandlerReturnType >(h, &app, _1);
+   }
+
+   /*!
+    * Util free function to create a 'singleton' callback
+    *
+    * \return a boost::function<HandlerReturnType (void) > callback 
+    *         to be used on handler class.
+    *
+    */
+   template< typename HandlerReturnType, typename App, typename Handler >
+   boost::function< HandlerReturnType (void) > 
+      make_singleton_callback(App& app, Handler h)
+   {
+      return boost::bind< HandlerReturnType >(h, &app);
+   }
+
 }} // boost::application
 
 #endif // BOOST_APPLICATION_HANDLER_HPP
