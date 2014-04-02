@@ -85,11 +85,11 @@ namespace boost { namespace application { namespace detail {
    };
 
    template <> struct ensure_single_instance< 
-         singularity<application::context> > {
-      bool operator()(singularity<application::context> &cxt, 
+         global_context > {
+      bool operator()(global_context_ptr cxt,
          boost::system::error_code& ec)
       {
-         return check(cxt.get_global(), ec);
+         return check(*cxt.get(), ec);
       }
    };
 

@@ -80,7 +80,7 @@ namespace boost { namespace application {
       system::error_code& ec)
    {
       // the ensure_single_instance tell us to exit?
-      bool we_need_exit = detail::ensure_single_instance(cxt, ec);
+      bool we_need_exit = detail::ensure_single_instance<application::context>()(cxt, ec);
 
       if(ec) return 0;
       if(we_need_exit) return 0;
@@ -127,7 +127,7 @@ namespace boost { namespace application {
    {
       // the ensure_single_instance tell us to exit?
       bool we_need_exit =
-         detail::ensure_single_instance(*cxt.get(), ec);
+         detail::ensure_single_instance<application::global_context>()(cxt, ec);
 
       if(ec) return 0;
       if(we_need_exit) return 0;

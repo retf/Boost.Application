@@ -17,9 +17,8 @@
 
 using namespace boost;
 
-boost::singularity<application::context> global_context;
-inline application::context& this_application() {
-   return global_context.get_global();
+inline application::global_context_ptr this_application() {
+   return application::global_context::get();
 }
 
 class myapp
@@ -103,20 +102,20 @@ int test_main(int argc, char** argv)
       boost::uuids::string_generator gen;
       boost::uuids::uuid appuuid = gen("{6F66E4AD-ECA5-475D-8784-4BAA329EF9F2}");
 
-      boost::singularity<application::context>::create_global();
+      application::global_context::create();
 
       application::handler<>::singleton_callback callback 
          = boost::bind<bool>(&myapp::instace_aready_running_false, &app);
 
-      this_application().insert<application::limit_single_instance>(
+      this_application()->insert<application::limit_single_instance>(
          boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, callback));
 
-      BOOST_CHECK(!application::detail::ensure_single_instance<singularity<application::context> >()(global_context, ec)); 
+      BOOST_CHECK(!application::detail::ensure_single_instance<application::global_context>()(this_application(), ec));
       BOOST_CHECK(!ec);
-      BOOST_CHECK(application::detail::ensure_single_instance<singularity<application::context> >()(global_context, ec)); 
+      BOOST_CHECK(application::detail::ensure_single_instance<application::global_context>()(this_application(), ec));
       BOOST_CHECK(!ec);
 
-      boost::singularity<application::context>::destroy();
+      application::global_context::destroy();
    }
 
    // test ensure_single_instance instace_aready_running_true
@@ -126,20 +125,20 @@ int test_main(int argc, char** argv)
       boost::uuids::string_generator gen;
       boost::uuids::uuid appuuid = gen("{5F66E4AD-ECA5-475D-8784-4BAA329EF9F2}");
 
-      boost::singularity<application::context>::create_global();
+      application::global_context::create();
 
       application::handler<>::singleton_callback callback 
          = boost::bind<bool>(&myapp::instace_aready_running_true, &app);
 
-      this_application().insert<application::limit_single_instance>(
+      this_application()->insert<application::limit_single_instance>(
          boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, callback));
 
-      BOOST_CHECK(!application::detail::ensure_single_instance<singularity<application::context> >()(global_context, ec)); 
+      BOOST_CHECK(!application::detail::ensure_single_instance<application::global_context>()(this_application(), ec));
       BOOST_CHECK(!ec);
-      BOOST_CHECK(!application::detail::ensure_single_instance<singularity<application::context> >()(global_context, ec)); 
+      BOOST_CHECK(!application::detail::ensure_single_instance<application::global_context>()(this_application(), ec));
       BOOST_CHECK(!ec);
 
-      boost::singularity<application::context>::destroy();
+      application::global_context::destroy();
    }
 
 
