@@ -24,6 +24,7 @@
 #include <boost/application/aspects/termination_handler.hpp>
 #include <boost/application/aspects/pause_handler.hpp>
 #include <boost/application/aspects/resume_handler.hpp>
+#include <boost/application/aspects/args.hpp>
 
 #include <boost/application/detail/application_impl.hpp>
 #include <boost/application/signal_binder.hpp>
