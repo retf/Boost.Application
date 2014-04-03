@@ -11,12 +11,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\example\service_setup.cpp" />
+    <ClCompile Include="..\example\simple_application_with_global_context.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{AA0508C0-7B3E-4612-FAAB-FFFF5EFC31AA}</ProjectGuid>
+    <ProjectGuid>{110BF4EB-7F98-4D60-8B45-95940B51F5F1}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>service_setup</RootNamespace>
+    <RootNamespace>simple_application_with_global_context</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -55,7 +55,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>E:\type_index\include;E:\Singularity;E:\project.boost.app.v4.5.git\include;C:\boost_1_54_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\type_index;E:\project.boost.app.v4.6.git\include;C:\boost_1_54_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

@@ -23,7 +23,7 @@
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
 
-namespace boost { namespace application {
+namespace boost { namespace application { namespace example {
 
    // util class to open/close the SCM on current machine
    class windows_scm : noncopyable
@@ -525,7 +525,7 @@ namespace boost { namespace application {
    typedef install_windows_service_<character_types::char_type> install_windows_service;
    // wchar_t / char
 
-}} // boost::application
+}}} // boost::application::example
 
 #endif // BOOST_APPLICATION_IMPL_WINDOWS_SERVICE_SETUP_HPP
 

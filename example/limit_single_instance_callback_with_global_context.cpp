@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
    */
 
    // way 2
-   this_application().insert<limit_single_instance>(
+   this_application()->insert<limit_single_instance>(
       boost::make_shared<limit_single_instance_default_behaviour>(appuuid, 
          make_singleton_callback<bool>(app, &myapp::instace_aready_running)));
 

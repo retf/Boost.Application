@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\example\limit_single_instance_callback_using_singularity.cpp">
+    <ClCompile Include="..\example\simple_application_with_global_context.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

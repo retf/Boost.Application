@@ -11,6 +11,8 @@ contact: re.tf@acm.org
 
    A special thanks to Vicente J. Botet Escriba that helped a lot on all areas of this lib.
    
+   Thanks to Benjamin Dieckmann for global_context implementation.
+   
 ###On-line Documentation (Work in Progress)
 
 [Online Docs] (http://www.dokfile.com/appbeta4/docs/libs/application/doc/html/index.html)
@@ -33,3 +35,4 @@ Building: Detailed instructions can be found [here] (https://svn.boost.org/trac/
 ### Questions, suggestions or bugs, please send an email to: 
 
 re.tf@acm.org (Renato Tegon Forti)
+

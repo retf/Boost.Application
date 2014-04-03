@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "simple_application", "simple_application.vcxproj", "{710BF4EB-7F98-4D60-8B45-95940B51F5F7}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "simple_application_using_singularity", "simple_application_using_singularity.vcxproj", "{110BF4EB-7F98-4D60-8B45-95940B51F5F1}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "simple_application_with_global_context", "simple_application_with_global_context.vcxproj", "{110BF4EB-7F98-4D60-8B45-95940B51F5F1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "limit_single_instance", "limit_single_instance.vcxproj", "{210BF4EB-7F98-4D60-8B45-95940B51F5F1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "limit_single_instance_callback", "limit_single_instance_callback.vcxproj", "{520BF4EB-7F98-4D60-8B45-95940B51F5F1}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "limit_single_instance_callback_using_singularity", "limit_single_instance_callback_using_singularity.vcxproj", "{570BF4EB-6F98-4D60-8B45-95940B51F5F1}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "limit_single_instance_callback_with_global_context", "limit_single_instance_callback_with_global_context.vcxproj", "{570BF4EB-6F98-4D60-8B45-95940B51F5F1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wait_for_termination_request", "wait_for_termination_request.vcxproj", "{710BF4EB-7F98-4D70-8B45-95940B51F5F7}"
 EndProject
@@ -39,8 +39,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "uuid_plugin_library", "uuid
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "uuid_server", "uuid_server.vcxproj", "{AA0508C0-7B3E-4612-FFFF-FFFF5EFC31AA}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "service_setup", "service_setup.vcxproj", "{AA0508C0-7B3E-4612-FAAB-FFFF5EFC31AA}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tutorial_stage1", "tutorial_stage1.vcxproj", "{4D4BE500-EDC5-4B1F-FFFF-FFFFF86AF0C7}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tutorial_stage2", "tutorial_stage2.vcxproj", "{2D4BE500-EDC5-4B1F-FFFF-FFFFF86AF0C6}"
@@ -55,7 +53,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "myexception", "myexception.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "application_mode_apache_httpd_mod", "application_mode_apache_httpd_mod.vcxproj", "{1FCFD195-439E-4789-BAA4-1B28F31604E6}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "termination_handler_using_singularity", "termination_handler_using_singularity.vcxproj", "{210BF4EB-7F98-4D60-5A45-95940B51F5F5}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "termination_handler_with_global_context", "termination_handler_with_global_context.vcxproj", "{210BF4EB-7F98-4D60-5A45-95940B51F5F5}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "service_setup_ex", "service_setup_ex.vcxproj", "{73744107-4ED1-4E31-ACEA-7FBF61370E58}"
 EndProject
@@ -141,10 +139,6 @@ Global
 		{AA0508C0-7B3E-4612-FFFF-FFFF5EFC31AA}.Debug|Win32.Build.0 = Debug|Win32
 		{AA0508C0-7B3E-4612-FFFF-FFFF5EFC31AA}.Release|Win32.ActiveCfg = Release|Win32
 		{AA0508C0-7B3E-4612-FFFF-FFFF5EFC31AA}.Release|Win32.Build.0 = Release|Win32
-		{AA0508C0-7B3E-4612-FAAB-FFFF5EFC31AA}.Debug|Win32.ActiveCfg = Debug|Win32
-		{AA0508C0-7B3E-4612-FAAB-FFFF5EFC31AA}.Debug|Win32.Build.0 = Debug|Win32
-		{AA0508C0-7B3E-4612-FAAB-FFFF5EFC31AA}.Release|Win32.ActiveCfg = Release|Win32
-		{AA0508C0-7B3E-4612-FAAB-FFFF5EFC31AA}.Release|Win32.Build.0 = Release|Win32
 		{4D4BE500-EDC5-4B1F-FFFF-FFFFF86AF0C7}.Debug|Win32.ActiveCfg = Debug|Win32
 		{4D4BE500-EDC5-4B1F-FFFF-FFFFF86AF0C7}.Debug|Win32.Build.0 = Debug|Win32
 		{4D4BE500-EDC5-4B1F-FFFF-FFFFF86AF0C7}.Release|Win32.ActiveCfg = Release|Win32

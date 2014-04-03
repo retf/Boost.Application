@@ -110,9 +110,9 @@ int test_main(int argc, char** argv)
       this_application()->insert<application::limit_single_instance>(
          boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, callback));
 
-      BOOST_CHECK(!application::detail::ensure_single_instance<application::global_context>()(this_application(), ec));
+      BOOST_CHECK(!application::detail::ensure_single_instance<application::global_context_ptr>()(this_application(), ec));
       BOOST_CHECK(!ec);
-      BOOST_CHECK(application::detail::ensure_single_instance<application::global_context>()(this_application(), ec));
+      BOOST_CHECK(application::detail::ensure_single_instance<application::global_context_ptr>()(this_application(), ec));
       BOOST_CHECK(!ec);
 
       application::global_context::destroy();
@@ -133,16 +133,13 @@ int test_main(int argc, char** argv)
       this_application()->insert<application::limit_single_instance>(
          boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, callback));
 
-      BOOST_CHECK(!application::detail::ensure_single_instance<application::global_context>()(this_application(), ec));
+      BOOST_CHECK(!application::detail::ensure_single_instance<application::global_context_ptr>()(this_application(), ec));
       BOOST_CHECK(!ec);
-      BOOST_CHECK(!application::detail::ensure_single_instance<application::global_context>()(this_application(), ec));
+      BOOST_CHECK(!application::detail::ensure_single_instance<application::global_context_ptr>()(this_application(), ec));
       BOOST_CHECK(!ec);
 
       application::global_context::destroy();
    }
-
-
-
 
    return 0;
 }

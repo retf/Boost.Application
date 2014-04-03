@@ -54,6 +54,11 @@
 #include <boost/program_options.hpp>
 #include <boost/application.hpp>
 
+// provide setup example for windows service   
+#if defined(BOOST_WINDOWS_API)      
+#   include "setup/windows/setup/service_setup.hpp"
+#endif
+
 namespace po = boost::program_options;
 using namespace boost;
 
@@ -192,7 +197,7 @@ bool setup(application::context& context)
 
       if (vm.count("-i")) 
       {
-         application::install_windows_service(
+         application::example::install_windows_service(
          application::setup_arg(vm["name"].as<std::string>()), 
          application::setup_arg(vm["display"].as<std::string>()), 
          application::setup_arg(vm["description"].as<std::string>()), 
@@ -205,7 +210,7 @@ bool setup(application::context& context)
 
       if (vm.count("-u")) 
       {
-         application::uninstall_windows_service(
+         application::example::uninstall_windows_service(
             application::setup_arg(vm["name"].as<std::string>()), 
             application::setup_arg(executable_path_name)).uninstall(ec);
 			   

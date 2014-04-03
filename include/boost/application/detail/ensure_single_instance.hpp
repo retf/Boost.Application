@@ -85,7 +85,7 @@ namespace boost { namespace application { namespace detail {
    };
 
    template <> struct ensure_single_instance< 
-         global_context > {
+         global_context_ptr > {
       bool operator()(global_context_ptr cxt,
          boost::system::error_code& ec)
       {

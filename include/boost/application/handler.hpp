@@ -33,7 +33,7 @@ namespace boost { namespace application {
      *
      * bool instace_aready_running(context &context);
      *
-     * The second version assumes that you are using Boost.Singularity,
+     * The second version assumes that you are using global_context,
      * then no parameter was passed, and the signature looks like:
      *
      * bool instace_aready_running(void);

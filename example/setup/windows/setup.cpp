@@ -33,12 +33,13 @@
 
 #define BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
 
-#include <boost\application.hpp>
-#include <boost\program_options.hpp>
+#include <boost/application.hpp>
+#include <boost/program_options.hpp>
 
 #include "setup/service_setup.hpp"
 
 using namespace boost;
+
 namespace po = program_options;
 
 //[wss
@@ -82,7 +83,7 @@ public:
       if (vm.count("-i")) 
       {
          std::string s = vm["name"].as<std::string>();
-         application::install_windows_service(
+         application::example::install_windows_service(
          application::setup_arg(vm["name"].as<std::string>()), 
          application::setup_arg(vm["display"].as<std::string>()), 
          application::setup_arg(vm["description"].as<std::string>()),
@@ -98,7 +99,7 @@ public:
       if (vm.count("-c")) 
       {
          bool exist =
-         application::check_windows_service(
+         application::example::check_windows_service(
             application::setup_arg(vm["name"].as<std::string>())).exist(ec);
 
          if(ec) 
@@ -124,7 +125,7 @@ public:
 
       if (vm.count("-u")) 
       {
-         application::uninstall_windows_service(
+         application::example::uninstall_windows_service(
             application::setup_arg(vm["name"].as<std::string>()), 
             application::setup_arg(vm["path"].as<std::string>())).uninstall(ec);
 			   

@@ -33,14 +33,36 @@
 
 namespace boost { namespace application {
 
-namespace detail {
-   template <class T> struct T_instance
-   {
-      static csbl::shared_ptr<T> ptr;
-   };
+   /*!
+    * This file a context of applications
+    *
+    * The lib user has 2 options, use a global context or local context that
+    * are passed by handlers (callback) as parameter of methods.
+    *
+    * - context (to be used as parameter
+    * - global_context (is a singleton)
+    *
+    * Then the 'application operator and callbacks' provided by user 
+    * can be defined in 2 ways (signatures). 
+    *
+    * 1. 'singleton' based version (void). 
+    * 2. 'param' based version (that receive a 'context' of application 
+    *     as parameter).
+    *
+    */
 
-   template <class T> csbl::shared_ptr<T> T_instance<T>::ptr;
-} //application::detail
+   namespace detail {
+
+      // application global, replaces the use of Boost.Singularity
+
+      template <class T> struct T_instance
+      {
+         static csbl::shared_ptr<T> ptr;
+      };
+
+      template <class T> csbl::shared_ptr<T> T_instance<T>::ptr;
+
+   } // application::detail
 
    /*!
     * \brief This class is the base of Boost.Application.
@@ -68,8 +90,6 @@ namespace detail {
       // nothing here! Reserved for future use.
    };
 
-
-
    class global_context : public basic_context
    {
    public:
@@ -77,7 +97,9 @@ namespace detail {
       {
          boost::mutex::scoped_lock(lock);
          if(already_created())
-            BOOST_THROW_EXCEPTION(std::logic_error("global context is already created"));
+            BOOST_THROW_EXCEPTION(std::logic_error(
+               "global context is already created"));
+
          instance_t::ptr.reset(new context_t());
          return instance_t::ptr;
       }
@@ -85,14 +107,18 @@ namespace detail {
       {
          boost::mutex::scoped_lock(lock);
          if(!already_created())
-         BOOST_THROW_EXCEPTION(std::logic_error("no global context to destroy"));
+         BOOST_THROW_EXCEPTION(std::logic_error(
+            "no global context to destroy"));
+
          instance_t::ptr.reset();
       }
       static inline csbl::shared_ptr<global_context> get()
       {
          boost::shared_lock_guard<boost::shared_mutex> sm(lock);
          if(!already_created())
-            BOOST_THROW_EXCEPTION(std::logic_error("there is no global context"));
+            BOOST_THROW_EXCEPTION(std::logic_error(
+               "there is no global context"));
+
          return instance_t::ptr;
       }
    protected:
@@ -106,8 +132,8 @@ namespace detail {
       }
       static boost::shared_mutex lock;
    };
-   boost::shared_mutex global_context::lock;
 
+   boost::shared_mutex global_context::lock;
 
    typedef basic_context context;
    typedef csbl::shared_ptr<global_context> global_context_ptr;
@@ -116,4 +142,3 @@ namespace detail {
 }} // boost::application
 
 #endif // BOOST_APPLICATION_CONTEXT_HPP
-

@@ -14,7 +14,6 @@ project
    : source-location .
    : requirements
         <include>../../..
-        <include>../../../../Singularity
         <include>../../../../type_index
    # windows
 
@@ -24,14 +23,17 @@ project
       <toolset>msvc:<define>_CRT_SECURE_NO_WARNINGS
       <toolset>msvc:<define>_CRT_SECURE_NO_DEPRECATE
       <toolset>msvc:<define>_SCL_SECURE_NO_WARNINGS
-
  
    # linux
       <target-os>linux:<linkflags>"-ldl" 
 
    # gcc
       <toolset>gcc:<cxxflags>-fno-strict-aliasing  # avoids strict aliasing violations in other Boost components
-
+	
+   # use dynamic libs
+   # <define>BOOST_ALL_DYN_LINK
+   # <define>BOOST_LIB_DIAGNOSTIC
+	  
    # others
       <link>shared:<define>BOOST_ALL_DLL      
       <library>/boost/system//boost_system
@@ -41,6 +43,7 @@ project
       <library>/boost/thread//boost_thread
       <library>/boost/test//boost_test_exec_monitor
       <threading>multi
+
       ;
 {
 

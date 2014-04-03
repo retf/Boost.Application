@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\example\service_setup.cpp">
+    <ClCompile Include="..\example\limit_single_instance_callback.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
