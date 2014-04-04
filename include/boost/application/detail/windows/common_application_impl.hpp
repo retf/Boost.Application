@@ -33,7 +33,7 @@ namespace boost { namespace application {
    public:
 
       typedef boost::function< int (application::context&) > main_parameter;
-      typedef boost::function< int (void) >                  main_singleton;
+      typedef boost::function< int (void) >                  main_singleton; // global_context
 
       // string types to be used internaly to handle unicode on windows
       typedef CharType char_type;

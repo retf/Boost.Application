@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
 
    // way 1
    /*
-   application::dafault_handler::parameter_callback callback 
+   application::handler<bool>::parameter_context_callback callback 
       = boost::bind<bool>(&myapp::instace_aready_running, &app, _1);
 
    app_context.insert<application::limit_single_instance>(
@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
    // way 2
    app_context.insert<application::limit_single_instance>(
       boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, 
-         application::make_parameter_callback<bool>(app, &myapp::instace_aready_running)));
+         application::handler<bool>::make_parameter_callback(app, &myapp::instace_aready_running)));
 
    return application::launch<application::common>(app, app_context);
 }

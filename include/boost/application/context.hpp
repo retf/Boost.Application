@@ -34,20 +34,47 @@
 namespace boost { namespace application {
 
    /*!
-    * This file a context of applications
+    * This file hold a context of applications
     *
     * The lib user has 2 options, use a global context or local context that
     * are passed by handlers (callback) as parameter of methods.
-    *
-    * - context (to be used as parameter
+    *    
     * - global_context (is a singleton)
+    * - context (to be used as parameter)
     *
-    * Then the 'application operator and callbacks' provided by user 
+    * Then the 'application operator and callbacks handlers' provided by user 
     * can be defined in 2 ways (signatures). 
     *
-    * 1. 'singleton' based version (void). 
-    * 2. 'param' based version (that receive a 'context' of application 
-    *     as parameter).
+    * 1. 'param' based version, in this case the handler will that receive a 
+    *    'context' of application as parameter.    
+    *
+    * e.g.
+    *
+    * int operator()(application::context& context)
+    * {
+    *    // use context
+    * }
+    *
+    * bool stop(application::context& context)
+    * {
+    *    // use context
+    * }
+    *
+    * 2. 'global_context' based version, in this case the handler don't receive 
+    *     anything, the user can get access to application::context using 
+    *     application::global_context::get(). 
+    *
+    * e.g.
+    *
+    * int operator()()
+    * {
+    *    // use application::global_context::get()
+    * }
+    *
+    * bool stop()
+    * {
+    *    // use application::global_context::get()
+    * }
     *
     */
 

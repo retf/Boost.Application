@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
    
    // way 1
    /*
-   handler<>::singleton_callback callback 
+   handler<>::global_context_callback callback 
       = boost::bind<bool>(&myapp::instace_aready_running, &app);
    
    // use aspects
@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
    // way 2
    this_application()->insert<limit_single_instance>(
       boost::make_shared<limit_single_instance_default_behaviour>(appuuid, 
-         make_singleton_callback<bool>(app, &myapp::instace_aready_running)));
+         handler<bool>::make_global_callback(app, &myapp::instace_aready_running)));
 
    int ret = launch<common>(app, ctx);
 

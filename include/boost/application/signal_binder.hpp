@@ -351,7 +351,7 @@ namespace boost { namespace application {
          return context_.find<termination_handler>(guard);
       }
 
-      // parameter version
+      // parameter context version
 
       virtual void parameter_register_signals(boost::system::error_code& ec)
       {
@@ -388,7 +388,7 @@ namespace boost { namespace application {
          return false;
       }
 
-      // singleton version
+      // global_context version
 
       virtual void singleton_register_signals(boost::system::error_code& ec)
       {

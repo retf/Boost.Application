@@ -52,11 +52,18 @@ namespace boost { namespace application {
    {
    public:
 
+      // old names (DEPRECATED)
+
       typedef boost::function< HandlerReturnType (context&) >
          parameter_callback;
 
       typedef boost::function< HandlerReturnType (void)     >
          singleton_callback;
+
+      // new names
+
+      typedef parameter_callback parameter_context_callback;
+      typedef singleton_callback global_context_callback;
 
       /*!
        * Constructs an void handler.
@@ -76,7 +83,7 @@ namespace boost { namespace application {
        * \param callback An callback that receive a application context
        *        as param. User must return desired behaviour.
        */
-      handler(const parameter_callback& callback)
+      handler(const parameter_context_callback& callback)
          : parameter_callback_(callback) {}
 
       /*!
@@ -86,8 +93,8 @@ namespace boost { namespace application {
        *        User must return desired behaviour.
        *
        */
-      handler(const singleton_callback& callback)
-         : singleton_callback_(callback) {}
+      handler(const global_context_callback& callback)
+         : global_callback_(callback) {}
 
       /*!
        * Set a callback to handler.
@@ -95,7 +102,7 @@ namespace boost { namespace application {
        * \param callback An callback that receive a application context
        *        as param.
        */
-      void callback(const parameter_callback& callback)
+      void callback(const parameter_context_callback& callback)
       {
          parameter_callback_ = callback;
       }
@@ -106,9 +113,9 @@ namespace boost { namespace application {
        * \param callback An callback.
        *
        */
-      void callback(const singleton_callback& callback)
+      void callback(const global_context_callback& callback)
       {
-         singleton_callback_ = callback;
+         global_callback_ = callback;
       }
 
       /*!
@@ -120,7 +127,7 @@ namespace boost { namespace application {
        * \return true if callback pointer is valid.
        *
        */
-      bool callback(parameter_callback*& callback)
+      bool callback(parameter_context_callback*& callback)
       {
           if(parameter_callback_is_valid())
           {
@@ -141,11 +148,11 @@ namespace boost { namespace application {
        * \return true if callback pointer is valid.
        *
        */
-      bool callback(singleton_callback*& callback)
+      bool callback(global_context_callback*& callback)
       {
-          if(singleton_callback_is_valid())
+          if(global_callback_is_valid())
           {
-            callback = &singleton_callback_;
+            callback = &global_callback_;
             return true;
           }
 
@@ -167,15 +174,24 @@ namespace boost { namespace application {
           return true;
       }
 
+      // old name (DEPRECATED)
+      bool singleton_callback_is_valid() const
+      {
+          if(global_callback_.empty())
+            return false;
+
+          return true;
+      }
+
       /*!
        * Check if a callback pointer to futher execution is valid.
        *
        * \return true if callback pointer is valid.
        *
        */
-      bool singleton_callback_is_valid() const
+      bool global_callback_is_valid() const
       {
-          if(singleton_callback_.empty())
+          if(global_callback_.empty())
             return false;
 
           return true;
@@ -192,44 +208,68 @@ namespace boost { namespace application {
          return *this;
       }
 
+      // util
+
+      /*!
+       * Convenient static method to create a 'parameter_context' callback
+       * to be used by handler.
+       *
+       * e.g. to make a callback of method like this:
+       * 
+       * struct myapp {
+       *    bool instace_aready_running(context &context);
+       * }; 
+       *
+       * myapp app;
+       *
+       * handler<bool>::make_parameter_callback(app, &myapp::instace_aready_running);
+       *
+       * \return a boost::function<HandlerReturnType (context&) > callback 
+       *         to be used on handler class.
+       *
+       */
+      template< typename App, typename Handler >
+      static boost::function< HandlerReturnType (context&) > 
+         make_parameter_callback(App& app, Handler h)
+      {
+         return boost::bind< HandlerReturnType >(h, &app, _1);
+      }
+
+      /*!
+       * Convenient static method to create a 'global_context' callback
+       * to be used by handler.
+       *
+       * e.g. to make a callback of method like this:
+       * 
+       * struct myapp {
+       *    bool instace_aready_running(void);
+       * }; 
+       *
+       * myapp app;
+       *
+       * handler<bool>::make_global_callback(app, &myapp::instace_aready_running);
+       *
+       * \return a boost::function<HandlerReturnType (void) > callback 
+       *         to be used on handler class.
+       *
+       */
+      template< typename App, typename Handler >
+      static boost::function< HandlerReturnType (void) > 
+         make_global_callback(App& app, Handler h)
+      {
+         return boost::bind< HandlerReturnType >(h, &app);
+      }
+
    private:
 
-      parameter_callback parameter_callback_;
-      singleton_callback singleton_callback_;
+      parameter_context_callback parameter_callback_;
+      global_context_callback    global_callback_;
 
    };
 
+   // usual handler 
    typedef handler<bool> dafault_handler;
-
-   /*!
-    * Util free function to create a 'parameter' callback
-    *
-    * \return a boost::function<ReturnType (context&) > callback 
-    *         to be used on handler class.
-    *
-    */
-   template< typename HandlerReturnType, typename App, typename Handler >
-   boost::function< HandlerReturnType (context&) > 
-      make_parameter_callback(App& app, Handler h)
-   {
-      return boost::bind< HandlerReturnType >(h, &app, _1);
-   }
-
-   /*!
-    * Util free function to create a 'singleton' callback
-    *
-    * \return a boost::function<HandlerReturnType (void) > callback 
-    *         to be used on handler class.
-    *
-    */
-   template< typename HandlerReturnType, typename App, typename Handler >
-   boost::function< HandlerReturnType (void) > 
-      make_singleton_callback(App& app, Handler h)
-   {
-      return boost::bind< HandlerReturnType >(h, &app);
-   }
 
 }} // boost::application
 
 #endif // BOOST_APPLICATION_HANDLER_HPP
-
