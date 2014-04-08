@@ -85,9 +85,11 @@ namespace boost { namespace application {
       template <class T> struct T_instance
       {
          static csbl::shared_ptr<T> ptr;
+         static boost::shared_mutex lock;
       };
 
       template <class T> csbl::shared_ptr<T> T_instance<T>::ptr;
+      template <class T> boost::shared_mutex T_instance<T>::lock;
 
    } // application::detail
 
@@ -122,7 +124,7 @@ namespace boost { namespace application {
    public:
       static inline csbl::shared_ptr<global_context> create()
       {
-         boost::mutex::scoped_lock(lock);
+         boost::lock_guard<boost::shared_mutex> u_guard(instance_t::lock);
          if(already_created())
             BOOST_THROW_EXCEPTION(std::logic_error(
                "global context is already created"));
@@ -132,7 +134,7 @@ namespace boost { namespace application {
       }
       static inline void destroy()
       {
-         boost::mutex::scoped_lock(lock);
+         boost::lock_guard<boost::shared_mutex> u_guard(instance_t::lock);
          if(!already_created())
          BOOST_THROW_EXCEPTION(std::logic_error(
             "no global context to destroy"));
@@ -141,7 +143,7 @@ namespace boost { namespace application {
       }
       static inline csbl::shared_ptr<global_context> get()
       {
-         boost::shared_lock_guard<boost::shared_mutex> sm(lock);
+         boost::shared_lock_guard<boost::shared_mutex> s_guard(instance_t::lock);
          if(!already_created())
             BOOST_THROW_EXCEPTION(std::logic_error(
                "there is no global context"));
@@ -157,10 +159,8 @@ namespace boost { namespace application {
       static inline bool already_created() {
           return (instance_t::ptr != 0);
       }
-      static boost::shared_mutex lock;
-   };
 
-   boost::shared_mutex global_context::lock;
+   };
 
    typedef basic_context context;
    typedef csbl::shared_ptr<global_context> global_context_ptr;
