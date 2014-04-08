@@ -63,6 +63,13 @@ project
       [ run global_context_test.cpp ]
       #
       #
+	  
+	  #
+      # translation unit test
+      #
+      [ run tunit_test.cpp myapp.cpp ]
+      #
+      #
 
       #
       # common application
