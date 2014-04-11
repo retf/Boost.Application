@@ -21,6 +21,8 @@ contact: re.tf@acm.org
 
 [Creating a New Application Mode] (http://www.codeproject.com/Articles/695937/Creating-a-New-Application-Mode)
 
+[Build a Server Application using Application Library] (http://www.codeproject.com/Articles/756866/Build-a-Server-Application-using-Application-Libra)
+
 ###Installation Notes
 
 Boost.Application uses a libraries that is not part of boost yet, you need install this library manually:
