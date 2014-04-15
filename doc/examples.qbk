@@ -49,7 +49,7 @@ Use of Apache httpd Application Mode [@http://www.boost.org/libs/application/exa
 [* Windows specifics]
 
 [pre
-Windows Service Setup [@http://www.boost.org/libs/application/example/service_setup.cpp (service_setup.cpp)]
+Windows Service Setup [@http://www.boost.org/libs/application/example/setup/windows/setup.cpp (setup.cpp)]
 ]
 
 [* POSIX specifics]
@@ -83,6 +83,8 @@ Common Application With Simple Asio Based Threadpool [@http://www.boost.org/libs
 UUID Generator (server) Application Uisng Asio [@http://www.boost.org/libs/application/example/uuid_client_server/server.cpp (server.cpp)]
 UUID Generator (client) Application Uisng Asio [@http://www.boost.org/libs/application/example/uuid_client_server/client.cpp (client.cpp)]
 UUID Generator (plugin) Application Uisng Asio [@http://www.boost.org/libs/application/example/uuid_client_server/plugin.cpp (plugin.cpp)]
+Time-based Server [@http://www.boost.org/libs/application/example/time_based_server/server.cpp (server.cpp)]
+Time-based Server Plug-in [@http://www.boost.org/libs/application/example/time_based_server/job_plugin_library.cpp (job_plugin_library.cpp)]
 ]
 
 [note

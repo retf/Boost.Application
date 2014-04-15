@@ -15,7 +15,6 @@
 
 #define BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
 
-//[self
 #include <iostream>
 #include <boost/application.hpp>
 #include <boost/application/aspects/selfpipe.hpp>

@@ -57,6 +57,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "termination_handler_with_gl
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "service_setup_ex", "service_setup_ex.vcxproj", "{73744107-4ED1-4E31-ACEA-7FBF61370E58}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "job_plugin_library", "job_plugin_library.vcxproj", "{28EBB11C-6D92-42E8-AECE-A2144004E563}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "time_based_plugin_job", "time_based_plugin_job.vcxproj", "{37E28B6F-CB07-4080-B7FF-D4509297B4E1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -171,6 +175,14 @@ Global
 		{73744107-4ED1-4E31-ACEA-7FBF61370E58}.Debug|Win32.Build.0 = Debug|Win32
 		{73744107-4ED1-4E31-ACEA-7FBF61370E58}.Release|Win32.ActiveCfg = Release|Win32
 		{73744107-4ED1-4E31-ACEA-7FBF61370E58}.Release|Win32.Build.0 = Release|Win32
+		{28EBB11C-6D92-42E8-AECE-A2144004E563}.Debug|Win32.ActiveCfg = Debug|Win32
+		{28EBB11C-6D92-42E8-AECE-A2144004E563}.Debug|Win32.Build.0 = Debug|Win32
+		{28EBB11C-6D92-42E8-AECE-A2144004E563}.Release|Win32.ActiveCfg = Release|Win32
+		{28EBB11C-6D92-42E8-AECE-A2144004E563}.Release|Win32.Build.0 = Release|Win32
+		{37E28B6F-CB07-4080-B7FF-D4509297B4E1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{37E28B6F-CB07-4080-B7FF-D4509297B4E1}.Debug|Win32.Build.0 = Debug|Win32
+		{37E28B6F-CB07-4080-B7FF-D4509297B4E1}.Release|Win32.ActiveCfg = Release|Win32
+		{37E28B6F-CB07-4080-B7FF-D4509297B4E1}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

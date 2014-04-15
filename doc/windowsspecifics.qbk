@@ -18,9 +18,23 @@ Boost.Application have some specifics on each side, here the user that uses Wind
 
 [section:setup_service Setup for Windows Service] 
 
+In this version the library don’t provide official support for "service or daemon" installation. This is because we need maintain symmetry between functionality provided on all platforms that the lib support, and on POSIX side, the installation process varies a lot. Thus the library provide installation functionality for major system as sample on examples folder. In future we have plan to bring these functionality to core library.
+
+[note
+For POSIX you need use some shell script to control a daemon, refer to:
+
+\example\setup\posix\ubuntu
+
+That has some samples from Ubuntu.
+]
+
+On Window we will use this sample code:
+
+\example\setup\windows\setup\service_setup.hpp
+
 Boost.Application provides a setup code, that can be added to to enable installation/uninstallation of windows service application.
 
-[import ../example/service_setup.cpp]
+[import ../example/setup/windows/setup.cpp]
 [wss]
 
 This example shows how to use windows service setup module to provide a installation system to application using program_options.
@@ -39,11 +53,17 @@ windows_service_setup.exe -u --name "My Service" --path "c:\myservice\service.ex
 ]
 
 [important 
-Note that you need run this AS ADMIN.
+To install service you need have permission to do that. An easy way is execute installation as Admin.
 ]
 
 [note
 Note that when arg name are not priovided, the name will be the name of executable, in this case, service name will be: 'windows_service_setup'
+]
+
+[note
+Note that you can provide “user login” to install the service for a specific Windows User.
+
+windows_service_setup.exe -i --name "My Service" --path "c:\myservice\service.exe" --display "My Service" --description "Service Description" --user "Renato Forti" --pass "1c2c3c"
 ]
 
 [tip

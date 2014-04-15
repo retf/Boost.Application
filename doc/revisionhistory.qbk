@@ -6,6 +6,11 @@
 
 [section Revision History]
 
+
+[h5 0.4.6]
+
+Removes Boost.Singularity dependence and add a global context
+
 [h5 0.4.5]
 
 In line with the last Boost.TypeIndex (typeind::type_index)

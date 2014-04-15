@@ -64,7 +64,7 @@ public:
          (",u", "unistall service")
          ("path", po::value<std::string>(), "service path")
          ("name", po::value<std::string>(), "service name")
-		   ("user", po::value<std::string>()->default_value(""), "user logon (optional, installation only)")
+         ("user", po::value<std::string>()->default_value(""), "user logon (optional, installation only)")
          ("pass", po::value<std::string>()->default_value(""), "user password (optional, installation only)")
          ("display", po::value<std::string>()->default_value(""), "service display name (optional, installation only)")
          ("description", po::value<std::string>()->default_value(""), "service description (optional, installation only)")

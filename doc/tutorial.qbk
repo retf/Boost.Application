@@ -15,6 +15,11 @@ This tutorial will demonstrate how to use the "Boost.Application" to build the t
 The code presented here can be compiled on UNIX variants and Windows without modifications.
 ]
 
+[tip 
+An more complex tutorial can be found at [@http://www.codeproject.com/Articles/756866/Build-a-Server-Application-using-Application-Libra Code Project]
+]
+
+
 [section Common Application]
 Like name aready explan, this is a most usual type of aplication. Exemples of this kind of application are a command application (e.g. more, tail, ls), mail client application and so on. In general matter, this kind of application does not execute to a long period of time, like a server application are.
 
