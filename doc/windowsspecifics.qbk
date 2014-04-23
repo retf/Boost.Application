@@ -72,4 +72,21 @@ The sample 'simple_server application.cpp' has the setup code embed on it. This 
 
 [endsect]
 
+[section:multi_service Multi-Service Process] 
+By definition, each Win32 service process can contain one or more services, running on separate threads.
+
+Note that Boost.Application do not support more than one service at one executable. This limitation is imposed to maintain symmetry between Windows and POSIX sides.
+[endsect]
+
+[section:unicode Unicode on Services] 
+Boost.Application supports both Unicode and ANSI char types to develop a server (service) mode application, but is highly recommended that you use Unicode.
+
+Windows has two versions of every API function that takes a string parameter, one for wide chars that name ends with W, and another that name ends with A for ANSI. The native call is for 'W' functions, while the 'A' version function simply ends up calling the 'W' function.
+
+Uing ANSI therefore makes extra function call, and aditional string conversion overhad.
+
+To know how Boost.Application handle Unicode, refer to [@../html/boost_application/f_a_q_.html#boost_application.f_a_q_.how_unicode__windows__is_hadled_ FAQ]
+
+[endsect]
+
 [endsect]
