@@ -34,6 +34,11 @@ Full Reference (http://www.boost.org/community/review_schedule.html)
 
 Building: Detailed instructions can be found [here] (https://svn.boost.org/trac/boost/wiki/TryModBoost).
 
+### Use
+
+If you intend to use ‘Application’ on your application, please send-me your name and project. I am looking for create a list of users of ‘Application’.
+
+
 ### Questions, suggestions or bugs, please send an email to: 
 
 re.tf@acm.org (Renato Tegon Forti)
