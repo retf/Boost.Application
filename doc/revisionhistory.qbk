@@ -6,6 +6,16 @@
 
 [section Revision History]
 
+[h5 0.4.8]
+
+New experimental module auto_handler.hpp
+This module simplifies the creation of the main 'handlers', like: stop, instace_aready_running, pause (windows only), resume (windows only)
+
+[h5 0.4.7]
+
+In line with the last Boost.TypeIndex (typeindex::type_index)
+
+[@https://github.com/boostorg/type_index TypeIndex]
 
 [h5 0.4.6]
 

@@ -411,7 +411,7 @@ namespace boost { namespace application { namespace example {
                NULL,                       // load order group
                NULL,                       // tag id
                NULL,                       // dependencies
-               actual_service_user.c_str(),      // user account
+               actual_service_user.c_str(),// user account
                service_password_.c_str(),  // user account password
                NULL );                     // service display name
 

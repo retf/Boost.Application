@@ -74,7 +74,9 @@
 #   define BOOST_APPLICATION_TYPE_INDEX_SELECT type_index
 #elif defined( BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST )
 #   define BOOST_APPLICATION_FEATURE_NS_SELECT boost
-#   define BOOST_APPLICATION_TYPE_INDEX_SELECT typeind::type_index
+//  the last type_index uses boost::typeindex insted boost::typeind 
+//  (https://github.com/boostorg/type_index)
+#   define BOOST_APPLICATION_TYPE_INDEX_SELECT typeindex::type_index 
 #else // auto detect
 // BOOST_APPLICATION_FEATURE_NS_SELECT is used to select correct ns
 // on class members.
@@ -142,4 +144,3 @@
 #endif
 
 #endif // BOOST_APPLICATION_CONFIG_HPP
-

@@ -89,6 +89,12 @@ exe limit_single_instance
 exe simple_server_application
    : simple_server_application.cpp
    ;
+
+# auto_handler
+
+exe simple_server_application_with_auto_handler
+   : simple_server_application_with_auto_handler.cpp
+   ;
    
 # shared library sub-system
    

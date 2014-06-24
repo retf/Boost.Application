@@ -27,8 +27,8 @@ contact: re.tf@acm.org
 
 Boost.Application uses a libraries that is not part of boost yet, you need install this library manually:
 
-* [TypeIndex] (https://github.com/apolukhin/type_index/)
-  --> In line with the last Boost TypeIndex (typeind::type_index)
+* [TypeIndex] (https://github.com/boostorg/type_index)
+  --> In line with the last Boost TypeIndex (typeindex::type_index)
 
 Full Reference (http://www.boost.org/community/review_schedule.html)
 
@@ -36,7 +36,7 @@ Building: Detailed instructions can be found [here] (https://svn.boost.org/trac/
 
 ### Use
 
-If you intend to use ‘Application’ on your application, please send-me your name and project. I am looking for create a list of users of ‘Application’.
+If you intend to use 'Application' on your application, please send-me your name and project. I am looking for create a list of users of ‘Application’.
 
 
 ### Questions, suggestions or bugs, please send an email to: 
