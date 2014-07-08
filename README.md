@@ -27,21 +27,21 @@ contact: re.tf@acm.org
 
 As proposed by Rodrigo Madera (Application RM), this new version (0.4.9) changes the creation of application, this:
 
- struct myapp {
-     bool stop(boost::application::context& context);
-     bool pause(boost::application::context& context);
-     bool resume(boost::application::context& context); 
- };
+    struct myapp {
+        bool stop(boost::application::context& context);
+        bool pause(boost::application::context& context);
+        bool resume(boost::application::context& context); 
+    };
 
 Become this:
 
- struct myapp {
-     myapp(boost::application::context& context);
-
-     bool stop();
-     bool pause();
-     bool resume();
- };
+    struct myapp {
+        myapp(boost::application::context& context);
+   
+        bool stop();
+        bool pause();
+        bool resume();
+    };
 
 ### Todo
 
