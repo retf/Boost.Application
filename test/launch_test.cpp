@@ -14,22 +14,30 @@
 
 using namespace boost;
 
-class myapp_parameter
-{
-public:
-   int operator()(application::context& context)
-   {
-      return 0;
-   }
-};
-
-class myapp_singleton
+class myapp
 {
 public:
    int operator()()
    {
       return 0;
    }
+};
+
+class myapp2
+{
+public:
+   myapp2(application::context& context)
+      : context_(context)
+   {
+   }
+   
+   int operator()()
+   {
+      return 0;
+   }
+     
+private:
+   application::context& context_;
 };
 
 class my_signal_manager : public application::signal_manager
@@ -39,35 +47,16 @@ public:
    my_signal_manager(application::context &context)
       : signal_manager(context)
    {
-      application::handler<>::parameter_callback callback
-         = boost::bind<bool>(&my_signal_manager::stop, this, _1);
-
-      bind(SIGINT,  callback);
-   }
-
-   my_signal_manager(boost::application::global_context_ptr context)
-      : signal_manager(context)
-   {
-      application::handler<>::singleton_callback callback
+      application::handler<>::callback cb
          = boost::bind<bool>(&my_signal_manager::stop, this);
 
-      bind(SIGINT,  callback);
-   }
-
-   bool stop(application::context &context)
-   {
-      application::csbl::shared_ptr<application::wait_for_termination_request> th
-         = context.find<application::wait_for_termination_request>();
-
-      th->proceed();
-
-      return false;
+      bind(SIGINT,  cb);
    }
 
    bool stop()
    {
       application::csbl::shared_ptr<application::wait_for_termination_request> th
-         = application::global_context::get()->find<application::wait_for_termination_request>();
+         = context_.find<application::wait_for_termination_request>();
 
       th->proceed();
 
@@ -77,19 +66,17 @@ public:
 
 int test_main(int argc, char** argv)
 {
-   application::context app_context;
-
    // common
 
    {
-      myapp_parameter app;
       application::context cxt;
+      myapp2 app(cxt);
 
       BOOST_CHECK(!application::launch<application::common>(app, cxt));
    }
 
    {
-      myapp_singleton app;
+      myapp app;
       application::global_context::create();
 
       BOOST_CHECK(!application::launch<application::common>(app, application::global_context::get()));
@@ -98,8 +85,8 @@ int test_main(int argc, char** argv)
    }
 
    {
-      myapp_parameter app;
       application::context cxt;
+      myapp2 app(cxt);
 
       boost::system::error_code ec;
       BOOST_CHECK(!application::launch<application::common>(app, cxt, ec));
@@ -107,7 +94,7 @@ int test_main(int argc, char** argv)
    }
 
    {
-      myapp_singleton app;
+      myapp app;
       application::global_context::create();
 
       boost::system::error_code ec;
@@ -120,18 +107,19 @@ int test_main(int argc, char** argv)
    // sm
 
    {
-      myapp_parameter app;
       application::context cxt;
+      myapp2 app(cxt);
+      
       my_signal_manager sm(cxt);
 
       BOOST_CHECK(!application::launch<application::common>(app, sm, cxt));
    }
 
    {
-      myapp_singleton app;
+      myapp app;
       application::global_context::create();
 
-      my_signal_manager sm(application::global_context::get());
+      my_signal_manager sm(*application::global_context::get().get());
 
       BOOST_CHECK(!application::launch<application::common>(app, sm, application::global_context::get()));
 
@@ -139,8 +127,9 @@ int test_main(int argc, char** argv)
    }
 
    {
-      myapp_parameter app;
-      application::context cxt;
+      application::context cxt; 
+      myapp2 app(cxt);
+      
       my_signal_manager sm(cxt);
 
       boost::system::error_code ec;
@@ -149,14 +138,14 @@ int test_main(int argc, char** argv)
    }
 
    {
-      myapp_singleton app;
+      myapp app;
       application::global_context::create();
-      my_signal_manager sm(application::global_context::get());
+      my_signal_manager sm(*application::global_context::get().get());
 
       boost::system::error_code ec;
       BOOST_CHECK(!application::launch<application::common>(app, sm, application::global_context::get(), ec));
       BOOST_CHECK(!ec);
-
+      
       application::global_context::destroy();
    }
 
@@ -169,8 +158,8 @@ int test_main(int argc, char** argv)
    // The service process could not connect to the service controller.
 
    {
-      myapp_parameter app;
       application::context cxt;
+      myapp2 app(cxt);
 
       try
       {
@@ -183,7 +172,7 @@ int test_main(int argc, char** argv)
    }
 
    {
-      myapp_singleton app;
+      myapp app;
       application::global_context::create();
 
       try
@@ -199,8 +188,8 @@ int test_main(int argc, char** argv)
    }
 
    {
-      myapp_parameter app;
       application::context cxt;
+      myapp2 app(cxt);
 
       boost::system::error_code ec;
       int ret = application::launch<application::server>(app, cxt, ec);
@@ -208,7 +197,7 @@ int test_main(int argc, char** argv)
    }
 
    {
-      myapp_singleton app;
+      myapp app;
       application::global_context::create();
 
       boost::system::error_code ec;
@@ -221,8 +210,9 @@ int test_main(int argc, char** argv)
    // sm
 
    {
-      myapp_parameter app;
       application::context cxt;
+      myapp2 app(cxt);
+      
       my_signal_manager sm(cxt);
 
       try
@@ -236,9 +226,9 @@ int test_main(int argc, char** argv)
    }
 
    {
-      myapp_singleton app;
+      myapp app;
       application::global_context::create();
-      my_signal_manager sm(application::global_context::get());
+      my_signal_manager sm(*application::global_context::get().get());
 
       try
       {
@@ -253,8 +243,10 @@ int test_main(int argc, char** argv)
    }
 
    {
-      myapp_parameter app;
-      application::context cxt;
+     
+      application::context cxt; 
+      myapp2 app(cxt);
+      
       my_signal_manager sm(cxt);
 
       boost::system::error_code ec;
@@ -263,9 +255,9 @@ int test_main(int argc, char** argv)
    }
 
    {
-      myapp_singleton app;
+      myapp app;
       application::global_context::create();
-      my_signal_manager sm(application::global_context::get());
+      my_signal_manager sm(*application::global_context::get().get());
 
       boost::system::error_code ec;
       int ret = application::launch<application::server>(app, sm, application::global_context::get(), ec);
@@ -277,14 +269,15 @@ int test_main(int argc, char** argv)
 #elif defined( BOOST_POSIX_API )
 
    {
-      myapp_parameter app;
+      
       application::context cxt;
+      myapp2 app(cxt);
 
       BOOST_CHECK(!application::launch<application::server>(app, cxt));
    }
 
     {
-      myapp_singleton app;
+      myapp app;
       application::global_context::create();
 
       BOOST_CHECK(!application::launch<application::server>(app, application::global_context::get()));
@@ -293,8 +286,8 @@ int test_main(int argc, char** argv)
    }
 
    {
-      myapp_parameter app;
       application::context cxt;
+      myapp2 app(cxt);
 
       boost::system::error_code ec;
       BOOST_CHECK(!application::launch<application::server>(app, cxt, ec));
@@ -302,7 +295,7 @@ int test_main(int argc, char** argv)
    }
 
    {
-      myapp_singleton app;
+      myapp app;
       application::global_context::create();
 
       boost::system::error_code ec;
@@ -315,15 +308,17 @@ int test_main(int argc, char** argv)
    // sm
 
    {
-      myapp_parameter app;
+      
       application::context cxt;
+      myapp app(cxt);
+      
       my_signal_manager sm(cxt);
 
       BOOST_CHECK(!application::launch<application::server>(app, sm, cxt));
    }
 
    {
-      myapp_singleton app;
+      myapp app;
       application::global_context::create();
 
       my_signal_manager sm(application::global_context::get());
@@ -334,8 +329,9 @@ int test_main(int argc, char** argv)
    }
 
    {
-      myapp_parameter app;
       application::context cxt;
+      myapp app(cxt);
+      
       my_signal_manager sm(cxt);
 
       boost::system::error_code ec;
@@ -344,7 +340,7 @@ int test_main(int argc, char** argv)
    }
 
    {
-      myapp_singleton app;
+      myapp app;
       application::global_context::create();
       my_signal_manager sm(application::global_context::get());
 

@@ -1,12 +1,11 @@
 // -----------------------------------------------------------------------------
-// simple_application.cpp : examples that show how use 
-// Boost.Application to make a simplest interactive (terminal) application 
+// simple_server_application_with_auto_handler_and_global_context.cpp : 
+// examples that show how use Boost.Application to make a simplest server
+// application using auto_handler and global_context
 //
-// Note 1: The Boost.Application (Aspects v4) and this sample are in 
-//         development process.
 // -----------------------------------------------------------------------------
 
-// Copyright 2011-2013 Renato Tegon Forti
+// Copyright 2011-2014 Renato Tegon Forti
 //
 // Distributed under the Boost Software License, Version 1.0. (See accompanying 
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -64,14 +63,13 @@ using namespace boost;
 
 // my application code
 
+inline application::global_context_ptr this_application() {
+   return application::global_context::get();
+}
+
 class myapp
 {   
 public:
-
-   myapp(application::context& context)
-      : context_(context)
-   {
-   }
 
    void worker()
    {
@@ -79,8 +77,8 @@ public:
 
       // dump args
 
-      std::vector<std::string> arg_vector = 
-         context_.find<application::args>()->arg_vector();
+      std::vector<std::string> &arg_vector = 
+         this_application()->find<application::args>()->arg_vector();
 
       my_log_file_ << "-----------------------------" << std::endl;
       my_log_file_ << "---------- Arg List ---------" << std::endl;
@@ -97,7 +95,7 @@ public:
       // run logic
 
       boost::shared_ptr<application::status> st =          
-         context_.find<application::status>();
+         this_application()->find<application::status>();
 
       int count = 0;
       while(st->state() != application::status::stoped)
@@ -115,7 +113,7 @@ public:
    int operator()()
    {
       std::string logfile 
-         = context_.find<application::path>()->executable_path().string() + "/log.txt";
+         = this_application()->find<application::path>()->executable_path().string() + "/log.txt";
       
       my_log_file_.open(logfile.c_str());
       my_log_file_ << "Start Log..." << std::endl;
@@ -123,7 +121,7 @@ public:
       // launch a work thread
       boost::thread thread(&myapp::worker, this);
       
-      context_.find<application::wait_for_termination_request>()->wait();
+      this_application()->find<application::wait_for_termination_request>()->wait();
 
       // to run direct
       // worker(&context);
@@ -158,8 +156,6 @@ public:
 private:
 
    std::ofstream my_log_file_;
-
-   application::context& context_;
 
 };
 
@@ -233,60 +229,33 @@ bool setup(application::context& context)
 
 int main(int argc, char *argv[])
 {   
+   application::global_context_ptr ctx = application::global_context::create();
    
-   application::context app_context;
-   myapp app(app_context);
+   // auto_handler will automatically add termination, pause and resume (windows) handlers
+   application::auto_handler<myapp> app(ctx);
+   // application::detail::handler_auto_set<myapp> app(app_context);
 
    // my server aspects
 
-   app_context.insert<application::path>(
+   this_application()->insert<application::path>(
       boost::make_shared<application::path_default_behaviour>(argc, argv));
 
-   app_context.insert<application::args>(
-      boost::make_shared<application::args>(argc, argv));
-
-   // add termination handler
-  
-   application::handler<>::callback termination_callback 
-      = boost::bind<bool>(&myapp::stop, &app);
-
-   app_context.insert<application::termination_handler>(
-      boost::make_shared<application::termination_handler_default_behaviour>(termination_callback));
-   
-   // To  "pause/resume" works, is required to add the 2 handlers.
-
-#if defined(BOOST_WINDOWS_API) 
-
-   // windows only : add pause handler
-  
-   application::handler<>::callback pause_callback 
-      = boost::bind<bool>(&myapp::pause, &app);
-
-   app_context.insert<application::pause_handler>(
-      boost::make_shared<application::pause_handler_default_behaviour>(pause_callback));
-
-   // windows only : add resume handler
-
-   application::handler<>::callback resume_callback 
-      = boost::bind<bool>(&myapp::resume, &app);
-
-   app_context.insert<application::resume_handler>(
-      boost::make_shared<application::resume_handler_default_behaviour>(resume_callback));
-
-#endif     
+   this_application()->insert<application::args>(
+      boost::make_shared<application::args>(argc, argv));  
 
    // check if we need setup
 
-   if(setup(app_context))
+   if(setup(*ctx.get()))
    {
       std::cout << "[I] Setup changed the current configuration." << std::endl;
+      application::global_context::destroy();
       return 0;
    }
 
    // my server instantiation
 
    boost::system::error_code ec;
-   int result = application::launch<application::server>(app, app_context, ec);
+   int result = application::launch<application::server>(app, ctx, ec);
 
    if(ec)
    {
@@ -294,5 +263,7 @@ int main(int argc, char *argv[])
          << " <" << ec.value() << "> " << std::cout;
    }
    
+   application::global_context::destroy();
+
    return result;
 }

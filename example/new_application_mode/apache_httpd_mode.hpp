@@ -42,11 +42,8 @@ class apache2_httpd_mod;
 class http_get_verb_handler : public handler<std::string>
 {
 public:
-   http_get_verb_handler(const parameter_callback& callback)
-      : handler<std::string>(callback) {}
-
-   http_get_verb_handler(const singleton_callback& callback)
-      : handler<std::string>(callback) {}
+   http_get_verb_handler(const handler<std::string>::callback& cb)
+      : handler<std::string>(cb) {}
 };
 
 class content_type
@@ -115,18 +112,10 @@ public:
 
    template <typename Application, typename RequestRec>
    apache2_httpd_mod(Application& myapp, RequestRec &rr, 
-      context &cxt, boost::system::error_code& ec)
+      context& cxt, boost::system::error_code& ec)
       : error_(OK) 
    {
       handle_request(myapp, rr, cxt);
-   }
-
-   template <typename Application, typename RequestRec>
-   apache2_httpd_mod(Application& myapp, RequestRec &rr, 
-      boost::application::global_context_ptr cxt, boost::system::error_code& ec)
-      : error_(OK) 
-   {
-      handle_request(myapp, rr, *cxt.get());
    }
 
    int run() { return error_; }
@@ -192,18 +181,11 @@ protected:
 
          // check if we have any callback to call
 
-         handler<std::string>::parameter_callback* parameter = 0;
+         handler<std::string>::callback* cb = 0;
 
-         if(http_get_verb->callback(parameter))
+         if(http_get_verb->get(cb))
          {
-            ap_rputs((*parameter)(cxt).c_str(), &rr); return;
-         }
-
-         handler<std::string>::singleton_callback* singleton = 0;
-
-         if(http_get_verb->callback(singleton))
-         {
-            ap_rputs((*singleton)().c_str(), &rr); return;
+            ap_rputs((*cb)().c_str(), &rr); return;
          }
       }
 

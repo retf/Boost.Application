@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
    
    // way 1
    /*
-   handler<>::global_context_callback callback 
+   handler<>::callback cb 
       = boost::bind<bool>(&myapp::instace_aready_running, &app);
    
    // use aspects
@@ -106,13 +106,13 @@ int main(int argc, char *argv[])
       boost::make_shared<args>(argc, argv));
 
    this_application()->insert<limit_single_instance>(
-      boost::make_shared<limit_single_instance_default_behaviour>(appuuid, callback));
+      boost::make_shared<limit_single_instance_default_behaviour>(appuuid, cb));
    */
 
    // way 2
    this_application()->insert<limit_single_instance>(
       boost::make_shared<limit_single_instance_default_behaviour>(appuuid, 
-         handler<bool>::make_global_callback(app, &myapp::instace_aready_running)));
+         handler<bool>::make_callback(app, &myapp::instace_aready_running)));
 
    int ret = launch<common>(app, ctx);
 

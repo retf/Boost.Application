@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
    
    application::global_context_ptr ctx = application::global_context::create();
 
-   application::handler<>::singleton_callback callback
+   application::handler<>::callback callback
       = boost::bind<bool>(&myapp::stop, &app);
 
    this_application()->insert<application::termination_handler>(

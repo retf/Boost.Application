@@ -47,13 +47,18 @@ class windows_service_setup
 {
 public:
 
-   int operator()(application::context& context)
+   windows_service_setup(application::context& context)
+      : context_(context)
+   {
+   }
+
+   int operator()()
    {
       std::cout << "Setup Windows Service " 
          << "(Note that you need run this AS ADMIN!)" << std::endl;
 
       boost::shared_ptr<application::args> myargs 
-         = context.find<application::args>();
+         = context_.find<application::args>();
 
       // define our simple installation schema options
       po::options_description install("service options");
@@ -136,14 +141,18 @@ public:
 
       return 0;
    }
+ 
+private:
+   application::context& context_;
+
 };
 
 int main(int argc, char *argv[])
 {
    try 
    {
-      windows_service_setup app;
       application::context app_context;
+      windows_service_setup app(app_context);
 
       app_context.insert<application::args>(
          boost::make_shared<application::args>(argc, argv));

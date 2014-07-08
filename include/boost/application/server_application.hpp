@@ -1,7 +1,7 @@
 // server_application.hpp ----------------------------------------------------//
 // -----------------------------------------------------------------------------
 
-// Copyright 2011-2012 Renato Tegon Forti
+// Copyright 2011-2014 Renato Tegon Forti
 
 // Distributed under the Boost Software License, Version 1.0.
 // See http://www.boost.org/LICENSE_1_0.txt
@@ -88,61 +88,12 @@ namespace boost { namespace application {
          // default aspects patterns added to this kind of application
 
          if(!context.find<run_mode>())
-         {
              context.insert<run_mode>(
                csbl::make_shared<run_mode>(mode()));
-         }
 
          if(!context.find<status>())
-         {
              context.insert<status>(
                csbl::make_shared<status>(status::running));
-         }
-
-         // need be created after run_mode, status
-
-         impl_.reset(new server_application_impl(
-            boost::bind<int>( &Application::operator(), &myapp, _1), sm,
-            context, ec));
-      }
-
-      /*!
-       * Creates a server application.
-       *
-       * \param myapp An user application functor class.
-       *
-       * \param sm The signal manager of application, that will be used
-       *           internaly by application type.
-       *           User can customize this instance.
-       *
-       * \param context A shared_ptr to global_context of application, that hold all
-       *        aspects.
-       *
-       * \param ec Variable (boost::system::error_code) that will be
-       *        set to the result of the operation.
-       *
-       * Check ec for errors.
-       *
-       */
-      template <typename Application, typename SignalManager>
-      server(Application& myapp, SignalManager &sm,
-             global_context_ptr context,
-             boost::system::error_code& ec)
-      {
-
-         // default aspects patterns added to this kind of application
-
-         if(!context->find<run_mode>())
-         {
-             context->insert<run_mode>(
-               csbl::make_shared<run_mode>(mode()));
-         }
-
-         if(!context->find<status>())
-         {
-             context->insert<status>(
-               csbl::make_shared<status>(status::running));
-         }
 
          // need be created after run_mode, status
 
@@ -172,7 +123,6 @@ namespace boost { namespace application {
    private:
 
       csbl::shared_ptr<server_application_impl> impl_;
-
    };
 
 }} // boost::application

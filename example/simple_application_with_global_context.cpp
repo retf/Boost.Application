@@ -72,19 +72,19 @@ public:
 // main
 
 int main(int argc, char *argv[])
-{
-   /*<<Instantiate your application>>*/    
-   myapp app;
- 
+{   
    /*<<Create a global context application aspect pool>>*/   
    application::global_context_ptr ctx = application::global_context::create();
 
+   /*<<Instantiate your application>>*/    
+   myapp app;
+ 
    /*<<Add an aspect for future use. An 'aspect' can be customized, or new aspects can be created>>*/ 
    this_application()->insert<application::args>(
       boost::make_shared<application::args>(argc, argv));
 
    /*<<Start the application on the desired mode (common, server)>>*/  
-   int ret = application::launch<application::common>(app, ctx);
+   int ret = application::launch<application::common>(app, this_application());
 
    /*<<Destroy the application global context>>*/  
    application::global_context::destroy();

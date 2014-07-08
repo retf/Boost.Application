@@ -1,7 +1,7 @@
 // run_mode.hpp  -------------------------------------------------------------//
 // -----------------------------------------------------------------------------
 
-// Copyright 2011-2013 Renato Tegon Forti
+// Copyright 2011-2014 Renato Tegon Forti
 
 // Distributed under the Boost Software License, Version 1.0.
 // See http://www.boost.org/LICENSE_1_0.txt

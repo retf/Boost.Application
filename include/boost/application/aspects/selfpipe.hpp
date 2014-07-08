@@ -1,7 +1,7 @@
 // selfpipe.hpp --------------------------------------------------------------//
 // -----------------------------------------------------------------------------
 
-// Copyright 2011-2013 Renato Tegon Forti
+// Copyright 2011-2014 Renato Tegon Forti
 // Copyright 2013 Stanislav Ivochkin 
 // Part of this file was contributed by Stanislav Ivochkin 
 

@@ -73,15 +73,24 @@ class myapp
 {
 public:
 
-   int operator()(application::context& context)
+   myapp(application::context& context)
+      : context_(context)
    {
-      if(!context.find<application::args>())
+   }
+
+   int operator()()
+   {
+      if(!context_.find<application::args>())
       {
          throw myexception("custon error", 4121);
       }
 
       return 0;
    }
+
+private:
+   application::context& context_;
+
 };
 
 // main
@@ -90,8 +99,8 @@ int main(int argc, char *argv[])
 {  
    try 
    {
-      myapp app;
-      application::context app_context;
+      application::context app_context;      
+      myapp app(app_context);
 
       // app_context.insert<application::args>(
       //    boost::make_shared<application::args>(argc, argv));

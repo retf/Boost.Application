@@ -24,14 +24,19 @@ class my_client
 {
 public:
 
-   int operator()(application::context& context)
+   my_client(application::context& context)
+      : context_(context)
+   {
+   }
+
+   int operator()()
    {
 
       BOOST_APPLICATION_FEATURE_SELECT
 
       // recovery needed aspect
       shared_ptr<application::args> myargs 
-         = context.find<application::args>();
+         = context_.find<application::args>();
 
       using boost::asio::ip::tcp;
 
@@ -86,6 +91,9 @@ public:
       return 0;
    }
 
+private:
+   application::context& context_;
+
 }; // my_client class
 
 int main(int argc, char *argv[])
@@ -94,8 +102,8 @@ int main(int argc, char *argv[])
 
    try 
    {
-      my_client app;
       application::context app_context;
+      my_client app(app_context);
 
       // aspects
 

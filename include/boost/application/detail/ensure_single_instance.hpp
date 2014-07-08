@@ -1,7 +1,7 @@
-// ensure_single_instance.hpp  ------------------------------------------------//
+// ensure_single_instance.hpp  ----------------------------------------------//
 // -----------------------------------------------------------------------------
 
-// Copyright 2011-2013 Renato Tegon Forti
+// Copyright 2011-2014 Renato Tegon Forti
 
 // Distributed under the Boost Software License, Version 1.0.
 // See http://www.boost.org/LICENSE_1_0.txt
@@ -43,24 +43,11 @@ namespace boost { namespace application { namespace detail {
 
          // check if we have any callback to call
 
-         handler<>::parameter_callback* parameter = 0;
+         handler<>::callback* cb = 0;
 
-         if(ol->callback(parameter))
+         if(ol->get(cb))
          {
-            if((*parameter)(cxt))
-            {
-               // user tell us to continue
-               return false;
-            }
-
-            return true;
-         }
-
-         handler<>::singleton_callback* singleton = 0;
-
-         if(ol->callback(singleton))
-         {
-            if((*singleton)())
+            if((*cb)())
             {
                // user tell us to continue
                return false;

@@ -23,20 +23,29 @@ class myapp
 {
 public:
    
-   int operator()(application::context& context)
+   myapp(application::context& context)
+      : context_(context)
    {
-      context.find<application::wait_for_termination_request>()->wait();
+   }
+
+   int operator()()
+   {
+      context_.find<application::wait_for_termination_request>()->wait();
       return 0;
    }
 
    /*<< Define your 'stop' handler that will be called when the 'stop' event will be fired. >>*/
-   bool stop(application::context& context)
+   bool stop()
    {
       std::cout << "Stoping my application..." << std::endl;
 	  
       /*<< return true to stop, false to ignore >>*/
       return true; 
    }
+
+private:
+   application::context& context_;
+
 };
 
 //]

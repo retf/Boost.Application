@@ -26,13 +26,18 @@ class my_application_functor_class
 {
 public:
 
-   int operator()(application::context& context)
+   my_application_functor_class(application::context& context)
+      : context_(context)
+   {
+   }
+
+   int operator()()
    {
       // your application logic here!
       // use ctrl to get state of your application...
 
       boost::shared_ptr<application::run_mode> modes 
-         = context.find<application::run_mode>();
+         = context_.find<application::run_mode>();
 
       if(modes->mode() == application::common::mode())
       {
@@ -45,16 +50,19 @@ public:
       }
 
       std::cout << "your application logic!" << std::endl;
-      context.find<application::wait_for_termination_request>()->wait();
+      context_.find<application::wait_for_termination_request>()->wait();
 
       return 0;
    }
 
-   bool stop(application::context& context)
+   bool stop()
    {
       std::cout << "stop!" << std::endl;
       return true; // return true to stop, false to ignore
    }
+
+private:
+   application::context& context_;
 
 };
 
@@ -71,13 +79,13 @@ int main(int argc, char** argv)
 
    po::store(po::parse_command_line(argc, argv, desc), vm);
 
-   my_application_functor_class app;
    application::context app_context;
-
+   my_application_functor_class app(app_context);
+   
    // add termination handler
 
-   application::handler<>::parameter_callback termination_callback 
-      = boost::bind<bool>(&my_application_functor_class::stop, &app, _1);
+   application::handler<>::callback termination_callback 
+      = boost::bind<bool>(&my_application_functor_class::stop, &app);
 
    app_context.insert<application::termination_handler>(
       boost::make_shared<

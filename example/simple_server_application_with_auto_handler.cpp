@@ -76,14 +76,19 @@ class myapp
 {   
 public:
 
-   void worker(application::context* context)
+   myapp(application::context& context)
+      : context_(context)
+   {
+   }
+
+   void worker()
    {
       // my application behaviour
 
       // dump args
 
       std::vector<std::string> arg_vector = 
-         context->find<application::args>()->arg_vector();
+         context_.find<application::args>()->arg_vector();
 
       my_log_file_ << "-----------------------------" << std::endl;
       my_log_file_ << "---------- Arg List ---------" << std::endl;
@@ -100,7 +105,7 @@ public:
       // run logic
 
       boost::shared_ptr<application::status> st =          
-         context->find<application::status>();
+         context_.find<application::status>();
 
       int count = 0;
       while(st->state() != application::status::stoped)
@@ -115,18 +120,18 @@ public:
    }
 
    // param
-   int operator()(application::context& context)
+   int operator()()
    {
       std::string logfile 
-         = context.find<application::path>()->executable_path().string() + "/log.txt";
+         = context_.find<application::path>()->executable_path().string() + "/log.txt";
       
       my_log_file_.open(logfile.c_str());
       my_log_file_ << "Start Log..." << std::endl;
 
       // launch a work thread
-      boost::thread thread(&myapp::worker, this, &context);
+      boost::thread thread(&myapp::worker, this);
       
-      context.find<application::wait_for_termination_request>()->wait();
+      context_.find<application::wait_for_termination_request>()->wait();
 
       // to run direct
       // worker(&context);
@@ -136,7 +141,7 @@ public:
 
    // windows/posix
 
-   bool stop(application::context& context)
+   bool stop()
    {
       my_log_file_ << "Stoping my application..." << std::endl;
       my_log_file_.close();
@@ -146,13 +151,13 @@ public:
 
    // windows specific (ignored on posix)
 
-   bool pause(application::context& context)
+   bool pause()
    {
       my_log_file_ << "Pause my application..." << std::endl;
       return true; // return true to pause, false to ignore
    }
 
-   bool resume(application::context& context)
+   bool resume()
    {
       my_log_file_ << "Resume my application..." << std::endl;
       return true; // return true to resume, false to ignore
@@ -161,6 +166,7 @@ public:
 private:
 
    std::ofstream my_log_file_;
+   application::context& context_;
 
 };
 
@@ -238,6 +244,7 @@ int main(int argc, char *argv[])
    
    // auto_handler will automatically add termination, pause and resume (windows) handlers
    application::auto_handler<myapp> app(app_context);
+   // application::detail::handler_auto_set<myapp> app(app_context);
 
    // my server aspects
 

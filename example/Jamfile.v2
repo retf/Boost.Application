@@ -105,6 +105,6 @@ exe shared_library_load_plugin
 # windows only
 
 exe service_setup
-   : service_setup.cpp
+   : setup/windows/setup.cpp
    : <build>no <target-os>windows:<build>yes 
    ;	

@@ -11,12 +11,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\example\tutorial\main_stage2.cpp" />
+    <ClCompile Include="..\example\simple_server_application_with_auto_handler_and_global_context.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{2D4BE500-EDC5-4B1F-FFFF-FFFFF86AF0C6}</ProjectGuid>
+    <ProjectGuid>{710BF4EB-3F98-4D60-1B42-93340B51F5F6}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>tutorial_stage2</RootNamespace>
+    <RootNamespace>simple_server_application_with_auto_handler_and_global_context</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -55,7 +55,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>E:\type_index\include;E:\project.boost.app.v4.9.git\include;C:\boost_1_54_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\project.boost.app.v4.9.git\example;E:\project.boost.app.v4.9.git\include;E:\type_index\include;C:\boost_1_54_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

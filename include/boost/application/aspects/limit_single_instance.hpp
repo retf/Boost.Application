@@ -1,10 +1,10 @@
-//  limit_single_instance.hpp ------------------------------------------------//
+// limit_single_instance.hpp ------------------------------------------------//
 // -----------------------------------------------------------------------------
 
-//  Copyright 2011-2012 Renato Tegon Forti
+// Copyright 2011-2014 Renato Tegon Forti
 
-//  Distributed under the Boost Software License, Version 1.0.
-//  See http://www.boost.org/LICENSE_1_0.txt
+// Distributed under the Boost Software License, Version 1.0.
+// See http://www.boost.org/LICENSE_1_0.txt
 
 // -----------------------------------------------------------------------------
 
@@ -46,11 +46,8 @@ namespace boost { namespace application {
 
       limit_single_instance() {}
 
-      limit_single_instance(const parameter_callback& callback)
-         : handler<>(callback) {}
-
-      limit_single_instance(const singleton_callback& callback)
-         : handler<>(callback)  {}
+      limit_single_instance(const callback& cb)
+         : handler<>(cb) {}
 
       virtual ~limit_single_instance() {}
 
@@ -105,32 +102,14 @@ namespace boost { namespace application {
        * \param app_uuid An Uuid that identify a application.
        *        The mutex will be created using this value.
        *
-       * \param callback An callback that receive a application context
-       *        as param. User must return true on callback to continue
-       *        with application execution, and false to terminate application
-       *        execution in case of positive evaluation of single istance.
-       */
-      limit_single_instance_default_behaviour(const uuids::uuid& app_uuid,
-         const parameter_callback& callback)
-         : limit_single_instance(callback)
-         , impl_(new limit_single_instance_impl())
-         , uuid_(app_uuid)
-      {}
-
-      /*!
-       * Constructs an limit_single_instance.
-       *
-       * \param app_uuid An Uuid that identify a application.
-       *        The mutex will be created using this value.
-       *
-       * \param callback An callback to control behaviour of execution.
+       * \param callback An callback that receive a application context.
        *        User must return true on callback to continue
        *        with application execution, and false to terminate application
        *        execution in case of positive evaluation of single istance.
        */
       limit_single_instance_default_behaviour(const uuids::uuid& app_uuid,
-         const singleton_callback& callback)
-         : limit_single_instance(callback)
+         const callback& cb)
+         : limit_single_instance(cb)
          , impl_(new limit_single_instance_impl())
          , uuid_(app_uuid)
       {}
@@ -233,32 +212,14 @@ namespace boost { namespace application {
        * \param app_uuid An Uuid that identify a application.
        *        The mutex will be created using this value.
        *
-       * \param callback An callback that receive a application context
-       *        as param. User must return true on callback to continue
-       *        with application execution, and false to terminate application
-       *        execution in case of positive evaluation of single istance.
-       */
-      limit_single_instance_named_mutex_behaviour(const uuids::uuid& app_uuid,
-         const parameter_callback& callback)
-         : limit_single_instance(callback)
-         , uuid_(app_uuid)
-         , owns_lock_(false)
-      {}
-
-      /*!
-       * Constructs an limit_single_instance.
-       *
-       * \param app_uuid An Uuid that identify a application.
-       *        The mutex will be created using this value.
-       *
-       * \param callback An callback to control behaviour of execution.
+       * \param callback An callback that receive a application context.
        *        User must return true on callback to continue
        *        with application execution, and false to terminate application
        *        execution in case of positive evaluation of single istance.
        */
       limit_single_instance_named_mutex_behaviour(const uuids::uuid& app_uuid,
-         const singleton_callback& callback)
-         : limit_single_instance(callback)
+         const callback& cb)
+         : limit_single_instance(cb)
          , uuid_(app_uuid)
          , owns_lock_(false)
       {}

@@ -60,7 +60,7 @@ namespace boost { namespace application {
 
       // handler detector
       class handler_detector : noncopyable {
-      protected:     
+      public:     
          // handlers that we will check
          // (look for, rule)
          MEMBER_HANDLER_EXIST(stop, has_stop); 
@@ -73,323 +73,200 @@ namespace boost { namespace application {
          MEMBER_HANDLER_EXIST(instace_aready_running, has_single_instance); 
       };
 
-      // for param context
-
-      template <typename Application>
-      class parameter_handler_auto_set : public Application, handler_detector 
+      // context constructible 
+      template <typename Application, typename Derived>
+      struct handler_auto_set_c : public Application, public handler_detector 
       {
-      public:
-
-         parameter_handler_auto_set(context &cxt)
+         handler_auto_set_c(context &cxt)
+            : Application (cxt)
          {
-            setup(cxt);
+            static_cast<Derived*>(this)->setup(cxt);
          }
 
-         parameter_handler_auto_set(context &cxt, boost::uuids::uuid& appid)
+         handler_auto_set_c(context &cxt, boost::uuids::uuid& appid)
+            : Application (cxt, appid)
          {
-            setup(cxt);
-            setup(cxt, appid);
-         }
-
-      private:
-
-         // setup context for common handlers
-
-         void setup(context &cxt)
-         {
-            if(has_stop<Application, bool(Application::*)(context&) >::value)
-            {   
-               cxt.insert< termination_handler > (
-                  boost::make_shared<termination_handler_default_behaviour>(
-                     handler<bool>::make_parameter_callback(*this, 
-                        &parameter_handler_auto_set::stop_handler_<
-                           has_stop<Application, bool(Application::*)(context&) >::value
-                              > )));  
-            }
-            
-            // platform dependent
-            // pause and resume is only available on windows            
-#           if defined( BOOST_WINDOWS_API ) 
-            if(has_pause<Application, bool(Application::*)(context&)>::value)
-            {
-               cxt.insert<pause_handler>(
-                  boost::make_shared<pause_handler_default_behaviour>(
-                     handler<bool>::make_parameter_callback(*this, 
-                        &parameter_handler_auto_set::pause_handler_<
-                           has_pause<Application, bool(Application::*)(context&)>::value
-                              > )));
-            }
-
-            if(has_resume<Application, bool(Application::*)(context&)>::value)
-            {
-               cxt.insert<resume_handler>(
-                  boost::make_shared<resume_handler_default_behaviour>(
-                     handler<bool>::make_parameter_callback(*this, 
-                        &parameter_handler_auto_set::resume_handler_<
-                           has_resume<Application, bool(Application::*)(context&)>::value
-                              > )));
-            }
-#           endif  
-
-         }
-
-         void setup(context &cxt, boost::uuids::uuid& appid)
-         {
-            if(has_single_instance<Application, bool(Application::*)(context&)>::value)
-            {
-               cxt.insert<limit_single_instance>(
-                  boost::make_shared<limit_single_instance_default_behaviour>(appid,
-                     handler<bool>::make_parameter_callback(*this, 
-                        &parameter_handler_auto_set::single_instance_handler_<
-                           has_single_instance<Application, bool(Application::*)(context&)>::value
-                              > )));               
-            }
-         }
-
-         // stop
-
-         template<bool Enable>  
-         typename boost::enable_if_c< Enable, bool>::type 
-            stop_handler_(context & c) 
-         { 
-            return Application::stop(c); 
-         } 
-
-         template<bool Enable> // never called
-         typename boost::enable_if_c<!Enable, bool>::type 
-            stop_handler_(context & c) 
-         {
-            return false; 
-         } 
- 
-         // platform dependent
-         // pause and resume is only available on windows         
-#        if defined( BOOST_WINDOWS_API ) 
-
-         // pause
-         template<bool Enable>  
-         typename boost::enable_if_c< Enable, bool>::type 
-            pause_handler_(context & c) 
-         { 
-            return Application::pause(c); 
-         } 
-
-         template<bool Enable> // never called
-         typename boost::enable_if_c<!Enable, bool>::type 
-            pause_handler_(context & c) 
-         {
-            return false; 
-         }
- 
-         // resume
-
-         template<bool Enable>  
-         typename boost::enable_if_c< Enable, bool>::type 
-            resume_handler_(context & c) 
-         { 
-            return Application::resume(c); 
-         } 
-
-         template<bool Enable> // never called
-         typename boost::enable_if_c<!Enable, bool>::type 
-            resume_handler_(context & c) 
-         {
-            return false; 
-         }
-#        endif  
-
-         // single_instance
-
-         template<bool Enable>  
-         typename boost::enable_if_c< Enable, bool>::type 
-            single_instance_handler_(context & c) 
-         { 
-            return Application::instace_aready_running(c); 
-         } 
-
-         template<bool Enable> // never called
-         typename boost::enable_if_c<!Enable, bool>::type 
-            single_instance_handler_(context & c) 
-         {
-            return false; 
+            static_cast<Derived*>(this)->setup(cxt);
+            static_cast<Derived*>(this)->setup(cxt, appid);
          }
       };
 
-      // for global context
-
-      template <typename Application>
-      class global_handler_auto_set : public Application, handler_detector 
+      // unconstructible (to use with global_context)
+      template <typename Application, typename Derived>
+      struct handler_auto_set_u : public Application, public handler_detector 
       {
-      public:
-
-         global_handler_auto_set(context &cxt)
+         handler_auto_set_u(context &cxt)
          {
-            setup(cxt);
+            static_cast<Derived*>(this)->setup(cxt);
          }
 
-         global_handler_auto_set(context &cxt, boost::uuids::uuid& appid)
+         handler_auto_set_u(context &cxt, boost::uuids::uuid& appid)
          {
-            setup(cxt);
-            setup(cxt, appid);
+            static_cast<Derived*>(this)->setup(cxt);
+            static_cast<Derived*>(this)->setup(cxt, appid);
          }
-
-      private:
-
-         // setup context fro common handlers
-
-         void setup(context &cxt)
-         {
-            if(has_stop<Application, bool(Application::*)()>::value)
-            {   
-               cxt.insert<termination_handler>(
-                  boost::make_shared<termination_handler_default_behaviour>(
-                     handler<bool>::make_global_callback(*this, 
-                        &global_handler_auto_set::stop_handler_<
-                           has_stop<Application, bool(Application::*)()>::value
-                              > )));
-            }
-  
-            // platform dependent
-            // pause and resume is only available on windows     
-#           if defined( BOOST_WINDOWS_API )   
-            if(has_pause<Application, bool(Application::*)()>::value)
-            {
-               cxt.insert<pause_handler>(
-                  boost::make_shared<pause_handler_default_behaviour>(
-                     handler<bool>::make_global_callback(*this, 
-                        &global_handler_auto_set::pause_handler_<
-                           has_pause<Application, bool(Application::*)()>::value
-                              > )));
-            }
-
-            if(has_resume<Application, bool(Application::*)()>::value)
-            {
-               cxt.insert<resume_handler>(
-                  boost::make_shared<resume_handler_default_behaviour>(
-                     handler<bool>::make_global_callback(*this, 
-                        &global_handler_auto_set::resume_handler_<
-                           has_resume<Application, bool(Application::*)()>::value
-                              > )));
-            }
-#           endif  
-
-         }
-
-         void setup(context &cxt, boost::uuids::uuid& appid)
-         {
-            if(has_single_instance<Application, bool(Application::*)()>::value)
-            {
-               cxt.insert<limit_single_instance>(
-                  boost::make_shared<limit_single_instance_default_behaviour>(appid,
-                     handler<bool>::make_global_callback(*this, 
-                        &global_handler_auto_set::single_instance_handler_<
-                           has_single_instance<Application, bool(Application::*)()>::value
-                              > )));
-            }
-         }
-
-         // stop
-
-         template<bool Enable>  
-         typename boost::enable_if_c< Enable, bool>::type 
-            stop_handler_() 
-         { 
-            return Application::stop(); 
-         } 
-
-         template<bool Enable> // never called
-         typename boost::enable_if_c<!Enable, bool>::type 
-            stop_handler_() 
-         {
-            return false; 
-         } 
-    
-         // platform dependent
-         // pause and resume is only available on windows       
-#        if defined( BOOST_WINDOWS_API ) 
-         // pause
-
-         template<bool Enable>  
-         typename boost::enable_if_c< Enable, bool>::type 
-            pause_handler_() 
-         { 
-            return Application::pause(); 
-         } 
-
-         template<bool Enable> // never called
-         typename boost::enable_if_c<!Enable, bool>::type 
-            pause_handler_() 
-         {
-            return false; 
-         }
- 
-         // resume
-
-         template<bool Enable>  
-         typename boost::enable_if_c< Enable, bool>::type 
-            resume_handler_() 
-         { 
-            return Application::resume(); 
-         } 
-
-         template<bool Enable> // never called
-         typename boost::enable_if_c<!Enable, bool>::type 
-            resume_handler_() 
-         {
-            return false; 
-         }
-#        endif  
-
-         // single_instance
-
-         template<bool Enable>  
-         typename boost::enable_if_c< Enable, bool>::type 
-            single_instance_handler_() 
-         { 
-            return Application::instace_aready_running(); 
-         } 
-
-         template<bool Enable> // never called
-         typename boost::enable_if_c<!Enable, bool>::type 
-            single_instance_handler_() 
-         {
-            return false; 
-         }
-      };  
-
-      // to detect param or global context using operator
-      class app_type_identification {
-      protected:     
-         // handlers that we will check
-         // (look for, rule)
-         MEMBER_HANDLER_EXIST(operator() , has_operator); 
-      };
-
-      template <typename Application>
-      class app_type_detector : public app_type_identification 
-      {
-      public:
-         typedef typename boost::conditional< 
-            has_operator<Application, int(Application::*)(context&)>::value, 
-               parameter_handler_auto_set<Application>, 
-               global_handler_auto_set<Application> 
-         >::type type;
       };
 
    } // detail
 
    template <typename Application>
-   class auto_handler : public detail::app_type_detector<Application>::type 
+   class auto_handler : public 
+      boost::conditional< 
+         boost::is_convertible<context, Application>::value, 
+            detail::handler_auto_set_c<Application, auto_handler<Application> >, 
+            detail::handler_auto_set_u<Application, auto_handler<Application> > 
+      >::type
    {
-   public:
-      template <typename AppContext>
-      auto_handler(AppContext &cxt) 
-         : detail::app_type_detector<Application>::type(cxt) {}
+      
+      template <typename , typename >
+         friend struct detail::handler_auto_set_u;
 
-      template <typename AppContext>
-      auto_handler(AppContext &cxt, boost::uuids::uuid& appid) 
-         : detail::app_type_detector<Application>::type(cxt, appid) {}
-   };
+      template <typename , typename >
+         friend struct detail::handler_auto_set_c;
+
+   public:
+ 
+      typedef typename boost::conditional< 
+         boost::is_convertible<context, Application>::value, 
+            detail::handler_auto_set_c<Application, auto_handler<Application> >, 
+            detail::handler_auto_set_u<Application, auto_handler<Application> > 
+         >::type base_selector;
+
+      auto_handler(context &cxt)
+         : base_selector(cxt) { }
+
+      auto_handler(context &cxt, uuids::uuid& appid)
+         : base_selector (cxt, appid) { }
+
+      auto_handler(global_context_ptr cxt)
+         : base_selector(*cxt.get()) { }
+
+      auto_handler(global_context_ptr cxt, uuids::uuid& appid)
+         : base_selector(*cxt.get(), appid) { }
+
+   protected:
+
+      // setup context fro common handlers
+
+      void setup(context &cxt)
+      {
+         if(has_stop<Application, bool(Application::*)()>::value)
+         {   
+            cxt.insert<termination_handler>(
+               boost::make_shared<termination_handler_default_behaviour>(
+                  handler<bool>::make_callback(*this, 
+                     &auto_handler::stop_handler_<
+                        has_stop<Application, bool(Application::*)()>::value
+                           > )));
+         }
+  
+         // platform dependent
+         // pause and resume is only available on windows     
+#        if defined( BOOST_WINDOWS_API )   
+         if(has_pause<Application, bool(Application::*)()>::value)
+         {
+            cxt.insert<pause_handler>(
+               boost::make_shared<pause_handler_default_behaviour>(
+                  handler<bool>::make_callback(*this, 
+                     &auto_handler::pause_handler_<
+                        has_pause<Application, bool(Application::*)()>::value
+                           > )));
+         }
+
+         if(has_resume<Application, bool(Application::*)()>::value)
+         {
+            cxt.insert<resume_handler>(
+               boost::make_shared<resume_handler_default_behaviour>(
+                  handler<bool>::make_callback(*this, 
+                     &auto_handler::resume_handler_<
+                        has_resume<Application, bool(Application::*)()>::value
+                           > )));
+         }
+#        endif  
+
+      }
+
+      void setup(context &cxt, boost::uuids::uuid& appid)
+      {
+         if(has_single_instance<Application, bool(Application::*)()>::value)
+         {
+            cxt.insert<limit_single_instance>(
+               boost::make_shared<limit_single_instance_default_behaviour>(appid,
+                  handler<bool>::make_callback(*this, 
+                     &auto_handler::single_instance_handler_<
+                        has_single_instance<Application, bool(Application::*)()>::value
+                           > )));
+         }
+      }
+
+      // stop
+
+      template<bool Enable>  
+      typename boost::enable_if_c< Enable, bool>::type 
+         stop_handler_() 
+      { 
+         return Application::stop(); 
+      } 
+
+      template<bool Enable> // never called
+      typename boost::enable_if_c<!Enable, bool>::type 
+         stop_handler_() 
+      {
+         return false; 
+      } 
+    
+      // platform dependent
+      // pause and resume is only available on windows       
+#     if defined( BOOST_WINDOWS_API ) 
+      // pause
+
+      template<bool Enable>  
+      typename boost::enable_if_c< Enable, bool>::type 
+         pause_handler_() 
+      { 
+         return Application::pause(); 
+      } 
+
+      template<bool Enable> // never called
+      typename boost::enable_if_c<!Enable, bool>::type 
+         pause_handler_() 
+      {
+         return false; 
+      }
+ 
+      // resume
+
+      template<bool Enable>  
+      typename boost::enable_if_c< Enable, bool>::type 
+         resume_handler_() 
+      { 
+         return Application::resume(); 
+      } 
+
+      template<bool Enable> // never called
+      typename boost::enable_if_c<!Enable, bool>::type 
+         resume_handler_() 
+      {
+         return false; 
+      }
+#     endif  
+
+      // single_instance
+
+      template<bool Enable>  
+      typename boost::enable_if_c< Enable, bool>::type 
+         single_instance_handler_() 
+      { 
+         return Application::instace_aready_running(); 
+      } 
+
+      template<bool Enable> // never called
+      typename boost::enable_if_c<!Enable, bool>::type 
+         single_instance_handler_() 
+      {
+         return false; 
+      }
+   };  
 
 }} // boost::application
 
@@ -405,23 +282,32 @@ class myapp
 {
 public:
 
-   int operator()(boost::application::context& context)
+   myapp(boost::application::context& context)
+      : context_(context)
    {
-      context.find<boost::application::wait_for_termination_request>()->wait();
+   }
+
+   int operator()()
+   {
+      context_.find<boost::application::wait_for_termination_request>()->wait();
       return 0;
    }
 
-   bool instace_aready_running(boost::application::context& context) 
+   bool instace_aready_running() 
    { 
       std::cout << "instace aready running!" << std::endl; 
       return false;
    } 
 
-   bool stop(boost::application::context& context)
+   bool stop()
    {
       std::cout << "stop app!" << std::endl; 
       return true;
    }
+
+private:
+   boost::application::context& context_;
+
 };
 
 -- Without 'auto_handler' (comparation)

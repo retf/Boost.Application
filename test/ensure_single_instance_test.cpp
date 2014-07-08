@@ -1,4 +1,4 @@
-// Copyright 2011-2012 Renato Tegon Forti
+// Copyright 2011-2014 Renato Tegon Forti
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -25,16 +25,6 @@ class myapp
 {
 public:
 
-   bool instace_aready_running_param_false(application::context &context)
-   {
-      return false;
-   }
-
-   bool instace_aready_running_param_true(application::context &context)
-   {
-      return true;
-   }
-
    bool instace_aready_running_false()
    {
       return false;
@@ -44,7 +34,31 @@ public:
    {
       return true;
    }
+   
+};
 
+class myapp2
+{
+public:
+
+   myapp2(application::context& context)
+      : context_(context)
+   {
+   }
+   
+   bool instace_aready_running_false()
+   {
+      return false;
+   }
+
+   bool instace_aready_running_true()
+   {
+      return true;
+   }
+   
+private:
+   application::context& context_;
+   
 };
 
 int test_main(int argc, char** argv)
@@ -59,16 +73,17 @@ int test_main(int argc, char** argv)
 	
    // test ensure_single_instance instace_aready_running_param_false
    {
-      myapp app; application::context cxt; boost::system::error_code ec;
+      application::context cxt; boost::system::error_code ec;
+      myapp2 app(cxt); 
 
       boost::uuids::string_generator gen;
       boost::uuids::uuid appuuid = gen("{8F66E4AD-ECA5-475D-8784-4BAA329EF9F2}");
 
-      application::handler<>::parameter_callback callback 
-         = boost::bind<bool>(&myapp::instace_aready_running_param_false, &app, _1);
+      application::handler<>::callback cb 
+         = boost::bind<bool>(&myapp2::instace_aready_running_false, &app);
 
       cxt.insert<application::limit_single_instance>(
-         boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, callback));
+         boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, cb));
 
       BOOST_CHECK(!application::detail::ensure_single_instance<application::context>()(cxt, ec)); 
       BOOST_CHECK(!ec);
@@ -78,16 +93,17 @@ int test_main(int argc, char** argv)
 	
    // test ensure_single_instance instace_aready_running_param_true
    {
-      myapp app; application::context cxt; boost::system::error_code ec;
+      application::context cxt; boost::system::error_code ec;
+      myapp2 app(cxt); 
 
       boost::uuids::string_generator gen;
       boost::uuids::uuid appuuid = gen("{7F66E4AD-ECA5-475D-8784-4BAA329EF9F2}");
 
-      application::handler<>::parameter_callback callback 
-         = boost::bind<bool>(&myapp::instace_aready_running_param_true, &app, _1);
+      application::handler<>::callback cb 
+         = boost::bind<bool>(&myapp2::instace_aready_running_true, &app);
 
       cxt.insert<application::limit_single_instance>(
-         boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, callback));
+         boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, cb));
 
       BOOST_CHECK(!application::detail::ensure_single_instance<application::context>()(cxt, ec)); 
       BOOST_CHECK(!ec);
@@ -104,11 +120,11 @@ int test_main(int argc, char** argv)
 
       application::global_context::create();
 
-      application::handler<>::singleton_callback callback 
+      application::handler<>::callback cb 
          = boost::bind<bool>(&myapp::instace_aready_running_false, &app);
 
       this_application()->insert<application::limit_single_instance>(
-         boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, callback));
+         boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, cb));
 
       BOOST_CHECK(!application::detail::ensure_single_instance<application::global_context_ptr>()(this_application(), ec));
       BOOST_CHECK(!ec);
@@ -127,11 +143,11 @@ int test_main(int argc, char** argv)
 
       application::global_context::create();
 
-      application::handler<>::singleton_callback callback 
+      application::handler<>::callback cb 
          = boost::bind<bool>(&myapp::instace_aready_running_true, &app);
 
       this_application()->insert<application::limit_single_instance>(
-         boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, callback));
+         boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, cb));
 
       BOOST_CHECK(!application::detail::ensure_single_instance<application::global_context_ptr>()(this_application(), ec));
       BOOST_CHECK(!ec);

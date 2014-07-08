@@ -31,6 +31,11 @@ class myapp
 {
 public:
 
+  myapp(context& context)
+      : context_(context)
+   {
+   }
+
    ~myapp()
    {
       std::cout << "~myapp()" << std::endl;
@@ -46,7 +51,7 @@ public:
    }
 
    // param
-   int operator()(context& context)
+   int operator()()
    {
       std::cout << "operator()" << std::endl;
 	  
@@ -68,12 +73,12 @@ public:
       // launch a work thread
       boost::thread thread(boost::bind(&myapp::work_thread, this));
 	  
-      context.find<wait_for_termination_request>()->wait();
+      context_.find<wait_for_termination_request>()->wait();
 
       return 0;
    }
 
-   bool stop(context &context)
+   bool stop()
    {
       char type;
       do
@@ -91,20 +96,24 @@ public:
       return false;
    }
 
+private:
+
+   context& context_;
+
 };
 
 // main
 
 int main(int argc, char *argv[])
-{   
-   myapp app;
+{      
    context app_context;
+   myapp app(app_context);
 
-   handler<>::parameter_callback callback 
-      = boost::bind<bool>(&myapp::stop, &app, _1);
+   handler<>::callback stop 
+      = boost::bind<bool>(&myapp::stop, &app);
 
    app_context.insert<termination_handler>(
-      boost::make_shared<termination_handler_default_behaviour>(callback));
+      boost::make_shared<termination_handler_default_behaviour>(stop));
 
    return launch<common>(app, app_context);
 }

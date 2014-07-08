@@ -70,48 +70,6 @@ namespace boost { namespace application {
        *
        * \param myapp An user application functor class.
        *
-       * \param sm The signal manager of application, that will be used
-       *           internaly by application type.
-       *           User can customize this instance.
-       *
-       * \param context An context of application, that hold all
-       *        aspects.
-       *
-       * \param ec Variable (boost::system::error_code) that will be
-       *        set to the result of the operation.
-       *
-       * Check ec for errors.
-       *
-       */
-      template <typename Application, typename SignalManager>
-      common(Application& myapp, SignalManager &sm,
-         application::context &context, boost::system::error_code& ec)
-         : impl_(new common_application_impl(
-                 boost::bind<int>(&Application::operator(), &myapp, _1), sm,
-                 context, ec))
-      {
-         if(ec) return;
-
-         // default aspects patterns added to this kind of application
-
-         if(!impl_->get_context().find<run_mode>())
-         {
-             impl_->get_context().insert<run_mode>(
-               csbl::make_shared<run_mode>(mode()));
-         }
-
-         if(!impl_->get_context().find<status>())
-         {
-             impl_->get_context().insert<status>(
-               csbl::make_shared<status>(status::running));
-         }
-      }
-
-      /*!
-       * Creates a common application.
-       *
-       * \param myapp An user application functor class.
-       *
        * \param context An context of application, that hold all
        *        aspects.
        *
@@ -125,10 +83,9 @@ namespace boost { namespace application {
        * Check ec for errors.
        *
        */
-
       template <typename Application, typename SignalManager>
       common(Application& myapp, SignalManager &sm,
-         global_context_ptr context,
+         application::context &context,
          boost::system::error_code& ec)
          : impl_(new common_application_impl(
                  boost::bind<int>(&Application::operator(), &myapp), sm,
@@ -139,16 +96,12 @@ namespace boost { namespace application {
          // default aspects patterns added to this kind of application
 
          if(!impl_->get_context().find<run_mode>())
-         {
              impl_->get_context().insert<run_mode>(
                csbl::make_shared<run_mode>(mode()));
-         }
 
          if(!impl_->get_context().find<status>())
-         {
              impl_->get_context().insert<status>(
-               csbl::make_shared<status>(status::running));
-         }
+               csbl::make_shared<status>(status::running)); 
       }
 
       /*!
@@ -172,7 +125,6 @@ namespace boost { namespace application {
    private:
 
       csbl::shared_ptr<common_application_impl> impl_;
-
    };
 
 }} // boost::application

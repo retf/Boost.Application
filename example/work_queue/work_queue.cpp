@@ -101,6 +101,11 @@ private:
 class myapp : work_queue<0> 
 {
 public: 
+
+   myapp(application::context& context)
+      : context_(context)
+   {
+   }
    
    void add_result(vector< vector<double> > kernel2d)
    {
@@ -116,7 +121,7 @@ public:
       }
    }
 
-   int operator()(application::context& context)
+   int operator()()
    {
       // your application logic here!
       task_count_ = 0;
@@ -126,12 +131,12 @@ public:
       add_task(gaussian_blur<6>( boost::bind<void>( &myapp::add_result, this, _1 ))); 
       add_task(gaussian_blur<9>( boost::bind<void>( &myapp::add_result, this, _1 ))); 
      
-      context.find<application::wait_for_termination_request>()->wait();
+      context_.find<application::wait_for_termination_request>()->wait();
 
       return 0;
    }
    
-   bool stop(application::context& context)
+   bool stop()
    {
       std::cout << "Result..." << std::endl;
 
@@ -160,6 +165,8 @@ private:
    vector< vector< vector<double> > > result_;
 
    int task_count_;
+
+   application::context& context_;
    
 }; // myapp 
 
@@ -167,14 +174,14 @@ int main(int argc, char *argv[])
 {
    BOOST_APPLICATION_FEATURE_SELECT
 
-   myapp app;
    application::context app_context;
+   myapp app(app_context);
    
-   application::handler<>::parameter_callback callback 
-      = boost::bind<bool>(&myapp::stop, &app, _1);
+   application::handler<>::callback cb 
+      = boost::bind<bool>(&myapp::stop, &app);
 
    app_context.insert<application::termination_handler>(
-      make_shared<application::termination_handler_default_behaviour>(callback));
+      make_shared<application::termination_handler_default_behaviour>(cb));
       
    return application::launch<application::common>(app, app_context);
 }

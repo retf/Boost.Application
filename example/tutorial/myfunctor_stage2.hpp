@@ -24,13 +24,16 @@ class myapp
 {
 public:
 
-   // param
-  
-   int operator()(application::context& context)
+   myapp(application::context& context)
+      : context_(context)
+   {
+   }
+
+   int operator()()
    { 
       /*<< Retrieves 'status' aspect from your context >>*/
       boost::shared_ptr<application::status> st =          
-         context.find<application::status>();
+         context_.find<application::status>();
 
       /*<< Check 'aspect' status 'state' >>*/
       while(st->state() != application::status::stoped)
@@ -44,10 +47,13 @@ public:
    }
 
    // check in next stage
-   bool stop(application::context& context)
+   bool stop()
    {
       return true; 
    }
+
+private:
+   application::context& context_;
 
 };
 

@@ -97,6 +97,14 @@ namespace boost { namespace application {
       return ApplicationMode(app, ct, cxt, ec).run();
    }
 
+   template <typename ApplicationMode, typename Application, 
+      typename CustomType>
+   inline int launch(Application& app, CustomType& ct, global_context_ptr cxt,
+      system::error_code& ec)
+   {
+      return launch<ApplicationMode>(app, ct, *cxt.get(), ec);
+   }
+
    /*!
     * Creates a application, the ec ( boost::system::error_code& ec)
     * will be set to the result of the operation, they should be
@@ -118,14 +126,19 @@ namespace boost { namespace application {
     *
     */
    template <typename ApplicationMode, typename Application, typename Context>
-   inline int launch(Application& app, Context &cxt,
-      system::error_code& ec)
+   inline int launch(Application& app, Context &cxt, system::error_code& ec)
    {
       signal_manager ct(cxt, ec); // our default custom type
 
       if(ec) return 0;
 
       return launch<ApplicationMode>(app, ct, cxt, ec);
+   }
+
+   template <typename ApplicationMode, typename Application>
+   inline int launch(Application& app, global_context_ptr cxt, system::error_code& ec)
+   {
+      return launch<ApplicationMode>(app, *cxt.get(), ec);
    }
 
    // throws an exception of type boost::system::system_error launch versions
@@ -152,8 +165,7 @@ namespace boost { namespace application {
     */
    template <typename ApplicationMode, typename Application,
       typename CustomType, typename Context>
-   inline int launch(Application& app, CustomType& ct,
-      Context &cxt)
+   inline int launch(Application& app, CustomType& ct, Context &cxt)
    {
       system::error_code ec; int ret = 0;
       ret = launch<ApplicationMode>(app, ct, cxt, ec);
@@ -162,6 +174,12 @@ namespace boost { namespace application {
 	       "launch() failed", ec);
 
       return ret;
+   }
+
+   template <typename ApplicationMode, typename Application, typename CustomType>
+   inline int launch(Application& app, CustomType& ct, global_context_ptr cxt)
+   {
+      return launch<ApplicationMode>(app, ct, *cxt.get());
    }
 
    /*!
@@ -190,6 +208,12 @@ namespace boost { namespace application {
 	       "launch() failed", ec);
 
       return ret;
+   }
+
+   template <typename ApplicationMode, typename Application>
+   inline int launch(Application& app, global_context_ptr cxt)
+   {
+      return launch<ApplicationMode>(app, *cxt.get());
    }
 
 }} // boost::application

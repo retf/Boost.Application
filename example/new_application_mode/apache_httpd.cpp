@@ -21,14 +21,17 @@ class my_apache2_httpd_content_generator_mod
 {
 public:
 
-   int operator()(application::context& context) 
+   my_apache2_httpd_content_generator_mod(application::context& context)
+      : context_(context) { }
+
+   int operator()() 
    {
       return 0; 
    }
 
-   std::string get(application::context& context)
+   std::string get()
    {
-      context.insert<content_type>(
+      context_.insert<content_type>(
          boost::make_shared<content_type>("text/html;charset=ascii"));
 
       std::stringstream htm;
@@ -50,7 +53,7 @@ public:
           << "</html>"
           ;
 
-      boost::shared_ptr<apache_log> apachelog = context.find<apache_log>();
+      boost::shared_ptr<apache_log> apachelog = context_.find<apache_log>();
       if(apachelog)
       {
          // log something on apache log file
@@ -59,21 +62,26 @@ public:
 
       return htm.str();
    }
+
+private:
+
+   application::context& context_;
+
 };
 
 // an application will be launched to handle each request that arrives.
 extern "C" int myhandle(request_rec *r)
-{   
-   my_apache2_httpd_content_generator_mod app;
-
+{     
    application::context app_context;
+
+   my_apache2_httpd_content_generator_mod app(app_context);
 
    app_context.insert<web_app_name>(
       boost::make_shared<web_app_name>("boostapp"));
 
-   handler<std::string>::parameter_callback my_http_get_verb
+   application::handler<std::string>::callback my_http_get_verb
       = boost::bind<std::string>(
-         &my_apache2_httpd_content_generator_mod::get, &app, _1);
+         &my_apache2_httpd_content_generator_mod::get, &app);
 
    app_context.insert<http_get_verb_handler>(
       boost::make_shared<

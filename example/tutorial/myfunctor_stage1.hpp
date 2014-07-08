@@ -24,13 +24,21 @@ class myapp
 {
 public:
 
-   // param
+   myapp(application::context& context)
+      : context_(context)
+   {
+   }
+
    /*<< Param application operator version, this is like a 'main' function >>*/
-   int operator()(application::context& context)
+   int operator()()
    {
       // your application logic here!
       return 0;
    }
+
+private:
+   application::context& context_;
+
 };
 
 //]

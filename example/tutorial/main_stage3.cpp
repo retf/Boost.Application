@@ -16,12 +16,12 @@
 
 int main(int argc, char *argv[])
 {   
-   myapp app; 
    application::context app_context;
+   myapp app(app_context); 
 
    /*<< create bind to stop handler >>*/
-   application::handler<>::parameter_callback termination_callback 
-      = boost::bind<bool>(&myapp::stop, &app, _1);
+   application::handler<>::callback termination_callback 
+      = boost::bind<bool>(&myapp::stop, &app);
 
    /*<< tie stop to termination_handler using default behaviour >>*/
    app_context.insert<application::termination_handler>(

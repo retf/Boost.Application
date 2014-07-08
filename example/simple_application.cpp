@@ -30,13 +30,18 @@ class myapp
 {
 public:
 
+   myapp(application::context& context)
+      : context_(context)
+   {
+   }
+
    /*<<Define the application operator that will receive a application context>>*/
-   int operator()(application::context& context)
+   int operator()()
    {
 
       /*<<Make use of an'aspect'>>*/
       boost::shared_ptr<application::args> myargs 
-         = context.find<application::args>();
+         = context_.find<application::args>();
 
       if (myargs)
       {
@@ -54,17 +59,25 @@ public:
 
       return 0;
    }
+
+private:
+
+   application::context& context_;
+
 };
+
+
 
 // main
 
+
 int main(int argc, char *argv[])
 {  
-   /*<<Instantiate your application>>*/    
-   myapp app;
-
    /*<<Create a context application aspect pool>>*/   
    application::context app_context;
+
+   /*<<Instantiate your application>>*/    
+   myapp app(app_context);
 
    /*<<Add an aspect for future use. An 'aspect' can be customized, or new aspects can be created>>*/  
    app_context.insert<application::args>(

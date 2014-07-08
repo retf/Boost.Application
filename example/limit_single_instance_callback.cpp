@@ -30,16 +30,21 @@ using namespace boost;
 class myapp
 {
 public:
+  
+   myapp(application::context& context)
+      : context_(context)
+   {
+   }
 
    // param
-   int operator()(application::context& context)
+   int operator()()
    {
       boost::shared_ptr<application::args> args =
-         context.find<application::args>();
+         context_.find<application::args>();
       
       if(args)
       {
-         std::vector<std::string> arg_vector = 
+         std::vector<std::string> &arg_vector = 
             args->arg_vector();
 
          // only print args on screen
@@ -49,13 +54,13 @@ public:
          }
       }
 
-      context.find<application::wait_for_termination_request>()->wait();
+      context_.find<application::wait_for_termination_request>()->wait();
 
       return 0;
    }
 
    /*<< Define a cllback that will handle if a new instance of application should continue or exit >>*/
-   bool instace_aready_running(application::context &context)
+   bool instace_aready_running()
    {
       char type;
       do
@@ -75,14 +80,18 @@ public:
       return false;
    }
 
+private:
+
+   application::context& context_;
+
 };
 
 // main
 
 int main(int argc, char *argv[])
 {   
-   myapp app;
    application::context app_context;
+   myapp app(app_context);
 
    boost::uuids::string_generator gen;
    /*<< Define a unique identity to application >>*/
@@ -90,17 +99,17 @@ int main(int argc, char *argv[])
 
    // way 1
    /*
-   application::handler<bool>::parameter_context_callback callback 
-      = boost::bind<bool>(&myapp::instace_aready_running, &app, _1);
+   application::handler<bool>::callback cb 
+      = boost::bind<bool>(&myapp::instace_aready_running, &app);
 
    app_context.insert<application::limit_single_instance>(
-      boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, callback));
+      boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, cb));
    */
 
    // way 2
    app_context.insert<application::limit_single_instance>(
       boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, 
-         application::handler<bool>::make_parameter_callback(app, &myapp::instace_aready_running)));
+         application::handler<bool>::make_callback(app, &myapp::instace_aready_running)));
 
    return application::launch<application::common>(app, app_context);
 }

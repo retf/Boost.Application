@@ -38,15 +38,20 @@ class myapp
 {
 public:
 
+   myapp(application::context& context)
+      : context_(context)
+   {
+   }
+
    // param
-   int operator()(application::context& context)
+   int operator()()
    {
       boost::shared_ptr<application::args> args =
-         context.find<application::args>();
+         context_.find<application::args>();
 
       if(args)
       {
-         std::vector<std::string> arg_vector = args->arg_vector();
+         std::vector<std::string> &arg_vector = args->arg_vector();
 
          // only print args on screen
          for(std::vector<std::string>::iterator it = arg_vector.begin(); 
@@ -55,19 +60,23 @@ public:
          }
       }
 
-      context.find<application::wait_for_termination_request>()->wait();
+      context_.find<application::wait_for_termination_request>()->wait();
 
       return 0;
    }
+
+private:
+   application::context& context_;
+
 };
 
 // main
 
 int main(int argc, char *argv[])
 {  
-   myapp app;
    application::context app_context;
-
+   myapp app(app_context);
+   
    boost::uuids::string_generator gen;
 
    app_context.insert<application::limit_single_instance>(

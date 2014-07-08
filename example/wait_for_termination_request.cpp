@@ -28,16 +28,21 @@ class myapp
 {
 public:
 
+   myapp(application::context& context)
+      : context_(context)
+   {
+   }
+
    // param
-   int operator()(application::context& context)
+   int operator()()
    {
       std::cout << "Test" << std::endl;
       boost::shared_ptr<application::args> myargs 
-         = context.find<application::args>();
+         = context_.find<application::args>();
 
       if (myargs)
       {
-         std::vector<std::string> arg_vector = myargs->arg_vector();
+         std::vector<std::string> &arg_vector = myargs->arg_vector();
 
          // only print args on screen
          for(std::vector<std::string>::iterator it = arg_vector.begin(); 
@@ -46,18 +51,21 @@ public:
          }
       }
 	  
-      context.find<application::wait_for_termination_request>()->wait();
+      context_.find<application::wait_for_termination_request>()->wait();
 
       return 0;
    }
+
+private:
+   application::context& context_;
 };
 
 // main
 
 int main(int argc, char *argv[])
 {  
-   myapp app;
    application::context app_context;
+   myapp app(app_context);
 
    app_context.insert<application::args>(
       boost::make_shared<application::args>(argc, argv));

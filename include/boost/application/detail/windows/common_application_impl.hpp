@@ -1,10 +1,10 @@
-//  application_impl.hpp  ---------------------------------------------------//
+// common_application_impl.hpp  ---------------------------------------------//
 // -----------------------------------------------------------------------------
 
-//  Copyright 2011-2013 Renato Tegon Forti
+// Copyright 2011-2014 Renato Tegon Forti
 
-//  Distributed under the Boost Software License, Version 1.0.
-//  See http://www.boost.org/LICENSE_1_0.txt
+// Distributed under the Boost Software License, Version 1.0.
+// See http://www.boost.org/LICENSE_1_0.txt
 
 // -----------------------------------------------------------------------------
 
@@ -32,29 +32,18 @@ namespace boost { namespace application {
    {
    public:
 
-      typedef boost::function< int (application::context&) > main_parameter;
-      typedef boost::function< int (void) >                  main_singleton; // global_context
+      typedef boost::function< int (void) > mainop;
 
       // string types to be used internaly to handle unicode on windows
       typedef CharType char_type;
       typedef std::basic_string<char_type> string_type;
 
-      common_application_impl_(const main_parameter &main,
+      common_application_impl_(const mainop &main,
                                signal_binder &sb,
                                application::context &context,
                                boost::system::error_code& ec)
-         : application_impl(parameter, context)
-         , main_parameter_(main)
-      {
-         sb.start();
-      }
-
-      common_application_impl_(const main_singleton &main,
-                               signal_binder &sb,
-                               global_context_ptr context,
-                               boost::system::error_code& ec)
-         : application_impl(singleton, context)
-         , main_singleton_(main)
+         : application_impl(context)
+         , main_(main)
       {
          sb.start();
       }
@@ -65,20 +54,11 @@ namespace boost { namespace application {
 
       int run()
       {
-         if(type_ == parameter){
-            return main_parameter_(context_);
-         }
-         else if(type_ == singleton){
-            return main_singleton_() ;
-         }
-
-         return 1; // error
+         return main_(); 
       }
 
    private:
-
-      main_parameter main_parameter_;
-      main_singleton main_singleton_;
+      mainop main_;
 
    };
 

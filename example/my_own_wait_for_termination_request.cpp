@@ -29,16 +29,25 @@ class myapp
 {
 public:
 
+   myapp(application::context& context)
+      : context_(context)
+   {
+   }
+
    // param
-   int operator()(application::context& context)
+   int operator()()
    {
       std::cout << "Test" << std::endl;
 	  
 	  /*<< Use your custon handler >>*/
-      context.find<application::wait_for_termination_request>()->wait();
+      context_.find<application::wait_for_termination_request>()->wait();
 
       return 0;
    }
+
+private:
+
+   application::context& context_;
 };
 
 // my made by hand behaviour
@@ -68,8 +77,8 @@ public:
 
 int main(int argc, char *argv[])
 {   
-   myapp app;
-   application::context app_context;
+   application::context app_context;   
+   myapp app(app_context);
 
    app_context.insert<application::args>(
       boost::make_shared<application::args>(argc, argv));

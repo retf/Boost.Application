@@ -29,14 +29,19 @@ class myapp
 {
 public:
 
+   myapp(application::context& context)
+      : context_(context)
+   {
+   }
+
    // param
-   int operator()(application::context& context)
+   int operator()()
    {
       std::cout << "Test" << std::endl;
 
 	    /*<< Use 'path' aspect on your logic >>*/ 
       boost::shared_ptr<application::path> path 
-         = context.find<application::path>();
+         = context_.find<application::path>();
 
       std::cout << "executable_path      : " << path->executable_path()      << std::endl;
       std::cout << "current_path         : " << path->current_path()         << std::endl;
@@ -52,14 +57,18 @@ public:
 
       return 0;
    }
+
+private:
+   application::context& context_;
+
 };
 
 // main
 
 int main(int argc, char *argv[])
-{   
-   myapp app;
+{      
    application::context app_context;
+   myapp app(app_context);
 
    /*<< Add 'path' aspect to context pool of application, it will be available for future use >>*/ 
    app_context.insert<application::path>(

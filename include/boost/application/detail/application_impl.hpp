@@ -1,7 +1,7 @@
 // application_impl.hpp ------------------------------------------------------//
 // -----------------------------------------------------------------------------
 
-// Copyright 2011-2013 Renato Tegon Forti
+// Copyright 2011-2014 Renato Tegon Forti
 
 // Distributed under the Boost Software License, Version 1.0.
 // See http://www.boost.org/LICENSE_1_0.txt
@@ -22,28 +22,13 @@
 
 namespace boost { namespace application {
 
+   // share context on modes
    class application_impl : noncopyable
    {
-   private:
-      global_context_ptr context_ptr_;
-
    public:
-      enum instantiation_type
-      {
-         parameter,
-         singleton
-      } ;
 
-      application_impl(instantiation_type type, context &cxt)
-         : type_(type)
-         , context_(cxt)
-      {
-      }
-
-      application_impl(instantiation_type type, global_context_ptr cxt)
-         : context_ptr_(cxt)
-         , type_(type)
-         , context_(*cxt.get())
+      application_impl(context &cxt)
+         : context_(cxt)
       {
       }
 
@@ -53,9 +38,8 @@ namespace boost { namespace application {
       }
 
    protected:
-
-      instantiation_type type_;
       context &context_;
+
    };
 
 }} // boost::application

@@ -28,18 +28,12 @@ namespace boost { namespace application {
      *
      * This callback is used on all handlers that application can define.
      *
-     * The application library support 2 versions, the first receive a
-     * application context as param, and the signature looks like:
+     * E.g.:
      *
-     * bool instace_aready_running(context &context);
-     *
-     * The second version assumes that you are using global_context,
-     * then no parameter was passed, and the signature looks like:
-     *
-     * bool instace_aready_running(void);
+     * bool instace_aready_running();
      *
      * All callbacks are executed by user selected "application mode"
-     * the return is a Template that can be defined be the user.
+     * the return is a template that can be defined be the user.
      *
      * In case of our sample, if your return true from
      * instace_aready_running the application mechanism will continue,
@@ -52,24 +46,21 @@ namespace boost { namespace application {
    {
    public:
 
-      // old names (DEPRECATED)
-
-      typedef boost::function< HandlerReturnType (context&) >
-         parameter_callback;
-
-      typedef boost::function< HandlerReturnType (void)     >
-         singleton_callback;
-
-      // new names
-
-      typedef parameter_callback parameter_context_callback;
-      typedef singleton_callback global_context_callback;
+      typedef boost::function< HandlerReturnType (void) > callback;
 
       /*!
        * Constructs an void handler.
        *
        */
       handler() {}
+      
+      /*!
+       * Constructs an handler.
+       *
+       * \param callback An member callback. User must return desired behaviour.
+       */
+      handler(const callback& cb)
+         : callback_(cb) {}
 
       /*!
        * Destruct an handler.
@@ -78,44 +69,13 @@ namespace boost { namespace application {
       virtual ~handler() {}
 
       /*!
-       * Constructs an handler.
-       *
-       * \param callback An callback that receive a application context
-       *        as param. User must return desired behaviour.
-       */
-      handler(const parameter_context_callback& callback)
-         : parameter_callback_(callback) {}
-
-      /*!
-       * Constructs an handler.
-       *
-       * \param callback An callback to control behaviour of execution.
-       *        User must return desired behaviour.
-       *
-       */
-      handler(const global_context_callback& callback)
-         : global_callback_(callback) {}
-
-      /*!
        * Set a callback to handler.
        *
-       * \param callback An callback that receive a application context
-       *        as param.
+       * \param callback An callback method as param.
        */
-      void callback(const parameter_context_callback& callback)
+      void set(const callback& cb)
       {
-         parameter_callback_ = callback;
-      }
-
-      /*!
-       * Set a callback to handler.
-       *
-       * \param callback An callback.
-       *
-       */
-      void callback(const global_context_callback& callback)
-      {
-         global_callback_ = callback;
+         callback_ = cb;
       }
 
       /*!
@@ -127,36 +87,15 @@ namespace boost { namespace application {
        * \return true if callback pointer is valid.
        *
        */
-      bool callback(parameter_context_callback*& callback)
+      bool get(callback*& cb)
       {
-          if(parameter_callback_is_valid())
+          if(is_valid())
           {
-            callback = &parameter_callback_;
+            cb = &callback_;
             return true;
           }
 
-         callback = 0;
-         return false;
-      }
-
-      /*!
-       * Get a callback pointer to futher execution.
-       * This method is used internaly by launch/application mode.
-       *
-       * \param callback An callback to execute.
-       *
-       * \return true if callback pointer is valid.
-       *
-       */
-      bool callback(global_context_callback*& callback)
-      {
-          if(global_callback_is_valid())
-          {
-            callback = &global_callback_;
-            return true;
-          }
-
-         callback = 0;
+         cb = 0;
          return false;
       }
 
@@ -166,32 +105,9 @@ namespace boost { namespace application {
        * \return true if callback pointer is valid.
        *
        */
-      bool parameter_callback_is_valid() const
+      bool is_valid() const
       {
-          if(parameter_callback_.empty())
-            return false;
-
-          return true;
-      }
-
-      // old name (DEPRECATED)
-      bool singleton_callback_is_valid() const
-      {
-          if(global_callback_.empty())
-            return false;
-
-          return true;
-      }
-
-      /*!
-       * Check if a callback pointer to futher execution is valid.
-       *
-       * \return true if callback pointer is valid.
-       *
-       */
-      bool global_callback_is_valid() const
-      {
-          if(global_callback_.empty())
+          if(callback_.empty())
             return false;
 
           return true;
@@ -211,13 +127,13 @@ namespace boost { namespace application {
       // util
 
       /*!
-       * Convenient static method to create a 'parameter_context' callback
+       * Convenient static method to create a callback
        * to be used by handler.
        *
        * e.g. to make a callback of method like this:
        * 
        * struct myapp {
-       *    bool instace_aready_running(context &context);
+       *    bool instace_aready_running();
        * }; 
        *
        * myapp app;
@@ -229,41 +145,14 @@ namespace boost { namespace application {
        *
        */
       template< typename App, typename Handler >
-      static boost::function< HandlerReturnType (context&) > 
-         make_parameter_callback(App& app, Handler h)
-      {
-         return boost::bind< HandlerReturnType >(h, &app, _1);
-      }
-
-      /*!
-       * Convenient static method to create a 'global_context' callback
-       * to be used by handler.
-       *
-       * e.g. to make a callback of method like this:
-       * 
-       * struct myapp {
-       *    bool instace_aready_running(void);
-       * }; 
-       *
-       * myapp app;
-       *
-       * handler<bool>::make_global_callback(app, &myapp::instace_aready_running);
-       *
-       * \return a boost::function<HandlerReturnType (void) > callback 
-       *         to be used on handler class.
-       *
-       */
-      template< typename App, typename Handler >
       static boost::function< HandlerReturnType (void) > 
-         make_global_callback(App& app, Handler h)
+         make_callback(App& app, Handler h)
       {
          return boost::bind< HandlerReturnType >(h, &app);
       }
 
    private:
-
-      parameter_context_callback parameter_callback_;
-      global_context_callback    global_callback_;
+      callback callback_;
 
    };
 

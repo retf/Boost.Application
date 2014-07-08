@@ -39,7 +39,7 @@ inline global_context_ptr this_application_cxt() {
 template< typename Handler >
 class timer_job : boost::noncopyable
 {
-   typedef handler<bool>::global_context_callback job_callback;
+   typedef handler<bool>::callback job_callback;
 
 public:
 
@@ -93,7 +93,7 @@ private:
    boost::asio::deadline_timer jtimer_;  
 };
 
-typedef timer_job< handler<bool>::global_context_callback > timer_callback;
+typedef timer_job< handler<bool>::callback > timer_callback;
 
 // our server class
 class time_based_job : boost::noncopyable
@@ -348,11 +348,11 @@ int main(int argc, char *argv[])
    this_application_cxt()->insert<
       timer_callback >(boost::make_shared<
          timer_callback >(
-            handler<bool>::make_global_callback(app, &time_based_job::doit), 5) );
+            handler<bool>::make_callback(app, &time_based_job::doit), 5) );
  
    this_application_cxt()->insert<termination_handler>(
       boost::make_shared<termination_handler_default_behaviour>(
-         handler<bool>::make_global_callback(app, &time_based_job::stop)));
+         handler<bool>::make_callback(app, &time_based_job::stop)));
 
    this_application_cxt()->insert<path>(
      boost::make_shared<path_default_behaviour>(argc, argv));

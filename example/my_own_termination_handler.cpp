@@ -33,6 +33,11 @@ using namespace boost::application;
 class myapp
 {
 public:
+  
+   myapp(context& context)
+      : context_(context)
+   {
+   }
 
    ~myapp()
    {
@@ -49,17 +54,21 @@ public:
    }
 
    // param
-   int operator()(context& context)
+   int operator()()
    {
       std::cout << "operator()" << std::endl;
 	  
       // launch a work thread
       boost::thread thread(boost::bind(&myapp::work_thread, this));
 	  
-      context.find<wait_for_termination_request>()->wait();
+      context_.find<wait_for_termination_request>()->wait();
 
       return 0;
    }
+
+private:
+
+   context& context_;
 
 };
 
@@ -72,21 +81,21 @@ public:
    my_signal_manager(context &context)
       : signal_manager(context)
    {
-      handler<>::parameter_callback callback 
-         = boost::bind<bool>(&my_signal_manager::stop, this, _1);
+      handler<>::callback cb
+         = boost::bind<bool>(&my_signal_manager::stop, this);
 
       // define my own signal / handler
 #if defined( BOOST_WINDOWS_API )
-      bind(SIGINT,  callback); // CTRL-C (2)
+      bind(SIGINT,  cb); // CTRL-C (2)
 #elif defined( BOOST_POSIX_API )      
       /*<< Define signal bind >>*/
-      bind(SIGUSR2, callback); 
+      bind(SIGUSR2, cb); 
 #endif
 
    }
 
    /*<< Define signal callback >>*/
-   bool stop(context &context)
+   bool stop()
    {
       BOOST_APPLICATION_FEATURE_SELECT
 
@@ -94,27 +103,28 @@ public:
       std::cout << "exiting..." << std::endl;
 #elif defined( BOOST_POSIX_API )
       std::ofstream my_log_file;
-      my_log_file.open((context.find<
+      my_log_file.open((context_.find<
          path>()->executable_path().string() + "/log_stop.txt").c_str());
       my_log_file << ":0)-" << std::endl;
       my_log_file.close();
 #endif
 
       shared_ptr<wait_for_termination_request> th 
-         = context.find<wait_for_termination_request>();
+         = context_.find<wait_for_termination_request>();
 
       th->proceed();
 
       return false;
    }
+
 };
 
 // main
 
 int main(int argc, char *argv[])
 {   
-   myapp app;
    context app_context;
+   myapp app(app_context);
 
    app_context.insert<path>(
       boost::make_shared<path_default_behaviour>(argc, argv));

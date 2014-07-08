@@ -20,7 +20,7 @@ struct handler_test
    bool called_;
    handler_test() : count_(0), called_(false) { }
 
-   bool signal_handler1(application::context &context)
+   bool signal_handler1()
    {
       called_ = true;
       return false;
@@ -53,21 +53,21 @@ int test_main(int argc, char** argv)
 
    app_signal_binder.start();
 
-   application::handler<>::parameter_callback callback = boost::bind<bool>(
-               &handler_test::signal_handler1, &app_handler_test, _1);
+   application::handler<>::callback cb = boost::bind<bool>(
+               &handler_test::signal_handler1, &app_handler_test);
 
    boost::system::error_code ec;
-   app_signal_binder.bind(SIGABRT, callback, ec);
+   app_signal_binder.bind(SIGABRT, cb, ec);
 
    raise(SIGABRT);
 
    BOOST_CHECK(!ec);
 
-   app_signal_binder.bind(SIGINT, callback, ec);
+   app_signal_binder.bind(SIGINT, cb, ec);
 
    BOOST_CHECK(!ec);
 
-   app_signal_binder.bind(SIGINT, callback, callback, ec);
+   app_signal_binder.bind(SIGINT, cb, cb, ec);
 
    BOOST_CHECK(!ec);
    BOOST_CHECK(app_signal_binder.is_bound(SIGINT));

@@ -36,7 +36,12 @@ class my_application_functor_class
    
 public:
 
-   int operator()(application::context& context)
+   my_application_functor_class(application::context& context)
+      : context_(context)
+   {
+   }
+
+   int operator()()
    {
       // my app logic here
       my_plugin_api* plugin = NULL;
@@ -59,14 +64,17 @@ public:
       return 0;
    }
 
+private:
+   application::context& context_;
+
 };
 
 int main(int argc, char* argv[])
 { 
    try
    {
-      my_application_functor_class app;
       application::context app_context;
+      my_application_functor_class app(app_context);
 
       app_context.insert<application::args>(
          boost::make_shared<application::args>(argc, argv));

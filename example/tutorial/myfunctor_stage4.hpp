@@ -23,23 +23,27 @@ class myapp
 {
 public:
 
-  // param
-   int operator()(application::context& context)
+   myapp(application::context& context)
+      : context_(context)
+   {
+   }
+
+   int operator()()
    {
       std::string logfile 
-         = context.find<application::path>()->executable_path().string() + "/log.txt";
+         = context_.find<application::path>()->executable_path().string() + "/log.txt";
       
       my_log_file_.open(logfile.c_str());
       my_log_file_ << "Start Log..." << std::endl;
 
       /*<< Here we use wait_for_termination_request instead application loop >>*/
-      context.find<application::wait_for_termination_request>()->wait();
+      context_.find<application::wait_for_termination_request>()->wait();
 
       return 0;
    }
 
    /*<< The 'stop' handler, available on windows and posix >>*/
-   bool stop(application::context& context)
+   bool stop()
    {
       my_log_file_ << "Stoping my application..." << std::endl;
       my_log_file_.close();
@@ -49,7 +53,7 @@ public:
    }
 
    /*<< The 'pause' handler, available on windows only, ignored on posix >>*/
-   bool pause(application::context& context)
+   bool pause()
    {
       my_log_file_ << "Pause my application..." << std::endl;
 
@@ -58,7 +62,7 @@ public:
    }
 
    /*<< The 'resume' handler, available on windows only, ignored on posix >>*/
-   bool resume(application::context& context)
+   bool resume()
    {
       my_log_file_ << "Resume my application..." << std::endl;
 
@@ -67,6 +71,7 @@ public:
    }
 
 private:
+   application::context& context_;
 
    /*<< Our simple log >>*/
    std::ofstream my_log_file_;

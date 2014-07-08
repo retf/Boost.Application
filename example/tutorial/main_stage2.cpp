@@ -16,8 +16,8 @@
 
 int main(int argc, char *argv[])
 {   
-   myapp app; 
    application::context app_context;
+   myapp app(app_context);
 
    /*<< Create bind to stop handler >>*/
    application::handler<>::parameter_callback termination_callback 

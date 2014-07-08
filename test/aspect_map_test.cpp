@@ -1,4 +1,4 @@
-// Copyright 2011-2012 Renato Tegon Forti
+// Copyright 2011-2014 Renato Tegon Forti
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -77,7 +77,6 @@ shared_ptr<my_msg_aspect_test> my_msg_aspect_test_reduction_function(
 
    return temp;
 }
-
 
 shared_ptr<my_sum_aspect_test> my_sum_aspect_test_reduction_function(
    shared_ptr<my_sum_aspect_test> lhs, shared_ptr<my_sum_aspect_test> rhs)

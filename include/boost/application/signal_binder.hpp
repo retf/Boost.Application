@@ -1,7 +1,7 @@
 // signal_binder.hpp ---------------------------------------------------------//
 // -----------------------------------------------------------------------------
 
-// Copyright 2011-2013 Renato Tegon Forti
+// Copyright 2011-2014 Renato Tegon Forti
 
 // Distributed under the Boost Software License, Version 1.0.
 // See http://www.boost.org/LICENSE_1_0.txt
@@ -47,6 +47,7 @@ namespace boost { namespace application {
    {
       template<class> friend class common_application_impl_;
       template<class> friend class server_application_impl_;
+
    private:
       application::global_context_ptr context_ptr_;
 
@@ -234,36 +235,18 @@ namespace boost { namespace application {
       {
          if (ec)
             return;
-
-         if(handler_map_[signal_number].first.parameter_callback_is_valid())
+        
+         if(handler_map_[signal_number].first.is_valid())
          {
-            handler<>::parameter_callback* parameter;
+            handler<>::callback* cb = 0;
 
-            if(handler_map_[signal_number].first.callback(parameter))
+            if(handler_map_[signal_number].first.get(cb))
             {
-               if((*parameter)(context_))
+               if((*cb)())
                {
                   // user tell us to call second callback
-                  if(handler_map_[signal_number].second.callback(parameter))
-                     (*parameter)(context_);
-
-               }
-
-               return;
-            }
-         }
-
-         if(handler_map_[signal_number].first.singleton_callback_is_valid())
-         {
-            handler<>::singleton_callback* singleton = 0;
-
-            if(handler_map_[signal_number].first.callback(singleton))
-            {
-               if((*singleton)())
-               {
-                  // user tell us to call second callback
-                  if(handler_map_[signal_number].second.callback(singleton))
-                     (*singleton)();
+                  if(handler_map_[signal_number].second.get(cb))
+                     (*cb)();
                }
 
                return;
@@ -271,9 +254,8 @@ namespace boost { namespace application {
          }
       }
 
-      application::context &context_;
-
    private:
+
       // signal < handler / handler>
       // if first handler returns true, the second handler are called
       csbl::unordered_map<int, std::pair<handler<>, handler<> > > handler_map_;
@@ -281,7 +263,12 @@ namespace boost { namespace application {
       asio::io_service io_service_;
       asio::signal_set signals_;
 
-      boost::thread *io_service_thread_;
+      boost::thread *io_service_thread_; 
+
+   protected:
+      
+      // for signal_manager access
+      application::context &context_;
 
    };
 
@@ -293,14 +280,13 @@ namespace boost { namespace application {
    class signal_manager
       : public signal_binder
    {
-
    public:
 
       signal_manager(application::context &context,
          boost::system::error_code& ec)
          : signal_binder(context)
       {
-         parameter_register_signals(ec);
+         register_signals(ec);
       }
 
       signal_manager(application::context &context)
@@ -308,26 +294,7 @@ namespace boost { namespace application {
       {
          boost::system::error_code ec;
 
-         parameter_register_signals(ec);
-
-         if(ec)
-            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
-               "signal_manager() failed", ec);
-      }
-
-      signal_manager(global_context_ptr context,
-         boost::system::error_code& ec)
-         : signal_binder(context)
-      {
-         singleton_register_signals(ec);
-      }
-
-      signal_manager(global_context_ptr context)
-         : signal_binder(context)
-      {
-         boost::system::error_code ec;
-
-         singleton_register_signals(ec);
+         register_signals(ec);
 
          if(ec)
             BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
@@ -353,30 +320,29 @@ namespace boost { namespace application {
 
       // parameter context version
 
-      virtual void parameter_register_signals(boost::system::error_code& ec)
+      virtual void register_signals(boost::system::error_code& ec)
       {
          csbl::shared_ptr<termination_handler> th
             = setup_termination_behaviour();
 
          if(th)
          {
-            handler<>::parameter_callback callback
+            handler<>::callback cb
                = boost::bind<bool>(
-               &signal_manager::parameter_termination_signal_handler, this, _1);
+               &signal_manager::termination_signal_handler, this);
 
-            bind(SIGINT,  th->get_handler(), callback, ec);
+            bind(SIGINT,  th->get_handler(), cb, ec);
             if(ec) return;
 
-            bind(SIGTERM, th->get_handler(), callback, ec);
+            bind(SIGTERM, th->get_handler(), cb, ec);
             if(ec) return;
 
-            bind(SIGABRT, th->get_handler(), callback, ec);
+            bind(SIGABRT, th->get_handler(), cb, ec);
             if(ec) return;
          }
       }
 
-      virtual bool parameter_termination_signal_handler(
-         application::context &context)
+      virtual bool termination_signal_handler(void)
       {
          // we need set application_state to stop
          context_.find<status>()->state(status::stoped);
@@ -388,41 +354,6 @@ namespace boost { namespace application {
          return false;
       }
 
-      // global_context version
-
-      virtual void singleton_register_signals(boost::system::error_code& ec)
-      {
-         csbl::shared_ptr<termination_handler> th
-            = setup_termination_behaviour();
-
-         if(th)
-         {
-            handler<>::singleton_callback callback
-               = boost::bind<bool>(
-               &signal_manager::singleton_termination_signal_handler, this);
-
-            bind(SIGINT,  th->get_handler(), callback, ec);
-            if(ec) return;
-
-            bind(SIGTERM, th->get_handler(), callback, ec);
-            if(ec) return;
-
-            bind(SIGABRT, th->get_handler(), callback, ec);
-            if(ec) return;
-         }
-      }
-
-      virtual bool singleton_termination_signal_handler(void)
-      {
-         // we need set application_state to stop
-         context_.find<status>()->state(status::stoped);
-
-         // and signalize wait_for_termination_request
-         context_.find<wait_for_termination_request>()->proceed();
-
-         // this is not used
-         return false;
-      }
    };
 
 }} // boost::application

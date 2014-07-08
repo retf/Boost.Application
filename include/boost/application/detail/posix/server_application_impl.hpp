@@ -1,7 +1,7 @@
 // server_application_impl.hpp -----------------------------------------------//
 // -----------------------------------------------------------------------------
 
-// Copyright 2011-2013 Renato Tegon Forti
+// Copyright 2011-2014 Renato Tegon Forti
 
 // Distributed under the Boost Software License, Version 1.0.
 // See http://www.boost.org/LICENSE_1_0.txt
@@ -42,30 +42,17 @@ namespace boost { namespace application {
    {
    public:
 
-      typedef boost::function< int (application::context&) > main_parameter;
-      typedef boost::function< int (void) >                  main_singleton;
+      // callback for app code
+      typedef boost::function< int (void) > mainop;
 
       // string types to be used internaly to handle unicode on windows
       typedef CharType char_type;
       typedef std::basic_string<char_type> string_type;
 
-      server_application_impl_(const main_parameter &main,
-                               signal_binder &sb,
-                               application::context &context,
-                               boost::system::error_code& ec)
-         : application_impl(parameter, context)
-         , main_parameter_(main)
-      {
-         process_id_ = daemonize(ec);
-         sb.start(); // need be started after daemonize
-      }
-
-      server_application_impl_(const main_singleton &main,
-                               signal_binder &sb,
-                               global_context_ptr context,
-                               boost::system::error_code& ec)
-         : application_impl(singleton, context)
-         , main_singleton_(main)
+      server_application_impl_(const mainop &main, signal_binder &sb,
+                               global_context_ptr context, boost::system::error_code& ec)
+         : application_impl(context)
+         , main_(main)
       {
          process_id_ = daemonize(ec);
          sb.start(); // need be started after daemonize
@@ -73,19 +60,7 @@ namespace boost { namespace application {
 
       int run()
       {
-         switch(type_)
-         {
-           case parameter: 
-              return main_parameter_(context_);
-           case singleton: 
-              return main_singleton_();
-           default: 
-           BOOST_ASSERT_MSG(false, 
-                            "boost::application handler type is not "
-                            "implemented, must be 'parameter' or "
-                            "'singleton' type");
-         }
-         return 0;
+         return main_();
       }
 
    protected:
@@ -202,9 +177,8 @@ namespace boost { namespace application {
 
       pid_t process_id_;
 
-      main_parameter main_parameter_;
-      main_singleton main_singleton_;
-
+      // app code
+      mainop main_;
    };
 
    /////////////////////////////////////////////////////////////////////////////

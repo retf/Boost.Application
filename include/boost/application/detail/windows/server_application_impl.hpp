@@ -1,10 +1,10 @@
-//  application_impl.hpp  ---------------------------------------------------//
+// server_application_impl.hpp ----------------------------------------------//
 // -----------------------------------------------------------------------------
 
-//  Copyright 2011-2013 Renato Tegon Forti
+// Copyright 2011-2014 Renato Tegon Forti
 
-//  Distributed under the Boost Software License, Version 1.0.
-//  See http://www.boost.org/LICENSE_1_0.txt
+// Distributed under the Boost Software License, Version 1.0.
+// See http://www.boost.org/LICENSE_1_0.txt
 
 // -----------------------------------------------------------------------------
 
@@ -52,30 +52,19 @@ namespace boost { namespace application {
    {
    public:
 
-      typedef boost::function< int (application::context&) > main_parameter;
-      typedef boost::function< int (void) >                  main_singleton;
+      // callback for app code
+      typedef boost::function< int (void) > mainop;
 
       // string types to be used internaly to handle unicode on windows
       typedef CharType char_type;
       typedef std::basic_string<char_type> string_type;
 
-      server_application_impl_(const main_parameter &main, signal_binder &sb, application::context &context, boost::system::error_code& ec)
-         : application_impl(parameter, context)
-         , main_parameter_(main)
+      server_application_impl_(const mainop &main, signal_binder &sb, 
+         application::context &context, boost::system::error_code& ec)
+         : application_impl(context)
+         , main_(main)
          , main_thread_(0)
          , launch_thread_(0)
-         , result_code_(0)
-         , terminate_event_(0)
-      {
-         sb.start();
-         initialize(ec);
-      }
-
-      server_application_impl_(const main_singleton &main, signal_binder &sb, global_context_ptr context, boost::system::error_code& ec)
-         : application_impl(singleton, context)
-         , main_thread_(0)
-         , launch_thread_(0)
-         , main_singleton_(main)
          , result_code_(0)
          , terminate_event_(0)
       {
@@ -140,24 +129,12 @@ namespace boost { namespace application {
 
          if(th)
          {
-            handler<>::parameter_callback* parameter = 0;
+            handler<>::callback* cb = 0;
 
-            if(th->callback(parameter))
+            if(th->get(cb))
             {
-               if((*parameter)(context_))
+               if((*cb)())
                {
-                  // stop
-                  return true;
-               }
-            }
-
-            handler<>::singleton_callback* singleton = 0;
-
-            if(th->callback(singleton))
-            {
-               if((*singleton)())
-               {
-                  // stop
                   return true;
                }
             }
@@ -174,24 +151,12 @@ namespace boost { namespace application {
 
          if(ph)
          {
-            handler<>::parameter_callback* parameter = 0;
+            handler<>::callback* cb = 0;
 
-            if(ph->callback(parameter))
+            if(ph->get(cb))
             {
-               if((*parameter)(context_))
+               if((*cb)())
                {
-                  // pause
-                  return true;
-               }
-            }
-
-            handler<>::singleton_callback* singleton = 0;
-
-            if(ph->callback(singleton))
-            {
-               if((*singleton)())
-               {
-                  // pause
                   return true;
                }
             }
@@ -206,23 +171,13 @@ namespace boost { namespace application {
         csbl::shared_ptr<resume_handler> rh =
            context_.find<resume_handler>();
 
-        if(rh)
-        {
-            handler<>::parameter_callback* parameter = 0;
+         if(rh)
+         {
+            handler<>::callback* cb = 0;
 
-            if(rh->callback(parameter))
+            if(rh->get(cb))
             {
-               if((*parameter)(context_))
-               {
-                  return true;
-               }
-            }
-
-            handler<>::singleton_callback* singleton = 0;
-
-            if(rh->callback(singleton))
-            {
-               if((*singleton)())
+               if((*cb)())
                {
                   return true;
                }
@@ -504,23 +459,12 @@ namespace boost { namespace application {
       {
          context_.exchange<application::args>(
             csbl::make_shared<application::args>(argc, argv));
-
-         if(type_ == parameter)
-         {
-            main_thread_
-               = new boost::thread(
-                  boost::lambda::var( result_code_ )
-                     = main_parameter_(context_)
-                        );
-         }
-         else if(type_ == singleton)
-         {
-            main_thread_
-               = new boost::thread(
-                  boost::lambda::var( result_code_ )
-                     = main_singleton_()
-                        );
-         }
+         
+         main_thread_
+            = new boost::thread(
+               boost::lambda::var( result_code_ )
+                  = main_()
+                     );
       }
 
       //
@@ -556,8 +500,8 @@ namespace boost { namespace application {
       boost::thread *launch_thread_;
       boost::thread *main_thread_;
 
-      main_parameter main_parameter_;
-      main_singleton main_singleton_;
+      // app code
+      mainop main_;
 
       int result_code_;
 

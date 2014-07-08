@@ -1,7 +1,7 @@
 // all.hpp -------------------------------------------------------------------//
 // -----------------------------------------------------------------------------
 
-// Copyright 2011-2013 Renato Tegon Forti
+// Copyright 2011-2014 Renato Tegon Forti
 //
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -22,6 +22,8 @@
 #include <boost/application/launch.hpp>
 // aspects
 #include <boost/application/ready_to_use_aspects.hpp>
+// auto handler
+#include <boost/application/auto_handler.hpp>
 // plugin sub-system
 #include <boost/application/shared_library.hpp>
 

@@ -1,4 +1,4 @@
-// Copyright 2011-2012 Renato Tegon Forti
+// Copyright 2011-2014 Renato Tegon Forti
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -16,12 +16,7 @@ using namespace boost;
 
 struct handler_test
 {
-   bool parameter_handler(application::context &context)
-   {
-      return true;
-   }
-
-   bool singleton_handler()
+   bool handler()
    {
       return true;
    }
@@ -35,60 +30,34 @@ int test_main(int argc, char** argv)
    {
       application::handler<> h;
 
-      BOOST_CHECK(!h.parameter_callback_is_valid());
-      BOOST_CHECK(!h.singleton_callback_is_valid());
+      BOOST_CHECK(!h.is_valid());
+      BOOST_CHECK(!h.is_valid());
    }
 
    {
-      application::handler<>::parameter_callback callback = boost::bind<bool>(
-         &handler_test::parameter_handler, &app_handler_test, _1);
+      application::handler<>::callback cb = boost::bind<bool>(
+         &handler_test::handler, &app_handler_test);
 
-      application::handler<> h(callback);
-      BOOST_CHECK(h.parameter_callback_is_valid());
+      application::handler<> h(cb);
+      BOOST_CHECK(h.is_valid());
 
-      application::handler<>::parameter_callback* parameter = 0;
-      BOOST_CHECK(h.callback(parameter));
-      BOOST_CHECK((*parameter)(app_context));
+      application::handler<>::callback* hvb = 0;
+      BOOST_CHECK(h.get(hvb));
+      BOOST_CHECK((*hvb)());
    }
 
    {
-      application::handler<>::singleton_callback callback = boost::bind<bool>(
-         &handler_test::singleton_handler, &app_handler_test);
-
-      application::handler<> h(callback);
-      BOOST_CHECK(h.singleton_callback_is_valid());
-
-      application::handler<>::singleton_callback* singleton = 0;
-      BOOST_CHECK(h.callback(singleton));
-      BOOST_CHECK((*singleton)());
-   }
-
-   {
-      application::handler<>::parameter_callback callback = boost::bind<bool>(
-         &handler_test::parameter_handler, &app_handler_test, _1);
+      application::handler<>::callback cb = boost::bind<bool>(
+         &handler_test::handler, &app_handler_test);
 
       application::handler<> h;
-      h.callback(callback);
+      h.set(cb);
 
-      BOOST_CHECK(h.parameter_callback_is_valid());
+      BOOST_CHECK(h.is_valid());
 
-      application::handler<>::parameter_callback* parameter = 0;
-      BOOST_CHECK(h.callback(parameter));
-      BOOST_CHECK((*parameter)(app_context));
-   }
-
-   {
-      application::handler<>::singleton_callback callback = boost::bind<bool>(
-         &handler_test::singleton_handler, &app_handler_test);
-
-      application::handler<> h;
-      h.callback(callback);
-
-      BOOST_CHECK(h.singleton_callback_is_valid());
-
-      application::handler<>::singleton_callback* singleton = 0;
-      BOOST_CHECK(h.callback(singleton));
-      BOOST_CHECK((*singleton)());
+      application::handler<>::callback* hcb = 0;
+      BOOST_CHECK(h.get(hcb));
+      BOOST_CHECK((*hcb)());
    }
 
    return 0;

@@ -15,12 +15,12 @@
 //[tutorialcpps1
 
 int main(int argc, char *argv[])
-{   
-   /*<< Your application functor instance >>*/
-   myapp app;
-
+{  
    /*<< Your application context that hold a 'aspect' pool >>*/
    application::context app_context;
+
+   /*<< Your application functor instance >>*/
+   myapp app(app_context);
 
    /*<< Starts the application as a common application type. >>*/
    return application::launch<application::common>(app, app_context);

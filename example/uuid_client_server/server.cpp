@@ -33,38 +33,43 @@ class my_server
 
 public:
 
-   int operator()(application::context& context)
+   my_server(application::context& context)
+      : context_(context)
+   {
+   }
+
+   int operator()()
    {
       BOOST_APPLICATION_FEATURE_SELECT
 
       // launch a work thread
-      boost::thread thread(boost::bind(&my_server::work_thread, this, &context));
+      boost::thread thread(boost::bind(&my_server::work_thread, this, &context_));
 
-      plugin_path_ = context.find<
+      plugin_path_ = context_.find<
          application::path>()->executable_path().string() 
           + "/uuid_plugin" + application::shared_library::suffix();
 
       plugin_.load(application::library(plugin_path_));
 
-      context.find<application::wait_for_termination_request>()->wait();
+      context_.find<application::wait_for_termination_request>()->wait();
       thread.join(); // the last connection need be served to app exit, comment this to exit quick
 
       return 0;
    }
 
-   bool stop(application::context& context)
+   bool stop()
    {
       plugin_.unload();
       return true;
    }
 
-   bool pause(application::context& context)
+   bool pause()
    {
       plugin_.unload();
       return true;
    }
    
-   bool resume(application::context& context)
+   bool resume()
    {
       plugin_.load(application::library(plugin_path_));
       return true;
@@ -158,6 +163,8 @@ private:
    application::shared_library plugin_;
    filesystem::path plugin_path_;
 
+   application::context& context_;
+
 }; // my_server class
 
 
@@ -167,8 +174,8 @@ int main(int argc, char *argv[])
 
    try 
    {
-      my_server app;
-      application::context app_context;
+      application::context app_context;      
+      my_server app(app_context);
 
       // my server aspects
 
@@ -180,8 +187,8 @@ int main(int argc, char *argv[])
 
       // add termination handler
 
-      application::handler<>::parameter_callback termination_callback 
-         = boost::bind<bool>(&my_server::stop, &app, _1);
+      application::handler<>::callback termination_callback 
+         = boost::bind<bool>(&my_server::stop, &app);
 
       app_context.insert<application::termination_handler>(
          make_shared<application::termination_handler_default_behaviour>(termination_callback));
@@ -192,16 +199,16 @@ int main(int argc, char *argv[])
 
       // windows only : add pause handler
      
-      application::handler<>::parameter_callback pause_callback 
-         = boost::bind<bool>(&my_server::pause, &app, _1);
+      application::handler<>::callback pause_callback 
+         = boost::bind<bool>(&my_server::pause, &app);
 
       app_context.insert<application::pause_handler>(
          make_shared<application::pause_handler_default_behaviour>(pause_callback));
 
       // windows only : add resume handler
 
-      application::handler<>::parameter_callback resume_callback 
-         = boost::bind<bool>(&my_server::resume, &app, _1);
+      application::handler<>::callback resume_callback 
+         = boost::bind<bool>(&my_server::resume, &app);
 
       app_context.insert<application::resume_handler>(
          make_shared<application::resume_handler_default_behaviour>(resume_callback));

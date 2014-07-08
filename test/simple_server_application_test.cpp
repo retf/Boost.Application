@@ -17,17 +17,22 @@ using namespace boost;
 class myapp
 {
 public:
-   // param
-   int operator()(application::context& context)
+   myapp(application::context& context)
+      : context_(context) { }
+   
+   int operator()()
    {
       return 0;
    }
+   
+private:
+   application::context& context_;
 };
 
 int test_main(int argc, char** argv)
 {   
-   myapp app;
-   application::context app_context;
+   application::context app_context; 
+   myapp app(app_context);
 
    boost::system::error_code ec;
    int ret = application::launch<application::server>(app, app_context, ec);
