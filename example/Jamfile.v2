@@ -96,6 +96,10 @@ exe simple_server_application_with_auto_handler
    : simple_server_application_with_auto_handler.cpp
    ;
    
+exe simple_server_application_with_auto_handler_and_global_context
+   : simple_server_application_with_auto_handler_and_global_context.cpp
+   ;
+     
 # shared library sub-system
    
 exe shared_library_load_plugin  

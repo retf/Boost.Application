@@ -75,7 +75,7 @@ namespace boost { namespace application {
 
       // context constructible 
       template <typename Application, typename Derived>
-      struct handler_auto_set_c : public Application, public handler_detector 
+      struct handler_auto_set_c : public Application
       {
          handler_auto_set_c(context &cxt)
             : Application (cxt)
@@ -93,7 +93,7 @@ namespace boost { namespace application {
 
       // unconstructible (to use with global_context)
       template <typename Application, typename Derived>
-      struct handler_auto_set_u : public Application, public handler_detector 
+      struct handler_auto_set_u : public Application
       {
          handler_auto_set_u(context &cxt)
          {
@@ -110,7 +110,7 @@ namespace boost { namespace application {
    } // detail
 
    template <typename Application>
-   class auto_handler : public 
+   class auto_handler : public detail::handler_detector, public 
       boost::conditional< 
          boost::is_convertible<context, Application>::value, 
             detail::handler_auto_set_c<Application, auto_handler<Application> >, 

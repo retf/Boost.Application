@@ -64,7 +64,7 @@ project
       #
       #
 	  
-	  #
+      #
       # translation unit test
       #
       [ run tunit_test.cpp myapp.cpp ]
@@ -101,6 +101,9 @@ project
       [ run path_aspect_test.cpp ]
       #
       #
+      
+      #  eof
       ;
+      #
 }
       

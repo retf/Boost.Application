@@ -6,7 +6,7 @@
 //         development process.
 // -----------------------------------------------------------------------------
 
-// Copyright 2011-2013 Renato Tegon Forti
+// Copyright 2011-2014 Renato Tegon Forti
 //
 // Distributed under the Boost Software License, Version 1.0. (See accompanying 
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -40,7 +40,7 @@ public:
    {
 
       /*<<Make use of an'aspect'>>*/
-      boost::shared_ptr<application::args> myargs 
+      application::csbl::shared_ptr<application::args> myargs 
          = context_.find<application::args>();
 
       if (myargs)
@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
 
    /*<<Add an aspect for future use. An 'aspect' can be customized, or new aspects can be created>>*/  
    app_context.insert<application::args>(
-      boost::make_shared<application::args>(argc, argv));
+      application::csbl::make_shared<application::args>(argc, argv));
 
    /*<<Start the application on the desired mode (common, server)>>*/  
    return application::launch<application::common>(app, app_context);

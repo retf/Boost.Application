@@ -77,7 +77,7 @@ public:
 
       // dump args
 
-      std::vector<std::string> &arg_vector = 
+      const std::vector<std::string> &arg_vector = 
          this_application()->find<application::args>()->arg_vector();
 
       my_log_file_ << "-----------------------------" << std::endl;
@@ -85,7 +85,7 @@ public:
       my_log_file_ << "-----------------------------" << std::endl;
 
       // only print args on screen
-      for(std::vector<std::string>::iterator it = arg_vector.begin(); 
+      for(std::vector<std::string>::const_iterator it = arg_vector.begin(); 
          it != arg_vector.end(); ++it) {
          my_log_file_ << *it << std::endl;
       }

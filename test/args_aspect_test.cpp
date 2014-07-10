@@ -20,7 +20,7 @@ int test_main(int argc, char** argv)
 
    BOOST_CHECK(myargs.argc());
    
-   std::vector< std::string > &argvec = myargs.arg_vector();
+   const std::vector< std::string > &argvec = myargs.arg_vector();
 
    BOOST_CHECK(argvec.size());
 

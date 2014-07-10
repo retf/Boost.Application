@@ -11,6 +11,11 @@
 // Revision History
 // 22-10-2013 dd-mm-yyyy - Initial Release
 
+/*
+---  0---|--- 10---|--- 20---|--- 30---|--- 40---|--- 50---|--- 60---|--- 70---|--- 80---|--- 90---|
+123456789|123456789|123456789|123456789|123456789|123456789|123456789|123456789|123456789|123456789|
+*/
+
 // -----------------------------------------------------------------------------
 
 #ifndef BOOST_APPLICATION_SERVER_APPLICATION_IMPL_HPP
@@ -50,7 +55,7 @@ namespace boost { namespace application {
       typedef std::basic_string<char_type> string_type;
 
       server_application_impl_(const mainop &main, signal_binder &sb,
-                               global_context_ptr context, boost::system::error_code& ec)
+                               application::context &context, boost::system::error_code& ec)
          : application_impl(context)
          , main_(main)
       {

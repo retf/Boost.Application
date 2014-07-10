@@ -310,7 +310,7 @@ int test_main(int argc, char** argv)
    {
       
       application::context cxt;
-      myapp app(cxt);
+      myapp2 app(cxt);
       
       my_signal_manager sm(cxt);
 
@@ -321,7 +321,7 @@ int test_main(int argc, char** argv)
       myapp app;
       application::global_context::create();
 
-      my_signal_manager sm(application::global_context::get());
+      my_signal_manager sm(*application::global_context::get().get());
 
       BOOST_CHECK(!application::launch<application::server>(app, sm, application::global_context::get()));
 
@@ -330,7 +330,7 @@ int test_main(int argc, char** argv)
 
    {
       application::context cxt;
-      myapp app(cxt);
+      myapp2 app(cxt);
       
       my_signal_manager sm(cxt);
 
@@ -342,7 +342,7 @@ int test_main(int argc, char** argv)
    {
       myapp app;
       application::global_context::create();
-      my_signal_manager sm(application::global_context::get());
+      my_signal_manager sm(*application::global_context::get().get());
 
       boost::system::error_code ec;
       BOOST_CHECK(!application::launch<application::server>(app, sm, application::global_context::get(), ec));
