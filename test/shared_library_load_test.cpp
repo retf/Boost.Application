@@ -41,6 +41,7 @@ int test_main(int argc, char* argv[])
    }
 
 #if defined( BOOST_WINDOWS_API )
+#if !defined(__MINGW32__)   
    {
       shared_library sl(library(shared_library_path), load_with_altered_search_path );
       BOOST_CHECK(sl.is_loaded());
@@ -64,6 +65,7 @@ int test_main(int argc, char* argv[])
       sl.load(library(shared_library_path), load_with_altered_search_path, ec);
       BOOST_CHECK(sl.is_loaded());
    }
+#endif   
 #elif defined( BOOST_POSIX_API )
 
    {

@@ -18,7 +18,7 @@
 
 #include <boost/application/config.hpp>
 
-#if defined( BOOST_POSIX_API )
+#if defined( BOOST_POSIX_API ) && defined(__MINGW32__)
 #include <dlfcn.h>
 #elif defined( BOOST_WINDOWS_API )
 // workaround [
@@ -178,7 +178,8 @@ namespace boost { namespace application {
     */
    enum shared_library_load_mode
    {
-#if defined( BOOST_WINDOWS_API )
+#if defined( BOOST_WINDOWS_API ) 
+#if !defined(__MINGW32__)
       // windows
       dont_resolve_dll_references             = DONT_RESOLVE_DLL_REFERENCES,         // 0x00000001
       load_ignore_code_authz_level            = LOAD_IGNORE_CODE_AUTHZ_LEVEL,        // 0x00000010
@@ -209,7 +210,8 @@ namespace boost { namespace application {
 #   endif
 
       load_with_altered_search_path           = LOAD_WITH_ALTERED_SEARCH_PATH        // 0x00000008
-#elif defined( BOOST_POSIX_API )
+#endif
+#elif defined( BOOST_POSIX_API ) && defined(__MINGW32__)
       // posix
       rtld_lazy   = RTLD_LAZY,   // 1
       rtld_now    = RTLD_NOW,    // 2
@@ -276,5 +278,3 @@ namespace boost { namespace application {
 }} // boost::application
 
 #endif // BOOST_APPLICATION_SHARED_LIBRARY_MODE_HPP
-
-

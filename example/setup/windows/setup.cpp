@@ -54,6 +54,9 @@ public:
 
    int operator()()
    {
+   
+#if !defined(__MINGW32__)  
+ 
       std::cout << "Setup Windows Service " 
          << "(Note that you need run this AS ADMIN!)" << std::endl;
 
@@ -138,6 +141,8 @@ public:
 
          return true;
       }
+      
+#endif
 
       return 0;
    }

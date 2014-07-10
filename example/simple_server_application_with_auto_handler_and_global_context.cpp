@@ -173,6 +173,7 @@ bool setup(application::context& context)
    
 // provide setup for windows service   
 #if defined(BOOST_WINDOWS_API)      
+#if !defined(__MINGW32__)   
 
    // get our executable path name
    boost::filesystem::path executable_path_name = mypath->executable_path_name();
@@ -221,6 +222,8 @@ bool setup(application::context& context)
 
          return true;
       }
+      
+#endif      
 #endif
       
    return false;
