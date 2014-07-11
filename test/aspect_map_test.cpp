@@ -117,10 +117,12 @@ public:
       for(int i = 0; i < LOOP_INTERACTIONS; i++)
       { // atomic
          strict_lock<application::aspect_map> guard(my_aspect_map_);
+         
+         shared_ptr<my_msg_aspect_test> res = my_aspect_map_.find<my_msg_aspect_test>(guard);
 
-         if(my_aspect_map_.find<my_msg_aspect_test>(guard))
+         if(res)
          {
-            BOOST_CHECK(my_aspect_map_.find<my_msg_aspect_test>()->say_hi() == "HI");
+            BOOST_CHECK(res->say_hi() == "HI");
 
             boost::this_thread::sleep(boost::posix_time::milliseconds(i*(2+1)));
 

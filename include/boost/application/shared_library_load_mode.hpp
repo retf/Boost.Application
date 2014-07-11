@@ -18,10 +18,38 @@
 
 #include <boost/application/config.hpp>
 
-#if defined( BOOST_POSIX_API ) && defined(__MINGW32__)
+// MINGW NOTE
+//
+// in mingw we have some problems here, at this time we don't support shared_library for __MINGW32__
+// you can download port yourself from:  https://code.google.com/p/dlfcn-win32/downloads/list
+
+#if defined( BOOST_POSIX_API ) 
 #include <dlfcn.h>
-#elif defined( BOOST_WINDOWS_API )
+#elif defined( BOOST_WINDOWS_API ) 
 // workaround [
+
+#   ifndef DONT_RESOLVE_DLL_REFERENCES
+#      define DONT_RESOLVE_DLL_REFERENCES 0x00000001
+#   endif
+
+#   ifndef LOAD_IGNORE_CODE_AUTHZ_LEVEL
+#      define LOAD_IGNORE_CODE_AUTHZ_LEVEL 0x00000010
+#   endif
+
+#   ifndef LOAD_LIBRARY_AS_DATAFILE
+#      define LOAD_LIBRARY_AS_DATAFILE 0x00000002
+#   endif
+
+#   ifndef LOAD_LIBRARY_AS_DATAFILE_EXCLUSIVE
+#      define LOAD_LIBRARY_AS_DATAFILE_EXCLUSIVE 0x00000040
+#   endif
+
+#   ifndef LOAD_LIBRARY_AS_IMAGE_RESOURCE
+#      define LOAD_LIBRARY_AS_IMAGE_RESOURCE 0x00000020
+#   endif
+
+// -
+      
 #   ifndef LOAD_LIBRARY_SEARCH_APPLICATION_DIR
 #      define LOAD_LIBRARY_SEARCH_APPLICATION_DIR 0x00000200
 #   endif
@@ -179,7 +207,6 @@ namespace boost { namespace application {
    enum shared_library_load_mode
    {
 #if defined( BOOST_WINDOWS_API ) 
-#if !defined(__MINGW32__)
       // windows
       dont_resolve_dll_references             = DONT_RESOLVE_DLL_REFERENCES,         // 0x00000001
       load_ignore_code_authz_level            = LOAD_IGNORE_CODE_AUTHZ_LEVEL,        // 0x00000010
@@ -210,8 +237,8 @@ namespace boost { namespace application {
 #   endif
 
       load_with_altered_search_path           = LOAD_WITH_ALTERED_SEARCH_PATH        // 0x00000008
-#endif
-#elif defined( BOOST_POSIX_API ) && defined(__MINGW32__)
+
+#elif defined( BOOST_POSIX_API ) 
       // posix
       rtld_lazy   = RTLD_LAZY,   // 1
       rtld_now    = RTLD_NOW,    // 2

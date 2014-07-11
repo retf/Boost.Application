@@ -65,7 +65,7 @@ int test_main(int argc, char** argv)
 {   
    // test no ensure_single_instance
    {
-      myapp app; application::context cxt; boost::system::error_code ec;
+      application::context cxt; boost::system::error_code ec;
 
       BOOST_CHECK(!application::detail::ensure_single_instance<application::context>()(cxt, ec)); 
       BOOST_CHECK(!ec);

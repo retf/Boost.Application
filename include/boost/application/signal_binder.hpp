@@ -48,14 +48,11 @@ namespace boost { namespace application {
       template<class> friend class common_application_impl_;
       template<class> friend class server_application_impl_;
 
-   private:
-      application::global_context_ptr context_ptr_;
-
    public:
       explicit signal_binder(context &cxt)
-         : context_(cxt)
-         , signals_(io_service_)
-         , io_service_thread_(0)
+         : signals_(io_service_)
+         , io_service_thread_(0) 
+         , context_(cxt)
       {
          signals_.async_wait(
             boost::bind(&signal_binder::signal_handler, this,
@@ -64,10 +61,9 @@ namespace boost { namespace application {
       }
 
       explicit signal_binder(global_context_ptr cxt)
-         : context_ptr_(cxt)
+         : signals_(io_service_)
+         , io_service_thread_(0) 
          , context_(*cxt.get())
-         , signals_(io_service_)
-         , io_service_thread_(0)
       {
          signals_.async_wait(
             boost::bind(&signal_binder::signal_handler, this,
@@ -258,7 +254,7 @@ namespace boost { namespace application {
 
       // signal < handler / handler>
       // if first handler returns true, the second handler are called
-      csbl::unordered_map<int, std::pair<handler<>, handler<> > > handler_map_;
+      csbl::unordered_map<int, std::pair< handler<>, handler<> > > handler_map_;
 
       asio::io_service io_service_;
       asio::signal_set signals_;

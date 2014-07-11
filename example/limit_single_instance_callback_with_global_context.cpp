@@ -48,10 +48,10 @@ public:
 
       if (myargs)
       {
-         std::vector<std::string> arg_vector = myargs->arg_vector();
+         const std::vector<std::string>& arg_vector = myargs->arg_vector();
 
          // only print args on screen
-         for(std::vector<std::string>::iterator it = arg_vector.begin(); 
+         for(std::vector<std::string>::const_iterator it = arg_vector.begin(); 
             it != arg_vector.end(); ++it) {
             std::cout << *it << std::endl;
          }

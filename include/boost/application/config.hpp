@@ -34,8 +34,13 @@
 // other header selection
 //
 // the user can force one selection defining
+//
 // BOOST_APPLICATION_FEATURE_NS_SELECT_STD or
 // BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
+//
+// e.g. on bjam:
+// > sudo bjam define=BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
+//
 
 // force selection
 #if defined( BOOST_APPLICATION_FEATURE_NS_SELECT_STD )
@@ -46,12 +51,14 @@
 #   include <boost/make_shared.hpp>
 #   include <boost/unordered_map.hpp>
 #else // auto detect
+//  The standard library header <memory> has no shared_ptr and unique_ptr.
 #   ifndef BOOST_NO_CXX11_SMART_PTR
 #      include <memory>
 #   else
 #      include <boost/shared_ptr.hpp>
 #      include <boost/make_shared.hpp>
 #   endif
+//  The standard library does not provide header <unordered_map>.
 #   ifndef BOOST_NO_CXX11_HDR_UNORDERED_MAP
 #      include <unordered_map>
 #   else
