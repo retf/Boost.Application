@@ -20,7 +20,7 @@ contact: re.tf@acm.org
 
 ###Articles
 
-Note that here we using version 4.8 (0.4.8). If you are using current version 4.9 (0.4.9) you need adapt all article samples.
+Note that here we are using version 4.8 (0.4.8). If you are using current version 4.9 (0.4.9) you need adapt all article samples.
 
 [Creating a New Application Mode] (http://www.codeproject.com/Articles/695937/Creating-a-New-Application-Mode)
 
