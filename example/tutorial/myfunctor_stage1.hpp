@@ -29,7 +29,7 @@ public:
    {
    }
 
-   /*<< Param application operator version, this is like a 'main' function >>*/
+   /*<< Application operator, this is like a 'main' function >>*/
    int operator()()
    {
       // your application logic here!

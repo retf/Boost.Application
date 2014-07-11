@@ -17,15 +17,9 @@
 int main(int argc, char *argv[])
 {   
    application::context app_context;
-   myapp app(app_context); 
 
-   /*<< create bind to stop handler >>*/
-   application::handler<>::callback termination_callback 
-      = boost::bind<bool>(&myapp::stop, &app);
-
-   /*<< tie stop to termination_handler using default behaviour >>*/
-   app_context.insert<application::termination_handler>(
-      boost::make_shared<application::termination_handler_default_behaviour>(termination_callback));
+   /*<< Tie stop to termination_handler using default behaviour >>*/
+   application::auto_handler<myapp> app(app_context);
 
    /*<< Note that now we are using 'application::server' as template param >>*/
    return application::launch<application::server>(app, app_context);

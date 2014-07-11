@@ -26,35 +26,45 @@ class myapp // [[a]]
 {   
 public:
 
-   // param version
+   /*<<Define the constructor that will receive a application context>>*/
+   myapp(application::context& context)
+      : context_(context)
+   {
+   }
+   
    /*<< Define a application operator using 'param' signature >>*/
-   int operator()(application::context& context) // [[a]]
+   int operator()() // [[a]]
    {
       // Do some thing
 
       // [[k]]
-      context.find<application::wait_for_termination_request>()->wait();
+      context_.find<application::wait_for_termination_request>()->wait();
 
       return 0;
    }
 
    // [[d]]
-   // param version
    /*<< Optionally, define a 'stop callback' handler, using 'param' signature >>*/
-   bool stop(application::context& context)
+   bool stop()
    {
       // Do some thing
       return true; // return true to stop, false to ignore
    }
+   
+private:
+   
+   /*<<Application context to hold aspects>>*/
+   application::context& context_;
 };
 
 int main(int argc, char *argv[])
 {   
 
-   /*<< Instatntiate our application >>*/
-   myapp app; // [[a]]
-   /*<< Create a 'context' for application that will hold our aspects >>*/
+   /*<< Create a local 'context' for application that will hold our aspects >>*/
    application::context app_context; // [[b]]
+   
+   /*<< Instatntiate our application using auto_handler, the 'stop' method will be automatically handled >>*/
+   application::auto_handler<myapp> app(app_context); // [[a]]
 
    // my server aspects
 
@@ -67,16 +77,6 @@ int main(int argc, char *argv[])
    /*<< Add 'args aspect' to application context >>*/
    app_context.insert<application::args>(
       boost::make_shared<application::args>(argc, argv));
-
-   // [[d]]
-   /*<< Define a 'termination_callback' to our application >>*/
-   application::handler::parameter_callback termination_callback 
-      = boost::bind<bool>(&myapp::stop, &app, _1);
-
-   // [[d]]
-   /*<< Add a 'termination_callback' to our application context >>*/
-   app_context.insert<application::termination_handler>(
-      boost::make_shared<application::termination_handler_default_behaviour>(termination_callback));
 
    // [[h]]
    /*<< Launch an application using server application mode >>*/

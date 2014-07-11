@@ -17,31 +17,21 @@ In the Boost.Application, the '[*aspects handlers]' is the way that you can defi
 
 ]
 
-The user can define the handler using one of two types of signature available.
+The user can define the handler like this:
 
-  1. Parameter Version
-  2. Singleton Version (To be used with Boost.Singularity)
-
-The handler defined using a param signature, looks like:
-
-```
-   bool stop(context &context)
-```
-   
-The handler defined to be used with Boost.Singularity, looks like:
 
 ```
    bool stop(void)
 ```
 
-Note that all handlers must return a 'bool' to indicate to '[*application mode engine]', what action need be done, e.g.:
+Note that handlers must return a 'bool' to indicate to '[*application mode engine]', what action need be done, e.g.:
 
 ```
 class myapp
 {
 public:
 // ...
-bool stop(context &context)
+bool stop()
 {
    char type;
    do

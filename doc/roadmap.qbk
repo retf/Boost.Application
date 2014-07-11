@@ -1,5 +1,5 @@
 [/
-    Copyright 2013 Renato Tegon Forti
+    Copyright 2014 Renato Tegon Forti
     Distributed under the Boost Software License, Version 1.0.
     (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 /]
@@ -10,8 +10,8 @@ Building an application with Boost.Application is a simple process, the basic ro
 
 [table:rs Roadmap Steps
     [[Step]               [Optionally?]             [Description]]
-    [[A]                  [NO]                      [Define a 'functor' class for your application with an application operator of desired signature]]
-    [[B]                  [NO]                      [Create a 'context' for application. An context can be a global_context (singleton) or can be passed as parameter to functor]]
+    [[A]                  [NO]                      [Define a 'functor' class for your application with an application operator]]
+    [[B]                  [NO]                      [Create a 'context' for application. An context can be a global_context (singleton) or local context]]
     [[C]                  [YES]                     [Add desired 'aspects' to application context]]
     [[D]                  [YES]                     [Define a 'callback' for 'handler aspects' type. e.g.: stop, pause, resume]]
     [[E]                  [YES]                     [Define new 'apects', and add it to application context]]
@@ -20,7 +20,7 @@ Building an application with Boost.Application is a simple process, the basic ro
     [[H]                  [NO]                      [Launch an application using some ready to use mode. ('common' or 'server' application)]]
     [[I]                  [YES]                     [Use 'plugin system' to extend or change behavior of application at runtime]]
     [[J]                  [YES]                     [In case of 'Windows Service' (Server mode on Windows), use example code to setup service]]
-    [[K]                  [YES]                     [Use 'aspects' available in the context (that user add on step 'c' or 'e')]]
+    [[K]                  [YES]                     [Use 'aspects' available in the context (that user add on step 'C' or 'E')]]
 ]
 
 A basic sample of server application can be:
@@ -29,9 +29,9 @@ A basic sample of server application can be:
 [simplesrvrhelp]
 
 [note	
-	   The 'application operator' provided by user on functor class can be defined in 2 ways (signatures). [br]
-		 [br]    1. 'singleton' based version (void).
-		 [br]    2. 'param' based version (that receive a 'context' of application as parameter).
+	   The 'application context' can be defined in 2 ways. [br]
+		 [br]    1. 'global_context' based version (that don't receive a 'context' as parameter on constructor).
+		 [br]    2. 'local' based version (that receive a 'context' of application as parameter on constructor, our case here.).
 ]
 
 [endsect]

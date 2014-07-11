@@ -30,12 +30,13 @@ class myapp
 {
 public:
 
+   /*<<Define the constructor that will receive a application context>>*/
    myapp(application::context& context)
       : context_(context)
    {
    }
 
-   /*<<Define the application operator that will receive a application context>>*/
+   /*<<Define the application operator>>*/
    int operator()()
    {
 
@@ -61,6 +62,8 @@ public:
    }
 
 private:
+   
+   /*<<Application context to hold aspects>>*/
    application::context& context_;
 
 };

@@ -23,7 +23,6 @@ Boost.Application provide many usefull ready-to-use features, e.g:
 * Plugin extension system;
 * Process(executable) Single instance Instantiation support;
 * Application SIGNAL/Callbacks customization;
-* And many others.
 
 Here's a simple example of how to construct a application with Boost.Application:
 

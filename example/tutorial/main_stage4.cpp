@@ -18,8 +18,8 @@ int main(int argc, char *argv[])
    /*<< Application Context >>*/
    application::context app_context;   
    
-   /*<< Functor user Class >>*/
-   myapp app(app_context); 
+   /*<< Tie stop, pause, resume handlers using default behaviour >>*/
+   application::auto_handler<myapp> app(app_context);
    
    /*<< Path manipulation aspect, to be used to get executable module path to use in log >>*/
    app_context.insert<application::path>(
@@ -28,27 +28,6 @@ int main(int argc, char *argv[])
    /*<< Arg manipulation aspect >>*/
    app_context.insert<application::args>(
       boost::make_shared<application::args>(argc, argv));
-
-   /*<< Termination handler tie >>*/
-   application::handler<>::callback termination_callback 
-      = boost::bind<bool>(&myapp::stop, &app);
-
-   app_context.insert<application::termination_handler>(
-      boost::make_shared<application::termination_handler_default_behaviour>(termination_callback));
-
-   /*<< Pause handler tie  >>*/
-   application::handler<>::callback pause_callback 
-      = boost::bind<bool>(&myapp::pause, &app);
-
-   app_context.insert<application::pause_handler>(
-      boost::make_shared<application::pause_handler_default_behaviour>(pause_callback));
-
-   /*<< Resume handler tie  >>*/
-   application::handler<>::callback resume_callback 
-      = boost::bind<bool>(&myapp::resume, &app);
-
-   app_context.insert<application::resume_handler>(
-      boost::make_shared<application::resume_handler_default_behaviour>(resume_callback));
 
    /*<< Note that now we are using 'application::server' as template param >>*/
    return application::launch<application::server>(app, app_context);

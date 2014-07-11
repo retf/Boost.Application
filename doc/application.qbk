@@ -1,5 +1,5 @@
 [/
-    Copyright 2013 Renato Tegon Forti
+    Copyright 2014 Renato Tegon Forti
     Distributed under the Boost Software License, Version 1.0.
     (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 /]
@@ -7,7 +7,7 @@
 [library Boost.Application
     [quickbook 1.5]
     [authors [Forti, Renato]]
-    [copyright 2013 Dokfile Software Ltd.]
+    [copyright 2014 Dokfile Software Ltd.]
     [id application]
     [dirname application]
     [license

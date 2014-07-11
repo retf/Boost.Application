@@ -17,15 +17,9 @@
 int main(int argc, char *argv[])
 {   
    application::context app_context;
-   myapp app(app_context);
-
-   /*<< Create bind to stop handler >>*/
-   application::handler<>::parameter_callback termination_callback 
-      = boost::bind<bool>(&myapp::stop, &app, _1);
-
+   
    /*<< Tie stop to termination_handler using default behaviour >>*/
-   app_context.insert<application::termination_handler>(
-      boost::make_shared<application::termination_handler_default_behaviour>(termination_callback));
+   application::auto_handler<myapp> app(app_context);
 
    /*<< Starts the application as a common application type. >>*/
    return application::launch<application::common>(app, app_context);

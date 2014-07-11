@@ -1,5 +1,5 @@
 [/
-    Copyright 2013 Renato Tegon Forti
+    Copyright 2014 Renato Tegon Forti
     Distributed under the Boost Software License, Version 1.0.
     (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 /]
@@ -37,23 +37,6 @@ After that, a functor class (that will hold user application code) need be creat
 
 [import ../example/tutorial/myfunctor_stage1.hpp]
 [tutorials1]
-
-[note
-
-The application operator can be defined using a param signature, e.g.:
-
-```
-   int operator()(context &context)
-```
-   
-Or using global_context, e.g.:
-
-```
-   int operator()(void)
-```
-
-The operator return a 'int' like a standard 'main' function.
-]
 
 An important things here is 'context'. Context is your application 'aspect' pool and you will use it to retrieves application information and control your application.
 
@@ -98,11 +81,10 @@ Here we will add a '[*stop]' handler to application.
 [import ../example/tutorial/myfunctor_stage3.hpp]
 [tutorials3]
 
-Now you need tie a 'stop' handler to 'termination_handler' aspect, like:
+Now you need tie a 'stop' handler to 'termination_handler' aspect, we will use 'auto_handler' to do this:
 
 [import ../example/tutorial/main_stage2.cpp]
 [tutorialcpps2]
-
 
 [endsect]
 
@@ -123,7 +105,7 @@ Now if you compile on [@http://en.wikipedia.org/wiki/Windows_service Windows], a
 In oder to use a Windows service, you have to install it. 
 Installation makes the SCM aware of the service and cause the SCM to add it to the list of services that appears in Services Console of Control Painel.
 
-Refer to [@../html/boost_application/windows_specifics.html#boost_application.windows_specifics.setup_service "Setup for Windows Service"] to know how add code that enable instalation on windows,
+Refer to setup example on 'example/setup' folder to know how to build a setup for Windows Service.
 
 After instalation you can see your service on SCM.
 
@@ -186,7 +168,7 @@ On POSIX system you will see only 'Start Log... Stoping my application...'
 [note
 Windows Service
 
-If you do not add '[*stop handler]', you will block the autonomy of the User to stop the service, see:
+If you do not add '[*stop handler]' to your class, you will block the autonomy of the User to stop the service, see:
 
 [$scm_stop.gif]
 

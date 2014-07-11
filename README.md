@@ -15,10 +15,12 @@ contact: re.tf@acm.org
      
 ###On-line Documentation (Work in Progress)
 
-[Online Docs] (http://www.dokfile.com/appbeta4/docs/libs/application/doc/html/index.html)
+[Online Docs (updated)] (http://www.dokfile.com/appbeta4/docs/libs/application/doc/html/index.html) 
 <br>[Wiki] (https://github.com/retf/Boost.Application/wiki)
 
 ###Articles
+
+Note that here we using version 4.8 (0.4.8). If you are using current version 4.9 (0.4.9) you need adapt all article samples.
 
 [Creating a New Application Mode] (http://www.codeproject.com/Articles/695937/Creating-a-New-Application-Mode)
 
@@ -44,20 +46,14 @@ Become this:
         bool resume();
     };
 
-### Todo
-
-Update Docs.
-
 ###Installation Notes
 
-Boost.Application uses a libraries that is not part of boost yet, you need install this library manually:
+If you are using boost lower than 1.56.0 you need install TypeIndex library manually:
 
 * [TypeIndex] (https://github.com/boostorg/type_index)
   --> In line with the last Boost TypeIndex (typeindex::type_index)
 
 Full Reference (http://www.boost.org/community/review_schedule.html)
-
-Building: Detailed instructions can be found [here] (https://svn.boost.org/trac/boost/wiki/TryModBoost).
 
 ### Use
 
