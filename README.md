@@ -18,6 +18,10 @@ contact: re.tf@acm.org
 [Online Docs (updated)] (http://www.dokfile.com/appbeta4/docs/libs/application/doc/html/index.html) 
 <br>[Wiki] (https://github.com/retf/Boost.Application/wiki)
 
+###Questions, suggestions or bugs, please use Boost ML, stackoverflow or this group: 
+
+[Discussion Group] (https://groups.google.com/forum/embed/?place=forum/boost_application)
+
 ###Articles
 
 Note that here we are using version 4.8 (0.4.8). If you are using current version 4.9 (0.4.9) you need adapt all article samples.
@@ -51,15 +55,13 @@ Become this:
 If you are using boost lower than 1.56.0 you need install TypeIndex library manually:
 
 * [TypeIndex] (https://github.com/boostorg/type_index)
-  --> In line with the last Boost TypeIndex (typeindex::type_index)
 
-Full Reference (http://www.boost.org/community/review_schedule.html)
+###Review Schedule
+
+Boost Review Schedule (http://www.boost.org/community/review_schedule.html)
 
 ### Use
 
 If you intend to use 'Application' on your application, please send-me your name and project. I am looking for create a list of users of ‘Application’.
-
-### Questions, suggestions or bugs, please send an email to: 
-
-re.tf@acm.org (Renato Tegon Forti)
+<br>re.tf@acm.org (Renato Tegon Forti)
 
