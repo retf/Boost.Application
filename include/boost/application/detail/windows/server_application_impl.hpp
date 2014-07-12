@@ -63,10 +63,10 @@ namespace boost { namespace application {
          application::context &context, boost::system::error_code& ec)
          : application_impl(context)
          , main_(main)
-         , main_thread_(0)
          , launch_thread_(0)
          , result_code_(0)
          , terminate_event_(0)
+         , terminate_code_(0)
       {
          sb.start();
          initialize(ec);
@@ -80,9 +80,6 @@ namespace boost { namespace application {
 
       virtual ~server_application_impl_()
       {
-         if(main_thread_)
-            delete main_thread_;
-
          if(launch_thread_)
             delete launch_thread_;
 
@@ -95,7 +92,7 @@ namespace boost { namespace application {
 
       void initialize(boost::system::error_code& ec)
       {
-          if(instance_ == 0)
+         if(instance_ == 0)
             instance_ = this;
 
          string_type void_string;
@@ -133,15 +130,15 @@ namespace boost { namespace application {
 
             if(th->get(cb))
             {
-               if((*cb)())
+               if(!(*cb)())
                {
-                  return true;
+                  return false;
                }
             }
          }
 
-         // don't accept, returns the service could not accept control messages
-         return false;
+         // if don't have stop ,default is can stop
+         return true;
       }
 
       bool pause(void)
@@ -198,9 +195,6 @@ namespace boost { namespace application {
          csbl::shared_ptr<status> st = 
             context_.find<status>();
 
-         csbl::shared_ptr<wait_for_termination_request> tr =
-            context_.find<wait_for_termination_request>();
-
          switch (dwOpcode)
          {
             case SERVICE_CONTROL_STOP:
@@ -209,24 +203,15 @@ namespace boost { namespace application {
                   // don't accept, returns the service
                   // could not accept control messages
                   return;
-
-               if (!send_status_to_scm(SERVICE_STOP_PENDING, 1, 1000))
-               {
-                  terminate(GetLastError());
-                  return;
-               }
-
-               if(st) st->state(status::stoped);
-               if(tr) tr->proceed();
-              
-               if (!send_status_to_scm(SERVICE_STOPPED, 0, 0))
-               {
-                  terminate(GetLastError());
-                  return;
-               }
+                  
+               request_terminate(0);
             }
             break;
-
+            case SERVICE_CONTROL_SHUTDOWN:
+            {
+               stop();
+               request_terminate(0);
+            }            
             case SERVICE_CONTROL_PAUSE:
             {
                if(!pause())
@@ -236,7 +221,7 @@ namespace boost { namespace application {
 
                if (!send_status_to_scm(SERVICE_PAUSE_PENDING, 1, 1000))
                {
-                  terminate(GetLastError());
+                  request_terminate(GetLastError());
                   return;
                }
 
@@ -244,7 +229,7 @@ namespace boost { namespace application {
 
                if (!send_status_to_scm(SERVICE_PAUSED, 0, 0))
                {
-                  terminate(GetLastError());
+                  request_terminate(GetLastError());
                   return;
                }
             }
@@ -259,7 +244,7 @@ namespace boost { namespace application {
 
                if (!send_status_to_scm(SERVICE_CONTINUE_PENDING, 1, 1000))
                {
-                  terminate(GetLastError());
+                  request_terminate(GetLastError());
                   return;
                }
 
@@ -267,7 +252,7 @@ namespace boost { namespace application {
 
                if (!send_status_to_scm(SERVICE_RUNNING, 0, 0))
                {
-                  terminate(GetLastError());
+               	request_terminate(GetLastError());
                   return;
                }
             }
@@ -276,24 +261,6 @@ namespace boost { namespace application {
             case SERVICE_CONTROL_INTERROGATE:
             {
                // Nothing here!
-            }
-            break;
-
-            case SERVICE_CONTROL_SHUTDOWN:
-            {
-               if (!send_status_to_scm(SERVICE_STOP_PENDING, 1, 1000))
-               {
-                  terminate(GetLastError());
-                  return;
-               }
-
-               stop();
-
-               if (!send_status_to_scm(SERVICE_STOPPED, 0, 0))
-               {
-                  terminate(GetLastError());
-                  return;
-               }
             }
             break;
          }
@@ -371,25 +338,37 @@ namespace boost { namespace application {
          // pass the status record to the scm
          success = SetServiceStatus(service_status_handle_, &service_status);
 
-         if (!success)
-         {
-            stop();
-         }
-
          return success;
       }
-
+	  void request_terminate(DWORD error)
+	  {
+	  	  terminate_code_ = error;
+	  	  if(terminate_event_ != NULL)
+	  	  	  SetEvent(terminate_event_);
+	  }
       // handle an error from service_main by cleaning up
       // and telling SCM that the service didn't start.
       void terminate(DWORD error)
       {
-         // if terminateEvent has been created, close it.
-         if (terminate_event_)
-            CloseHandle(terminate_event_);
+      	if(error == 0 && terminate_code_ != 0)
+         {
+         	 error = terminate_code_;
+         }
+         
+      	 stop();
+         
+         csbl::shared_ptr<status> st = 
+            context_.find<status>();       	 
+         csbl::shared_ptr<wait_for_termination_request> tr =
+            context_.find<wait_for_termination_request>();
+       	 
+         if(st) st->state(status::stoped);
+         if(tr) tr->proceed();
+
+         launch_thread_->join();
 
          // Send a message to the scm to tell about stopage
-         if (service_status_handle_)
-            send_status_to_scm(SERVICE_STOPPED, 0, 0, error);
+         send_status_to_scm(SERVICE_STOPPED, 0, 0, error);
 
          // Do not need to close serviceStatusHandle
       }
@@ -409,14 +388,13 @@ namespace boost { namespace application {
 
          if (!service_status_handle_)
          {
-            terminate(GetLastError());
             return;
          }
 
          // notify SCM of progress
-         if (!send_status_to_scm(SERVICE_START_PENDING, 1, 5000))
+         if (!send_status_to_scm(SERVICE_START_PENDING, 1, 1000))
          {
-            terminate(GetLastError());
+            send_status_to_scm(SERVICE_STOPPED, 0, 0, GetLastError());
             return;
          }
 
@@ -425,14 +403,14 @@ namespace boost { namespace application {
 
          if (!terminate_event_)
          {
-            terminate(GetLastError());
+            send_status_to_scm(SERVICE_STOPPED, 0, 0, GetLastError());
             return;
          }
 
          // notify SCM of progress
-         if (!send_status_to_scm(SERVICE_START_PENDING, 2, 1000))
+         if (!send_status_to_scm(SERVICE_START_PENDING, 2, 5000))
          {
-            terminate(GetLastError());
+            send_status_to_scm(SERVICE_STOPPED, 0, 0, GetLastError());
             return;
          }
 
@@ -440,6 +418,15 @@ namespace boost { namespace application {
          launch_thread_ = new boost::thread(
             boost::bind(&server_application_impl_::work_thread, this, dw_argc, lpsz_argv));
 
+         HANDLE hevent[2];		 
+
+         hevent[0] = launch_thread_->native_handle();
+         if(hevent[0] == NULL)
+         {
+            send_status_to_scm(SERVICE_STOPPED, 0, 0, -1);
+            return;		 
+         }
+		 
          // The service is now running.
          // Notify SCM of progress
          if (!send_status_to_scm(SERVICE_RUNNING, 0, 0))
@@ -447,12 +434,19 @@ namespace boost { namespace application {
             terminate(GetLastError());
             return;
          }
+		 
+         hevent[1] = terminate_event_;
 
          // Wait for stop signal, and then terminate
-         WaitForSingleObject(terminate_event_, INFINITE);
-
+         WaitForMultipleObjects(2,hevent,FALSE,INFINITE);
+         
+         if (!send_status_to_scm(SERVICE_STOP_PENDING, 1, 5000))
+         {
+            terminate(GetLastError());
+            return;
+         }
          // terminate service, no error!
-         terminate(0);
+         terminate(result_code_);
       }
 
       void work_thread(int argc, char_type** argv)
@@ -460,23 +454,19 @@ namespace boost { namespace application {
          context_.exchange<application::args>(
             csbl::make_shared<application::args>(argc, argv));
          
-         main_thread_
-            = new boost::thread(
-               boost::lambda::var( result_code_ )
-                  = main_()
-                     );
+         result_code_ = main_();
       }
 
       //
       // exposed to scm service interface
       //
 
-      static void service_main_entry(DWORD dw_argc, LPTSTR* lpsz_argv)
+      static void __stdcall service_main_entry(DWORD dw_argc, LPTSTR* lpsz_argv)
       {
          server_application_impl_::instance().service_main(dw_argc, lpsz_argv);
       }
 
-      static void service_handler_entry(DWORD dw_opcode)
+      static void __stdcall service_handler_entry(DWORD dw_opcode)
       {
          server_application_impl_::instance().service_handler(dw_opcode);
       }
@@ -485,7 +475,8 @@ namespace boost { namespace application {
 
       // Event used to hold ServiceMain from completing
       HANDLE terminate_event_;
-
+      DWORD terminate_code_;
+	  
       // Status of service
       SERVICE_STATUS service_status_;
 
@@ -493,12 +484,7 @@ namespace boost { namespace application {
       // the SCM. Created by RegisterServiceCtrlHandler
       SERVICE_STATUS_HANDLE service_status_handle_;
 
-      // Flag to wait service thread complementation
-      // need this to get return value of thread
-      bool wait_run_thread_complementation_;
-
       boost::thread *launch_thread_;
-      boost::thread *main_thread_;
 
       // app code
       mainop main_;
