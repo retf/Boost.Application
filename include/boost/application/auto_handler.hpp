@@ -153,7 +153,7 @@ namespace boost { namespace application {
          if(has_stop<Application, bool(Application::*)()>::value)
          {   
             cxt.insert<termination_handler>(
-               boost::make_shared<termination_handler_default_behaviour>(
+               csbl::make_shared<termination_handler_default_behaviour>(
                   handler<bool>::make_callback(*this, 
                      &auto_handler::stop_handler_<
                         has_stop<Application, bool(Application::*)()>::value
@@ -166,7 +166,7 @@ namespace boost { namespace application {
          if(has_pause<Application, bool(Application::*)()>::value)
          {
             cxt.insert<pause_handler>(
-               boost::make_shared<pause_handler_default_behaviour>(
+               csbl::make_shared<pause_handler_default_behaviour>(
                   handler<bool>::make_callback(*this, 
                      &auto_handler::pause_handler_<
                         has_pause<Application, bool(Application::*)()>::value
@@ -176,7 +176,7 @@ namespace boost { namespace application {
          if(has_resume<Application, bool(Application::*)()>::value)
          {
             cxt.insert<resume_handler>(
-               boost::make_shared<resume_handler_default_behaviour>(
+               csbl::make_shared<resume_handler_default_behaviour>(
                   handler<bool>::make_callback(*this, 
                      &auto_handler::resume_handler_<
                         has_resume<Application, bool(Application::*)()>::value
@@ -191,7 +191,7 @@ namespace boost { namespace application {
          if(has_single_instance<Application, bool(Application::*)()>::value)
          {
             cxt.insert<limit_single_instance>(
-               boost::make_shared<limit_single_instance_default_behaviour>(appid,
+               csbl::make_shared<limit_single_instance_default_behaviour>(appid,
                   handler<bool>::make_callback(*this, 
                      &auto_handler::single_instance_handler_<
                         has_single_instance<Application, bool(Application::*)()>::value
@@ -328,7 +328,7 @@ int main()
       = boost::bind<bool>(&myapp::instace_aready_running, &app, _1);
 
    app_context.insert<application::limit_single_instance>(
-      boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, callback));
+      csbl::make_shared<application::limit_single_instance_default_behaviour>(appuuid, callback));
 
    // add termination handler
   
@@ -336,7 +336,7 @@ int main()
       = boost::bind<bool>(&myapp::stop, &app, _1);
 
    app_context.insert<application::termination_handler>(
-      boost::make_shared<application::termination_handler_default_behaviour>(termination_callback));
+      csbl::make_shared<application::termination_handler_default_behaviour>(termination_callback));
 
    return boost::application::launch<boost::application::common>(app, app_context);
 }
@@ -404,13 +404,13 @@ int main()
       = boost::bind<bool>(&myapp::instace_aready_running, &app);
 
    this_application()->insert<limit_single_instance>(
-      boost::make_shared<limit_single_instance_default_behaviour>(appuuid, limit_single_instance_callback));
+      csbl::make_shared<limit_single_instance_default_behaviour>(appuuid, limit_single_instance_callback));
 
    handler<>::global_context_callback termination_callback 
       = boost::bind<bool>(&myapp::stop, &app);
 
    this_application()->insert<termination_handler>(
-      boost::make_shared<termination_handler_default_behaviour>(termination_callback));
+      csbl::make_shared<termination_handler_default_behaviour>(termination_callback));
 
    int ret = application::launch<application::common>(app, ctx);
 
