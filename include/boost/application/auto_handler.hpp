@@ -56,6 +56,26 @@ struct name                                                                \
 
 namespace boost { namespace application { 
 
+   /*!
+    * This file has a util class (auto_handler) that can be used to 
+    * bind a class methods to handlers in automatic way.
+    *
+    * The available handlers are:
+    *
+    * - stop
+    * - pause (windows only)
+    * - resume (windows only)
+    * - instace_aready_running
+    *
+    * Functor class methods (to handler) signature:
+    *
+    * - bool stop(void);
+    * - bool pause(void);
+    * - bool resume(void);
+    * - bool instace_aready_running(void);
+    *
+    */
+
    namespace detail {
 
       // handler detector
@@ -84,7 +104,7 @@ namespace boost { namespace application {
          }
 
          handler_auto_set_c(context &cxt, boost::uuids::uuid& appid)
-            : Application (cxt, appid)
+            : Application (cxt)
          {
             static_cast<Derived*>(this)->setup(cxt);
             static_cast<Derived*>(this)->setup(cxt, appid);
@@ -108,6 +128,44 @@ namespace boost { namespace application {
       };
 
    } // detail
+   
+   /*!
+    * \brief This class hold a 'auto_handler' mechanism allowing
+    *        the user make the "bind" to the main handlers automatically.
+    *
+    * Use:
+    * 
+    * class myapp
+    * {
+    * public:
+    * 
+    *    myapp(boost::application::context& context)
+    *       : context_(context) { }
+    * 
+    *    int operator()()
+    *    {
+    *        context_.find<boost::application::wait_for_termination_request>()->wait();
+    *        return 0;
+    *    }
+    * 
+    *    bool stop()
+    *    {
+    *        return true;
+    *    }
+    * 
+    * private:
+    *    boost::application::context& context_;
+    * };
+    *
+    * int main()
+    * {  
+    *    boost::application::context app_context;
+    *    boost::application::auto_handler<myapp> app(app_context);
+    * 
+    *    return boost::application::launch<boost::application::common>(app, app_context);
+    * }
+    * 
+    */
 
    template <typename Application>
    class auto_handler : public detail::handler_detector, public 
