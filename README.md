@@ -3,10 +3,6 @@
 * This release will be identified as : 0.4
 * To get 0.3 (older version) refer to: [0.3] (https://sourceforge.net/projects/boostapp/)
 
-In line with new Boost Git Structure
-
-contact: re.tf@acm.org
-
 ### Caution
 
 This is not yet an official Boost C++ library. It wasn't reviewed and can't be downloaded from www.boost.org. This beta is available to boost community to know real interest and get comments for refinement.The intention is to submit library to formal review, if community think that it is interesting!
@@ -191,6 +187,7 @@ If you are using boost lower than 1.56.0 you need install TypeIndex library manu
 * [TypeIndex] (https://github.com/boostorg/type_index)
 
 ### Tested compilers
+
 * Linux (x86/x86-64)
    * GCC 4.7.3/4.8.2/4.9.0
 
@@ -202,24 +199,31 @@ If you are using boost lower than 1.56.0 you need install TypeIndex library manu
 
 Boost Review Schedule (http://www.boost.org/community/review_schedule.html)
 
-### Use
+### Who's Using 'Application'
+
+* Dokfile Software (Colaboration and Backup System)
 
 If you intend to use 'Application' on your application, please send-me your name and project. I am looking for create a list of users of ‘Application’.
 <br>re.tf@acm.org (Renato Tegon Forti)
 
-* Dokfile Software (Colaboration and Backup System)
-
-### Acknowledgements
-
-A special thanks to Vicente J. Botet Escriba that helped a lot on all areas of this lib.
-   
-Thanks to Benjamin Dieckmann for global_context implementation.
-
-## Other 'Application' Frameworks:
+### Other 'Application' Frameworks:
 
  * [Pocoproject (WinService)](http://pocoproject.org/docs-1.5.3/Poco.Util.WinService.html)
  * [Libdaemon (Daemon)] (http://www.tyrfingr.is/projects/libdaemon/)
    
+### Acknowledgements
+
+A special thanks to Vicente J. Botet Escriba that helped a lot on all areas of this lib.
+   
+Thanks to Benjamin Dieckmann for global_context implementation.<br>
+Thanks to Rodrigo Madera (RM of Boost.Application)
+
+### Contact
+
+[Renato Tegon Forti] (mailto:re.tf@acm.org)
+
 ### License
 
 Distributed under the [Boost Software License, Version 1.0](http://www.boost.org/LICENSE_1_0.txt).
+
+
