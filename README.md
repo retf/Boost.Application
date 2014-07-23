@@ -187,6 +187,14 @@ If you are using boost lower than 1.56.0 you need install TypeIndex library manu
 
 * [TypeIndex] (https://github.com/boostorg/type_index)
 
+## Tested compilers
+* Linux (x86/x86-64)
+   * GCC 4.7.3/4.8.2/4.9.0
+
+* Windows (x86/x86-64)
+   * MinGW 4.7.3/4.8.2+
+   * Visual Studio 2013
+
 ###Review Schedule
 
 Boost Review Schedule (http://www.boost.org/community/review_schedule.html)
@@ -201,4 +209,12 @@ If you intend to use 'Application' on your application, please send-me your name
 A special thanks to Vicente J. Botet Escriba that helped a lot on all areas of this lib.
    
 Thanks to Benjamin Dieckmann for global_context implementation.
+
+## Other 'Application' Frameworks:
+
+ * [Pocoproject (WinService)](http://pocoproject.org/docs-1.5.3/Poco.Util.WinService.html)
+ * [Libdaemon (Daemon)] (http://www.tyrfingr.is/projects/libdaemon/)
    
+### License
+
+Distributed under the [Boost Software License, Version 1.0](http://www.boost.org/LICENSE_1_0.txt).
