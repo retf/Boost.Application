@@ -1,8 +1,5 @@
 #Boost.Application (Aspect Based)
 
-* This release will be identified as : 0.4
-* To get 0.3 (older version) refer to: [0.3] (https://sourceforge.net/projects/boostapp/)
-
 ### Caution
 
 This is not yet an official Boost C++ library. It wasn't reviewed and can't be downloaded from www.boost.org. This beta is available to boost community to know real interest and get comments for refinement.The intention is to submit library to formal review, if community think that it is interesting!
@@ -210,6 +207,13 @@ If you intend to use 'Application' on your application, please send-me your name
 
  * [Pocoproject (WinService)](http://pocoproject.org/docs-1.5.3/Poco.Util.WinService.html)
  * [Libdaemon (Daemon)] (http://www.tyrfingr.is/projects/libdaemon/)
+ 
+### Note about other version
+
+* This release will be identified as : 0.4
+* To get 0.3 (older version) refer to: [0.3] (https://sourceforge.net/projects/boostapp/)
+
+Note that version 0.3 is no longer maintained! Version 0.4, is now maintained and receives regular updates. 
    
 ### Acknowledgements
 
