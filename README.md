@@ -207,7 +207,8 @@ If you intend to use 'Application' on your application, please send-me your name
 
  * [Pocoproject (WinService)](http://pocoproject.org/docs-1.5.3/Poco.Util.WinService.html)
  * [Libdaemon (Daemon)] (http://www.tyrfingr.is/projects/libdaemon/)
- 
+ * [Qt (qtservice)](http://doc.qt.digia.com/solutions/4/qtservice/qtservice.html)
+
 ### Note about other version
 
 * This release will be identified as : 0.4
