@@ -185,11 +185,11 @@ If you are using boost lower than 1.56.0 you need install TypeIndex library manu
 
 ### Tested compilers
 
-* Linux (x86/x86-64)
-   * GCC 4.7.3/4.8.2/4.9.0
+* Linux (x86/64)
+   * GCC 4.7/4.8/4.9
 
 * Windows (x86/x86-64)
-   * MinGW 4.7.3/4.8.2+
+   * MinGW 4.7/4.8
    * Visual Studio 2013
 
 ### Review Schedule
@@ -198,7 +198,7 @@ Boost Review Schedule (http://www.boost.org/community/review_schedule.html)
 
 ### Who's Using 'Application'
 
-* Dokfile Software (Colaboration and Backup System)
+* [Dokfile Software (Colaboration and Backup System)](http://www.dokfile.com/)
 
 If you intend to use 'Application' on your application, please send-me your name and project. I am looking for create a list of users of ‘Application’.
 <br>re.tf@acm.org (Renato Tegon Forti)
