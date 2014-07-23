@@ -11,7 +11,7 @@ contact: re.tf@acm.org
 
 This is not yet an official Boost C++ library. It wasn't reviewed and can't be downloaded from www.boost.org. This beta is available to boost community to know real interest and get comments for refinement.The intention is to submit library to formal review, if community think that it is interesting!
 
-## Introduction
+### Introduction
 
 Boost.Application provides a application environment, or start point to any people that want a basic infrastructure to build an system application on Windows or Unix Variants (e.g. Linux, MacOS).
 
@@ -184,13 +184,13 @@ Library use:<br>
 Library customization:<br>
 [Creating a New Application Mode] (http://www.codeproject.com/Articles/695937/Creating-a-New-Application-Mode)
 
-###Installation Notes
+### Installation Notes
 
 If you are using boost lower than 1.56.0 you need install TypeIndex library manually:
 
 * [TypeIndex] (https://github.com/boostorg/type_index)
 
-## Tested compilers
+### Tested compilers
 * Linux (x86/x86-64)
    * GCC 4.7.3/4.8.2/4.9.0
 
@@ -198,7 +198,7 @@ If you are using boost lower than 1.56.0 you need install TypeIndex library manu
    * MinGW 4.7.3/4.8.2+
    * Visual Studio 2013
 
-###Review Schedule
+### Review Schedule
 
 Boost Review Schedule (http://www.boost.org/community/review_schedule.html)
 
