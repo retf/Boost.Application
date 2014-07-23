@@ -164,10 +164,11 @@ int main(int argc, char *argv[])
 
 ```
      
-### On-line Documentation (Work in Progress)
+### On-line Documentation (Work in Progress), and other information
 
-[Online Docs (updated)] (http://www.dokfile.com/appbeta4/docs/libs/application/doc/html/index.html) 
-<br>[Wiki] (https://github.com/retf/Boost.Application/wiki)
+* [Online Docs (updated)] (http://www.dokfile.com/appbeta4/docs/libs/application/doc/html/index.html) 
+* [Wiki] (https://github.com/retf/Boost.Application/wiki)
+* [Boost Library Incubator](http://rrsd.com/blincubator.com/bi_library/application/)
 
 ### Questions, suggestions or bugs, please use Boost ML, stackoverflow or this group: 
 
@@ -177,9 +178,11 @@ int main(int argc, char *argv[])
 
 Note that here we are using version 4.8 (0.4.8). If you are using current version 4.9 (0.4.9) you need adapt all article samples.
 
-[Creating a New Application Mode] (http://www.codeproject.com/Articles/695937/Creating-a-New-Application-Mode)
-
+Library use:<br>
 [Build a Server Application using Application Library] (http://www.codeproject.com/Articles/756866/Build-a-Server-Application-using-Application-Libra)
+
+Library customization:<br>
+[Creating a New Application Mode] (http://www.codeproject.com/Articles/695937/Creating-a-New-Application-Mode)
 
 ###Installation Notes
 
@@ -203,6 +206,8 @@ Boost Review Schedule (http://www.boost.org/community/review_schedule.html)
 
 If you intend to use 'Application' on your application, please send-me your name and project. I am looking for create a list of users of ‘Application’.
 <br>re.tf@acm.org (Renato Tegon Forti)
+
+* Dokfile Software (Colaboration and Backup System)
 
 ### Acknowledgements
 
