@@ -24,26 +24,10 @@
 namespace boost { namespace application {
 
    // library session
-   inline library_type<character_types::string_type>
-      library(const character_types::char_type *s)
+   template <class T>
+   inline library_path library(const T &s)
    {
-      return library_type<character_types::string_type>(s);
-   }
-
-   inline library_type<character_types::string_type>
-      library(const character_types::string_type &s)
-   {
-      return library_type<character_types::string_type>(s);
-   }
-
-   inline library_type<character_types::string_type>
-      library(const boost::filesystem::path &p)
-   {
-#if defined(BOOST_APPLICATION_STD_WSTRING)
-      return library_type<character_types::string_type>(p.wstring());
-#else
-      return library_type<character_types::string_type>(p.string());
-#endif
+      return library_path(s);
    }
 
    // symbol session

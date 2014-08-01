@@ -42,7 +42,7 @@ namespace boost { namespace application {
    public:
 
       /*!
-       * Creates enpty shared_library obj, need call load to
+       * Creates empty shared_library obj, need call load to
        * load a shared object.
        *
        */
@@ -58,14 +58,13 @@ namespace boost { namespace application {
        * The library() can handle std::string, char, std::wstring,
        * wchar_t or filesystem path.
        *
-       * \param library_type An initializer free function, e.g.:
+       * \param sl An initializer free function, e.g.:
        *        shared_library sh(library("c:\\mylib.dll"));
        *
        * Throw a boost::system::system_error on a execption.
        *
        */
-      template <typename T>
-      shared_library(const library_type<T> &sl)
+      shared_library(const library_path &sl)
       {
          boost::system::error_code ec;
          impl_ = new shared_library_impl(sl, ec);
@@ -82,7 +81,7 @@ namespace boost { namespace application {
        * The library() can handle std::string, char, std::wstring,
        * wchar_t or filesystem path.
        *
-       * \param library_type An initializer free function, e.g.:
+       * \param sl An initializer free function, e.g.:
        *        shared_library sh(library("c:\\mylib.dll"), ec);
        *
        * \param ec Variable (boost::system::error_code) that will be
@@ -91,8 +90,7 @@ namespace boost { namespace application {
        * Check ec for errors.
        *
        */
-      template <typename T>
-      shared_library(const library_type<T> &sl, boost::system::error_code &ec)
+      shared_library(const library_path &sl, boost::system::error_code &ec)
       {
          impl_ = new shared_library_impl(sl, ec);
       }
@@ -104,7 +102,7 @@ namespace boost { namespace application {
        * The library() can handle std::string, char, std::wstring,
        * wchar_t or filesystem path.
        *
-       * \param library_type An initializer free function, e.g.:
+       * \param sl An initializer free function, e.g.:
        *        shared_library sh(library("c:\\mylib.dll"), 0x00000001);
        *
        * \param mode An mode that will be used on load.
@@ -112,8 +110,7 @@ namespace boost { namespace application {
        * Throw a boost::system::system_error on a execption.
        *
        */
-      template <typename T>
-      shared_library(const library_type<T> &sl, shared_library_load_mode mode)
+      shared_library(const library_path &sl, shared_library_load_mode mode)
       {
          boost::system::error_code ec;
          impl_ = new shared_library_impl(sl, mode, ec);
@@ -130,7 +127,7 @@ namespace boost { namespace application {
        * The library() can handle std::string, char, std::wstring,
        * wchar_t or filesystem path.
        *
-       * \param library_type An initializer free function, e.g.:
+       * \param sl An initializer free function, e.g.:
        *        shared_library sh(library("c:\\mylib.dll"), 0x00000001, ec);
        *
        * \param mode An mode that will be used on load.
@@ -141,8 +138,7 @@ namespace boost { namespace application {
        * Check ec for errors.
        *
        */
-      template <typename T>
-      shared_library(const library_type<T> &sl, shared_library_load_mode mode,
+      shared_library(const library_path &sl, shared_library_load_mode mode,
                      boost::system::error_code &ec)
       {
          impl_ = new shared_library_impl(sl, mode, ec);
@@ -177,7 +173,7 @@ namespace boost { namespace application {
        * The library() can handle std::string, char, std::wstring,
        * wchar_t or filesystem path.
        *
-       * \param library_type An initializer free function, e.g.:
+       * \param sl An initializer free function, e.g.:
        *        sh.load(library("c:\\mylib.dll"));
        *
        * Throw a boost::system::system_error on a execption.
@@ -186,8 +182,7 @@ namespace boost { namespace application {
        * unload it and then load the new provided library.
        *
        */
-      template <typename T>
-      void load(const library_type<T> &sl)
+      void load(const library_path &sl)
       {
          boost::system::error_code ec;
          impl_->load(sl, ec);
@@ -203,7 +198,7 @@ namespace boost { namespace application {
        * The library() can handle std::string, char, std::wstring,
        * wchar_t or filesystem path.
        *
-       * \param library_type An initializer free function, e.g.:
+       * \param sl An initializer free function, e.g.:
        *        sh.load(library("c:\\mylib.dll"), ec);
        *
        * \param ec Variable (boost::system::error_code) that will be
@@ -215,8 +210,7 @@ namespace boost { namespace application {
        * unload it and then load the new provided library.
        *
        */
-      template <typename T>
-      void load(const library_type<T> &sl, boost::system::error_code &ec)
+      void load(const library_path &sl, boost::system::error_code &ec)
       {
          impl_->load(sl, ec);
       }
@@ -227,7 +221,7 @@ namespace boost { namespace application {
        * The library() can handle std::string, char, std::wstring,
        * wchar_t or filesystem path.
        *
-       * \param library_type An initializer free function, e.g.:
+       * \param sl An initializer free function, e.g.:
        *        sl.load(library("c:\\mylib.dll"), 0);
        *
        * \param mode An mode that will be used on load.
@@ -238,8 +232,7 @@ namespace boost { namespace application {
        * unload it and then load the new provided library.
        *
        */
-      template <typename T>
-      void load(const library_type<T> &sl, shared_library_load_mode mode)
+      void load(const library_path &sl, shared_library_load_mode mode)
       {
          boost::system::error_code ec;
          impl_->load(sl, mode, ec);
@@ -255,8 +248,8 @@ namespace boost { namespace application {
        * The library() can handle std::string, char, std::wstring,
        * wchar_t or filesystem path.
        *
-       * \param library_type An initializer free function, e.g.:
-       *        sl.load(library("c:\\mylib.dll"), 0, ec);
+       * \param sl An initializer free function, e.g.:
+       *        sl.load("c:\\mylib.dll", 0, ec);
        *
        * \param mode An mode that will be used on load.
        *
@@ -269,8 +262,7 @@ namespace boost { namespace application {
        * unload it and then load the new provided library.
        *
        */
-      template <typename T>
-      void load(const library_type<T> &sl, shared_library_load_mode mode,
+      void load(const library_path &sl, shared_library_load_mode mode,
                 boost::system::error_code &ec)
       {
          impl_->load(sl, mode, ec);
@@ -432,7 +424,7 @@ namespace boost { namespace application {
        * \return the boost::filesystem::path path of module.
        *
        */
-      const boost::filesystem::path& get_path() const
+      boost::filesystem::path get_path() const
       {
          return impl_->get_path();
       }

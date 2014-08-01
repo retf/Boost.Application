@@ -18,11 +18,12 @@
 
 #include <boost/application/config.hpp>
 #include <boost/application/base_type.hpp>
+#include <boost/filesystem/path.hpp>
 
 namespace boost { namespace application {
 
    /*!
-    * \brief This is a library_type.
+    * \brief This is a path.
     *
     * It is used as param on shared_library
     * class, and using it many types can be
@@ -30,14 +31,7 @@ namespace boost { namespace application {
     * and so on.
     *
     */
-   template <typename String>
-   class library_type
-      : public base_type<String>
-   {
-   public:
-      explicit library_type(const String &s)
-         : base_type<String>(s) {}
-   };
+   typedef boost::filesystem::path library_path;
 
    /*!
     * \brief This is a symbol_type.

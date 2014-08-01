@@ -27,7 +27,7 @@ namespace boost { namespace application { namespace csbl {
 BOOST_APPLICATION_FEATURE_SELECT
 
    template <class T>
-   inline  type_index get_type_id() {
+   inline type_index get_type_id() {
 
 #if defined( BOOST_APPLICATION_FEATURE_NS_SELECT_STD )
       return typeid(T);

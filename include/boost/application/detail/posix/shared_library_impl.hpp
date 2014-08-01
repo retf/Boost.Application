@@ -58,42 +58,37 @@ namespace boost { namespace application {
          unload();
       }
 
-      template <typename T>
-      shared_library_impl(const library_type<T> &sl, boost::system::error_code &ec)
+      shared_library_impl(const library_path &sl, boost::system::error_code &ec)
          : handle_(NULL)
       {
          load(sl, ec);
       }
 
-      template <typename T>
-      shared_library_impl(const library_type<T> &sl, shared_library_load_mode mode,
+      shared_library_impl(const library_path &sl, shared_library_load_mode mode,
                           boost::system::error_code &ec)
          : handle_(NULL)
       {
          load(sl, mode, ec);
       }
 
-      template <typename T>
-      void load(const library_type<T> &sl,
-                boost::system::error_code &ec)
+      void load(const library_path &sl, boost::system::error_code &ec)
       {
          boost::lock_guard<boost::mutex> lock(mutex_);
 
          if (handle_)
             unload(lock);
 
-         path_ = sl.get().c_str();
+         path_ = sl;
 
          load(RTLD_LAZY | RTLD_GLOBAL, ec, lock);// usual mode, generic
       }
 
-      template <typename T>
-      void load(const library_type<T> &sl, shared_library_load_mode mode,
+      void load(const library_path &sl, shared_library_load_mode mode,
                 boost::system::error_code &ec)
       {
          boost::lock_guard<boost::mutex> lock(mutex_);
 
-         path_ = sl.get().c_str();
+         path_ = sl;
          load(static_cast<unsigned long>(mode), ec, lock);
       }
 
@@ -125,7 +120,7 @@ namespace boost { namespace application {
          return symbol_addr(sb, ec);
       }
 
-      const boost::filesystem::path& get_path() const
+      boost::filesystem::path get_path() const
       {
          boost::lock_guard<boost::mutex> lock(mutex_);
          return path_;

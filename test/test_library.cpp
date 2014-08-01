@@ -5,13 +5,10 @@
 
 // For more information, see http://www.boost.org
 
+#include <boost/config.hpp>
 #include <iostream>
 
-#if defined(_WIN32)
-#   define LIBRARY_API __declspec(dllexport)
-#else
-#   define LIBRARY_API
-#endif
+#define LIBRARY_API BOOST_SYMBOL_EXPORT
 
 extern "C" void LIBRARY_API say_hello(void);
 extern "C" float LIBRARY_API lib_version(void);

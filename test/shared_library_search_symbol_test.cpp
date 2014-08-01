@@ -17,7 +17,7 @@ int test_main(int argc, char* argv[])
    const boost::filesystem::path shared_library_path(argv[1]);
 
    {
-      shared_library sl(library(shared_library_path));
+      shared_library sl(shared_library_path);
       BOOST_CHECK(sl.search_symbol(symbol("say_hello")));
       BOOST_CHECK(sl.search_symbol(symbol("lib_version")));
       BOOST_CHECK(!sl.search_symbol(symbol("i_do_not_exist")));

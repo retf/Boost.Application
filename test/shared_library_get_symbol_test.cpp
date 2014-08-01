@@ -25,7 +25,7 @@ int test_main(int argc, char* argv[])
    const boost::filesystem::path shared_library_path(argv[1]);
 
    {
-      shared_library sl(library(shared_library_path));
+      shared_library sl(shared_library_path);
 
       BOOST_CHECK(sl.get_symbol(symbol("say_hello")));
       float ver = ((lib_version_func) sl.get_symbol(symbol("lib_version")))();
