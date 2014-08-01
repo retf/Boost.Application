@@ -18,79 +18,84 @@
 #define BOOST_APPLICATION_SHARED_LIBRARY_IMPL_HPP
 
 #include <boost/application/config.hpp>
-#include <boost/application/shared_library_initializers.hpp>
+#include <boost/application/shared_library_types.hpp>
 #include <boost/application/shared_library_load_mode.hpp>
 
 #include <boost/noncopyable.hpp>
+#include <boost/swap.hpp>
 #include <boost/filesystem/path.hpp>
 
 namespace boost { namespace application {
 
-    class shared_library_impl : noncopyable {
-    public:
-        shared_library_impl()
-            : handle_(NULL)
-        {}
+class shared_library_impl : noncopyable {
+public:
+    shared_library_impl() BOOST_NOEXCEPT
+        : handle_(NULL)
+    {}
 
-        ~shared_library_impl() {
-            unload();
-        }
+    ~shared_library_impl() BOOST_NOEXCEPT {
+        unload();
+    }
 
-        static shared_library_load_mode default_mode() {
-            return 0;
-        }
+    static shared_library_load_mode default_mode() BOOST_NOEXCEPT {
+        return 0;
+    }
 
-        void load(const library_path &sh, shared_library_load_mode mode, boost::system::error_code &ec) {
-            unload();
+    void load(const library_path &sh, shared_library_load_mode mode, boost::system::error_code &ec) BOOST_NOEXCEPT {
+        unload();
 
-            DWORD flags = static_cast<DWORD>(mode);
+        DWORD flags = static_cast<DWORD>(mode);
 #if defined(BOOST_APPLICATION_STD_WSTRING)
-            handle_ = LoadLibraryEx(path_.wstring().c_str(), 0, flags);
+        handle_ = LoadLibraryEx(sh.c_str(), 0, flags);
 #else
-            handle_ = LoadLibraryEx(path_.string().c_str(), 0, flags);
+        handle_ = LoadLibraryEx(sh.c_str(), 0, flags);
 #endif
-            if (!handle_) {
-                ec = boost::application::last_error_code();
-            }
+        if (!handle_) {
+            ec = boost::application::last_error_code();
         }
+    }
 
-        bool is_loaded() const {
-            return (handle_ != 0);
+    bool is_loaded() const BOOST_NOEXCEPT {
+        return (handle_ != 0);
+    }
+
+    void unload() BOOST_NOEXCEPT {
+        if (handle_) {
+            FreeLibrary((HMODULE) handle_);
+            handle_ = NULL;
         }
+    }
 
-        void unload() {
-            if (handle_) {
-                FreeLibrary((HMODULE) handle_);
-                handle_ = NULL;
-            }
-        }
+    void swap(shared_library_impl& rhs) BOOST_NOEXCEPT {
+        boost::swap(handle_, rhs.handle_);
+    }
 
-        static character_types::string_type suffix() {
+    static character_types::string_type suffix() {
 #if defined(BOOST_APPLICATION_STD_WSTRING)
-            return character_types::string_type(L".dll");
+        return character_types::string_type(L".dll");
 #else
-            return character_types::string_type(".dll");
+        return character_types::string_type(".dll");
 #endif
+    }
+
+    void* symbol_addr(const symbol_type &sb, boost::system::error_code &ec) const BOOST_NOEXCEPT {
+        // Judging by the documentation and
+        // at GetProcAddress there is no version for UNICODE.
+        // There can be it and is correct, as in executed
+        // units names of functions are stored in narrow characters.
+
+        if (handle_) {
+            return (void*) GetProcAddress((HMODULE) handle_, sb.c_str());
+        } else {
+            ec = boost::application::last_error_code();
         }
 
-        void* symbol_addr(const symbol_type &sb, boost::system::error_code &ec) const {
-            // Judging by the documentation and
-            // at GetProcAddress there is no version for UNICODE.
-            // There can be it and is correct, as in executed
-            // units names of functions are stored in narrow characters.
-         
-            if (handle_) {
-                return (void*) GetProcAddress((HMODULE) handle_, sb.c_str());
-            } else {
-                ec = boost::application::last_error_code();
-            }
+        return NULL;
+    }
 
-            return NULL;
-        }
-
-    private:
-        void* handle_;
-    };
+private:
+    void* handle_;
+};
 
 }} // boost::application
 

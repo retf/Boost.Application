@@ -31,7 +31,7 @@ int test_main(int argc, char* argv[]) {
     sl.get<int>("integer_g") = 10;
     BOOST_CHECK(sl.get<int>("integer_g") == 10);
 
-    BOOST_CHECK(sl.get<say_hello_func>(symbol("say_hello")));
+    BOOST_CHECK(sl.get<say_hello_func>("say_hello"));
     sl.get<say_hello_func>("say_hello")();
 
     float ver = sl.get<lib_version_func>("lib_version")();

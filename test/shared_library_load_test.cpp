@@ -19,6 +19,13 @@ int test_main(int argc, char* argv[])
    {
       shared_library sl(shared_library_path);
       BOOST_CHECK(sl.is_loaded());
+
+      shared_library sl2;
+      BOOST_CHECK(!sl2.is_loaded());
+
+      swap(sl, sl2);
+      BOOST_CHECK(!sl.is_loaded());
+      BOOST_CHECK(sl2.is_loaded());
    }
 
    {

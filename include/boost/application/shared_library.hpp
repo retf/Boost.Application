@@ -48,7 +48,7 @@ public:
     * load a shared object.
     *
     */
-    shared_library() {}
+    shared_library() BOOST_NOEXCEPT {}
 
     /*!
     * Creates a shared_library object loading a library
@@ -63,7 +63,7 @@ public:
     * Throw a boost::system::system_error on a execption.
     *
     */
-    shared_library(const library_path &sl) {
+    explicit shared_library(const library_path &sl) {
         load(sl);
     }
 
@@ -134,7 +134,7 @@ public:
     * The actual library is unloaded. The unload() is called!
     *
     */
-    ~shared_library() {}
+    ~shared_library() BOOST_NOEXCEPT {}
 
 
     /*!
@@ -249,7 +249,7 @@ public:
     * Unloads a shared library.
     *
     */
-    void unload() {
+    void unload() BOOST_NOEXCEPT {
         base_t::unload();
         path_.clear();
     }
@@ -260,7 +260,7 @@ public:
     * \return true if a library has been loaded
     *
     */
-    bool is_loaded() const {
+    bool is_loaded() const BOOST_NOEXCEPT {
         return base_t::is_loaded();
     }
 
@@ -277,7 +277,7 @@ public:
     *         a symbol from a given name.
     *
     */
-    bool search_symbol(const symbol_type &sb) const {
+    bool search_symbol(const symbol_type &sb) const BOOST_NOEXCEPT {
         boost::system::error_code ec;
         return !!base_t::symbol_addr(sb, ec) && !ec;
     }
@@ -313,44 +313,13 @@ public:
     }
 
     /*!
-    * Returns the address of the symbol with the
-    * given name to posterior call.
-    *
-    * Name must be provided using symbol() initializer
-    * function that can handle std::string, char,
-    * std::wstring or wchar_t.
-    *
-    * \param symbol_type An initializer free function, e.g.:
-    *        sl.get_symbol(symbol("do_anything"), ec)
-    *
-    * \param ec Variable (boost::system::error_code) that will be
-    *        set to the result of the operation.
-    *
-    * \return the address of symbol.
-    *
-    * Check ec for errors.
-    *
-    */
-    template <typename Result>
-    Result& get(const symbol_type &sb, boost::system::error_code &ec) const {
-        void* ret = base_t::symbol_addr(sb, ec);
-
-        if (ec || !ret) {
-            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
-            "get() failed", ec);
-        }
-
-        return *reinterpret_cast<Result*>(ret);
-    }
-
-    /*!
     * Returns the path of the loaded library, as specified
     * in a call to load() or the constructor/load.
     *
     * \return the boost::filesystem::path path of module.
     *
     */
-    const boost::filesystem::path& get_path() const {
+    const boost::filesystem::path& get_path() const BOOST_NOEXCEPT {
         return path_;
     }
 
@@ -368,6 +337,16 @@ public:
     static character_types::string_type suffix() {
         return base_t::suffix();
     }
+
+
+    /*!
+    * Swaps two libraries.
+    * Does not invalidate existing symbols and functions loaded from libraries.
+    */
+    void swap(shared_library& rhs) BOOST_NOEXCEPT {
+        base_t::swap(rhs);
+        path_.swap(rhs.path_);
+    }
 };
 
 
@@ -376,7 +355,7 @@ public:
 * If the same shared library is loaded, means: same path
 *
 */
-inline bool operator==(const shared_library& lhs, const shared_library& rhs) {
+inline bool operator==(const shared_library& lhs, const shared_library& rhs) BOOST_NOEXCEPT {
     return lhs.get_path() == rhs.get_path();
 }
 
@@ -385,8 +364,16 @@ inline bool operator==(const shared_library& lhs, const shared_library& rhs) {
 * If the same shared library is loaded, means: same path
 *
 */
-inline bool operator<(const shared_library& lhs, const shared_library& rhs) {
+inline bool operator<(const shared_library& lhs, const shared_library& rhs) BOOST_NOEXCEPT {
     return lhs.get_path() < rhs.get_path();
+}
+
+/*!
+* Swaps two shared libraries.
+* Does not invalidate existing symbols and functions loaded from libraries.
+*/
+inline void swap(shared_library& lhs, shared_library& rhs) BOOST_NOEXCEPT {
+    lhs.swap(rhs);
 }
 
 }} // boost::application

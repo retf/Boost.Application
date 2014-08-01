@@ -19,17 +19,17 @@
 #define BOOST_APPLICATION_SHARED_LIBRARY_IMPL_HPP
 
 #include <boost/application/config.hpp>
-#include <boost/application/shared_library_initializers.hpp>
+#include <boost/application/shared_library_types.hpp>
 #include <boost/application/shared_library_load_mode.hpp>
 
 #include <boost/noncopyable.hpp>
+#include <boost/swap.hpp>
 
 #include <signal.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
 
-#include <syslog.h>
 #include <fcntl.h>
 #include <sys/resource.h>
 
@@ -41,19 +41,19 @@ namespace boost { namespace application {
 
 class shared_library_impl : noncopyable {
 public:
-    shared_library_impl()
+    shared_library_impl() BOOST_NOEXCEPT
         : handle_(NULL)
     {}
 
-    ~shared_library_impl() {
+    ~shared_library_impl() BOOST_NOEXCEPT {
         unload();
     }
 
-    static shared_library_load_mode default_mode() {
+    static shared_library_load_mode default_mode() BOOST_NOEXCEPT {
         return rtld_lazy | rtld_global;
     }
 
-    void load(const library_path &sl, shared_library_load_mode mode, boost::system::error_code &ec) {
+    void load(const library_path &sl, shared_library_load_mode mode, boost::system::error_code &ec) BOOST_NOEXCEPT {
         unload();
 
         handle_ = dlopen(sl.c_str(), static_cast<int>(mode));
@@ -62,17 +62,21 @@ public:
         }
     }
 
-    bool is_loaded() const {
+    bool is_loaded() const BOOST_NOEXCEPT {
         return (handle_ != 0);
     }
 
-    void unload() {
+    void unload() BOOST_NOEXCEPT {
         if (!is_loaded()) {
             return;
         }
 
         dlclose(handle_);
         handle_ = 0;
+    }
+
+    void swap(shared_library_impl& rhs) BOOST_NOEXCEPT {
+        boost::swap(handle_, rhs.handle_);
     }
 
     static character_types::string_type suffix() {
@@ -84,7 +88,7 @@ public:
 #endif
     }
 
-    void* symbol_addr(const symbol_type &sb, boost::system::error_code &ec) const {
+    void* symbol_addr(const symbol_type &sb, boost::system::error_code &ec) const BOOST_NOEXCEPT {
         void* symbol = 0;
 
         if (handle_) {
