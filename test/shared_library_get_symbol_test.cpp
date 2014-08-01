@@ -9,13 +9,13 @@
 
 #include <boost/application/shared_library.hpp>
 #include <boost/test/minimal.hpp>
+#include <boost/function.hpp>
 
 // lib functions
 
 typedef float (lib_version_func)();
 typedef void  (say_hello_func)  ();
 typedef int   (increment)       (int);
-typedef int   (*increment_ptr)    (int);
 
 // Unit Tests
 
@@ -28,6 +28,9 @@ int test_main(int argc, char* argv[]) {
 
     BOOST_CHECK(sl.get<int>("integer_g") == 100);
 
+    sl.get<int>("integer_g") = 10;
+    BOOST_CHECK(sl.get<int>("integer_g") == 10);
+
     BOOST_CHECK(sl.get<say_hello_func>(symbol("say_hello")));
     sl.get<say_hello_func>("say_hello")();
 
@@ -36,6 +39,13 @@ int test_main(int argc, char* argv[]) {
 
     int n = sl.get<increment>("increment")(1);
     BOOST_CHECK(n == 2);
+
+    BOOST_CHECK(sl.get<const int>("const_integer_g") == 777);
+
+    boost::function<int(int)> inc = sl.get<int(int)>("increment");
+    BOOST_CHECK(inc(1) == 2);
+    BOOST_CHECK(inc(2) == 3);
+    BOOST_CHECK(inc(3) == 4);
 
     return 0;
 }

@@ -17,6 +17,7 @@ extern "C" float LIBRARY_API lib_version(void);
 extern "C" int LIBRARY_API increment(int);
 
 extern "C" int integer_g;
+extern "C" const int const_integer_g = 777;
 
 int integer_g = 100;
 
