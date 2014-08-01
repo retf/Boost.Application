@@ -19,6 +19,7 @@
 #include <boost/application/config.hpp>
 #include <boost/application/base_type.hpp>
 #include <boost/filesystem/path.hpp>
+#include <boost/utility/string_ref.hpp>
 
 namespace boost { namespace application {
 
@@ -42,14 +43,7 @@ namespace boost { namespace application {
     * and so on.
     *
     */
-   template <typename String>
-   class symbol_type
-      : public base_type<String>
-   {
-   public:
-      explicit symbol_type(const String &s)
-         : base_type<String>(s) {}
-   };
+   typedef boost::string_ref symbol_type;
 
 }} // boost::application
 

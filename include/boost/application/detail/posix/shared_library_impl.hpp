@@ -2,6 +2,7 @@
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2012 Renato Tegon Forti
+// Copyright 2014 Renato Tegon Forti, Antony Polukhin.
 
 // Distributed under the Boost Software License, Version 1.0.
 // See http://www.boost.org/LICENSE_1_0.txt
@@ -17,15 +18,11 @@
 #ifndef BOOST_APPLICATION_SHARED_LIBRARY_IMPL_HPP
 #define BOOST_APPLICATION_SHARED_LIBRARY_IMPL_HPP
 
-#include <iostream>
-
 #include <boost/application/config.hpp>
 #include <boost/application/shared_library_initializers.hpp>
 #include <boost/application/shared_library_load_mode.hpp>
 
-#include <boost/thread.hpp>
 #include <boost/noncopyable.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <signal.h>
 #include <stdlib.h>
@@ -42,157 +39,74 @@
 
 namespace boost { namespace application {
 
-   class shared_library;
-   class shared_library_impl : noncopyable
-   {
-      friend class shared_library;
+class shared_library_impl : noncopyable {
+public:
+    shared_library_impl()
+        : handle_(NULL)
+    {}
 
-   public:
-      shared_library_impl()
-         : handle_(NULL)
-      {
-      }
+    ~shared_library_impl() {
+        unload();
+    }
 
-      virtual ~shared_library_impl()
-      {
-         unload();
-      }
+    static shared_library_load_mode default_mode() {
+        return rtld_lazy | rtld_global;
+    }
 
-      shared_library_impl(const library_path &sl, boost::system::error_code &ec)
-         : handle_(NULL)
-      {
-         load(sl, ec);
-      }
+    void load(const library_path &sl, shared_library_load_mode mode, boost::system::error_code &ec) {
+        unload();
 
-      shared_library_impl(const library_path &sl, shared_library_load_mode mode,
-                          boost::system::error_code &ec)
-         : handle_(NULL)
-      {
-         load(sl, mode, ec);
-      }
+        handle_ = dlopen(sl.c_str(), static_cast<int>(mode));
+        if (!handle_) {
+            ec = boost::application::last_error_code();
+        }
+    }
 
-      void load(const library_path &sl, boost::system::error_code &ec)
-      {
-         boost::lock_guard<boost::mutex> lock(mutex_);
+    bool is_loaded() const {
+        return (handle_ != 0);
+    }
 
-         if (handle_)
-            unload(lock);
+    void unload() {
+        if (!is_loaded()) {
+            return;
+        }
 
-         path_ = sl;
+        dlclose(handle_);
+        handle_ = 0;
+    }
 
-         load(RTLD_LAZY | RTLD_GLOBAL, ec, lock);// usual mode, generic
-      }
-
-      void load(const library_path &sl, shared_library_load_mode mode,
-                boost::system::error_code &ec)
-      {
-         boost::lock_guard<boost::mutex> lock(mutex_);
-
-         path_ = sl;
-         load(static_cast<unsigned long>(mode), ec, lock);
-      }
-
-      void unload()
-      {
-         boost::lock_guard<boost::mutex> lock(mutex_);
-         unload(lock);
-      }
-
-      bool is_loaded() const
-      {
-         boost::lock_guard<boost::mutex> lock(mutex_);
-         return (handle_ != 0);
-      }
-
-      template <typename T>
-      bool search_symbol(const symbol_type<T> &sb)
-      {
-         boost::system::error_code ec;
-         if(get_symbol(sb, ec) == NULL)
-            return false;
-
-         return true;
-      }
-
-      template <typename T>
-      void* get_symbol(const symbol_type<T> &sb, boost::system::error_code &ec)
-      {
-         return symbol_addr(sb, ec);
-      }
-
-      boost::filesystem::path get_path() const
-      {
-         boost::lock_guard<boost::mutex> lock(mutex_);
-         return path_;
-      }
-
-      static character_types::string_type suffix()
-      {
-// https://sourceforge.net/p/predef/wiki/OperatingSystems/
+    static character_types::string_type suffix() {
+        // https://sourceforge.net/p/predef/wiki/OperatingSystems/
 #if defined(__APPLE__)
-         return character_types::string_type(".dylib");
+        return character_types::string_type(".dylib");
 #else
-         return character_types::string_type(".so");
+        return character_types::string_type(".so");
 #endif
-      }
+    }
 
-   protected:
+    void* symbol_addr(const symbol_type &sb, boost::system::error_code &ec) const {
+        void* symbol = 0;
 
-      template <typename T>
-      void* symbol_addr(const symbol_type<T> &sb, boost::system::error_code &ec)
-      {
-         boost::lock_guard<boost::mutex> lock(mutex_);
-
-         void* symbol = 0;
-
-         if (handle_)
-         {
+        if (handle_) {
             // dlsym - obtain the address of a symbol from a dlopen object
-            symbol = dlsym(handle_, sb.get().c_str());
-         }
+            symbol = dlsym(handle_, sb.data());
+        }
 
-         if(symbol == NULL)
+        if (symbol == NULL) {
             ec = boost::application::last_error_code();
+        }
 
-         // If handle does not refer to a valid object opened by dlopen(),
-         // or if the named symbol cannot be found within any of the objects
-         // associated with handle, dlsym() shall return NULL.
-         // More detailed diagnostic information shall be available through dlerror().
+        // If handle does not refer to a valid object opened by dlopen(),
+        // or if the named symbol cannot be found within any of the objects
+        // associated with handle, dlsym() shall return NULL.
+        // More detailed diagnostic information shall be available through dlerror().
 
-         return symbol;
-      }
+        return symbol;
+    }
 
-      bool load(unsigned long mode, boost::system::error_code &ec, boost::lock_guard<boost::mutex> &lock)
-      {
-         handle_ = dlopen(path_.string().c_str(), static_cast<int>(mode));
-
-         if (!handle_)
-         {
-            ec = boost::application::last_error_code();
-            return false;
-         }
-
-         return true;
-      }
-
-      void unload(boost::lock_guard<boost::mutex> &lock)
-      {
-         if (handle_)
-         {
-            dlclose(handle_);
-            handle_ = 0;
-         }
-
-         path_.clear();
-      }
-
-	  private:
-
-      mutable boost::mutex mutex_;
-      boost::filesystem::path path_;
-      void* handle_;
-
-   };
+private:
+    void* handle_;
+};
 
 }} // boost::application
 

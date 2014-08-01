@@ -31,16 +31,10 @@ namespace boost { namespace application {
    }
 
    // symbol session
-   inline symbol_type<character_types::string_type>
-      symbol(const character_types::char_type *s)
+   template <class T>
+   inline symbol_type symbol(const T &s)
    {
-      return symbol_type<character_types::string_type>(s);
-   }
-
-   inline symbol_type<character_types::string_type>
-      symbol(const character_types::string_type &s)
-   {
-      return symbol_type<character_types::string_type>(s);
+      return symbol_type(s);
    }
 
 }} // boost::application

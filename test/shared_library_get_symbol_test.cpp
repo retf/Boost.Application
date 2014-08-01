@@ -1,4 +1,6 @@
-// Copyright 2011-2012 Renato Tegon Forti
+// Copyright 2011-2012 Renato Tegon Forti.
+// Copyright 2014 Renato Tegon Forti, Antony Polukhin.
+//
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -10,30 +12,31 @@
 
 // lib functions
 
-typedef float (*lib_version_func)(); 
-typedef void  (*say_hello_func)  (); 
-typedef int   (*increment)       (int);
-
-
+typedef float (lib_version_func)();
+typedef void  (say_hello_func)  ();
+typedef int   (increment)       (int);
+typedef int   (*increment_ptr)    (int);
 
 // Unit Tests
 
-int test_main(int argc, char* argv[])
-{
-   using namespace boost::application;
+int test_main(int argc, char* argv[]) {
+    using namespace boost::application;
 
-   const boost::filesystem::path shared_library_path(argv[1]);
+    const boost::filesystem::path shared_library_path(argv[1]);
 
-   {
-      shared_library sl(shared_library_path);
+    shared_library sl(shared_library_path);
 
-      BOOST_CHECK(sl.get_symbol(symbol("say_hello")));
-      float ver = ((lib_version_func) sl.get_symbol(symbol("lib_version")))();
-      BOOST_CHECK(ver == 1.0);
-      int n = ((increment)sl.get_symbol(symbol("increment")))(1);
-      BOOST_CHECK(n == 2);
-   }
+    BOOST_CHECK(sl.get<int>("integer_g") == 100);
 
-   return 0;
+    BOOST_CHECK(sl.get<say_hello_func>(symbol("say_hello")));
+    sl.get<say_hello_func>("say_hello")();
+
+    float ver = sl.get<lib_version_func>("lib_version")();
+    BOOST_CHECK(ver == 1.0);
+
+    int n = sl.get<increment>("increment")(1);
+    BOOST_CHECK(n == 2);
+
+    return 0;
 }
 

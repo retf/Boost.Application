@@ -1,4 +1,6 @@
 // Copyright 2011-2012 Renato Tegon Forti
+// Copyright 2014 Renato Tegon Forti, Antony Polukhin.
+//
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -13,6 +15,10 @@
 extern "C" void LIBRARY_API say_hello(void);
 extern "C" float LIBRARY_API lib_version(void);
 extern "C" int LIBRARY_API increment(int);
+
+extern "C" int integer_g;
+
+int integer_g = 100;
 
 void say_hello(void)
 {
