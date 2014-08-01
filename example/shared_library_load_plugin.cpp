@@ -31,8 +31,8 @@ using namespace boost;
 class my_application_functor_class
 {
    // plugin entry point
-   typedef my_plugin_api* (*pluginapi_create) (void);
-   typedef void (*pluginapi_delete) (my_plugin_api* myplugin);
+   typedef my_plugin_api* (pluginapi_create) (void);
+   typedef void (pluginapi_delete) (my_plugin_api* myplugin);
    
 public:
 
@@ -46,11 +46,11 @@ public:
       // my app logic here
       my_plugin_api* plugin = NULL;
 
-      application::shared_library sl(application::library(shared_library_path));
+      application::shared_library sl(shared_library_path);
 
-      if(sl.search_symbol(application::symbol("create_my_plugin")))
+      if(sl.search_symbol("create_my_plugin"))
       {
-         plugin = ((pluginapi_create)sl(application::symbol("create_my_plugin")))();
+         plugin = (sl.get<pluginapi_create>("create_my_plugin"))();
       }
 
       if(plugin != NULL)
@@ -58,7 +58,7 @@ public:
          std::cout << "Plugin Version: " << plugin->version() << std::endl;
          std::cout << "Plugin Method:  " << plugin->calculate(1.5, 1.5) << std::endl;
 
-         ((pluginapi_delete)sl(application::symbol("delete_my_plugin")))(plugin);
+         (sl.get<pluginapi_delete>("delete_my_plugin"))(plugin);
       }
 
       return 0;

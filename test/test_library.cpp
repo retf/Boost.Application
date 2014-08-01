@@ -16,8 +16,8 @@ extern "C" void LIBRARY_API say_hello(void);
 extern "C" float LIBRARY_API lib_version(void);
 extern "C" int LIBRARY_API increment(int);
 
-extern "C" int integer_g;
-extern "C" const int const_integer_g = 777;
+extern "C" int LIBRARY_API integer_g;
+extern "C" const int LIBRARY_API const_integer_g = 777;
 
 int integer_g = 100;
 
@@ -35,5 +35,4 @@ int increment(int n)
 {
    return ++n;
 }
-
 
