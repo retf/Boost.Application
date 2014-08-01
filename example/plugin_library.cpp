@@ -9,11 +9,8 @@
 
 //[plugcpp
 
-#if defined(_WIN32)
-#   define LIBRARY_API __declspec(dllexport)
-#else
-#   define LIBRARY_API
-#endif
+#include <boost/config.hpp>
+#define LIBRARY_API BOOST_SYMBOL_EXPORT
    
 #include "plugin_api.hpp"
 
@@ -89,13 +86,13 @@ void __attribute__ ((destructor)) my_unload(void);
 // called when the library is loaded and before dlopen() returns
 void my_load(void)
 {
-   // Add initialization code…
+   // Add initialization code
 }
 
 // called when the library is unloaded and before dlclose() returns
 void my_unload(void)
 {
-   // Add clean-up code…
+   // Add clean-up code
 }
 
 #endif

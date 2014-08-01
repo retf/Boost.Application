@@ -30,7 +30,7 @@ int test_main(int argc, char* argv[])
 
    {
       boost::system::error_code ec;
-      shared_library sl(shared_library_path, ec);
+      shared_library sl(argv[1], ec);
       BOOST_CHECK(sl.is_loaded());
    }
 
