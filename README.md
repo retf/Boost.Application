@@ -229,7 +229,8 @@ Want to contribute with Boost.Application project? Open a pull request!
 A special thanks to Vicente J. Botet Escriba that helped a lot on all areas of this lib.
    
 Thanks to Benjamin Dieckmann for global_context implementation.<br>
-Thanks to Rodrigo Madera (RM of Boost.Application)
+Thanks to Rodrigo Madera (RM of Boost.Application).<br>
+Thanks to Antony Polukhin for improvements on plug-in system module (shared_library).
 
 ### Contact
 
