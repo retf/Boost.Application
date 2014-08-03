@@ -16,7 +16,10 @@ int test_main(int argc, char* argv[])
 {
    using namespace boost::application;
 
-   const boost::filesystem::path shared_library_path(argv[1]);
+   BOOST_CHECK(argc >= 2);
+   boost::filesystem::path shared_library_path = std::string(argv[1]);
+   shared_library_path /= "libtest_library" + shared_library::suffix();
+   std::cout << "Library: " << shared_library_path;
 
    {
       shared_library sl(shared_library_path);

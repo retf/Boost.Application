@@ -22,7 +22,10 @@ typedef int   (increment)       (int);
 int test_main(int argc, char* argv[]) {
     using namespace boost::application;
 
-    const boost::filesystem::path shared_library_path(argv[1]);
+    BOOST_CHECK(argc >= 2);
+    boost::filesystem::path shared_library_path = std::string(argv[1]);
+    shared_library_path /= "libtest_library" + shared_library::suffix();
+    std::cout << "Library: " << shared_library_path;
 
     shared_library sl(shared_library_path);
 
@@ -46,6 +49,12 @@ int test_main(int argc, char* argv[]) {
     BOOST_CHECK(inc(1) == 2);
     BOOST_CHECK(inc(2) == 3);
     BOOST_CHECK(inc(3) == 4);
+
+    // Cheking that symbols are still available, after another load+unload of the library
+    { shared_library sl2(shared_library_path); }
+
+    BOOST_CHECK(inc(1) == 2);
+    BOOST_CHECK(sl.get<int>("integer_g") == 10);
 
     return 0;
 }
