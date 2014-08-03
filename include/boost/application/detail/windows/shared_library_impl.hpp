@@ -2,6 +2,7 @@
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2012 Renato Tegon Forti
+// Copyright 2014 Renato Tegon Forti, Antony Polukhin.
 
 // Distributed under the Boost Software License, Version 1.0.
 // See http://www.boost.org/LICENSE_1_0.txt
@@ -16,182 +17,85 @@
 #ifndef BOOST_APPLICATION_SHARED_LIBRARY_IMPL_HPP
 #define BOOST_APPLICATION_SHARED_LIBRARY_IMPL_HPP
 
-#include <iostream>
-
 #include <boost/application/config.hpp>
-#include <boost/application/shared_library_initializers.hpp>
+#include <boost/application/shared_library_types.hpp>
 #include <boost/application/shared_library_load_mode.hpp>
 
-#include <boost/thread.hpp>
 #include <boost/noncopyable.hpp>
+#include <boost/swap.hpp>
 #include <boost/filesystem/path.hpp>
 
 namespace boost { namespace application {
 
-   class shared_library;
-   class shared_library_impl : noncopyable
-   {
-      friend class shared_library;
+class shared_library_impl : noncopyable {
+public:
+    shared_library_impl() BOOST_NOEXCEPT
+        : handle_(NULL)
+    {}
 
-   public:
-      shared_library_impl()
-         : handle_(NULL)
-      {
-      }
+    ~shared_library_impl() BOOST_NOEXCEPT {
+        unload();
+    }
 
-      virtual ~shared_library_impl()
-      {
-         unload();
-      }
+    static shared_library_load_mode default_mode() BOOST_NOEXCEPT {
+        return 0;
+    }
 
-      template <typename T>
-      shared_library_impl(const library_type<T> &sh, boost::system::error_code &ec)
-         : handle_(NULL)
-      {
-         load(sh, ec);
-      }
+    void load(const library_path &sh, shared_library_load_mode mode, boost::system::error_code &ec) BOOST_NOEXCEPT {
+        unload();
 
-      template <typename T>
-      shared_library_impl(const library_type<T> &sh, shared_library_load_mode mode,
-                          boost::system::error_code &ec)
-         : handle_(NULL)
-      {
-         load(sh, mode, ec);
-      }
-
-      template <typename T>
-      void load(const library_type<T> &sh,
-                boost::system::error_code &ec)
-      {
-         boost::lock_guard<boost::mutex> lock(mutex_);
-
-         if (handle_)
-            unload(lock);
-
-         DWORD flags(0);
-         path_ = sh.get().c_str();
-
-         if (path_.is_absolute())
-            flags |= LOAD_WITH_ALTERED_SEARCH_PATH; // usual mode, generic (plugin mode)
-
-         load(static_cast<unsigned long>(flags), ec, lock);
-      }
-
-      template <typename T>
-      void load(const library_type<T> &sh, shared_library_load_mode mode,
-                boost::system::error_code &ec)
-      {
-         boost::lock_guard<boost::mutex> lock(mutex_);
-
-         path_ = sh.get().c_str();
-
-         load(static_cast<unsigned long>(mode), ec, lock);
-      }
-
-      void unload()
-      {
-         boost::lock_guard<boost::mutex> lock(mutex_);
-         unload(lock);
-      }
-
-      bool is_loaded() const
-      {
-         boost::lock_guard<boost::mutex> lock(mutex_);
-         return (handle_ != 0);
-      }
-
-      template <typename T>
-      bool search_symbol(const symbol_type<T> &sb)
-      {
-         boost::system::error_code ec;
-         if(get_symbol(sb, ec) == NULL)
-         {
-            return false;
-         }
-
-         return true;
-      }
-
-      template <typename T>
-      void* get_symbol(const symbol_type<T> &sb, boost::system::error_code &ec)
-      {
-         return symbol_addr(sb, ec);
-      }
-
-      const boost::filesystem::path& get_path() const
-      {
-         boost::lock_guard<boost::mutex> lock(mutex_);
-         return path_;
-      }
-
-      static character_types::string_type suffix()
-      {
+        DWORD flags = static_cast<DWORD>(mode);
 #if defined(BOOST_APPLICATION_STD_WSTRING)
-         return character_types::string_type(L".dll");
+        handle_ = LoadLibraryEx(sh.c_str(), 0, flags);
 #else
-         return character_types::string_type(".dll");
+        handle_ = LoadLibraryEx(sh.c_str(), 0, flags);
 #endif
-      }
-
-	  protected:
-
-      template <typename T>
-      void* symbol_addr(const symbol_type<T> &sb, boost::system::error_code &ec)
-      {
-         boost::lock_guard<boost::mutex> lock(mutex_);
-
-         // Judging by the documentation and
-         // at GetProcAddress there is no version for UNICODE.
-         // There can be it and is correct, as in executed
-         // units names of functions are stored in narrow characters.
-         std::string as_std_string( sb.get().begin(), sb.get().end() );
-
-         if (handle_)
-            return (void*) GetProcAddress((HMODULE) handle_, as_std_string.c_str());
-         else
+        if (!handle_) {
             ec = boost::application::last_error_code();
+        }
+    }
 
-         return NULL;
-      }
+    bool is_loaded() const BOOST_NOEXCEPT {
+        return (handle_ != 0);
+    }
 
-      bool load(unsigned long mode, boost::system::error_code &ec, boost::lock_guard<boost::mutex> &lock)
-      {
-         DWORD flags = static_cast<DWORD>(mode);
-
-#if defined(BOOST_APPLICATION_STD_WSTRING)
-         // LoadLibraryExW
-         handle_ = LoadLibraryEx(path_.wstring().c_str(), 0, flags);
-#else
-         // LoadLibraryExA
-         handle_ = LoadLibraryEx(path_.string().c_str(), 0, flags);
-#endif
-
-         if (!handle_)
-         {
-            ec = boost::application::last_error_code();
-            return false;
-         }
-
-         return true;
-      }
-
-      void unload(boost::lock_guard<boost::mutex> &lock)
-      {
-         if (handle_)
-         {
+    void unload() BOOST_NOEXCEPT {
+        if (handle_) {
             FreeLibrary((HMODULE) handle_);
             handle_ = NULL;
-         }
+        }
+    }
 
-         path_.clear();
-      }
+    void swap(shared_library_impl& rhs) BOOST_NOEXCEPT {
+        boost::swap(handle_, rhs.handle_);
+    }
 
-   private:
+    static character_types::string_type suffix() {
+#if defined(BOOST_APPLICATION_STD_WSTRING)
+        return character_types::string_type(L".dll");
+#else
+        return character_types::string_type(".dll");
+#endif
+    }
 
-      mutable boost::mutex mutex_;
-      boost::filesystem::path path_;
-      void* handle_;
-   };
+    void* symbol_addr(const symbol_type &sb, boost::system::error_code &ec) const BOOST_NOEXCEPT {
+        // Judging by the documentation and
+        // at GetProcAddress there is no version for UNICODE.
+        // There can be it and is correct, as in executed
+        // units names of functions are stored in narrow characters.
+
+        if (handle_) {
+            return (void*) GetProcAddress((HMODULE) handle_, sb.c_str());
+        } else {
+            ec = boost::application::last_error_code();
+        }
+
+        return NULL;
+    }
+
+private:
+    void* handle_;
+};
 
 }} // boost::application
 
