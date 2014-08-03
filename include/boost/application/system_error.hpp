@@ -26,7 +26,7 @@
 #if defined(BOOST_POSIX_API)
 #   include <errno.h>
 #elif defined(BOOST_WINDOWS_API)
-#   include <Windows.h>
+#   include <windows.h>
 #endif
 
 namespace boost { namespace application {
