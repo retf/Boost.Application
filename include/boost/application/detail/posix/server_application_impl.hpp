@@ -120,7 +120,7 @@ namespace boost { namespace application {
          setsid();
 
          // lose controlling terminal & change process group
-         setpgrp();
+         setpgid(0, 0);
 
          // Ensure future opens won't allocate controlling TTYs.
 
