@@ -14,6 +14,22 @@
 
 #define BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
 
+#include <boost/filesystem.hpp>
+namespace fs = ::boost::filesystem;
+fs::path get_shared_lib(const fs::path& root, const std::wstring& filename_part) {  
+    fs::directory_iterator it(root);
+    fs::directory_iterator endit;
+
+    while (it != endit) {
+        if (fs::is_regular_file(*it) && it->path().filename().wstring().find(filename_part) != std::wstring::npos) {
+            return *it;
+        }
+        ++it;
+    }
+
+    throw std::runtime_error("Failed to find library");
+}
+
 //[callplugcpp
 #include <boost/application.hpp>
 #include "plugin_api.hpp"
@@ -62,10 +78,11 @@ int main(int argc, char* argv[])
 { 
    // argv[1] must contain plugin path
    BOOST_ASSERT(argc >= 2);
-   
+   boost::filesystem::path shared_library_path = get_shared_lib(argv[1], L"plugin_library");
+
    try {
       application::context app_context;
-      my_application_functor_class app(app_context, argv[1]);
+      my_application_functor_class app(app_context, shared_library_path);
 
       app_context.insert<application::args>(
          boost::make_shared<application::args>(argc, argv));
