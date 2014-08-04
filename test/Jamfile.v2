@@ -86,6 +86,10 @@ project
    lib plugin_library : ../example/plugin_library.cpp ;
    install install-bin : test_library plugin_library : <location>$(TEST_DIR) ;
   
+  
+   local test_library_path = [ path.join $(TEST_DIR) [ path.basename [ glob $(TEST_DIR)/test_library*.dll : $(TEST_DIR)/libtest_library*.so ] ] ] ;
+   local plugin_library_path = [ path.join $(TEST_DIR) [ path.basename [ glob $(TEST_DIR)/plugin_library*.dll : $(TEST_DIR)/libplugin_library*.so ] ] ] ;
+  
    test-suite application
       : 
       #
@@ -124,9 +128,9 @@ project
       #
       # shared library
       #
-      [ run shared_library_load_test.cpp : $(TEST_DIR) ]
-      [ run shared_library_search_symbol_test.cpp : $(TEST_DIR) ]
-      [ run shared_library_get_symbol_test.cpp : $(TEST_DIR) ]
+      [ run shared_library_load_test.cpp : $(test_library_path) ]
+      [ run shared_library_search_symbol_test.cpp : $(test_library_path) ]
+      [ run shared_library_get_symbol_test.cpp : $(test_library_path) ]
       #
       #
 
@@ -153,7 +157,7 @@ project
       [ compile ../example/simple_server_application.cpp ]
       [ compile ../example/simple_server_application_with_auto_handler.cpp ]
       [ compile ../example/simple_server_application_with_auto_handler_and_global_context.cpp ]
-      [ run ../example/shared_library_load_plugin.cpp : $(TEST_DIR) ]
+      [ run ../example/shared_library_load_plugin.cpp : $(plugin_library_path) ]
       [ run ../example/setup/windows/setup.cpp : : : <build>no <target-os>windows:<build>yes ]
       #
       #

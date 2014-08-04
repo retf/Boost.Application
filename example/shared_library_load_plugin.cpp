@@ -60,12 +60,12 @@ private:
 
 int main(int argc, char* argv[])
 { 
+   // argv[1] must contain plugin path
    BOOST_ASSERT(argc >= 2);
-
+   
    try {
       application::context app_context;
-      my_application_functor_class app(
-         app_context, std::string(argv[1]) + "/libplugin_library" + application::shared_library::suffix());
+      my_application_functor_class app(app_context, argv[1]);
 
       app_context.insert<application::args>(
          boost::make_shared<application::args>(argc, argv));

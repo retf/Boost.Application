@@ -38,18 +38,14 @@ public:
     }
 
     static shared_library_load_mode default_mode() BOOST_NOEXCEPT {
-        return 0;
+        return load_library_default_mode;
     }
 
     void load(const library_path &sh, shared_library_load_mode mode, boost::system::error_code &ec) BOOST_NOEXCEPT {
         unload();
 
         DWORD flags = static_cast<DWORD>(mode);
-#if defined(BOOST_APPLICATION_STD_WSTRING)
-        handle_ = LoadLibraryEx(sh.c_str(), 0, flags);
-#else
-        handle_ = LoadLibraryEx(sh.c_str(), 0, flags);
-#endif
+        handle_ = LoadLibraryExW(sh.c_str(), 0, flags);
         if (!handle_) {
             ec = boost::application::last_error_code();
         }
@@ -61,8 +57,8 @@ public:
 
     void unload() BOOST_NOEXCEPT {
         if (handle_) {
-            FreeLibrary((HMODULE) handle_);
-            handle_ = NULL;
+            FreeLibrary(handle_);
+            handle_ = 0;
         }
     }
 
@@ -85,7 +81,7 @@ public:
         // units names of functions are stored in narrow characters.
 
         if (handle_) {
-            return (void*) GetProcAddress((HMODULE) handle_, sb.c_str());
+            return (void*) GetProcAddress(handle_, sb.data());
         } else {
             ec = boost::application::last_error_code();
         }
@@ -94,7 +90,7 @@ public:
     }
 
 private:
-    void* handle_;
+    HMODULE handle_;
 };
 
 }} // boost::application
