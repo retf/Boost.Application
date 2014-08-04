@@ -92,6 +92,7 @@
 #      define BOOST_APPLICATION_TYPE_INDEX_SELECT type_index
 #   else
 #      define BOOST_APPLICATION_FEATURE_NS_SELECT boost
+#      define BOOST_APPLICATION_TYPE_INDEX_SELECT typeindex::type_index
 #   endif
 #endif
 

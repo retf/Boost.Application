@@ -208,6 +208,7 @@ namespace boost { namespace application {
    {
 #if defined( BOOST_WINDOWS_API ) 
       // windows
+      load_library_default_mode               = 0,
       dont_resolve_dll_references             = DONT_RESOLVE_DLL_REFERENCES,         // 0x00000001
       load_ignore_code_authz_level            = LOAD_IGNORE_CODE_AUTHZ_LEVEL,        // 0x00000010
       load_library_as_datafile                = LOAD_LIBRARY_AS_DATAFILE,            // 0x00000002

@@ -38,14 +38,14 @@ To shared library work, on unix/linux variants you need link with: '-ldl' lib (d
 
 ]
 
-The class shared_library has a list of methods to load library, find symbol, and get symbol to execution, all of theases methods must be called using a initializer functions (e.g.:'library') that will handle correct string type, and paths. e.g.
+The class shared_library has a list of methods to load library, find symbol, and get symbol to execution.
 
 ```
-const boost::filesystem::path shared_library_path("/test/boost/application/libtest_library.so");
-shared_library sl(library(shared_library_path));
+shared_library sl("/test/boost/application/libtest_library.so");
 ```
 
-The following diagram shows the process of extension of the application functionality. The library is loaded dynamically in the context of the application, and then a library function is executed. After that, the library is unloaded and will cease to exist in the application.
+The following diagram shows the process of extension of the application functionality. The library is loaded dynamically in the context of the application, and then a library
+function is executed. After that, the library is unloaded and will cease to exist in the application.
 
 [$plugin.gif]
 
