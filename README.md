@@ -163,11 +163,13 @@ int main(int argc, char *argv[])
 
 ### Note about plug-in system
 
-Starting with version 0.4.10 of the plug-in module has been moved to a new library, called Boost.Plugin.
+Starting with version 0.4.10 the plug-in module has been moved to a new library, called Boost.Plugin.
 
 Refer to [Boost.Plugin] (https://github.com/apolukhin/Boost.Plugin)
 
-Note that versions 0.4.8 and 0.4.9 still have the plugin system.
+Note that versions 0.4.8 and 0.4.9 still have the plugin system, but this version is not longer maintained! 
+The new library [Boost.Plugin] (https://github.com/apolukhin/Boost.Plugin) was refactored, and have a lot of fixes and improvements. 
+If you intend to use 'plugin system' and Boost.Application, we recommend that you use the last version with Boost.Plugin.
      
 ### On-line Documentation (Work in Progress), and other information
 
@@ -181,7 +183,7 @@ Note that versions 0.4.8 and 0.4.9 still have the plugin system.
 
 ### Articles
 
-Note that here we are using version 4.8 (0.4.8). If you are using current version 4.9 (0.4.9) you need adapt all article samples.
+Note that here we are using version 4.8 (0.4.8). If you are using current version 4.10 (0.4.10) you need adapt all article samples and download [Boost.Plugin] (https://github.com/apolukhin/Boost.Plugin)
 
 Library use:<br>
 [Build a Server Application using Application Library] (http://www.codeproject.com/Articles/756866/Build-a-Server-Application-using-Application-Libra)
@@ -238,7 +240,7 @@ A special thanks to Vicente J. Botet Escriba that helped a lot on all areas of t
    
 Thanks to Benjamin Dieckmann for global_context implementation.<br>
 Thanks to Rodrigo Madera (RM of Boost.Application).<br>
-Thanks to Antony Polukhin for improvements on plug-in system module (shared_library).
+Thanks to Antony Polukhin for improvements on plug-in system module (shared_library), that now is a new library, see notes above. 
 
 ### Contact
 

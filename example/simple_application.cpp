@@ -1,9 +1,9 @@
 // -----------------------------------------------------------------------------
+
 // simple_application.cpp : examples that show how use 
 // Boost.Application to make a simplest interactive (terminal) application 
 //
-// Note 1: The Boost.Application (Aspects v4) and this sample are in 
-//         development process.
+
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2014 Renato Tegon Forti

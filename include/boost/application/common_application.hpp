@@ -19,19 +19,19 @@
 #include <boost/application/config.hpp>
 #include <boost/application/context.hpp>
 #include <boost/application/detail/csbl.hpp>
-#include <boost/application/application_initializers.hpp>
 #include <boost/application/application_mode_register.hpp>
+
 // internal aspects
 #include <boost/application/aspects/status.hpp>
 #include <boost/application/aspects/run_mode.hpp>
 
 // platform dependent
 #if defined( BOOST_WINDOWS_API )
-#include <boost/application/detail/windows/common_application_impl.hpp>
+#   include <boost/application/detail/windows/common_application_impl.hpp>
 #elif defined( BOOST_POSIX_API )
-#include <boost/application/detail/posix/common_application_impl.hpp>
+#   include <boost/application/detail/posix/common_application_impl.hpp>
 #else
-#error "Sorry, no boost application are available for this platform."
+#   error "Sorry, no boost application are available for this platform."
 #endif
 
 namespace boost { namespace application {

@@ -17,12 +17,22 @@
 #define BOOST_APPLICATION_APPLICATION_INITIALIZERS_HPP
 
 #include <boost/application/config.hpp>
-#include <boost/application/application_types.hpp>
-
 #include <boost/filesystem/path.hpp>
+#include <boost/application/base_type.hpp>
 
 namespace boost { namespace application {
-
+  
+  // this is used by examples, check:
+   // example/setup for more detail 
+   template <typename String>
+   class setup_type
+      : public base_type<String>
+   {
+   public:
+      explicit setup_type(const String &s)
+         : base_type<String>(s) {}
+   };
+   
    // setup session
    inline setup_type<character_types::string_type>
       setup_arg(const character_types::char_type *s)

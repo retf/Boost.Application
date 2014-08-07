@@ -20,7 +20,7 @@
 
 #define BOOST_APPLICATION_VERSION_MAJOR 0
 #define BOOST_APPLICATION_VERSION_MINOR 4
-#define BOOST_APPLICATION_VERSION_BUILD 9
+#define BOOST_APPLICATION_VERSION_BUILD 10
 
 // major.minor.build
 
@@ -56,4 +56,3 @@ namespace boost { namespace application {
 }}// boost::application
 
 #endif // BOOST_APPLICATION_APPLICATION_VERSION_HPP
-

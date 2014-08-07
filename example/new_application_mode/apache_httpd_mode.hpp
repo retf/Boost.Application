@@ -11,7 +11,6 @@
 #include <boost/application/config.hpp>
 #include <boost/application/context.hpp>
 #include <boost/application/detail/csbl.hpp>
-#include <boost/application/application_initializers.hpp>
 #include <boost/application/application_mode_register.hpp>
 // internal aspects
 #include <boost/application/aspects/status.hpp>

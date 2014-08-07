@@ -18,10 +18,13 @@
 
 // application
 #include <boost/application/config.hpp>
-#include <boost/application/application_types.hpp>
+
 // boost
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
+
+//
+#include "../../initializers.hpp"
 
 namespace boost { namespace application { namespace example {
 

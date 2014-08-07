@@ -81,11 +81,7 @@ project
       ;
 {
 
-   # our test lib for shared library tests
-   lib test_library : test_library.cpp ;
-   lib plugin_library : ../example/plugin_library.cpp ;
-   install install-bin : test_library plugin_library : <location>$(TEST_DIR) ;
-  
+
    test-suite application
       : 
       #
@@ -122,15 +118,6 @@ project
       #
 
       #
-      # shared library
-      #
-      [ run shared_library_load_test.cpp : $(TEST_DIR) ]
-      [ run shared_library_search_symbol_test.cpp : $(TEST_DIR) ]
-      [ run shared_library_get_symbol_test.cpp : $(TEST_DIR) ]
-      #
-      #
-
-      #
       # aspects
       #
       [ run args_aspect_test.cpp ]
@@ -153,7 +140,6 @@ project
       [ compile ../example/simple_server_application.cpp ]
       [ compile ../example/simple_server_application_with_auto_handler.cpp ]
       [ compile ../example/simple_server_application_with_auto_handler_and_global_context.cpp ]
-      [ run ../example/shared_library_load_plugin.cpp : $(TEST_DIR) ]
       [ run ../example/setup/windows/setup.cpp : : : <build>no <target-os>windows:<build>yes ]
       #
       #

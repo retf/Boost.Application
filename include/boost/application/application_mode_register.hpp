@@ -36,4 +36,3 @@ namespace boost { namespace application {
 }} // boost::application
 
 #endif // BOOST_APPLICATION_MODES_REGISTER_HPP
-

@@ -2,6 +2,12 @@
 
 [caution This is not yet an official Boost C++ library. It wasn't reviewed and can't be downloaded from www.boost.org. This beta is available to boost community to know real interest and get comments for refinement.The intention is to submit library to formal review, if community think that it is interesting!]
 
+[note
+Starting with version 0.4.10 the plug-in module has been moved to a new library, called Boost.Plugin.
+
+[@https://github.com/apolukhin/Boost.Plugin Refer to Boost.Plugin]
+]
+
 Sometimes we need run application for long time (e.g. Server Application), we need a mechanism to extend this application on runtime, and we need some facilities to access paths, ensure single instance instantiation on system, manage and catch signals and so on.
 
 This work is recurrent each time that we need build and deploy an application for particular system, and the way to do this, change a lot on each of these systems.
