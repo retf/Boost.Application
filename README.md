@@ -163,13 +163,13 @@ int main(int argc, char *argv[])
 
 ### Note about plug-in system
 
-Starting with version 0.4.10 the plug-in module has been moved to a new library, called Boost.Plugin.
+Starting with version 0.4.10 the plug-in module has been moved to a new library, called Boost.DLL.
 
-Refer to [Boost.Plugin] (https://github.com/apolukhin/Boost.Plugin)
+Refer to [Boost.DLL] (https://github.com/apolukhin/Boost.DLL)
 
 Note that versions 0.4.8 and 0.4.9 still have the plugin system, but this version is not longer maintained! 
-The new library [Boost.Plugin] (https://github.com/apolukhin/Boost.Plugin) was refactored, and have a lot of fixes and improvements. 
-If you intend to use 'plugin system' and Boost.Application, we recommend that you use the last version with Boost.Plugin.
+The new library [Boost.DLL] (https://github.com/apolukhin/Boost.DLL) was refactored, and have a lot of fixes and improvements. 
+If you intend to use 'plugin system' and Boost.Application, we recommend that you use the last version with Boost.DLL.
      
 ### On-line Documentation (Work in Progress), and other information
 
