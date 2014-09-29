@@ -20,18 +20,15 @@
 #include <boost/application/config.hpp>
 #include <boost/application/context.hpp>
 #include <boost/application/detail/csbl.hpp>
-#include <boost/application/application_initializers.hpp>
 #include <boost/application/application_mode_register.hpp>
+
 // platform dependent
 #if defined( BOOST_WINDOWS_API )
-#include <boost/application/detail/windows/server_application_impl.hpp>
-// moved to examples folder: 
-// #include <boost/application/detail/windows/service_setup.hpp>
-// example/setup/windows/setup/service_setup.hpp
+#   include <boost/application/detail/windows/server_application_impl.hpp>
 #elif defined( BOOST_POSIX_API )
-#include <boost/application/detail/posix/server_application_impl.hpp>
+#   include <boost/application/detail/posix/server_application_impl.hpp>
 #else
-#error "Sorry, no boost application are available for this platform."
+#   error "Sorry, no boost application are available for this platform."
 #endif
 
 namespace boost { namespace application {

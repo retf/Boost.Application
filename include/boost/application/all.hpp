@@ -21,11 +21,8 @@
 #include <boost/application/context.hpp>
 #include <boost/application/launch.hpp>
 // aspects
-#include <boost/application/ready_to_use_aspects.hpp>
+#include <boost/application/aspects/all.hpp>
 // auto handler
 #include <boost/application/auto_handler.hpp>
-// plugin sub-system
-#include <boost/application/shared_library.hpp>
 
 #endif // BOOST_APPLICATION_ALL_HPP
-

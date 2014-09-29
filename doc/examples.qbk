@@ -28,7 +28,6 @@ Limit Single Instance [@http://www.boost.org/libs/application/example/limit_sing
 Limit Single Instance (interprocess) [@http://www.boost.org/libs/application/example/limit_single_instance_boost_interprocess_named_mutex.cpp (limit_single_instance_boost_interprocess_named_mutex.cpp)] 
 Limit Single Instance Using Callback [@http://www.boost.org/libs/application/example/limit_single_instance_callback.cpp (limit_single_instance_callback.cpp)]
 Limit Single Instance with global Context [@http://www.boost.org/libs/application/example/limit_single_instance_callback_with_global_context.cpp (limit_single_instance_callback_with_global_context.cpp)]
-Plug-in System [@http://www.boost.org/libs/application/example/shared_library_load_plugin.cpp (shared_library_load_plugin.cpp)]
 ]
 
 [* Customization]
@@ -80,11 +79,6 @@ Tutorial Stage 4 [@http://www.boost.org/libs/application/example/tutorial/main_s
 
 [pre
 Common Application With Simple Asio Based Threadpool [@http://www.boost.org/libs/application/example/work_queue/work_queue.cpp (work_queue.cpp)]
-UUID Generator (server) Application Uisng Asio [@http://www.boost.org/libs/application/example/uuid_client_server/server.cpp (server.cpp)]
-UUID Generator (client) Application Uisng Asio [@http://www.boost.org/libs/application/example/uuid_client_server/client.cpp (client.cpp)]
-UUID Generator (plugin) Application Uisng Asio [@http://www.boost.org/libs/application/example/uuid_client_server/plugin.cpp (plugin.cpp)]
-Time-based Server [@http://www.boost.org/libs/application/example/time_based_server/server.cpp (server.cpp)]
-Time-based Server Plug-in [@http://www.boost.org/libs/application/example/time_based_server/job_plugin_library.cpp (job_plugin_library.cpp)]
 ]
 
 [note

@@ -18,9 +18,8 @@ Building an application with Boost.Application is a simple process, the basic ro
     [[F]                  [YES]                     [Customize some ready to use 'apects']]
     [[G]                  [YES]                     [Customize 'SIGNALS' of application]]
     [[H]                  [NO]                      [Launch an application using some ready to use mode. ('common' or 'server' application)]]
-    [[I]                  [YES]                     [Use 'plugin system' to extend or change behavior of application at runtime]]
-    [[J]                  [YES]                     [In case of 'Windows Service' (Server mode on Windows), use example code to setup service]]
-    [[K]                  [YES]                     [Use 'aspects' available in the context (that user add on step 'C' or 'E')]]
+    [[I]                  [YES]                     [In case of 'Windows Service' (Server mode on Windows), use example code to setup service]]
+    [[J]                  [YES]                     [Use 'aspects' available in the context (that user add on step 'C' or 'E')]]
 ]
 
 A basic sample of server application can be:

@@ -1,4 +1,4 @@
-#Boost.Application (0.4.9)
+#Boost.Application (0.4.10)
 
 ### Caution
 
@@ -161,96 +161,15 @@ int main(int argc, char *argv[])
 
 ```
 
-### Hello World (common application and plug-in system)
+### Note about plug-in system
 
-```cpp
-// mylib.so/.dll
-//
+Starting with version 0.4.10 the plug-in module has been moved to a new library, called Boost.DLL.
 
-#include <boost/config.hpp>
-#include <iostream>
+Refer to [Boost.DLL] (https://github.com/apolukhin/Boost.DLL)
 
-#define LIBRARY_API BOOST_SYMBOL_EXPORT
-
-extern "C" void LIBRARY_API say_hello(void);
-extern "C" float LIBRARY_API lib_version(void);
-extern "C" int LIBRARY_API increment(int);
-
-extern "C" int integer_g;
-extern "C" const int const_integer_g = 777;
-
-int integer_g = 100;
-
-void say_hello(void)
-{
-   std::cout << "Hello, Boost.Application!" << std::endl;
-}
-
-float lib_version(void)
-{
-   return 1.0;
-}
-
-int increment(int n)
-{
-   return ++n;
-}
-
-// application
-//
-
-#include <boost/application.hpp>
-
-using namespace boost::application;
-
-class myapp
-{
-public:
-
-   myapp(context& cxt)
-      : context_(cxt) {}
-
-   int operator()()
-   {
-      shared_library sl(
-	     path->executable_path().string() + "/plugin/mylib" + shared_library::suffix());
-     
-	  // shared_library::suffix():
-	  // the suffix of shared module, like:
-      // 
-      // .dll (windows)
-      // .so (unix)
-      // .dylib (mac)
-	  
-      boost::function<int(int)> inc = sl.get<int(int)>("increment");
-
-      BOOST_CHECK(inc(1) == 2);
-      BOOST_CHECK(inc(2) == 3);
-      BOOST_CHECK(inc(3) == 4);
-
-      return 0;
-   }
-
-private:
-   context& context_;
-
-};
-
-// main
-
-int main(int argc, char *argv[])
-{  
-   context app_context;
-   myapp app(app_context);
-
-   // add 'path' aspect to context pool of application, it will be available for future use
-   app_context.insert<path>(
-      boost::make_shared<path_default_behaviour>(argc, argv));
-	 
-   return launch<common>(app, app_context);
-}
-
-```
+Note that versions 0.4.8 and 0.4.9 still have the plugin system, but this version is not longer maintained! 
+The new library [Boost.DLL] (https://github.com/apolukhin/Boost.DLL) was refactored, and have a lot of fixes and improvements. 
+If you intend to use 'plugin system' and Boost.Application, we recommend that you use the last version with Boost.DLL.
      
 ### On-line Documentation (Work in Progress), and other information
 
@@ -264,7 +183,7 @@ int main(int argc, char *argv[])
 
 ### Articles
 
-Note that here we are using version 4.8 (0.4.8). If you are using current version 4.9 (0.4.9) you need adapt all article samples.
+Note that here we are using version 4.8 (0.4.8). If you are using current version 4.10 (0.4.10) you need adapt all article samples and download [Boost.Plugin] (https://github.com/apolukhin/Boost.Plugin)
 
 Library use:<br>
 [Build a Server Application using Application Library] (http://www.codeproject.com/Articles/756866/Build-a-Server-Application-using-Application-Libra)
@@ -321,7 +240,7 @@ A special thanks to Vicente J. Botet Escriba that helped a lot on all areas of t
    
 Thanks to Benjamin Dieckmann for global_context implementation.<br>
 Thanks to Rodrigo Madera (RM of Boost.Application).<br>
-Thanks to Antony Polukhin for improvements on plug-in system module (shared_library).
+Thanks to Antony Polukhin for improvements on plug-in system module (shared_library), that now is a new library, see notes above. 
 
 ### Contact
 

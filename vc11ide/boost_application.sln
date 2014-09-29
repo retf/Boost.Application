@@ -25,19 +25,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "my_own_termination_handler"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "simple_server_application", "simple_server_application.vcxproj", "{710BF4EB-7F98-4D60-1B42-95940B51F5F7}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "shared_library_load_plugin", "shared_library_load_plugin.vcxproj", "{FBD09C25-F7E4-4D5D-FFFF-FFFF5C2F22C8}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "plugin_library", "plugin_library.vcxproj", "{6FCFD195-439E-4789-BAA4-6B28F31604E6}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "work_queue", "work_queue.vcxproj", "{B744D911-4C29-4977-848D-81AB8C54CF6D}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "application_mode_select", "application_mode_select.vcxproj", "{AA0508C0-7B3E-4612-FFFF-FFFF5EFC3191}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "uuid_client", "uuid_client.vcxproj", "{56032211-D125-44B2-FFFF-FFFFD71E0BBD}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "uuid_plugin_library", "uuid_plugin_library.vcxproj", "{F04D90F7-9905-4108-FFFF-FFFFF213BBD3}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "uuid_server", "uuid_server.vcxproj", "{AA0508C0-7B3E-4612-FFFF-FFFF5EFC31AA}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tutorial_stage1", "tutorial_stage1.vcxproj", "{4D4BE500-EDC5-4B1F-FFFF-FFFFF86AF0C7}"
 EndProject
@@ -56,10 +46,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "termination_handler_with_global_context", "termination_handler_with_global_context.vcxproj", "{210BF4EB-7F98-4D60-5A45-95940B51F5F5}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "service_setup_ex", "service_setup_ex.vcxproj", "{73744107-4ED1-4E31-ACEA-7FBF61370E58}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "job_plugin_library", "job_plugin_library.vcxproj", "{28EBB11C-6D92-42E8-AECE-A2144004E563}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "time_based_plugin_job", "time_based_plugin_job.vcxproj", "{37E28B6F-CB07-4080-B7FF-D4509297B4E1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "simple_server_application_with_auto_handler", "simple_server_application_with_auto_handler.vcxproj", "{710BF4EB-7F98-4D60-1B42-95940B51F5F6}"
 EndProject
@@ -119,14 +105,6 @@ Global
 		{710BF4EB-7F98-4D60-1B42-95940B51F5F7}.Debug|Win32.Build.0 = Debug|Win32
 		{710BF4EB-7F98-4D60-1B42-95940B51F5F7}.Release|Win32.ActiveCfg = Release|Win32
 		{710BF4EB-7F98-4D60-1B42-95940B51F5F7}.Release|Win32.Build.0 = Release|Win32
-		{FBD09C25-F7E4-4D5D-FFFF-FFFF5C2F22C8}.Debug|Win32.ActiveCfg = Debug|Win32
-		{FBD09C25-F7E4-4D5D-FFFF-FFFF5C2F22C8}.Debug|Win32.Build.0 = Debug|Win32
-		{FBD09C25-F7E4-4D5D-FFFF-FFFF5C2F22C8}.Release|Win32.ActiveCfg = Release|Win32
-		{FBD09C25-F7E4-4D5D-FFFF-FFFF5C2F22C8}.Release|Win32.Build.0 = Release|Win32
-		{6FCFD195-439E-4789-BAA4-6B28F31604E6}.Debug|Win32.ActiveCfg = Debug|Win32
-		{6FCFD195-439E-4789-BAA4-6B28F31604E6}.Debug|Win32.Build.0 = Debug|Win32
-		{6FCFD195-439E-4789-BAA4-6B28F31604E6}.Release|Win32.ActiveCfg = Release|Win32
-		{6FCFD195-439E-4789-BAA4-6B28F31604E6}.Release|Win32.Build.0 = Release|Win32
 		{B744D911-4C29-4977-848D-81AB8C54CF6D}.Debug|Win32.ActiveCfg = Debug|Win32
 		{B744D911-4C29-4977-848D-81AB8C54CF6D}.Debug|Win32.Build.0 = Debug|Win32
 		{B744D911-4C29-4977-848D-81AB8C54CF6D}.Release|Win32.ActiveCfg = Release|Win32
@@ -135,18 +113,6 @@ Global
 		{AA0508C0-7B3E-4612-FFFF-FFFF5EFC3191}.Debug|Win32.Build.0 = Debug|Win32
 		{AA0508C0-7B3E-4612-FFFF-FFFF5EFC3191}.Release|Win32.ActiveCfg = Release|Win32
 		{AA0508C0-7B3E-4612-FFFF-FFFF5EFC3191}.Release|Win32.Build.0 = Release|Win32
-		{56032211-D125-44B2-FFFF-FFFFD71E0BBD}.Debug|Win32.ActiveCfg = Debug|Win32
-		{56032211-D125-44B2-FFFF-FFFFD71E0BBD}.Debug|Win32.Build.0 = Debug|Win32
-		{56032211-D125-44B2-FFFF-FFFFD71E0BBD}.Release|Win32.ActiveCfg = Release|Win32
-		{56032211-D125-44B2-FFFF-FFFFD71E0BBD}.Release|Win32.Build.0 = Release|Win32
-		{F04D90F7-9905-4108-FFFF-FFFFF213BBD3}.Debug|Win32.ActiveCfg = Debug|Win32
-		{F04D90F7-9905-4108-FFFF-FFFFF213BBD3}.Debug|Win32.Build.0 = Debug|Win32
-		{F04D90F7-9905-4108-FFFF-FFFFF213BBD3}.Release|Win32.ActiveCfg = Release|Win32
-		{F04D90F7-9905-4108-FFFF-FFFFF213BBD3}.Release|Win32.Build.0 = Release|Win32
-		{AA0508C0-7B3E-4612-FFFF-FFFF5EFC31AA}.Debug|Win32.ActiveCfg = Debug|Win32
-		{AA0508C0-7B3E-4612-FFFF-FFFF5EFC31AA}.Debug|Win32.Build.0 = Debug|Win32
-		{AA0508C0-7B3E-4612-FFFF-FFFF5EFC31AA}.Release|Win32.ActiveCfg = Release|Win32
-		{AA0508C0-7B3E-4612-FFFF-FFFF5EFC31AA}.Release|Win32.Build.0 = Release|Win32
 		{4D4BE500-EDC5-4B1F-FFFF-FFFFF86AF0C7}.Debug|Win32.ActiveCfg = Debug|Win32
 		{4D4BE500-EDC5-4B1F-FFFF-FFFFF86AF0C7}.Debug|Win32.Build.0 = Debug|Win32
 		{4D4BE500-EDC5-4B1F-FFFF-FFFFF86AF0C7}.Release|Win32.ActiveCfg = Release|Win32
@@ -179,14 +145,6 @@ Global
 		{73744107-4ED1-4E31-ACEA-7FBF61370E58}.Debug|Win32.Build.0 = Debug|Win32
 		{73744107-4ED1-4E31-ACEA-7FBF61370E58}.Release|Win32.ActiveCfg = Release|Win32
 		{73744107-4ED1-4E31-ACEA-7FBF61370E58}.Release|Win32.Build.0 = Release|Win32
-		{28EBB11C-6D92-42E8-AECE-A2144004E563}.Debug|Win32.ActiveCfg = Debug|Win32
-		{28EBB11C-6D92-42E8-AECE-A2144004E563}.Debug|Win32.Build.0 = Debug|Win32
-		{28EBB11C-6D92-42E8-AECE-A2144004E563}.Release|Win32.ActiveCfg = Release|Win32
-		{28EBB11C-6D92-42E8-AECE-A2144004E563}.Release|Win32.Build.0 = Release|Win32
-		{37E28B6F-CB07-4080-B7FF-D4509297B4E1}.Debug|Win32.ActiveCfg = Debug|Win32
-		{37E28B6F-CB07-4080-B7FF-D4509297B4E1}.Debug|Win32.Build.0 = Debug|Win32
-		{37E28B6F-CB07-4080-B7FF-D4509297B4E1}.Release|Win32.ActiveCfg = Release|Win32
-		{37E28B6F-CB07-4080-B7FF-D4509297B4E1}.Release|Win32.Build.0 = Release|Win32
 		{710BF4EB-7F98-4D60-1B42-95940B51F5F6}.Debug|Win32.ActiveCfg = Debug|Win32
 		{710BF4EB-7F98-4D60-1B42-95940B51F5F6}.Debug|Win32.Build.0 = Debug|Win32
 		{710BF4EB-7F98-4D60-1B42-95940B51F5F6}.Release|Win32.ActiveCfg = Release|Win32

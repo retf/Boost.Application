@@ -9,6 +9,7 @@
 The following platforms and compilers have been tested:
 
 * Win32 and Win64 using Visual C++ 11.0.
+* MinGW 4.7/4.8
 * Linux (2.6 kernels) using g++ 4.7.3.
  
 [endsect]

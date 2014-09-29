@@ -6,6 +6,12 @@
 
 [section Revision History]
 
+[h5 0.4.10]
+
+Starting with version 0.4.10 the plug-in module has been moved to a new library, called Boost.Plugin.
+
+[@https://github.com/apolukhin/Boost.Plugin Refer to Boost.Plugin]
+
 [h5 0.4.9]
 
 As proposed by Rodrigo Madera (Application RM), this:
