@@ -118,13 +118,13 @@ exe simple_server_application
 
 # auto_handler
 
-exe simple_server_application_with_auto_handler
-   : simple_server_application_with_auto_handler.cpp
-   ;
+#exe simple_server_application_with_auto_handler
+#   : simple_server_application_with_auto_handler.cpp
+#   ;
    
-exe simple_server_application_with_auto_handler_and_global_context
-   : simple_server_application_with_auto_handler_and_global_context.cpp
-   ;
+#exe simple_server_application_with_auto_handler_and_global_context
+#   : simple_server_application_with_auto_handler_and_global_context.cpp
+#   ;
    
 # windows only
 
