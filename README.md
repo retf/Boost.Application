@@ -183,7 +183,7 @@ If you intend to use 'plugin system' and Boost.Application, we recommend that yo
 
 ### Articles
 
-Note that here we are using version 4.8 (0.4.8). If you are using current version 4.10 (0.4.10) you need adapt all article samples and download [Boost.Plugin] (https://github.com/apolukhin/Boost.Plugin)
+Note that here we are using version 4.8 (0.4.8). If you are using current version 4.10 (0.4.10) you need adapt all article samples and download [Boost.DLL] (https://github.com/apolukhin/Boost.DLL)
 
 Library use:<br>
 [Build a Server Application using Application Library] (http://www.codeproject.com/Articles/756866/Build-a-Server-Application-using-Application-Libra)
