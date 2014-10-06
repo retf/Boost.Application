@@ -64,7 +64,7 @@ Here we will use the first version.
 [tutorials2]
 
 [note
-By default the signals '[*SIGINT]', '[*SIGTERM]' and '[*SIGABRT]' will change internal state os aspect '[*status]' of application from '[*application::status::running]' to '[*application::status::stoped]'.
+By default the signals '[*SIGINT]', '[*SIGTERM]' and '[*SIGABRT]' will change internal state os aspect '[*status]' of application from '[*application::status::running]' to '[*application::status::stopped]'.
 
 User can customize the default behaviour, refer to [@../html/boost_application/customization.html#boost_application.customization.customize_signal 'Customize Signals/Handlers']
 ] 

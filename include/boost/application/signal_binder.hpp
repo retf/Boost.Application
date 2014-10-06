@@ -51,7 +51,7 @@ namespace boost { namespace application {
    public:
       explicit signal_binder(context &cxt)
          : signals_(io_service_)
-         , io_service_thread_(0) 
+         , io_service_thread_(0)
          , context_(cxt)
       {
          signals_.async_wait(
@@ -62,7 +62,7 @@ namespace boost { namespace application {
 
       explicit signal_binder(global_context_ptr cxt)
          : signals_(io_service_)
-         , io_service_thread_(0) 
+         , io_service_thread_(0)
          , context_(*cxt.get())
       {
          signals_.async_wait(
@@ -231,7 +231,7 @@ namespace boost { namespace application {
       {
          if (ec)
             return;
-        
+
          if(handler_map_[signal_number].first.is_valid())
          {
             handler<>::callback* cb = 0;
@@ -259,10 +259,10 @@ namespace boost { namespace application {
       asio::io_service io_service_;
       asio::signal_set signals_;
 
-      boost::thread *io_service_thread_; 
+      boost::thread *io_service_thread_;
 
    protected:
-      
+
       // for signal_manager access
       application::context &context_;
 
@@ -341,7 +341,7 @@ namespace boost { namespace application {
       virtual bool termination_signal_handler(void)
       {
          // we need set application_state to stop
-         context_.find<status>()->state(status::stoped);
+         context_.find<status>()->state(status::stopped);
 
          // and signalize wait_for_termination_request
          context_.find<wait_for_termination_request>()->proceed();

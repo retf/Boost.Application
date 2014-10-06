@@ -1,14 +1,14 @@
 // -----------------------------------------------------------------------------
-// simple_server_application_with_auto_handler.cpp : examples that show how use 
-// Boost.Application to make a simplest interactive (terminal) application 
+// simple_server_application_with_auto_handler.cpp : examples that show how use
+// Boost.Application to make a simplest interactive (terminal) application
 //
-// Note 1: The Boost.Application (Aspects v4) and this sample are in 
+// Note 1: The Boost.Application (Aspects v4) and this sample are in
 //         development process.
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2013 Renato Tegon Forti
 //
-// Distributed under the Boost Software License, Version 1.0. (See accompanying 
+// Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
@@ -27,7 +27,7 @@
 // kill -INT <PID>
 
 // output sample on windows service (log.txt)
-// 
+//
 // Start Log...
 // -----------------------------
 // ---------- Arg List ---------
@@ -62,8 +62,8 @@
 #include <boost/application.hpp>
 #include <boost/application/auto_handler.hpp>
 
-// provide setup example for windows service   
-#if defined(BOOST_WINDOWS_API)      
+// provide setup example for windows service
+#if defined(BOOST_WINDOWS_API)
 #   include "setup/windows/setup/service_setup.hpp"
 #endif
 
@@ -73,7 +73,7 @@ using namespace boost;
 // my application code
 
 class myapp
-{   
+{
 public:
 
    myapp(application::context& context)
@@ -87,7 +87,7 @@ public:
 
       // dump args
 
-      std::vector<std::string> arg_vector = 
+      std::vector<std::string> arg_vector =
          context_.find<application::args>()->arg_vector();
 
       my_log_file_ << "-----------------------------" << std::endl;
@@ -95,7 +95,7 @@ public:
       my_log_file_ << "-----------------------------" << std::endl;
 
       // only print args on screen
-      for(std::vector<std::string>::iterator it = arg_vector.begin(); 
+      for(std::vector<std::string>::iterator it = arg_vector.begin();
          it != arg_vector.end(); ++it) {
          my_log_file_ << *it << std::endl;
       }
@@ -104,11 +104,11 @@ public:
 
       // run logic
 
-      boost::shared_ptr<application::status> st =          
+      boost::shared_ptr<application::status> st =
          context_.find<application::status>();
 
       int count = 0;
-      while(st->state() != application::status::stoped)
+      while(st->state() != application::status::stopped)
       {
          boost::this_thread::sleep(boost::posix_time::seconds(1));
 
@@ -122,15 +122,15 @@ public:
    // param
    int operator()()
    {
-      std::string logfile 
+      std::string logfile
          = context_.find<application::path>()->executable_path().string() + "/log.txt";
-      
+
       my_log_file_.open(logfile.c_str());
       my_log_file_ << "Start Log..." << std::endl;
 
       // launch a work thread
       boost::thread thread(&myapp::worker, this);
-      
+
       context_.find<application::wait_for_termination_request>()->wait();
 
       // to run direct
@@ -174,17 +174,17 @@ private:
 
 bool setup(application::context& context)
 {
-   strict_lock<application::aspect_map> guard(context); 
+   strict_lock<application::aspect_map> guard(context);
 
-   boost::shared_ptr<application::args> myargs 
+   boost::shared_ptr<application::args> myargs
       = context.find<application::args>(guard);
 
-   boost::shared_ptr<application::path> mypath 
+   boost::shared_ptr<application::path> mypath
       = context.find<application::path>(guard);
-   
-// provide setup for windows service   
-#if defined(BOOST_WINDOWS_API)      
-#if !defined(__MINGW32__)   
+
+// provide setup for windows service
+#if defined(BOOST_WINDOWS_API)
+#if !defined(__MINGW32__)
 
    // get our executable path name
    boost::filesystem::path executable_path_name = mypath->executable_path_name();
@@ -204,18 +204,18 @@ bool setup(application::context& context)
       po::store(po::parse_command_line(myargs->argc(), myargs->argv(), install), vm);
       boost::system::error_code ec;
 
-      if (vm.count("help")) 
+      if (vm.count("help"))
       {
          std::cout << install << std::cout;
          return true;
       }
 
-      if (vm.count("-i")) 
+      if (vm.count("-i"))
       {
          application::example::install_windows_service(
-         application::setup_arg(vm["name"].as<std::string>()), 
-         application::setup_arg(vm["display"].as<std::string>()), 
-         application::setup_arg(vm["description"].as<std::string>()), 
+         application::setup_arg(vm["name"].as<std::string>()),
+         application::setup_arg(vm["display"].as<std::string>()),
+         application::setup_arg(vm["description"].as<std::string>()),
          application::setup_arg(executable_path_name)).install(ec);
 
          std::cout << ec.message() << std::endl;
@@ -223,28 +223,28 @@ bool setup(application::context& context)
          return true;
       }
 
-      if (vm.count("-u")) 
+      if (vm.count("-u"))
       {
          application::example::uninstall_windows_service(
-            application::setup_arg(vm["name"].as<std::string>()), 
+            application::setup_arg(vm["name"].as<std::string>()),
             application::setup_arg(executable_path_name)).uninstall(ec);
-			   
+
          std::cout << ec.message() << std::endl;
 
          return true;
       }
-      
-#endif      
+
 #endif
-      
+#endif
+
    return false;
 }
 // main
 
 int main(int argc, char *argv[])
-{   
+{
    application::context app_context;
-   
+
    // auto_handler will automatically add termination, pause and resume (windows) handlers
    application::auto_handler<myapp> app(app_context);
    // application::detail::handler_auto_set<myapp> app(app_context);
@@ -255,7 +255,7 @@ int main(int argc, char *argv[])
       boost::make_shared<application::path_default_behaviour>(argc, argv));
 
    app_context.insert<application::args>(
-      boost::make_shared<application::args>(argc, argv));  
+      boost::make_shared<application::args>(argc, argv));
 
    // check if we need setup
 
@@ -272,9 +272,9 @@ int main(int argc, char *argv[])
 
    if(ec)
    {
-      std::cout << "[E] " << ec.message() 
+      std::cout << "[E] " << ec.message()
          << " <" << ec.value() << "> " << std::cout;
    }
-   
+
    return result;
 }
