@@ -1,0 +1,209 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Class limit_single_instance_default_behaviour</title>
+<link rel="stylesheet" href="../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Boost.Application">
+<link rel="up" href="../../boost_application/reference.html#header.boost.application.aspects.limit_single_instance_hpp" title="Header &lt;boost/application/aspects/limit_single_instance.hpp&gt;">
+<link rel="prev" href="limit_single_instance.html" title="Class limit_single_instance">
+<link rel="next" href="path.html" title="Class path">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
+<td align="center"><a href="../../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../../libs/libraries.htm">Libraries</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
+<td align="center"><a href="../../../../../../more/index.htm">More</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="limit_single_instance.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../../boost_application/reference.html#header.boost.application.aspects.limit_single_instance_hpp"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="path.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+<div class="refentry">
+<a name="boost.application.limit_single_inst_id293335"></a><div class="titlepage"></div>
+<div class="refnamediv">
+<h2><span class="refentrytitle">Class limit_single_instance_default_behaviour</span></h2>
+<p>boost::application::limit_single_instance_default_behaviour &#8212; This aspect class ensure that only a single instance of application (process) is running on a given operating system. </p>
+</div>
+<h2 xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv-title">Synopsis</h2>
+<div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis"><span class="comment">// In header: &lt;<a class="link" href="../../boost_application/reference.html#header.boost.application.aspects.limit_single_instance_hpp" title="Header &lt;boost/application/aspects/limit_single_instance.hpp&gt;">boost/application/aspects/limit_single_instance.hpp</a>&gt;
+
+</span>
+<span class="keyword">class</span> <a class="link" href="limit_single_inst_id293335.html" title="Class limit_single_instance_default_behaviour">limit_single_instance_default_behaviour</a> <span class="special">:</span>
+  <span class="keyword">public</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">limit_single_instance</span>
+<span class="special">{</span>
+<span class="keyword">public</span><span class="special">:</span>
+  <span class="comment">// <a class="link" href="limit_single_inst_id293335.html#boost.application.limit_single_inst_id293335construct-copy-destruct">construct/copy/destruct</a></span>
+  <a class="link" href="limit_single_inst_id293335.html#id293406-bb"><span class="identifier">limit_single_instance_default_behaviour</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">uuids</span><span class="special">::</span><span class="identifier">uuid</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="limit_single_inst_id293335.html#id293439-bb"><span class="identifier">limit_single_instance_default_behaviour</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">uuids</span><span class="special">::</span><span class="identifier">uuid</span> <span class="special">&amp;</span><span class="special">,</span> 
+                                          <span class="keyword">const</span> <span class="identifier">callback</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+
+  <span class="comment">// <a class="link" href="limit_single_inst_id293335.html#id293328-bb">public member functions</a></span>
+  <span class="keyword">bool</span> <a class="link" href="limit_single_inst_id293335.html#id293330-bb"><span class="identifier">lock</span></a><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">system</span><span class="special">::</span><span class="identifier">error_code</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">bool</span> <a class="link" href="limit_single_inst_id293335.html#id293379-bb"><span class="identifier">lock</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">bool</span> <a class="link" href="limit_single_inst_id293335.html#id293373-bb"><span class="identifier">is_another_instance_running</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">void</span> <a class="link" href="limit_single_inst_id293335.html#id293404-bb"><span class="identifier">release</span></a><span class="special">(</span><span class="keyword">void</span><span class="special">)</span><span class="special">;</span>
+<span class="special">}</span><span class="special">;</span></pre></div>
+<div class="refsect1">
+<a name="id928834"></a><h2>Description</h2>
+<p>Note that the automatic behavior of limit single instance is just evaluated in automatically way when the application is started by the launcher.</p>
+<p>Note that user must call lock() to know if a istance of application (process) is running, and only after that the call of is_another_instance_running will return correct value. Call to is_another_instance_running, before call of lock, cause is_another_instance_running to return always false. </p>
+<div class="refsect2">
+<a name="id928814"></a><h3>
+<a name="boost.application.limit_single_inst_id293335construct-copy-destruct"></a><code class="computeroutput">limit_single_instance_default_behaviour</code> 
+        public
+       construct/copy/destruct</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem">
+<pre class="literallayout"><a name="id293406-bb"></a><span class="identifier">limit_single_instance_default_behaviour</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">uuids</span><span class="special">::</span><span class="identifier">uuid</span> <span class="special">&amp;</span> app_uuid<span class="special">)</span><span class="special">;</span></pre>
+<p>Constructs an <code class="computeroutput"><a class="link" href="limit_single_instance.html" title="Class limit_single_instance">limit_single_instance</a></code>.</p>
+<p>
+</p>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term">Parameters:</span></p></td>
+<td><div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="computeroutput">app_uuid</code></span></p></td>
+<td><p>An Uuid (Boost.Uuid) that identify a application. The mutex will be created using this value. In case of positive evaluation of single istance application, will exit. </p></td>
+</tr></tbody>
+</table></div></td>
+</tr></tbody>
+</table></div>
+</li>
+<li class="listitem">
+<pre class="literallayout"><a name="id293439-bb"></a><span class="identifier">limit_single_instance_default_behaviour</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">uuids</span><span class="special">::</span><span class="identifier">uuid</span> <span class="special">&amp;</span> app_uuid<span class="special">,</span> 
+                                        <span class="keyword">const</span> <span class="identifier">callback</span> <span class="special">&amp;</span> cb<span class="special">)</span><span class="special">;</span></pre>
+<p>Constructs an <code class="computeroutput"><a class="link" href="limit_single_instance.html" title="Class limit_single_instance">limit_single_instance</a></code>.</p>
+<p>
+</p>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term">Parameters:</span></p></td>
+<td><div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="computeroutput">app_uuid</code></span></p></td>
+<td><p>An Uuid that identify a application. The mutex will be created using this value.</p></td>
+</tr></tbody>
+</table></div></td>
+</tr></tbody>
+</table></div>
+</li>
+</ol></div>
+</div>
+<div class="refsect2">
+<a name="id929009"></a><h3>
+<a name="id293328-bb"></a><code class="computeroutput">limit_single_instance_default_behaviour</code> public member functions</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">bool</span> <a name="id293330-bb"></a><span class="identifier">lock</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">system</span><span class="special">::</span><span class="identifier">error_code</span> <span class="special">&amp;</span> ec<span class="special">)</span><span class="special">;</span></pre>
+<p>Creates a system mutex, the ec ( boost::system::error_code&amp; ec) will be set to the result of the operation, they should be tested for errors.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term">Parameters:</span></p></td>
+<td><div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="computeroutput">ec</code></span></p></td>
+<td><p>Variable (boost::system::error_code) that will be set to the result of the operation.</p></td>
+</tr></tbody>
+</table></div></td>
+</tr>
+<tr>
+<td><p><span class="term">Returns:</span></p></td>
+<td><p>if system mutex is already created, return true to indicate that we already have another instance running on current operating system. </p></td>
+</tr>
+</tbody>
+</table></div>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">bool</span> <a name="id293379-bb"></a><span class="identifier">lock</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<p>Creates a system mutex, throws an exception of type boost::system::system_error on error.</p>
+<p>
+</p>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term">Returns:</span></p></td>
+<td><p>if system mutex is already created, return true to indicate that we already have another instance running on current operating system. </p></td>
+</tr></tbody>
+</table></div>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">bool</span> <a name="id293373-bb"></a><span class="identifier">is_another_instance_running</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<p>Indicate that we already have another instance of application running on current operating system.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term">Requires:</span></p></td>
+<td><p>the lock() method need be called first. </p></td>
+</tr>
+<tr>
+<td><p><span class="term">Returns:</span></p></td>
+<td><p>true if a instance of application (process) is already running on current system. </p></td>
+</tr>
+</tbody>
+</table></div>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">void</span> <a name="id293404-bb"></a><span class="identifier">release</span><span class="special">(</span><span class="keyword">void</span><span class="special">)</span><span class="special">;</span></pre>
+<p>Release system mutex. </p>
+</li>
+</ol></div>
+</div>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2014 Dokfile Software Ltd.<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="limit_single_instance.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../../boost_application/reference.html#header.boost.application.aspects.limit_single_instance_hpp"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="path.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

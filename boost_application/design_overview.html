@@ -1,0 +1,101 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Design overview</title>
+<link rel="stylesheet" href="../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Boost.Application">
+<link rel="up" href="../index.html" title="Chapter&#160;1.&#160;Boost.Application">
+<link rel="prev" href="../index.html" title="Chapter&#160;1.&#160;Boost.Application">
+<link rel="next" href="suported_application_types.html" title="Suported Application Types">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
+<td align="center"><a href="../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../libs/libraries.htm">Libraries</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
+<td align="center"><a href="../../../../../more/index.htm">More</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="../index.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="suported_application_types.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="boost_application.design_overview"></a><a class="link" href="design_overview.html" title="Design overview">Design overview</a>
+</h2></div></div></div>
+<p>
+      The design of Boost.Application is very modular and extensible. The components
+      are very independents (loosely coupled). The 'aspects' concept allow user to
+      customize, and extend library functionality in easy way. The key components
+      are designed in independent way, and are tied at runtime (launch).
+    </p>
+<p>
+      The diagram below shows the components of Boost.Application.
+    </p>
+<p>
+      <span class="inlinemediaobject"><img src="../app.gif" alt="app"></span>
+    </p>
+<h6>
+<a name="boost_application.design_overview.h0"></a>
+      <span class="phrase"><a name="boost_application.design_overview.primary_components"></a></span><a class="link" href="design_overview.html#boost_application.design_overview.primary_components">Primary
+      Components</a>
+    </h6>
+<p>
+      The first component is the '<span class="bold"><strong>User Defined Application
+      Functor Class</strong></span>'. This component is designed by the user, and the
+      user must define the '<span class="bold"><strong>application operator</strong></span>'
+      that will hold user application logic.
+    </p>
+<p>
+      The next components is the '<a href="../../html/boost_application/suported_application_types.html" target="_top">Application
+      Mode</a>', this component will create the needed structure to run the '<span class="bold"><strong>User Defined Application Functor Class</strong></span>' using desired
+      mode, that can be a '<span class="bold"><strong>server (Service/Daemon)</strong></span>'
+      or '<span class="bold"><strong>common</strong></span>' application type. The user can
+      design a new '<span class="bold"><strong>application mode</strong></span>' if he want.
+    </p>
+<p>
+      The third component is responsible for receiving '<span class="bold"><strong>signals</strong></span>'
+      from the operating system and run the '<span class="bold"><strong>callback</strong></span>'
+      defined by the User. The User can customize this <a href="../../html/boost_application/customization.html#boost_application.customization.customize_signal" target="_top">manager</a>
+      if necessary.
+    </p>
+<p>
+      The next components is the '<a href="../../html/boost_application/context.html" target="_top">Application
+      Context</a>'. This Component hold the '<span class="bold"><strong>Aspect Pool</strong></span>'
+      of application. User can customize an '<span class="bold"><strong>Aspect</strong></span>'
+      provided by library, or/and can create new '<span class="bold"><strong>Aspects</strong></span>'
+      to your own need.
+    </p>
+<p>
+      The last components is the '<span class="bold"><strong>launch</strong></span>'. The launch
+      tie all components and execute the '<span class="bold"><strong>User Application</strong></span>'.
+    </p>
+<h6>
+<a name="boost_application.design_overview.h1"></a>
+      <span class="phrase"><a name="boost_application.design_overview.optional_components"></a></span><a class="link" href="design_overview.html#boost_application.design_overview.optional_components">Optional
+      Components</a>
+    </h6>
+<p>
+      On 'A' we have the 'service setup' component. This component is Windows specific,
+      and has the code necessary to install and uninstall a Windows Service on Client
+      machine. This component is not part of lib, and are provided on 'example/setup'
+      folder.
+    </p>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2014 Dokfile Software Ltd.<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="../index.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="suported_application_types.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

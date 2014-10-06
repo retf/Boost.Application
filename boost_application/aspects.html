@@ -1,0 +1,408 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Application Apects</title>
+<link rel="stylesheet" href="../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Boost.Application">
+<link rel="up" href="../index.html" title="Chapter&#160;1.&#160;Boost.Application">
+<link rel="prev" href="context.html" title="Application Context">
+<link rel="next" href="using_application_handlers.html" title="Using Application Handlers">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
+<td align="center"><a href="../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../libs/libraries.htm">Libraries</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
+<td align="center"><a href="../../../../../more/index.htm">More</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="context.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="using_application_handlers.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="boost_application.aspects"></a><a class="link" href="aspects.html" title="Application Apects">Application Apects </a>
+</h2></div></div></div>
+<p>
+      A central concept on Boost.Application is the 'aspects' that can be added to
+      application context.
+    </p>
+<p>
+      Boost.Application provide a wide class of ready-to-use 'aspects' and user is
+      free to customize or define anyone that he needs, basically we can classify
+      the ready-to-use aspects in 2 groups:
+    </p>
+<div class="table">
+<a name="boost_application.aspects.sca"></a><p class="title"><b>Table&#160;1.2.&#160;Simple or Common that can be any class</b></p>
+<div class="table-contents"><table class="table" summary="Simple or Common that can be any class">
+<colgroup>
+<col>
+<col>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>
+              <p>
+                Aspect Name
+              </p>
+            </th>
+<th>
+              <p>
+                Aspect Contract Class
+              </p>
+            </th>
+<th>
+              <p>
+                Aspect Final Class
+              </p>
+            </th>
+<th>
+              <p>
+                Aspect Functionality
+              </p>
+            </th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+              <p>
+                args
+              </p>
+            </td>
+<td>
+              <p>
+                args
+              </p>
+            </td>
+<td>
+              <p>
+                args (same class)
+              </p>
+            </td>
+<td>
+              <p>
+                Provide functionality for handling arguments of the application
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                path
+              </p>
+            </td>
+<td>
+              <p>
+                path
+              </p>
+            </td>
+<td>
+              <p>
+                path_default_behaviour
+              </p>
+            </td>
+<td>
+              <p>
+                Provide functionality for handling paths of the application
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                run_mode
+              </p>
+            </td>
+<td>
+              <p>
+                run_mode
+              </p>
+            </td>
+<td>
+              <p>
+                run_mode (same class)
+              </p>
+            </td>
+<td>
+              <p>
+                Provide information of application running mode (common or server)
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                status
+              </p>
+            </td>
+<td>
+              <p>
+                status
+              </p>
+            </td>
+<td>
+              <p>
+                status (same class)
+              </p>
+            </td>
+<td>
+              <p>
+                Provide information about current satatus of application (sopped,
+                running or paused)
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                wait_for_termination_request
+              </p>
+            </td>
+<td>
+              <p>
+                wait_for_termination_request
+              </p>
+            </td>
+<td>
+              <p>
+                wait_for_termination_request_default_behaviour
+              </p>
+            </td>
+<td>
+              <p>
+                Provide functionality for wait for task completion
+              </p>
+            </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<br class="table-break"><div class="table">
+<a name="boost_application.aspects.hc"></a><p class="title"><b>Table&#160;1.3.&#160;Handler, that has a callback associated to it</b></p>
+<div class="table-contents"><table class="table" summary="Handler, that has a callback associated to it">
+<colgroup>
+<col>
+<col>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>
+              <p>
+                Aspect Name
+              </p>
+            </th>
+<th>
+              <p>
+                Aspect Contract Class
+              </p>
+            </th>
+<th>
+              <p>
+                Aspect Final Class
+              </p>
+            </th>
+<th>
+              <p>
+                Aspect Functionality
+              </p>
+            </th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+              <p>
+                pause_handler
+              </p>
+            </td>
+<td>
+              <p>
+                pause_handler
+              </p>
+            </td>
+<td>
+              <p>
+                pause_handler_default_behaviour
+              </p>
+            </td>
+<td>
+              <p>
+                When 'pause' event is detected, fire a user defined callback
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                resume_handler
+              </p>
+            </td>
+<td>
+              <p>
+                resume_handler
+              </p>
+            </td>
+<td>
+              <p>
+                resume_handler_default_behaviour
+              </p>
+            </td>
+<td>
+              <p>
+                When 'resume' event is detected, fire a user defined callback
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                termination_handler
+              </p>
+            </td>
+<td>
+              <p>
+                termination_handler
+              </p>
+            </td>
+<td>
+              <p>
+                termination_handler_default_behaviour
+              </p>
+            </td>
+<td>
+              <p>
+                When 'stop' signal/event is detected, fire a user defined callback
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                limit_single_instance
+              </p>
+            </td>
+<td>
+              <p>
+                limit_single_instance
+              </p>
+            </td>
+<td>
+              <p>
+                limit_single_instance_default_behaviour
+              </p>
+            </td>
+<td>
+              <p>
+                When single instance feature is enabled, fire a user defined callback
+                to handle it
+              </p>
+            </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<br class="table-break"><p>
+      To know how customize an Aspect, refer to <a href="../../html/boost_application/customization.html#boost_application.customization.customize_handlers" target="_top">'Customize
+      Aspects'</a>
+    </p>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../doc/src/images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+        Note that that the application launch&lt;mode&gt; tie 'run_mode' and 'status'
+        aspects to application context in automatic way.
+      </p></td></tr>
+</table></div>
+<p>
+      For sample, the following code show the use of 'path' aspect.
+    </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">class</span> <span class="identifier">myapp</span>
+<span class="special">{</span>
+<span class="keyword">public</span><span class="special">:</span>
+
+   <span class="identifier">myapp</span><span class="special">(</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">context</span><span class="special">&amp;</span> <span class="identifier">context</span><span class="special">)</span>
+      <span class="special">:</span> <span class="identifier">context_</span><span class="special">(</span><span class="identifier">context</span><span class="special">)</span>
+   <span class="special">{</span>
+   <span class="special">}</span>
+
+   <span class="comment">// param</span>
+   <span class="keyword">int</span> <span class="keyword">operator</span><span class="special">()()</span>
+   <span class="special">{</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Test"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+
+	    <a class="co" name="boost_application.aspects.c0" href="aspects.html#boost_application.aspects.c1"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a><span class="identifier">boost</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">path</span><span class="special">&gt;</span> <span class="identifier">path</span>
+         <span class="special">=</span> <span class="identifier">context_</span><span class="special">.</span><span class="identifier">find</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">path</span><span class="special">&gt;();</span>
+
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"executable_path      : "</span> <span class="special">&lt;&lt;</span> <span class="identifier">path</span><span class="special">-&gt;</span><span class="identifier">executable_path</span><span class="special">()</span>      <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"current_path         : "</span> <span class="special">&lt;&lt;</span> <span class="identifier">path</span><span class="special">-&gt;</span><span class="identifier">current_path</span><span class="special">()</span>         <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"executable_name      : "</span> <span class="special">&lt;&lt;</span> <span class="identifier">path</span><span class="special">-&gt;</span><span class="identifier">executable_name</span><span class="special">()</span>      <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"executable_full_name : "</span> <span class="special">&lt;&lt;</span> <span class="identifier">path</span><span class="special">-&gt;</span><span class="identifier">executable_full_name</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"executable_path_name : "</span> <span class="special">&lt;&lt;</span> <span class="identifier">path</span><span class="special">-&gt;</span><span class="identifier">executable_path_name</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+
+      <span class="comment">// e.g.: "executable_path      : E:\project.boost.app.v4\libs\application\vc11ide\Debug"</span>
+      <span class="comment">// e.g.: "current_path         : E:\project.boost.app.v4\libs\application\vc11ide"</span>
+      <span class="comment">// e.g.: "executable_name      : path"</span>
+      <span class="comment">// e.g.: "executable_full_name : path.exe"</span>
+      <span class="comment">// e.g.: "executable_path_name : E:\project.boost.app.v4\libs\application\vc11ide\Debug\path.exe"</span>
+
+      <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
+   <span class="special">}</span>
+
+<span class="keyword">private</span><span class="special">:</span>
+   <span class="identifier">application</span><span class="special">::</span><span class="identifier">context</span><span class="special">&amp;</span> <span class="identifier">context_</span><span class="special">;</span>
+
+<span class="special">};</span>
+
+<span class="comment">// main</span>
+
+<span class="keyword">int</span> <span class="identifier">main</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">argc</span><span class="special">,</span> <span class="keyword">char</span> <span class="special">*</span><span class="identifier">argv</span><span class="special">[])</span>
+<span class="special">{</span>
+   <span class="identifier">application</span><span class="special">::</span><span class="identifier">context</span> <span class="identifier">app_context</span><span class="special">;</span>
+   <span class="identifier">myapp</span> <span class="identifier">app</span><span class="special">(</span><span class="identifier">app_context</span><span class="special">);</span>
+
+   <a class="co" name="boost_application.aspects.c2" href="aspects.html#boost_application.aspects.c3"><img src="../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a><span class="identifier">app_context</span><span class="special">.</span><span class="identifier">insert</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">path</span><span class="special">&gt;(</span>
+     <span class="identifier">boost</span><span class="special">::</span><span class="identifier">make_shared</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">path_default_behaviour</span><span class="special">&gt;(</span><span class="identifier">argc</span><span class="special">,</span> <span class="identifier">argv</span><span class="special">));</span>
+
+   <span class="keyword">return</span> <span class="identifier">application</span><span class="special">::</span><span class="identifier">launch</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">common</span><span class="special">&gt;(</span><span class="identifier">app</span><span class="special">,</span> <span class="identifier">app_context</span><span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+    </p>
+<div class="calloutlist"><table border="0" summary="Callout list">
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.aspects.c1"></a><a href="#boost_application.aspects.c0"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          Use 'path' aspect on your logic
+        </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.aspects.c3"></a><a href="#boost_application.aspects.c2"><img src="../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          Add 'path' aspect to context pool of application, it will be available
+          for future use
+        </p></td>
+</tr>
+</table></div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2014 Dokfile Software Ltd.<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="context.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="using_application_handlers.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

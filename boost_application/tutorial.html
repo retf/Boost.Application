@@ -1,0 +1,729 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Tutorial</title>
+<link rel="stylesheet" href="../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Boost.Application">
+<link rel="up" href="../index.html" title="Chapter&#160;1.&#160;Boost.Application">
+<link rel="prev" href="handling_errors.html" title="Handling errors">
+<link rel="next" href="customization.html" title="Customization">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
+<td align="center"><a href="../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../libs/libraries.htm">Libraries</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
+<td align="center"><a href="../../../../../more/index.htm">More</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="handling_errors.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="customization.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="boost_application.tutorial"></a><a class="link" href="tutorial.html" title="Tutorial">Tutorial</a>
+</h2></div></div></div>
+<div class="toc"><dl class="toc">
+<dt><span class="section"><a href="tutorial.html#boost_application.tutorial.common_application">Common
+      Application</a></span></dt>
+<dt><span class="section"><a href="tutorial.html#boost_application.tutorial.server_application">Server
+      Application</a></span></dt>
+</dl></div>
+<p>
+      This tutorial will demonstrate how to use the "Boost.Application"
+      to build the two types of application supported in the current version, thus
+      it is divided into 2 parts, as follows.
+    </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+          The first part shows how to build a "Common" application;
+        </li>
+<li class="listitem">
+          The second part show how to build a simple "Server" application.
+        </li>
+</ul></div>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../doc/src/images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+        The code presented here can be compiled on UNIX variants and Windows without
+        modifications.
+      </p></td></tr>
+</table></div>
+<div class="tip"><table border="0" summary="Tip">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="../../../../../doc/src/images/tip.png"></td>
+<th align="left">Tip</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+        An more complex tutorial can be found at <a href="http://www.codeproject.com/Articles/756866/Build-a-Server-Application-using-Application-Libra" target="_top">Code
+        Project</a>
+      </p></td></tr>
+</table></div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="boost_application.tutorial.common_application"></a><a class="link" href="tutorial.html#boost_application.tutorial.common_application" title="Common Application">Common
+      Application</a>
+</h3></div></div></div>
+<p>
+        Like name aready explan, this is a most usual type of aplication. Exemples
+        of this kind of application are a command application (e.g. more, tail, ls),
+        mail client application and so on. In general matter, this kind of application
+        does not execute to a long period of time, like a server application are.
+      </p>
+<h5>
+<a name="boost_application.tutorial.common_application.h0"></a>
+        <span class="phrase"><a name="boost_application.tutorial.common_application.header_"></a></span><a class="link" href="tutorial.html#boost_application.tutorial.common_application.header_">Header </a>
+      </h5>
+<p>
+        Boost.Application is a header-only library. It comes with a convenience header
+        file which is the only one you need to include to make use of all library
+        features:
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">application</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+</pre>
+<p>
+      </p>
+<h5>
+<a name="boost_application.tutorial.common_application.h1"></a>
+        <span class="phrase"><a name="boost_application.tutorial.common_application.functor_application_class_"></a></span><a class="link" href="tutorial.html#boost_application.tutorial.common_application.functor_application_class_">Functor
+        Application Class </a>
+      </h5>
+<p>
+        After that, a functor class (that will hold user application code) need be
+        created.
+      </p>
+<p>
+</p>
+<pre class="programlisting"><a class="co" name="boost_application.tutorial.common_application.c0" href="tutorial.html#boost_application.tutorial.common_application.c1"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a><span class="keyword">class</span> <span class="identifier">myapp</span>
+<span class="special">{</span>
+<span class="keyword">public</span><span class="special">:</span>
+
+   <span class="identifier">myapp</span><span class="special">(</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">context</span><span class="special">&amp;</span> <span class="identifier">context</span><span class="special">)</span>
+      <span class="special">:</span> <span class="identifier">context_</span><span class="special">(</span><span class="identifier">context</span><span class="special">)</span>
+   <span class="special">{</span>
+   <span class="special">}</span>
+
+   <a class="co" name="boost_application.tutorial.common_application.c2" href="tutorial.html#boost_application.tutorial.common_application.c3"><img src="../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a><span class="keyword">int</span> <span class="keyword">operator</span><span class="special">()()</span>
+   <span class="special">{</span>
+      <span class="comment">// your application logic here!</span>
+      <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
+   <span class="special">}</span>
+
+<span class="keyword">private</span><span class="special">:</span>
+   <span class="identifier">application</span><span class="special">::</span><span class="identifier">context</span><span class="special">&amp;</span> <span class="identifier">context_</span><span class="special">;</span>
+
+<span class="special">};</span>
+</pre>
+<p>
+      </p>
+<div class="calloutlist"><table border="0" summary="Callout list">
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.tutorial.common_application.c1"></a><a href="#boost_application.tutorial.common_application.c0"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            Your application functor class
+          </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.tutorial.common_application.c3"></a><a href="#boost_application.tutorial.common_application.c2"><img src="../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            Application operator, this is like a 'main' function
+          </p></td>
+</tr>
+</table></div>
+<p>
+        An important things here is 'context'. Context is your application 'aspect'
+        pool and you will use it to retrieves application information and control
+        your application.
+      </p>
+<p>
+        Refer to <a href="../../html/boost_application/context.html" target="_top">'Application
+        Context'</a> to know more.
+      </p>
+<h5>
+<a name="boost_application.tutorial.common_application.h2"></a>
+        <span class="phrase"><a name="boost_application.tutorial.common_application.standard_main_function_"></a></span><a class="link" href="tutorial.html#boost_application.tutorial.common_application.standard_main_function_">Standard
+        Main Function </a>
+      </h5>
+<p>
+        The standard "main" function that will instantiate our application
+        (<span class="bold"><strong>myapp</strong></span>) looks like as:
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">argc</span><span class="special">,</span> <span class="keyword">char</span> <span class="special">*</span><span class="identifier">argv</span><span class="special">[])</span>
+<span class="special">{</span>
+   <a class="co" name="boost_application.tutorial.common_application.c4" href="tutorial.html#boost_application.tutorial.common_application.c5"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a><span class="identifier">application</span><span class="special">::</span><span class="identifier">context</span> <span class="identifier">app_context</span><span class="special">;</span>
+
+   <a class="co" name="boost_application.tutorial.common_application.c6" href="tutorial.html#boost_application.tutorial.common_application.c7"><img src="../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a><span class="identifier">myapp</span> <span class="identifier">app</span><span class="special">(</span><span class="identifier">app_context</span><span class="special">);</span>
+
+   <a class="co" name="boost_application.tutorial.common_application.c8" href="tutorial.html#boost_application.tutorial.common_application.c9"><img src="../../../../../doc/src/images/callouts/3.png" alt="3" border="0"></a><span class="keyword">return</span> <span class="identifier">application</span><span class="special">::</span><span class="identifier">launch</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">common</span><span class="special">&gt;(</span><span class="identifier">app</span><span class="special">,</span> <span class="identifier">app_context</span><span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<div class="calloutlist"><table border="0" summary="Callout list">
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.tutorial.common_application.c5"></a><a href="#boost_application.tutorial.common_application.c4"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            Your application context that hold a 'aspect' pool
+          </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.tutorial.common_application.c7"></a><a href="#boost_application.tutorial.common_application.c6"><img src="../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            Your application functor instance
+          </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.tutorial.common_application.c9"></a><a href="#boost_application.tutorial.common_application.c8"><img src="../../../../../doc/src/images/callouts/3.png" alt="3" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            Starts the application as a common application type.
+          </p></td>
+</tr>
+</table></div>
+<p>
+        This is the simplest application that we can have.
+      </p>
+<h5>
+<a name="boost_application.tutorial.common_application.h3"></a>
+        <span class="phrase"><a name="boost_application.tutorial.common_application.action_loop_and_wait_for_termination_request_"></a></span><a class="link" href="tutorial.html#boost_application.tutorial.common_application.action_loop_and_wait_for_termination_request_">Action
+        Loop and Wait For Termination Request </a>
+      </h5>
+<p>
+        The library provides 2 methods to wait execution of application:
+      </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+            Inspect the '<span class="bold"><strong>status</strong></span>' aspect state;
+          </li>
+<li class="listitem">
+            Using '<span class="bold"><strong>wait_for_termination_request</strong></span>'
+            aspect.
+          </li>
+</ul></div>
+<p>
+        Here we will use the first version.
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">class</span> <span class="identifier">myapp</span>
+<span class="special">{</span>
+<span class="keyword">public</span><span class="special">:</span>
+
+   <span class="identifier">myapp</span><span class="special">(</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">context</span><span class="special">&amp;</span> <span class="identifier">context</span><span class="special">)</span>
+      <span class="special">:</span> <span class="identifier">context_</span><span class="special">(</span><span class="identifier">context</span><span class="special">)</span>
+   <span class="special">{</span>
+   <span class="special">}</span>
+
+   <span class="keyword">int</span> <span class="keyword">operator</span><span class="special">()()</span>
+   <span class="special">{</span>
+      <a class="co" name="boost_application.tutorial.common_application.c10" href="tutorial.html#boost_application.tutorial.common_application.c11"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a><span class="identifier">boost</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">status</span><span class="special">&gt;</span> <span class="identifier">st</span> <span class="special">=</span>
+         <span class="identifier">context_</span><span class="special">.</span><span class="identifier">find</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">status</span><span class="special">&gt;();</span>
+
+      <a class="co" name="boost_application.tutorial.common_application.c12" href="tutorial.html#boost_application.tutorial.common_application.c13"><img src="../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a><span class="keyword">while</span><span class="special">(</span><span class="identifier">st</span><span class="special">-&gt;</span><span class="identifier">state</span><span class="special">()</span> <span class="special">!=</span> <span class="identifier">application</span><span class="special">::</span><span class="identifier">status</span><span class="special">::</span><span class="identifier">stopped</span><span class="special">)</span>
+      <span class="special">{</span>
+	     <a class="co" name="boost_application.tutorial.common_application.c14" href="tutorial.html#boost_application.tutorial.common_application.c15"><img src="../../../../../doc/src/images/callouts/3.png" alt="3" border="0"></a><span class="identifier">boost</span><span class="special">::</span><span class="identifier">this_thread</span><span class="special">::</span><span class="identifier">sleep</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">posix_time</span><span class="special">::</span><span class="identifier">seconds</span><span class="special">(</span><span class="number">1</span><span class="special">));</span>
+         <span class="comment">// your application logic here!</span>
+      <span class="special">}</span>
+
+      <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
+   <span class="special">}</span>
+
+   <span class="comment">// check in next stage</span>
+   <span class="keyword">bool</span> <span class="identifier">stop</span><span class="special">()</span>
+   <span class="special">{</span>
+      <span class="keyword">return</span> <span class="keyword">true</span><span class="special">;</span>
+   <span class="special">}</span>
+
+<span class="keyword">private</span><span class="special">:</span>
+   <span class="identifier">application</span><span class="special">::</span><span class="identifier">context</span><span class="special">&amp;</span> <span class="identifier">context_</span><span class="special">;</span>
+
+<span class="special">};</span>
+</pre>
+<p>
+      </p>
+<div class="calloutlist"><table border="0" summary="Callout list">
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.tutorial.common_application.c11"></a><a href="#boost_application.tutorial.common_application.c10"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            Retrieves 'status' aspect from your context
+          </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.tutorial.common_application.c13"></a><a href="#boost_application.tutorial.common_application.c12"><img src="../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            Check 'aspect' status 'state'
+          </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.tutorial.common_application.c15"></a><a href="#boost_application.tutorial.common_application.c14"><img src="../../../../../doc/src/images/callouts/3.png" alt="3" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            Your application loop body
+          </p></td>
+</tr>
+</table></div>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../doc/src/images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top">
+<p>
+          By default the signals '<span class="bold"><strong>SIGINT</strong></span>', '<span class="bold"><strong>SIGTERM</strong></span>' and '<span class="bold"><strong>SIGABRT</strong></span>'
+          will change internal state os aspect '<span class="bold"><strong>status</strong></span>'
+          of application from '<span class="bold"><strong>application::status::running</strong></span>'
+          to '<span class="bold"><strong>application::status::stopped</strong></span>'.
+        </p>
+<p>
+          User can customize the default behaviour, refer to <a href="../../html/boost_application/customization.html#boost_application.customization.customize_signal" target="_top">'Customize
+          Signals/Handlers'</a>
+        </p>
+</td></tr>
+</table></div>
+<h5>
+<a name="boost_application.tutorial.common_application.h4"></a>
+        <span class="phrase"><a name="boost_application.tutorial.common_application.handlers_"></a></span><a class="link" href="tutorial.html#boost_application.tutorial.common_application.handlers_">Handlers
+        </a>
+      </h5>
+<p>
+        Handlers is the way that you can define a custom action to a event.
+      </p>
+<p>
+        Here we will add a '<span class="bold"><strong>stop</strong></span>' handler to application.
+      </p>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../doc/src/images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+          Note that the way to 'fire' an event changes depending on the chosen application
+          and operating system types. e.g.: The user can use 'kill -INT &lt;PID&gt;'
+          on UNIX, send CTRL-C on Windows console, or press the link 'stop' on <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms685150(v=vs.85).aspx" target="_top">SCM</a>
+        </p></td></tr>
+</table></div>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">class</span> <span class="identifier">myapp</span>
+<span class="special">{</span>
+<span class="keyword">public</span><span class="special">:</span>
+
+   <span class="identifier">myapp</span><span class="special">(</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">context</span><span class="special">&amp;</span> <span class="identifier">context</span><span class="special">)</span>
+      <span class="special">:</span> <span class="identifier">context_</span><span class="special">(</span><span class="identifier">context</span><span class="special">)</span>
+   <span class="special">{</span>
+   <span class="special">}</span>
+
+   <span class="keyword">int</span> <span class="keyword">operator</span><span class="special">()()</span>
+   <span class="special">{</span>
+      <span class="identifier">context_</span><span class="special">.</span><span class="identifier">find</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">wait_for_termination_request</span><span class="special">&gt;()-&gt;</span><span class="identifier">wait</span><span class="special">();</span>
+      <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
+   <span class="special">}</span>
+
+   <a class="co" name="boost_application.tutorial.common_application.c16" href="tutorial.html#boost_application.tutorial.common_application.c17"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a><span class="keyword">bool</span> <span class="identifier">stop</span><span class="special">()</span>
+   <span class="special">{</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Stoping my application..."</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+	
+      <a class="co" name="boost_application.tutorial.common_application.c18" href="tutorial.html#boost_application.tutorial.common_application.c19"><img src="../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a><span class="keyword">return</span> <span class="keyword">true</span><span class="special">;</span>
+   <span class="special">}</span>
+
+<span class="keyword">private</span><span class="special">:</span>
+   <span class="identifier">application</span><span class="special">::</span><span class="identifier">context</span><span class="special">&amp;</span> <span class="identifier">context_</span><span class="special">;</span>
+
+<span class="special">};</span>
+</pre>
+<p>
+      </p>
+<div class="calloutlist"><table border="0" summary="Callout list">
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.tutorial.common_application.c17"></a><a href="#boost_application.tutorial.common_application.c16"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            Define your 'stop' handler that will be called when the 'stop' event
+            will be fired.
+          </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.tutorial.common_application.c19"></a><a href="#boost_application.tutorial.common_application.c18"><img src="../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            return true to stop, false to ignore
+          </p></td>
+</tr>
+</table></div>
+<p>
+        Now you need tie a 'stop' handler to 'termination_handler' aspect, we will
+        use 'auto_handler' to do this:
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">argc</span><span class="special">,</span> <span class="keyword">char</span> <span class="special">*</span><span class="identifier">argv</span><span class="special">[])</span>
+<span class="special">{</span>
+   <span class="identifier">application</span><span class="special">::</span><span class="identifier">context</span> <span class="identifier">app_context</span><span class="special">;</span>
+
+   <a class="co" name="boost_application.tutorial.common_application.c20" href="tutorial.html#boost_application.tutorial.common_application.c21"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a><span class="identifier">application</span><span class="special">::</span><span class="identifier">auto_handler</span><span class="special">&lt;</span><span class="identifier">myapp</span><span class="special">&gt;</span> <span class="identifier">app</span><span class="special">(</span><span class="identifier">app_context</span><span class="special">);</span>
+
+   <a class="co" name="boost_application.tutorial.common_application.c22" href="tutorial.html#boost_application.tutorial.common_application.c23"><img src="../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a><span class="keyword">return</span> <span class="identifier">application</span><span class="special">::</span><span class="identifier">launch</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">common</span><span class="special">&gt;(</span><span class="identifier">app</span><span class="special">,</span> <span class="identifier">app_context</span><span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<div class="calloutlist"><table border="0" summary="Callout list">
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.tutorial.common_application.c21"></a><a href="#boost_application.tutorial.common_application.c20"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            Tie stop to termination_handler using default behaviour
+          </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.tutorial.common_application.c23"></a><a href="#boost_application.tutorial.common_application.c22"><img src="../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            Starts the application as a common application type.
+          </p></td>
+</tr>
+</table></div>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="boost_application.tutorial.server_application"></a><a class="link" href="tutorial.html#boost_application.tutorial.server_application" title="Server Application">Server
+      Application</a>
+</h3></div></div></div>
+<p>
+        Everything that has been seen so far, applies to the application server.
+        But server application (mainly in windows side) provide other features. For
+        sample on Windows Side we have pause and resume handlers and installation
+        functionality.
+      </p>
+<h5>
+<a name="boost_application.tutorial.server_application.h0"></a>
+        <span class="phrase"><a name="boost_application.tutorial.server_application.instantiate_a_server_"></a></span><a class="link" href="tutorial.html#boost_application.tutorial.server_application.instantiate_a_server_">Instantiate
+        a Server </a>
+      </h5>
+<p>
+        To transform the '<span class="bold"><strong>common</strong></span>' seen application
+        in a '<span class="bold"><strong>server</strong></span>' you need only change the template
+        application mode on main, like this:
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">argc</span><span class="special">,</span> <span class="keyword">char</span> <span class="special">*</span><span class="identifier">argv</span><span class="special">[])</span>
+<span class="special">{</span>
+   <span class="identifier">application</span><span class="special">::</span><span class="identifier">context</span> <span class="identifier">app_context</span><span class="special">;</span>
+
+   <a class="co" name="boost_application.tutorial.server_application.c0" href="tutorial.html#boost_application.tutorial.server_application.c1"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a><span class="identifier">application</span><span class="special">::</span><span class="identifier">auto_handler</span><span class="special">&lt;</span><span class="identifier">myapp</span><span class="special">&gt;</span> <span class="identifier">app</span><span class="special">(</span><span class="identifier">app_context</span><span class="special">);</span>
+
+   <a class="co" name="boost_application.tutorial.server_application.c2" href="tutorial.html#boost_application.tutorial.server_application.c3"><img src="../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a><span class="keyword">return</span> <span class="identifier">application</span><span class="special">::</span><span class="identifier">launch</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">server</span><span class="special">&gt;(</span><span class="identifier">app</span><span class="special">,</span> <span class="identifier">app_context</span><span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<div class="calloutlist"><table border="0" summary="Callout list">
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.tutorial.server_application.c1"></a><a href="#boost_application.tutorial.server_application.c0"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            Tie stop to termination_handler using default behaviour
+          </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.tutorial.server_application.c3"></a><a href="#boost_application.tutorial.server_application.c2"><img src="../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            Note that now we are using 'application::server' as template param
+          </p></td>
+</tr>
+</table></div>
+<p>
+        Now if you compile on <a href="http://en.wikipedia.org/wiki/Windows_service" target="_top">Windows</a>,
+        a Service will be created, and on Unix Variants a background process/<a href="http://en.wikipedia.org/wiki/Daemon_(computing)" target="_top">Daemon</a> will
+        be created.
+      </p>
+<div class="important"><table border="0" summary="Important">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="../../../../../doc/src/images/important.png"></td>
+<th align="left">Important</th>
+</tr>
+<tr><td align="left" valign="top">
+<p>
+          In oder to use a Windows service, you have to install it. Installation
+          makes the SCM aware of the service and cause the SCM to add it to the list
+          of services that appears in Services Console of Control Painel.
+        </p>
+<p>
+          Refer to setup example on 'example/setup' folder to know how to build a
+          setup for Windows Service.
+        </p>
+<p>
+          After instalation you can see your service on SCM.
+        </p>
+<p>
+          <span class="inlinemediaobject"><img src="../scm.gif" alt="scm"></span>
+        </p>
+<p>
+          On POSIX system you need only execute your application.
+        </p>
+<p>
+          <span class="inlinemediaobject"><img src="../terminal.gif" alt="terminal"></span>
+        </p>
+</td></tr>
+</table></div>
+<h5>
+<a name="boost_application.tutorial.server_application.h1"></a>
+        <span class="phrase"><a name="boost_application.tutorial.server_application.optional_handlers__windows__"></a></span><a class="link" href="tutorial.html#boost_application.tutorial.server_application.optional_handlers__windows__">Optional
+        Handlers (Windows) </a>
+      </h5>
+<p>
+        Now that you know the basis, we will do a simplest server and add some new
+        handles to it.
+      </p>
+<p>
+        Let's start doing a simple server with simple log to file funcionality (If
+        you desire you can change this code to use Boost.Log).
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">class</span> <span class="identifier">myapp</span>
+<span class="special">{</span>
+<span class="keyword">public</span><span class="special">:</span>
+
+   <span class="identifier">myapp</span><span class="special">(</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">context</span><span class="special">&amp;</span> <span class="identifier">context</span><span class="special">)</span>
+      <span class="special">:</span> <span class="identifier">context_</span><span class="special">(</span><span class="identifier">context</span><span class="special">)</span>
+   <span class="special">{</span>
+   <span class="special">}</span>
+
+   <span class="keyword">int</span> <span class="keyword">operator</span><span class="special">()()</span>
+   <span class="special">{</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">logfile</span>
+         <span class="special">=</span> <span class="identifier">context_</span><span class="special">.</span><span class="identifier">find</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">path</span><span class="special">&gt;()-&gt;</span><span class="identifier">executable_path</span><span class="special">().</span><span class="identifier">string</span><span class="special">()</span> <span class="special">+</span> <span class="string">"/log.txt"</span><span class="special">;</span>
+
+      <span class="identifier">my_log_file_</span><span class="special">.</span><span class="identifier">open</span><span class="special">(</span><span class="identifier">logfile</span><span class="special">.</span><span class="identifier">c_str</span><span class="special">());</span>
+      <span class="identifier">my_log_file_</span> <span class="special">&lt;&lt;</span> <span class="string">"Start Log..."</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+
+      <a class="co" name="boost_application.tutorial.server_application.c4" href="tutorial.html#boost_application.tutorial.server_application.c5"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a><span class="identifier">context_</span><span class="special">.</span><span class="identifier">find</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">wait_for_termination_request</span><span class="special">&gt;()-&gt;</span><span class="identifier">wait</span><span class="special">();</span>
+
+      <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
+   <span class="special">}</span>
+
+   <a class="co" name="boost_application.tutorial.server_application.c6" href="tutorial.html#boost_application.tutorial.server_application.c7"><img src="../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a><span class="keyword">bool</span> <span class="identifier">stop</span><span class="special">()</span>
+   <span class="special">{</span>
+      <span class="identifier">my_log_file_</span> <span class="special">&lt;&lt;</span> <span class="string">"Stoping my application..."</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+      <span class="identifier">my_log_file_</span><span class="special">.</span><span class="identifier">close</span><span class="special">();</span>
+
+      <a class="co" name="boost_application.tutorial.server_application.c8" href="tutorial.html#boost_application.tutorial.server_application.c9"><img src="../../../../../doc/src/images/callouts/3.png" alt="3" border="0"></a><span class="keyword">return</span> <span class="keyword">true</span><span class="special">;</span>
+   <span class="special">}</span>
+
+   <a class="co" name="boost_application.tutorial.server_application.c10" href="tutorial.html#boost_application.tutorial.server_application.c11"><img src="../../../../../doc/src/images/callouts/4.png" alt="4" border="0"></a><span class="keyword">bool</span> <span class="identifier">pause</span><span class="special">()</span>
+   <span class="special">{</span>
+      <span class="identifier">my_log_file_</span> <span class="special">&lt;&lt;</span> <span class="string">"Pause my application..."</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+
+      <a class="co" name="boost_application.tutorial.server_application.c12" href="tutorial.html#boost_application.tutorial.server_application.c13"><img src="../../../../../doc/src/images/callouts/5.png" alt="5" border="0"></a><span class="keyword">return</span> <span class="keyword">true</span><span class="special">;</span>
+   <span class="special">}</span>
+
+   <a class="co" name="boost_application.tutorial.server_application.c14" href="tutorial.html#boost_application.tutorial.server_application.c15"><img src="../../../../../doc/src/images/callouts/6.png" alt="6" border="0"></a><span class="keyword">bool</span> <span class="identifier">resume</span><span class="special">()</span>
+   <span class="special">{</span>
+      <span class="identifier">my_log_file_</span> <span class="special">&lt;&lt;</span> <span class="string">"Resume my application..."</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+
+      <a class="co" name="boost_application.tutorial.server_application.c16" href="tutorial.html#boost_application.tutorial.server_application.c17"><img src="../../../../../doc/src/images/callouts/7.png" alt="7" border="0"></a><span class="keyword">return</span> <span class="keyword">true</span><span class="special">;</span>
+   <span class="special">}</span>
+
+<span class="keyword">private</span><span class="special">:</span>
+   <span class="identifier">application</span><span class="special">::</span><span class="identifier">context</span><span class="special">&amp;</span> <span class="identifier">context_</span><span class="special">;</span>
+
+   <a class="co" name="boost_application.tutorial.server_application.c18" href="tutorial.html#boost_application.tutorial.server_application.c19"><img src="../../../../../doc/src/images/callouts/8.png" alt="8" border="0"></a><span class="identifier">std</span><span class="special">::</span><span class="identifier">ofstream</span> <span class="identifier">my_log_file_</span><span class="special">;</span>
+
+<span class="special">};</span>
+</pre>
+<p>
+      </p>
+<div class="calloutlist"><table border="0" summary="Callout list">
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.tutorial.server_application.c5"></a><a href="#boost_application.tutorial.server_application.c4"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            Here we use wait_for_termination_request instead application loop
+          </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.tutorial.server_application.c7"></a><a href="#boost_application.tutorial.server_application.c6"><img src="../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            The 'stop' handler, available on windows and posix
+          </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.tutorial.server_application.c9"></a><a href="#boost_application.tutorial.server_application.c8"><img src="../../../../../doc/src/images/callouts/3.png" alt="3" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            Return true to resume, false to tell to application mode engine to ignore
+            the event
+          </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.tutorial.server_application.c11"></a><a href="#boost_application.tutorial.server_application.c10"><img src="../../../../../doc/src/images/callouts/4.png" alt="4" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            The 'pause' handler, available on windows only, ignored on posix
+          </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.tutorial.server_application.c13"></a><a href="#boost_application.tutorial.server_application.c12"><img src="../../../../../doc/src/images/callouts/5.png" alt="5" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            Return true to resume, false to tell to application mode engine to ignore
+            the event
+          </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.tutorial.server_application.c15"></a><a href="#boost_application.tutorial.server_application.c14"><img src="../../../../../doc/src/images/callouts/6.png" alt="6" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            The 'resume' handler, available on windows only, ignored on posix
+          </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.tutorial.server_application.c17"></a><a href="#boost_application.tutorial.server_application.c16"><img src="../../../../../doc/src/images/callouts/7.png" alt="7" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            Return true to resume, false to tell to application mode engine to ignore
+            the event
+          </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.tutorial.server_application.c19"></a><a href="#boost_application.tutorial.server_application.c18"><img src="../../../../../doc/src/images/callouts/8.png" alt="8" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            Our simple log
+          </p></td>
+</tr>
+</table></div>
+<p>
+        And in cpp file:
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">argc</span><span class="special">,</span> <span class="keyword">char</span> <span class="special">*</span><span class="identifier">argv</span><span class="special">[])</span>
+<span class="special">{</span>
+   <a class="co" name="boost_application.tutorial.server_application.c20" href="tutorial.html#boost_application.tutorial.server_application.c21"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a><span class="identifier">application</span><span class="special">::</span><span class="identifier">context</span> <span class="identifier">app_context</span><span class="special">;</span>
+
+   <a class="co" name="boost_application.tutorial.server_application.c22" href="tutorial.html#boost_application.tutorial.server_application.c23"><img src="../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a><span class="identifier">application</span><span class="special">::</span><span class="identifier">auto_handler</span><span class="special">&lt;</span><span class="identifier">myapp</span><span class="special">&gt;</span> <span class="identifier">app</span><span class="special">(</span><span class="identifier">app_context</span><span class="special">);</span>
+
+   <a class="co" name="boost_application.tutorial.server_application.c24" href="tutorial.html#boost_application.tutorial.server_application.c25"><img src="../../../../../doc/src/images/callouts/3.png" alt="3" border="0"></a><span class="identifier">app_context</span><span class="special">.</span><span class="identifier">insert</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">path</span><span class="special">&gt;(</span>
+      <span class="identifier">boost</span><span class="special">::</span><span class="identifier">make_shared</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">path_default_behaviour</span><span class="special">&gt;(</span><span class="identifier">argc</span><span class="special">,</span> <span class="identifier">argv</span><span class="special">));</span>
+
+   <a class="co" name="boost_application.tutorial.server_application.c26" href="tutorial.html#boost_application.tutorial.server_application.c27"><img src="../../../../../doc/src/images/callouts/4.png" alt="4" border="0"></a><span class="identifier">app_context</span><span class="special">.</span><span class="identifier">insert</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">args</span><span class="special">&gt;(</span>
+      <span class="identifier">boost</span><span class="special">::</span><span class="identifier">make_shared</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">args</span><span class="special">&gt;(</span><span class="identifier">argc</span><span class="special">,</span> <span class="identifier">argv</span><span class="special">));</span>
+
+   <a class="co" name="boost_application.tutorial.server_application.c28" href="tutorial.html#boost_application.tutorial.server_application.c29"><img src="../../../../../doc/src/images/callouts/5.png" alt="5" border="0"></a><span class="keyword">return</span> <span class="identifier">application</span><span class="special">::</span><span class="identifier">launch</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">server</span><span class="special">&gt;(</span><span class="identifier">app</span><span class="special">,</span> <span class="identifier">app_context</span><span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<div class="calloutlist"><table border="0" summary="Callout list">
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.tutorial.server_application.c21"></a><a href="#boost_application.tutorial.server_application.c20"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            Application Context
+          </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.tutorial.server_application.c23"></a><a href="#boost_application.tutorial.server_application.c22"><img src="../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            Tie stop, pause, resume handlers using default behaviour
+          </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.tutorial.server_application.c25"></a><a href="#boost_application.tutorial.server_application.c24"><img src="../../../../../doc/src/images/callouts/3.png" alt="3" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            Path manipulation aspect, to be used to get executable module path to
+            use in log
+          </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.tutorial.server_application.c27"></a><a href="#boost_application.tutorial.server_application.c26"><img src="../../../../../doc/src/images/callouts/4.png" alt="4" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            Arg manipulation aspect
+          </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.tutorial.server_application.c29"></a><a href="#boost_application.tutorial.server_application.c28"><img src="../../../../../doc/src/images/callouts/5.png" alt="5" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            Note that now we are using 'application::server' as template param
+          </p></td>
+</tr>
+</table></div>
+<p>
+        Now, after start your service you will see "pause" on SCM.
+      </p>
+<p>
+        <span class="inlinemediaobject"><img src="../scm_pause.gif" alt="scm_pause"></span>
+      </p>
+<p>
+        Then if you start your application and pause and then resume, in log you
+        will have some thing like this:
+      </p>
+<pre class="programlisting">Start Log...
+work_thread (1s)
+work_thread (2s)
+work_thread (3s)
+Pause my application...
+work_thread paused...(4s)
+work_thread paused...(5s)
+work_thread paused...(6s)
+work_thread paused...(7s)
+work_thread paused...(8s)
+work_thread paused...(9s)
+work_thread paused...(10s)
+Resume my application...
+work_thread (11s)
+work_thread (12s)
+work_thread (13s)
+Stoping my application...
+</pre>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../doc/src/images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+          By default, the log (log.txt) file is located in the same directory as
+          the application binary.
+        </p></td></tr>
+</table></div>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../doc/src/images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+          On POSIX system you will see only 'Start Log... Stoping my application...'
+        </p></td></tr>
+</table></div>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../doc/src/images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top">
+<p>
+          Windows Service
+        </p>
+<p>
+          If you do not add '<span class="bold"><strong>stop handler</strong></span>' to your
+          class, you will block the autonomy of the User to stop the service, see:
+        </p>
+<p>
+          <span class="inlinemediaobject"><img src="../scm_stop.gif" alt="scm_stop"></span>
+        </p>
+</td></tr>
+</table></div>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2014 Dokfile Software Ltd.<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="handling_errors.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="customization.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

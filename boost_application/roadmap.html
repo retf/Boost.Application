@@ -1,0 +1,386 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Application Roadmap</title>
+<link rel="stylesheet" href="../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Boost.Application">
+<link rel="up" href="../index.html" title="Chapter&#160;1.&#160;Boost.Application">
+<link rel="prev" href="suported_application_types.html" title="Suported Application Types">
+<link rel="next" href="context.html" title="Application Context">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
+<td align="center"><a href="../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../libs/libraries.htm">Libraries</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
+<td align="center"><a href="../../../../../more/index.htm">More</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="suported_application_types.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="context.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="boost_application.roadmap"></a><a class="link" href="roadmap.html" title="Application Roadmap">Application Roadmap</a>
+</h2></div></div></div>
+<p>
+      Building an application with Boost.Application is a simple process, the basic
+      roadmap steps are:
+    </p>
+<div class="table">
+<a name="boost_application.roadmap.rs"></a><p class="title"><b>Table&#160;1.1.&#160;Roadmap Steps</b></p>
+<div class="table-contents"><table class="table" summary="Roadmap Steps">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>
+              <p>
+                Step
+              </p>
+            </th>
+<th>
+              <p>
+                Optionally?
+              </p>
+            </th>
+<th>
+              <p>
+                Description
+              </p>
+            </th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+              <p>
+                A
+              </p>
+            </td>
+<td>
+              <p>
+                NO
+              </p>
+            </td>
+<td>
+              <p>
+                Define a 'functor' class for your application with an application
+                operator
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                B
+              </p>
+            </td>
+<td>
+              <p>
+                NO
+              </p>
+            </td>
+<td>
+              <p>
+                Create a 'context' for application. An context can be a global_context
+                (singleton) or local context
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                C
+              </p>
+            </td>
+<td>
+              <p>
+                YES
+              </p>
+            </td>
+<td>
+              <p>
+                Add desired 'aspects' to application context
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                D
+              </p>
+            </td>
+<td>
+              <p>
+                YES
+              </p>
+            </td>
+<td>
+              <p>
+                Define a 'callback' for 'handler aspects' type. e.g.: stop, pause,
+                resume
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                E
+              </p>
+            </td>
+<td>
+              <p>
+                YES
+              </p>
+            </td>
+<td>
+              <p>
+                Define new 'apects', and add it to application context
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                F
+              </p>
+            </td>
+<td>
+              <p>
+                YES
+              </p>
+            </td>
+<td>
+              <p>
+                Customize some ready to use 'apects'
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                G
+              </p>
+            </td>
+<td>
+              <p>
+                YES
+              </p>
+            </td>
+<td>
+              <p>
+                Customize 'SIGNALS' of application
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                H
+              </p>
+            </td>
+<td>
+              <p>
+                NO
+              </p>
+            </td>
+<td>
+              <p>
+                Launch an application using some ready to use mode. ('common' or
+                'server' application)
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                I
+              </p>
+            </td>
+<td>
+              <p>
+                YES
+              </p>
+            </td>
+<td>
+              <p>
+                In case of 'Windows Service' (Server mode on Windows), use example
+                code to setup service
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                J
+              </p>
+            </td>
+<td>
+              <p>
+                YES
+              </p>
+            </td>
+<td>
+              <p>
+                Use 'aspects' available in the context (that user add on step 'C'
+                or 'E')
+              </p>
+            </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<br class="table-break"><p>
+      A basic sample of server application can be:
+    </p>
+<p>
+</p>
+<pre class="programlisting"><a class="co" name="boost_application.roadmap.c0" href="roadmap.html#boost_application.roadmap.c1"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a><span class="keyword">class</span> <span class="identifier">myapp</span> <span class="comment">// [[a]]</span>
+<span class="special">{</span>
+<span class="keyword">public</span><span class="special">:</span>
+
+   <a class="co" name="boost_application.roadmap.c2" href="roadmap.html#boost_application.roadmap.c3"><img src="../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a><span class="identifier">myapp</span><span class="special">(</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">context</span><span class="special">&amp;</span> <span class="identifier">context</span><span class="special">)</span>
+      <span class="special">:</span> <span class="identifier">context_</span><span class="special">(</span><span class="identifier">context</span><span class="special">)</span>
+   <span class="special">{</span>
+   <span class="special">}</span>
+
+   <a class="co" name="boost_application.roadmap.c4" href="roadmap.html#boost_application.roadmap.c5"><img src="../../../../../doc/src/images/callouts/3.png" alt="3" border="0"></a><span class="keyword">int</span> <span class="keyword">operator</span><span class="special">()()</span> <span class="comment">// [[a]]</span>
+   <span class="special">{</span>
+      <span class="comment">// Do some thing</span>
+
+      <span class="comment">// [[k]]</span>
+      <span class="identifier">context_</span><span class="special">.</span><span class="identifier">find</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">wait_for_termination_request</span><span class="special">&gt;()-&gt;</span><span class="identifier">wait</span><span class="special">();</span>
+
+      <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
+   <span class="special">}</span>
+
+   <span class="comment">// [[d]]</span>
+   <a class="co" name="boost_application.roadmap.c6" href="roadmap.html#boost_application.roadmap.c7"><img src="../../../../../doc/src/images/callouts/4.png" alt="4" border="0"></a><span class="keyword">bool</span> <span class="identifier">stop</span><span class="special">()</span>
+   <span class="special">{</span>
+      <span class="comment">// Do some thing</span>
+      <span class="keyword">return</span> <span class="keyword">true</span><span class="special">;</span> <span class="comment">// return true to stop, false to ignore</span>
+   <span class="special">}</span>
+
+<span class="keyword">private</span><span class="special">:</span>
+
+   <a class="co" name="boost_application.roadmap.c8" href="roadmap.html#boost_application.roadmap.c9"><img src="../../../../../doc/src/images/callouts/5.png" alt="5" border="0"></a><span class="identifier">application</span><span class="special">::</span><span class="identifier">context</span><span class="special">&amp;</span> <span class="identifier">context_</span><span class="special">;</span>
+<span class="special">};</span>
+
+<span class="keyword">int</span> <span class="identifier">main</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">argc</span><span class="special">,</span> <span class="keyword">char</span> <span class="special">*</span><span class="identifier">argv</span><span class="special">[])</span>
+<span class="special">{</span>
+
+   <a class="co" name="boost_application.roadmap.c10" href="roadmap.html#boost_application.roadmap.c11"><img src="../../../../../doc/src/images/callouts/6.png" alt="6" border="0"></a><span class="identifier">application</span><span class="special">::</span><span class="identifier">context</span> <span class="identifier">app_context</span><span class="special">;</span> <span class="comment">// [[b]]</span>
+
+   <a class="co" name="boost_application.roadmap.c12" href="roadmap.html#boost_application.roadmap.c13"><img src="../../../../../doc/src/images/callouts/7.png" alt="7" border="0"></a><span class="identifier">application</span><span class="special">::</span><span class="identifier">auto_handler</span><span class="special">&lt;</span><span class="identifier">myapp</span><span class="special">&gt;</span> <span class="identifier">app</span><span class="special">(</span><span class="identifier">app_context</span><span class="special">);</span> <span class="comment">// [[a]]</span>
+
+   <span class="comment">// my server aspects</span>
+
+   <span class="comment">// [[c]]</span>
+   <a class="co" name="boost_application.roadmap.c14" href="roadmap.html#boost_application.roadmap.c15"><img src="../../../../../doc/src/images/callouts/8.png" alt="8" border="0"></a><span class="identifier">app_context</span><span class="special">.</span><span class="identifier">insert</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">path</span><span class="special">&gt;(</span>
+      <span class="identifier">boost</span><span class="special">::</span><span class="identifier">make_shared</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">path_default_behaviour</span><span class="special">&gt;(</span><span class="identifier">argc</span><span class="special">,</span> <span class="identifier">argv</span><span class="special">));</span>
+
+   <span class="comment">// [[c]]</span>
+   <a class="co" name="boost_application.roadmap.c16" href="roadmap.html#boost_application.roadmap.c17"><img src="../../../../../doc/src/images/callouts/9.png" alt="9" border="0"></a><span class="identifier">app_context</span><span class="special">.</span><span class="identifier">insert</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">args</span><span class="special">&gt;(</span>
+      <span class="identifier">boost</span><span class="special">::</span><span class="identifier">make_shared</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">args</span><span class="special">&gt;(</span><span class="identifier">argc</span><span class="special">,</span> <span class="identifier">argv</span><span class="special">));</span>
+
+   <span class="comment">// [[h]]</span>
+   <a class="co" name="boost_application.roadmap.c18" href="roadmap.html#boost_application.roadmap.c19"><img src="../../../../../doc/src/images/callouts/10.png" alt="10" border="0"></a><span class="keyword">return</span> <span class="identifier">application</span><span class="special">::</span><span class="identifier">launch</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">server</span><span class="special">&gt;(</span><span class="identifier">app</span><span class="special">,</span> <span class="identifier">app_context</span><span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+    </p>
+<div class="calloutlist"><table border="0" summary="Callout list">
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.roadmap.c1"></a><a href="#boost_application.roadmap.c0"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          Define a 'functor' myapp class for our application
+        </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.roadmap.c3"></a><a href="#boost_application.roadmap.c2"><img src="../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          Define the constructor that will receive a application context
+        </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.roadmap.c5"></a><a href="#boost_application.roadmap.c4"><img src="../../../../../doc/src/images/callouts/3.png" alt="3" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          Define a application operator using 'param' signature
+        </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.roadmap.c7"></a><a href="#boost_application.roadmap.c6"><img src="../../../../../doc/src/images/callouts/4.png" alt="4" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          Optionally, define a 'stop callback' handler, using 'param' signature
+        </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.roadmap.c9"></a><a href="#boost_application.roadmap.c8"><img src="../../../../../doc/src/images/callouts/5.png" alt="5" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          Application context to hold aspects
+        </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.roadmap.c11"></a><a href="#boost_application.roadmap.c10"><img src="../../../../../doc/src/images/callouts/6.png" alt="6" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          Create a local 'context' for application that will hold our aspects
+        </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.roadmap.c13"></a><a href="#boost_application.roadmap.c12"><img src="../../../../../doc/src/images/callouts/7.png" alt="7" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          Instatntiate our application using auto_handler, the 'stop' method will
+          be automatically handled
+        </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.roadmap.c15"></a><a href="#boost_application.roadmap.c14"><img src="../../../../../doc/src/images/callouts/8.png" alt="8" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          Add 'path aspect' to application context
+        </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.roadmap.c17"></a><a href="#boost_application.roadmap.c16"><img src="../../../../../doc/src/images/callouts/9.png" alt="9" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          Add 'args aspect' to application context
+        </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.roadmap.c19"></a><a href="#boost_application.roadmap.c18"><img src="../../../../../doc/src/images/callouts/10.png" alt="10" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          Launch an application using server application mode
+        </p></td>
+</tr>
+</table></div>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../doc/src/images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+        The 'application context' can be defined in 2 ways. <br> <br> 1. 'global_context'
+        based version (that don't receive a 'context' as parameter on constructor).
+        <br> 2. 'local' based version (that receive a 'context' of application
+        as parameter on constructor, our case here.).
+      </p></td></tr>
+</table></div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2014 Dokfile Software Ltd.<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="suported_application_types.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="context.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

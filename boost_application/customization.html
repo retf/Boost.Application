@@ -1,0 +1,360 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Customization</title>
+<link rel="stylesheet" href="../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Boost.Application">
+<link rel="up" href="../index.html" title="Chapter&#160;1.&#160;Boost.Application">
+<link rel="prev" href="tutorial.html" title="Tutorial">
+<link rel="next" href="other_features.html" title="Other Features">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
+<td align="center"><a href="../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../libs/libraries.htm">Libraries</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
+<td align="center"><a href="../../../../../more/index.htm">More</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="tutorial.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="other_features.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="boost_application.customization"></a><a class="link" href="customization.html" title="Customization">Customization</a>
+</h2></div></div></div>
+<div class="toc"><dl class="toc">
+<dt><span class="section"><a href="customization.html#boost_application.customization.customize_handlers">Customize
+      Aspects</a></span></dt>
+<dt><span class="section"><a href="customization.html#boost_application.customization.customize_signal">Customize
+      Signals/Handlers</a></span></dt>
+</dl></div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="boost_application.customization.customize_handlers"></a><a class="link" href="customization.html#boost_application.customization.customize_handlers" title="Customize Aspects">Customize
+      Aspects</a>
+</h3></div></div></div>
+<p>
+        The '<span class="bold"><strong>aspects</strong></span>' concept allow user to customize,
+        and extend library functionality in easy way. The diagram below shows the
+        way to extend or create new aspect.
+      </p>
+<p>
+        <span class="inlinemediaobject"><img src="../aspect.gif" alt="aspect"></span>
+      </p>
+<p>
+        The '<span class="bold"><strong>A</strong></span>' shows the more complex aspects,
+        that needs to meet a well defined interface, which is used internally by
+        the application mode.
+      </p>
+<p>
+        On '<span class="bold"><strong>B</strong></span>' we have simplest aspect that can
+        be any C++ class.
+      </p>
+<p>
+        Thus, the user can customize the default behavior of any handler. To do this,
+        the user needs inheriting of contract handler class (abstract) that he wants
+        to modify the behavior.
+      </p>
+<p>
+        For sample: The default behavior of wait_for_termination_request is unblock
+        and exit of application. To change this behavior user can do as follows:
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">class</span> <span class="identifier">myapp</span>
+<span class="special">{</span>
+<span class="keyword">public</span><span class="special">:</span>
+
+   <span class="identifier">myapp</span><span class="special">(</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">context</span><span class="special">&amp;</span> <span class="identifier">context</span><span class="special">)</span>
+      <span class="special">:</span> <span class="identifier">context_</span><span class="special">(</span><span class="identifier">context</span><span class="special">)</span>
+   <span class="special">{</span>
+   <span class="special">}</span>
+
+   <span class="comment">// param</span>
+   <span class="keyword">int</span> <span class="keyword">operator</span><span class="special">()()</span>
+   <span class="special">{</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Test"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+	
+	  <a class="co" name="boost_application.customization.customize_handlers.c0" href="customization.html#boost_application.customization.customize_handlers.c1"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a><span class="identifier">context_</span><span class="special">.</span><span class="identifier">find</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">wait_for_termination_request</span><span class="special">&gt;()-&gt;</span><span class="identifier">wait</span><span class="special">();</span>
+
+      <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
+   <span class="special">}</span>
+
+<span class="keyword">private</span><span class="special">:</span>
+
+   <span class="identifier">application</span><span class="special">::</span><span class="identifier">context</span><span class="special">&amp;</span> <span class="identifier">context_</span><span class="special">;</span>
+<span class="special">};</span>
+
+<span class="comment">// my made by hand behaviour</span>
+<span class="keyword">class</span> <span class="identifier">wait_for_termination_request_my_behaviour</span>
+   <a class="co" name="boost_application.customization.customize_handlers.c2" href="customization.html#boost_application.customization.customize_handlers.c3"><img src="../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a><span class="special">:</span> <span class="keyword">public</span> <span class="identifier">application</span><span class="special">::</span><span class="identifier">wait_for_termination_request</span>
+<span class="special">{</span>
+<span class="keyword">public</span><span class="special">:</span>
+
+   <a class="co" name="boost_application.customization.customize_handlers.c4" href="customization.html#boost_application.customization.customize_handlers.c5"><img src="../../../../../doc/src/images/callouts/3.png" alt="3" border="0"></a><span class="keyword">void</span> <span class="identifier">wait</span><span class="special">(){</span>
+      <span class="keyword">char</span> <span class="identifier">type</span><span class="special">;</span>
+      <span class="keyword">do</span>
+      <span class="special">{</span>
+         <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Exit? [y/n]"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+         <span class="identifier">std</span><span class="special">::</span><span class="identifier">cin</span> <span class="special">&gt;&gt;</span> <span class="identifier">type</span><span class="special">;</span>
+      <span class="special">}</span>
+      <span class="keyword">while</span><span class="special">(</span> <span class="special">!</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">cin</span><span class="special">.</span><span class="identifier">fail</span><span class="special">()</span> <span class="special">&amp;&amp;</span> <span class="identifier">type</span><span class="special">!=</span><span class="char">'y'</span> <span class="special">);</span>
+   <span class="special">}</span>
+
+   <span class="keyword">void</span> <span class="identifier">proceed</span><span class="special">(){</span>
+      <span class="comment">// do nothing</span>
+   <span class="special">}</span>
+<span class="special">};</span>
+
+<span class="comment">// main</span>
+
+<span class="keyword">int</span> <span class="identifier">main</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">argc</span><span class="special">,</span> <span class="keyword">char</span> <span class="special">*</span><span class="identifier">argv</span><span class="special">[])</span>
+<span class="special">{</span>
+   <span class="identifier">application</span><span class="special">::</span><span class="identifier">context</span> <span class="identifier">app_context</span><span class="special">;</span>
+   <span class="identifier">myapp</span> <span class="identifier">app</span><span class="special">(</span><span class="identifier">app_context</span><span class="special">);</span>
+
+   <span class="identifier">app_context</span><span class="special">.</span><span class="identifier">insert</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">args</span><span class="special">&gt;(</span>
+      <span class="identifier">boost</span><span class="special">::</span><span class="identifier">make_shared</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">args</span><span class="special">&gt;(</span><span class="identifier">argc</span><span class="special">,</span> <span class="identifier">argv</span><span class="special">));</span>
+
+   <span class="comment">// if user do this, the default behavoiur will be ignored, </span>
+   <span class="comment">// and the user behaviour will be executed by application::server</span>
+   <a class="co" name="boost_application.customization.customize_handlers.c6" href="customization.html#boost_application.customization.customize_handlers.c7"><img src="../../../../../doc/src/images/callouts/4.png" alt="4" border="0"></a><span class="identifier">app_context</span><span class="special">.</span><span class="identifier">insert</span><span class="special">&lt;</span> <span class="identifier">application</span><span class="special">::</span><span class="identifier">wait_for_termination_request</span><span class="special">&gt;(</span>
+      <span class="identifier">shared_ptr</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">wait_for_termination_request</span><span class="special">&gt;(</span>
+         <span class="keyword">new</span> <span class="identifier">wait_for_termination_request_my_behaviour</span><span class="special">));</span>
+
+   <span class="keyword">return</span> <span class="identifier">application</span><span class="special">::</span><span class="identifier">launch</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">common</span><span class="special">&gt;(</span><span class="identifier">app</span><span class="special">,</span> <span class="identifier">app_context</span><span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<div class="calloutlist"><table border="0" summary="Callout list">
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.customization.customize_handlers.c1"></a><a href="#boost_application.customization.customize_handlers.c0"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            Use your custon handler
+          </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.customization.customize_handlers.c3"></a><a href="#boost_application.customization.customize_handlers.c2"><img src="../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            Inheriting of 'wait_for_termination_request' handler contract abstract
+            class
+          </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.customization.customize_handlers.c5"></a><a href="#boost_application.customization.customize_handlers.c4"><img src="../../../../../doc/src/images/callouts/3.png" alt="3" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            Define your desired operation for 'wait' method
+          </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.customization.customize_handlers.c7"></a><a href="#boost_application.customization.customize_handlers.c6"><img src="../../../../../doc/src/images/callouts/4.png" alt="4" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            Add your custon handler to context aspect pool of application
+          </p></td>
+</tr>
+</table></div>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="boost_application.customization.customize_signal"></a><a class="link" href="customization.html#boost_application.customization.customize_signal" title="Customize Signals/Handlers">Customize
+      Signals/Handlers</a>
+</h3></div></div></div>
+<p>
+        Like a handler, the user is free to customize the SIGNALS of application.
+      </p>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../doc/src/images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top">
+<p>
+          The SIGNALS can not be customized when Windows Service (server application
+          mode on windows) is used.
+        </p>
+<p>
+          Windows Service uses a completely different set of signals called 'events',
+          so in this case you should customize 'pause', 'resume' and 'stop' handlers
+        </p>
+</td></tr>
+</table></div>
+<p>
+        This feature allows user configure/add handlers for others SIGNALS.
+      </p>
+<p>
+        In this sample we will create a handler to SIGUSR2 POSIX signal. Note that
+        this signal is not available on Windows.
+      </p>
+<p>
+        To do this user need inheriting of signal_manager class and add new signal
+        bind, like:
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">class</span> <span class="identifier">myapp</span>
+<span class="special">{</span>
+<span class="keyword">public</span><span class="special">:</span>
+
+   <span class="identifier">myapp</span><span class="special">(</span><span class="identifier">context</span><span class="special">&amp;</span> <span class="identifier">context</span><span class="special">)</span>
+      <span class="special">:</span> <span class="identifier">context_</span><span class="special">(</span><span class="identifier">context</span><span class="special">)</span>
+   <span class="special">{</span>
+   <span class="special">}</span>
+
+   <span class="special">~</span><span class="identifier">myapp</span><span class="special">()</span>
+   <span class="special">{</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"~myapp()"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+   <span class="special">}</span>
+
+   <span class="keyword">void</span> <span class="identifier">work_thread</span><span class="special">()</span>
+   <span class="special">{</span>
+      <span class="keyword">while</span><span class="special">(</span><span class="number">1</span><span class="special">)</span>
+      <span class="special">{</span>
+         <span class="identifier">boost</span><span class="special">::</span><span class="identifier">this_thread</span><span class="special">::</span><span class="identifier">sleep</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">posix_time</span><span class="special">::</span><span class="identifier">seconds</span><span class="special">(</span><span class="number">2</span><span class="special">));</span>
+         <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"running"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+      <span class="special">}</span>
+   <span class="special">}</span>
+
+   <span class="comment">// param</span>
+   <span class="keyword">int</span> <span class="keyword">operator</span><span class="special">()()</span>
+   <span class="special">{</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"operator()"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+	
+      <span class="comment">// launch a work thread</span>
+      <span class="identifier">boost</span><span class="special">::</span><span class="identifier">thread</span> <span class="identifier">thread</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">bind</span><span class="special">(&amp;</span><span class="identifier">myapp</span><span class="special">::</span><span class="identifier">work_thread</span><span class="special">,</span> <span class="keyword">this</span><span class="special">));</span>
+	
+      <span class="identifier">context_</span><span class="special">.</span><span class="identifier">find</span><span class="special">&lt;</span><span class="identifier">wait_for_termination_request</span><span class="special">&gt;()-&gt;</span><span class="identifier">wait</span><span class="special">();</span>
+
+      <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
+   <span class="special">}</span>
+
+<span class="keyword">private</span><span class="special">:</span>
+
+   <span class="identifier">context</span><span class="special">&amp;</span> <span class="identifier">context_</span><span class="special">;</span>
+
+<span class="special">};</span>
+
+<a class="co" name="boost_application.customization.customize_signal.c0" href="customization.html#boost_application.customization.customize_signal.c1"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a><span class="keyword">class</span> <span class="identifier">my_signal_manager</span> <span class="special">:</span> <span class="keyword">public</span> <span class="identifier">signal_manager</span>
+<span class="special">{</span>
+<span class="keyword">public</span><span class="special">:</span>
+
+   <a class="co" name="boost_application.customization.customize_signal.c2" href="customization.html#boost_application.customization.customize_signal.c3"><img src="../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a><span class="identifier">my_signal_manager</span><span class="special">(</span><span class="identifier">context</span> <span class="special">&amp;</span><span class="identifier">context</span><span class="special">)</span>
+      <span class="special">:</span> <span class="identifier">signal_manager</span><span class="special">(</span><span class="identifier">context</span><span class="special">)</span>
+   <span class="special">{</span>
+      <span class="identifier">handler</span><span class="special">&lt;&gt;::</span><span class="identifier">callback</span> <span class="identifier">cb</span>
+         <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">bind</span><span class="special">&lt;</span><span class="keyword">bool</span><span class="special">&gt;(&amp;</span><span class="identifier">my_signal_manager</span><span class="special">::</span><span class="identifier">stop</span><span class="special">,</span> <span class="keyword">this</span><span class="special">);</span>
+
+      <span class="comment">// define my own signal / handler</span>
+<span class="preprocessor">#if</span> <span class="identifier">defined</span><span class="special">(</span> <span class="identifier">BOOST_WINDOWS_API</span> <span class="special">)</span>
+      <span class="identifier">bind</span><span class="special">(</span><span class="identifier">SIGINT</span><span class="special">,</span>  <span class="identifier">cb</span><span class="special">);</span> <span class="comment">// CTRL-C (2)</span>
+<span class="preprocessor">#elif</span> <span class="identifier">defined</span><span class="special">(</span> <span class="identifier">BOOST_POSIX_API</span> <span class="special">)</span>
+      <a class="co" name="boost_application.customization.customize_signal.c4" href="customization.html#boost_application.customization.customize_signal.c5"><img src="../../../../../doc/src/images/callouts/3.png" alt="3" border="0"></a><span class="identifier">bind</span><span class="special">(</span><span class="identifier">SIGUSR2</span><span class="special">,</span> <span class="identifier">cb</span><span class="special">);</span>
+<span class="preprocessor">#endif</span>
+
+   <span class="special">}</span>
+
+   <a class="co" name="boost_application.customization.customize_signal.c6" href="customization.html#boost_application.customization.customize_signal.c7"><img src="../../../../../doc/src/images/callouts/4.png" alt="4" border="0"></a><span class="keyword">bool</span> <span class="identifier">stop</span><span class="special">()</span>
+   <span class="special">{</span>
+      <span class="identifier">BOOST_APPLICATION_FEATURE_SELECT</span>
+
+<span class="preprocessor">#if</span> <span class="identifier">defined</span><span class="special">(</span> <span class="identifier">BOOST_WINDOWS_API</span> <span class="special">)</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"exiting..."</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="preprocessor">#elif</span> <span class="identifier">defined</span><span class="special">(</span> <span class="identifier">BOOST_POSIX_API</span> <span class="special">)</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">ofstream</span> <span class="identifier">my_log_file</span><span class="special">;</span>
+      <span class="identifier">my_log_file</span><span class="special">.</span><span class="identifier">open</span><span class="special">((</span><span class="identifier">context_</span><span class="special">.</span><span class="identifier">find</span><span class="special">&lt;</span>
+         <span class="identifier">path</span><span class="special">&gt;()-&gt;</span><span class="identifier">executable_path</span><span class="special">().</span><span class="identifier">string</span><span class="special">()</span> <span class="special">+</span> <span class="string">"/log_stop.txt"</span><span class="special">).</span><span class="identifier">c_str</span><span class="special">());</span>
+      <span class="identifier">my_log_file</span> <span class="special">&lt;&lt;</span> <span class="string">":0)-"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+      <span class="identifier">my_log_file</span><span class="special">.</span><span class="identifier">close</span><span class="special">();</span>
+<span class="preprocessor">#endif</span>
+
+      <span class="identifier">shared_ptr</span><span class="special">&lt;</span><span class="identifier">wait_for_termination_request</span><span class="special">&gt;</span> <span class="identifier">th</span>
+         <span class="special">=</span> <span class="identifier">context_</span><span class="special">.</span><span class="identifier">find</span><span class="special">&lt;</span><span class="identifier">wait_for_termination_request</span><span class="special">&gt;();</span>
+
+      <span class="identifier">th</span><span class="special">-&gt;</span><span class="identifier">proceed</span><span class="special">();</span>
+
+      <span class="keyword">return</span> <span class="keyword">false</span><span class="special">;</span>
+   <span class="special">}</span>
+
+<span class="special">};</span>
+
+<span class="comment">// main</span>
+
+<span class="keyword">int</span> <span class="identifier">main</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">argc</span><span class="special">,</span> <span class="keyword">char</span> <span class="special">*</span><span class="identifier">argv</span><span class="special">[])</span>
+<span class="special">{</span>
+   <span class="identifier">context</span> <span class="identifier">app_context</span><span class="special">;</span>
+   <span class="identifier">myapp</span> <span class="identifier">app</span><span class="special">(</span><span class="identifier">app_context</span><span class="special">);</span>
+
+   <span class="identifier">app_context</span><span class="special">.</span><span class="identifier">insert</span><span class="special">&lt;</span><span class="identifier">path</span><span class="special">&gt;(</span>
+      <span class="identifier">boost</span><span class="special">::</span><span class="identifier">make_shared</span><span class="special">&lt;</span><span class="identifier">path_default_behaviour</span><span class="special">&gt;(</span><span class="identifier">argc</span><span class="special">,</span> <span class="identifier">argv</span><span class="special">));</span>
+
+   <span class="comment">// we will customize our signals behaviour</span>
+   <a class="co" name="boost_application.customization.customize_signal.c8" href="customization.html#boost_application.customization.customize_signal.c9"><img src="../../../../../doc/src/images/callouts/5.png" alt="5" border="0"></a><span class="identifier">my_signal_manager</span> <span class="identifier">sm</span><span class="special">(</span><span class="identifier">app_context</span><span class="special">);</span>
+
+<span class="preprocessor">#if</span> <span class="identifier">defined</span><span class="special">(</span> <span class="identifier">BOOST_WINDOWS_API</span> <span class="special">)</span>
+   <a class="co" name="boost_application.customization.customize_signal.c10" href="customization.html#boost_application.customization.customize_signal.c11"><img src="../../../../../doc/src/images/callouts/6.png" alt="6" border="0"></a><span class="keyword">return</span> <span class="identifier">launch</span><span class="special">&lt;</span><span class="identifier">common</span><span class="special">&gt;(</span><span class="identifier">app</span><span class="special">,</span> <span class="identifier">sm</span><span class="special">,</span> <span class="identifier">app_context</span><span class="special">);</span>
+<span class="preprocessor">#elif</span> <span class="identifier">defined</span><span class="special">(</span> <span class="identifier">BOOST_POSIX_API</span> <span class="special">)</span>
+   <span class="keyword">return</span> <span class="identifier">launch</span><span class="special">&lt;</span><span class="identifier">server</span><span class="special">&gt;(</span><span class="identifier">app</span><span class="special">,</span> <span class="identifier">sm</span><span class="special">,</span> <span class="identifier">app_context</span><span class="special">);</span>
+<span class="preprocessor">#endif</span>
+
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<div class="calloutlist"><table border="0" summary="Callout list">
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.customization.customize_signal.c1"></a><a href="#boost_application.customization.customize_signal.c0"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            Inheriting of signal_manager
+          </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.customization.customize_signal.c3"></a><a href="#boost_application.customization.customize_signal.c2"><img src="../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            Customize SIGNALS bind
+          </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.customization.customize_signal.c5"></a><a href="#boost_application.customization.customize_signal.c4"><img src="../../../../../doc/src/images/callouts/3.png" alt="3" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            Define signal bind
+          </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.customization.customize_signal.c7"></a><a href="#boost_application.customization.customize_signal.c6"><img src="../../../../../doc/src/images/callouts/4.png" alt="4" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            Define signal callback
+          </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.customization.customize_signal.c9"></a><a href="#boost_application.customization.customize_signal.c8"><img src="../../../../../doc/src/images/callouts/5.png" alt="5" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            Instantiate your custon signal manager.
+          </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.customization.customize_signal.c11"></a><a href="#boost_application.customization.customize_signal.c10"><img src="../../../../../doc/src/images/callouts/6.png" alt="6" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+            Pass 'custon signal manager (sm)' to launch function.
+          </p></td>
+</tr>
+</table></div>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2014 Dokfile Software Ltd.<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="tutorial.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="other_features.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

@@ -1,0 +1,307 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Application Context</title>
+<link rel="stylesheet" href="../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Boost.Application">
+<link rel="up" href="../index.html" title="Chapter&#160;1.&#160;Boost.Application">
+<link rel="prev" href="roadmap.html" title="Application Roadmap">
+<link rel="next" href="aspects.html" title="Application Apects">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
+<td align="center"><a href="../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../libs/libraries.htm">Libraries</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
+<td align="center"><a href="../../../../../more/index.htm">More</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="roadmap.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="aspects.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="boost_application.context"></a><a class="link" href="context.html" title="Application Context">Application Context</a>
+</h2></div></div></div>
+<p>
+      A central concept on Boost.Application is the 'aspects' that can be added to
+      application context.
+    </p>
+<p>
+      User is free to add any aspect to Application Context, and many operations
+      are available (thread-safe) to manipulate the 'aspect pool' of application,
+      refer to <a href="../boost/application/entity/aspect_map.html" target="_top">'Application
+      Context (aspect_map class)'</a> reference to know more detail about provided
+      methods.
+    </p>
+<p>
+      The application context can be a global (singleton) or local, which passes
+      the 'context' as parameter to constructor of functor.
+    </p>
+<p>
+      The user is free to choose the best option to your application design.
+    </p>
+<p>
+      Here's a simple example of how to construct a application using global context:
+    </p>
+<p>
+</p>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">application</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+
+<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">;</span>
+
+<span class="comment">// singleton access</span>
+
+<a class="co" name="boost_application.context.c0" href="context.html#boost_application.context.c1"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a><span class="keyword">inline</span> <span class="identifier">application</span><span class="special">::</span><span class="identifier">global_context_ptr</span> <span class="identifier">this_application</span><span class="special">()</span> <span class="special">{</span>
+   <span class="keyword">return</span> <span class="identifier">application</span><span class="special">::</span><span class="identifier">global_context</span><span class="special">::</span><span class="identifier">get</span><span class="special">();</span>
+<span class="special">}</span>
+
+<span class="comment">// my functor application</span>
+
+<span class="keyword">class</span> <span class="identifier">myapp</span>
+<span class="special">{</span>
+<span class="keyword">public</span><span class="special">:</span>
+
+   <a class="co" name="boost_application.context.c2" href="context.html#boost_application.context.c3"><img src="../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a><span class="keyword">int</span> <span class="keyword">operator</span><span class="special">()()</span>
+   <span class="special">{</span>
+      <span class="identifier">BOOST_APPLICATION_FEATURE_SELECT</span>
+
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Test"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+      <span class="identifier">shared_ptr</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">args</span><span class="special">&gt;</span> <span class="identifier">myargs</span>
+         <span class="special">=</span> <span class="identifier">this_application</span><span class="special">()-&gt;</span><span class="identifier">find</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">args</span><span class="special">&gt;();</span>
+
+      <span class="keyword">if</span> <span class="special">(</span><span class="identifier">myargs</span><span class="special">)</span>
+      <span class="special">{</span>
+         <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&gt;</span> <span class="special">&amp;</span><span class="identifier">arg_vector</span> <span class="special">=</span> <span class="identifier">myargs</span><span class="special">-&gt;</span><span class="identifier">arg_vector</span><span class="special">();</span>
+
+         <span class="comment">// only print args on screen</span>
+         <span class="keyword">for</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&gt;::</span><span class="identifier">const_iterator</span> <span class="identifier">it</span> <span class="special">=</span> <span class="identifier">arg_vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">();</span>
+            <span class="identifier">it</span> <span class="special">!=</span> <span class="identifier">arg_vector</span><span class="special">.</span><span class="identifier">end</span><span class="special">();</span> <span class="special">++</span><span class="identifier">it</span><span class="special">)</span> <span class="special">{</span>
+            <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="special">*</span><span class="identifier">it</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+         <span class="special">}</span>
+      <span class="special">}</span>
+
+
+      <a class="co" name="boost_application.context.c4" href="context.html#boost_application.context.c5"><img src="../../../../../doc/src/images/callouts/3.png" alt="3" border="0"></a><span class="comment">// code your application</span>
+
+      <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
+   <span class="special">}</span>
+
+<span class="special">};</span>
+
+<span class="comment">// main</span>
+
+<span class="keyword">int</span> <span class="identifier">main</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">argc</span><span class="special">,</span> <span class="keyword">char</span> <span class="special">*</span><span class="identifier">argv</span><span class="special">[])</span>
+<span class="special">{</span>
+   <a class="co" name="boost_application.context.c6" href="context.html#boost_application.context.c7"><img src="../../../../../doc/src/images/callouts/4.png" alt="4" border="0"></a><span class="identifier">application</span><span class="special">::</span><span class="identifier">global_context_ptr</span> <span class="identifier">ctx</span> <span class="special">=</span> <span class="identifier">application</span><span class="special">::</span><span class="identifier">global_context</span><span class="special">::</span><span class="identifier">create</span><span class="special">();</span>
+
+   <a class="co" name="boost_application.context.c8" href="context.html#boost_application.context.c9"><img src="../../../../../doc/src/images/callouts/5.png" alt="5" border="0"></a><span class="identifier">myapp</span> <span class="identifier">app</span><span class="special">;</span>
+
+   <a class="co" name="boost_application.context.c10" href="context.html#boost_application.context.c11"><img src="../../../../../doc/src/images/callouts/6.png" alt="6" border="0"></a><span class="identifier">this_application</span><span class="special">()-&gt;</span><span class="identifier">insert</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">args</span><span class="special">&gt;(</span>
+      <span class="identifier">boost</span><span class="special">::</span><span class="identifier">make_shared</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">args</span><span class="special">&gt;(</span><span class="identifier">argc</span><span class="special">,</span> <span class="identifier">argv</span><span class="special">));</span>
+
+   <a class="co" name="boost_application.context.c12" href="context.html#boost_application.context.c13"><img src="../../../../../doc/src/images/callouts/7.png" alt="7" border="0"></a><span class="keyword">int</span> <span class="identifier">ret</span> <span class="special">=</span> <span class="identifier">application</span><span class="special">::</span><span class="identifier">launch</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">common</span><span class="special">&gt;(</span><span class="identifier">app</span><span class="special">,</span> <span class="identifier">this_application</span><span class="special">());</span>
+
+   <a class="co" name="boost_application.context.c14" href="context.html#boost_application.context.c15"><img src="../../../../../doc/src/images/callouts/8.png" alt="8" border="0"></a><span class="identifier">application</span><span class="special">::</span><span class="identifier">global_context</span><span class="special">::</span><span class="identifier">destroy</span><span class="special">();</span>
+
+   <span class="keyword">return</span> <span class="identifier">ret</span><span class="special">;</span>
+<span class="special">}</span>
+</pre>
+<p>
+    </p>
+<div class="calloutlist"><table border="0" summary="Callout list">
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.context.c1"></a><a href="#boost_application.context.c0"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          Optionally, create a function to give us easy access to global context
+        </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.context.c3"></a><a href="#boost_application.context.c2"><img src="../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          Define the application operator (singleton, no param)
+        </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.context.c5"></a><a href="#boost_application.context.c4"><img src="../../../../../doc/src/images/callouts/3.png" alt="3" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          Add other application logic
+        </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.context.c7"></a><a href="#boost_application.context.c6"><img src="../../../../../doc/src/images/callouts/4.png" alt="4" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          Create a global context application aspect pool
+        </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.context.c9"></a><a href="#boost_application.context.c8"><img src="../../../../../doc/src/images/callouts/5.png" alt="5" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          Instantiate your application
+        </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.context.c11"></a><a href="#boost_application.context.c10"><img src="../../../../../doc/src/images/callouts/6.png" alt="6" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          Add an aspect for future use. An 'aspect' can be customized, or new aspects
+          can be created
+        </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.context.c13"></a><a href="#boost_application.context.c12"><img src="../../../../../doc/src/images/callouts/7.png" alt="7" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          Start the application on the desired mode (common, server)
+        </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.context.c15"></a><a href="#boost_application.context.c14"><img src="../../../../../doc/src/images/callouts/8.png" alt="8" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          Destroy the application global context
+        </p></td>
+</tr>
+</table></div>
+<p>
+      Here's a simple example of how to construct a application using local context:
+    </p>
+<p>
+</p>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">application</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+
+<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">;</span>
+
+<a class="co" name="boost_application.context.c16" href="context.html#boost_application.context.c17"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a><span class="keyword">class</span> <span class="identifier">myapp</span>
+<span class="special">{</span>
+<span class="keyword">public</span><span class="special">:</span>
+
+   <a class="co" name="boost_application.context.c18" href="context.html#boost_application.context.c19"><img src="../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a><span class="identifier">myapp</span><span class="special">(</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">context</span><span class="special">&amp;</span> <span class="identifier">context</span><span class="special">)</span>
+      <span class="special">:</span> <span class="identifier">context_</span><span class="special">(</span><span class="identifier">context</span><span class="special">)</span>
+   <span class="special">{</span>
+   <span class="special">}</span>
+
+   <a class="co" name="boost_application.context.c20" href="context.html#boost_application.context.c21"><img src="../../../../../doc/src/images/callouts/3.png" alt="3" border="0"></a><span class="keyword">int</span> <span class="keyword">operator</span><span class="special">()()</span>
+   <span class="special">{</span>
+
+      <a class="co" name="boost_application.context.c22" href="context.html#boost_application.context.c23"><img src="../../../../../doc/src/images/callouts/4.png" alt="4" border="0"></a><span class="identifier">application</span><span class="special">::</span><span class="identifier">csbl</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">args</span><span class="special">&gt;</span> <span class="identifier">myargs</span>
+         <span class="special">=</span> <span class="identifier">context_</span><span class="special">.</span><span class="identifier">find</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">args</span><span class="special">&gt;();</span>
+
+      <span class="keyword">if</span> <span class="special">(</span><span class="identifier">myargs</span><span class="special">)</span>
+      <span class="special">{</span>
+         <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&gt;</span> <span class="special">&amp;</span><span class="identifier">arg_vector</span> <span class="special">=</span> <span class="identifier">myargs</span><span class="special">-&gt;</span><span class="identifier">arg_vector</span><span class="special">();</span>
+
+         <span class="comment">// only print args on screen</span>
+         <span class="keyword">for</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&gt;::</span><span class="identifier">const_iterator</span> <span class="identifier">it</span> <span class="special">=</span> <span class="identifier">arg_vector</span><span class="special">.</span><span class="identifier">begin</span><span class="special">();</span>
+            <span class="identifier">it</span> <span class="special">!=</span> <span class="identifier">arg_vector</span><span class="special">.</span><span class="identifier">end</span><span class="special">();</span> <span class="special">++</span><span class="identifier">it</span><span class="special">)</span> <span class="special">{</span>
+            <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="special">*</span><span class="identifier">it</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+         <span class="special">}</span>
+      <span class="special">}</span>
+
+      <a class="co" name="boost_application.context.c24" href="context.html#boost_application.context.c25"><img src="../../../../../doc/src/images/callouts/5.png" alt="5" border="0"></a><span class="comment">// code your application</span>
+
+      <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
+   <span class="special">}</span>
+
+<span class="keyword">private</span><span class="special">:</span>
+
+   <a class="co" name="boost_application.context.c26" href="context.html#boost_application.context.c27"><img src="../../../../../doc/src/images/callouts/6.png" alt="6" border="0"></a><span class="identifier">application</span><span class="special">::</span><span class="identifier">context</span><span class="special">&amp;</span> <span class="identifier">context_</span><span class="special">;</span>
+
+<span class="special">};</span>
+
+<span class="comment">// main</span>
+
+<span class="keyword">int</span> <span class="identifier">main</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">argc</span><span class="special">,</span> <span class="keyword">char</span> <span class="special">*</span><span class="identifier">argv</span><span class="special">[])</span>
+<span class="special">{</span>
+   <a class="co" name="boost_application.context.c28" href="context.html#boost_application.context.c29"><img src="../../../../../doc/src/images/callouts/7.png" alt="7" border="0"></a><span class="identifier">application</span><span class="special">::</span><span class="identifier">context</span> <span class="identifier">app_context</span><span class="special">;</span>
+
+   <a class="co" name="boost_application.context.c30" href="context.html#boost_application.context.c31"><img src="../../../../../doc/src/images/callouts/8.png" alt="8" border="0"></a><span class="identifier">myapp</span> <span class="identifier">app</span><span class="special">(</span><span class="identifier">app_context</span><span class="special">);</span>
+
+   <a class="co" name="boost_application.context.c32" href="context.html#boost_application.context.c33"><img src="../../../../../doc/src/images/callouts/9.png" alt="9" border="0"></a><span class="identifier">app_context</span><span class="special">.</span><span class="identifier">insert</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">args</span><span class="special">&gt;(</span>
+      <span class="identifier">application</span><span class="special">::</span><span class="identifier">csbl</span><span class="special">::</span><span class="identifier">make_shared</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">args</span><span class="special">&gt;(</span><span class="identifier">argc</span><span class="special">,</span> <span class="identifier">argv</span><span class="special">));</span>
+
+   <a class="co" name="boost_application.context.c34" href="context.html#boost_application.context.c35"><img src="../../../../../doc/src/images/callouts/10.png" alt="10" border="0"></a><span class="keyword">return</span> <span class="identifier">application</span><span class="special">::</span><span class="identifier">launch</span><span class="special">&lt;</span><span class="identifier">application</span><span class="special">::</span><span class="identifier">common</span><span class="special">&gt;(</span><span class="identifier">app</span><span class="special">,</span> <span class="identifier">app_context</span><span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+    </p>
+<div class="calloutlist"><table border="0" summary="Callout list">
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.context.c17"></a><a href="#boost_application.context.c16"><img src="../../../../../doc/src/images/callouts/1.png" alt="1" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          Define application functor class
+        </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.context.c19"></a><a href="#boost_application.context.c18"><img src="../../../../../doc/src/images/callouts/2.png" alt="2" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          Define the constructor that will receive a application context
+        </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.context.c21"></a><a href="#boost_application.context.c20"><img src="../../../../../doc/src/images/callouts/3.png" alt="3" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          Define the application operator
+        </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.context.c23"></a><a href="#boost_application.context.c22"><img src="../../../../../doc/src/images/callouts/4.png" alt="4" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          Make use of an'aspect'
+        </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.context.c25"></a><a href="#boost_application.context.c24"><img src="../../../../../doc/src/images/callouts/5.png" alt="5" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          Add other application logic
+        </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.context.c27"></a><a href="#boost_application.context.c26"><img src="../../../../../doc/src/images/callouts/6.png" alt="6" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          Application context to hold aspects
+        </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.context.c29"></a><a href="#boost_application.context.c28"><img src="../../../../../doc/src/images/callouts/7.png" alt="7" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          Create a context application aspect pool
+        </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.context.c31"></a><a href="#boost_application.context.c30"><img src="../../../../../doc/src/images/callouts/8.png" alt="8" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          Instantiate your application
+        </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.context.c33"></a><a href="#boost_application.context.c32"><img src="../../../../../doc/src/images/callouts/9.png" alt="9" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          Add an aspect for future use. An 'aspect' can be customized, or new aspects
+          can be created
+        </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left"><p><a name="boost_application.context.c35"></a><a href="#boost_application.context.c34"><img src="../../../../../doc/src/images/callouts/10.png" alt="10" border="0"></a> </p></td>
+<td valign="top" align="left"><p>
+          Start the application on the desired mode (common, server)
+        </p></td>
+</tr>
+</table></div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2014 Dokfile Software Ltd.<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="roadmap.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="aspects.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>
