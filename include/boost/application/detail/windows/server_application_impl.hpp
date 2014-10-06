@@ -59,7 +59,7 @@ namespace boost { namespace application {
       typedef CharType char_type;
       typedef std::basic_string<char_type> string_type;
 
-      server_application_impl_(const mainop &main, signal_binder &sb, 
+      server_application_impl_(const mainop &main, signal_binder &sb,
          application::context &context, boost::system::error_code& ec)
          : application_impl(context)
          , main_(main)
@@ -120,7 +120,7 @@ namespace boost { namespace application {
       //
 
       bool stop(void)
-      {  
+      {
          csbl::shared_ptr<termination_handler> th =
                context_.find<termination_handler>();
 
@@ -142,7 +142,7 @@ namespace boost { namespace application {
       }
 
       bool pause(void)
-      {    
+      {
          csbl::shared_ptr<pause_handler> ph =
             context_.find<pause_handler>();
 
@@ -164,7 +164,7 @@ namespace boost { namespace application {
       }
 
       bool resume(void)
-      {      
+      {
         csbl::shared_ptr<resume_handler> rh =
            context_.find<resume_handler>();
 
@@ -192,7 +192,7 @@ namespace boost { namespace application {
       // Handle SCM signals
       void service_handler(DWORD dwOpcode)
       {
-         csbl::shared_ptr<status> st = 
+         csbl::shared_ptr<status> st =
             context_.find<status>();
 
          switch (dwOpcode)
@@ -203,7 +203,7 @@ namespace boost { namespace application {
                   // don't accept, returns the service
                   // could not accept control messages
                   return;
-                  
+
                request_terminate(0);
             }
             break;
@@ -211,7 +211,7 @@ namespace boost { namespace application {
             {
                stop();
                request_terminate(0);
-            }            
+            }
             case SERVICE_CONTROL_PAUSE:
             {
                if(!pause())
@@ -354,15 +354,15 @@ namespace boost { namespace application {
          {
          	 error = terminate_code_;
          }
-         
+
       	 stop();
-         
-         csbl::shared_ptr<status> st = 
-            context_.find<status>();       	 
+
+         csbl::shared_ptr<status> st =
+            context_.find<status>();
          csbl::shared_ptr<wait_for_termination_request> tr =
             context_.find<wait_for_termination_request>();
-       	 
-         if(st) st->state(status::stoped);
+
+         if(st) st->state(status::stopped);
          if(tr) tr->proceed();
 
          launch_thread_->join();
@@ -418,15 +418,15 @@ namespace boost { namespace application {
          launch_thread_ = new boost::thread(
             boost::bind(&server_application_impl_::work_thread, this, dw_argc, lpsz_argv));
 
-         HANDLE hevent[2];		 
+         HANDLE hevent[2];
 
          hevent[0] = launch_thread_->native_handle();
          if(hevent[0] == NULL)
          {
             send_status_to_scm(SERVICE_STOPPED, 0, 0, -1);
-            return;		 
+            return;
          }
-		 
+
          // The service is now running.
          // Notify SCM of progress
          if (!send_status_to_scm(SERVICE_RUNNING, 0, 0))
@@ -434,12 +434,12 @@ namespace boost { namespace application {
             terminate(GetLastError());
             return;
          }
-		 
+
          hevent[1] = terminate_event_;
 
          // Wait for stop signal, and then terminate
          WaitForMultipleObjects(2,hevent,FALSE,INFINITE);
-         
+
          if (!send_status_to_scm(SERVICE_STOP_PENDING, 1, 5000))
          {
             terminate(GetLastError());
@@ -453,7 +453,7 @@ namespace boost { namespace application {
       {
          context_.exchange<application::args>(
             csbl::make_shared<application::args>(argc, argv));
-         
+
          result_code_ = main_();
       }
 
@@ -476,7 +476,7 @@ namespace boost { namespace application {
       // Event used to hold ServiceMain from completing
       HANDLE terminate_event_;
       DWORD terminate_code_;
-	  
+
       // Status of service
       SERVICE_STATUS service_status_;
 

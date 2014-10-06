@@ -45,7 +45,7 @@ bool stop()
    {
       // return true to tell to the 'application mode engine' to stop application.
       // This implies:
-      // 1. The 'application mode engine' will set the 'application 'status' aspect to status::stoped;
+      // 1. The 'application mode engine' will set the 'application 'status' aspect to status::stopped;
       // 2. The 'application mode engine' will signalize the 'application 'wait_for_termination_request' aspect to release.
       return true;
    }

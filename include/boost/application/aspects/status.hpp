@@ -27,7 +27,7 @@ namespace boost { namespace application {
     * Indicates the current state of application,
     * 3 ways are possible:
     *
-    * - application_stoped
+    * - application_stopped
     * - application_running
     * - application_paused (used only on server appliation on windows side)
     *
@@ -40,7 +40,7 @@ namespace boost { namespace application {
    public:
       // application current state
       enum application_state {
-         stoped = 0,
+         stopped = 0,
          running,
          paused // Windows Service
       };

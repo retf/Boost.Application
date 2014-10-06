@@ -46,13 +46,13 @@ namespace boost { namespace application {
     * template param on launch free function.
     *
     */
-   class server 
+   class server
    {
    public:
 
       /*!
-       * Retrieves a id that identify application run mode. 
-       *  
+       * Retrieves a id that identify application run mode.
+       *
        */
       static int mode()
       {
@@ -114,7 +114,7 @@ namespace boost { namespace application {
        */
       virtual ~server()
       {
-         impl_->get_context().find<status>()->state(status::stoped);
+         impl_->get_context().find<status>()->state(status::stopped);
       }
 
    private:

@@ -1,14 +1,14 @@
 // -----------------------------------------------------------------------------
-// limit_single_instance_callback.cpp : examples that show how use 
-// Boost.Application to make a simplest interactive (terminal) application 
+// limit_single_instance_callback.cpp : examples that show how use
+// Boost.Application to make a simplest interactive (terminal) application
 //
-// Note 1: The Boost.Application (Aspects v4) and this sample are in 
+// Note 1: The Boost.Application (Aspects v4) and this sample are in
 //         development process.
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2013 Renato Tegon Forti
 //
-// Distributed under the Boost Software License, Version 1.0. (See accompanying 
+// Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
@@ -54,14 +54,14 @@ public:
    int operator()()
    {
       std::cout << "operator()" << std::endl;
-	  
+
 	  // using [state]
 
       /*
-      std::shared_ptr<status> state = 
+      std::shared_ptr<status> state =
          context.get_aspect<status>();
 
-      while(state->state() != status::stoped)
+      while(state->state() != status::stopped)
       {
          boost::this_thread::sleep(boost::posix_time::seconds(2));
          std::cout << "running" << std::endl;
@@ -72,7 +72,7 @@ public:
 
       // launch a work thread
       boost::thread thread(boost::bind(&myapp::work_thread, this));
-	  
+
       context_.find<wait_for_termination_request>()->wait();
 
       return 0;
@@ -105,11 +105,11 @@ private:
 // main
 
 int main(int argc, char *argv[])
-{      
+{
    context app_context;
    myapp app(app_context);
 
-   handler<>::callback stop 
+   handler<>::callback stop
       = boost::bind<bool>(&myapp::stop, &app);
 
    app_context.insert<termination_handler>(

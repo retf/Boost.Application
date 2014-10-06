@@ -26,9 +26,9 @@
 
 // Apache APR
 #include <apr_dbd.h>
-#include <mod_dbd.h> 
+#include <mod_dbd.h>
 #include <apr_strings.h>
-#include <apr_hash.h>  
+#include <apr_hash.h>
 
 using namespace boost::application;
 
@@ -110,9 +110,9 @@ public:
    }
 
    template <typename Application, typename RequestRec>
-   apache2_httpd_mod(Application& myapp, RequestRec &rr, 
+   apache2_httpd_mod(Application& myapp, RequestRec &rr,
       context& cxt, boost::system::error_code& ec)
-      : error_(OK) 
+      : error_(OK)
    {
       handle_request(myapp, rr, cxt);
    }
@@ -145,32 +145,32 @@ protected:
          error_ = DECLINED; return;
       }
 
-      if (strcmp(rr.handler, appname->web_app_name_.c_str())) 
+      if (strcmp(rr.handler, appname->web_app_name_.c_str()))
       {
          error_ = DECLINED; return;
       }
 
       // we allow only GET
-      
-      // Add other http verbs 
+
+      // Add other http verbs
       // ...
 
       if(rr.method_number != M_GET)
       {
          error_ = HTTP_METHOD_NOT_ALLOWED; return;
       }
-         
+
       // GET
 
       csbl::shared_ptr<http_get_verb_handler> http_get_verb =
          cxt.find<http_get_verb_handler>();
-      
+
       if(http_get_verb)
       {
-         // apache log 
+         // apache log
          cxt.insert<apache_log>(csbl::make_shared<apache_log>(&rr));
 
-         csbl::shared_ptr<content_type> contenttype = 
+         csbl::shared_ptr<content_type> contenttype =
             cxt.find<content_type>();
 
          if(contenttype)
@@ -189,7 +189,7 @@ protected:
       }
 
       // we need set application_state to stop
-      cxt.find<status>()->state(status::stoped);
+      cxt.find<status>()->state(status::stopped);
 
       // we cant find any handler, generate apache error
       error_ = HTTP_INTERNAL_SERVER_ERROR;

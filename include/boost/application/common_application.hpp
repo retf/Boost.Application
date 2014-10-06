@@ -56,8 +56,8 @@ namespace boost { namespace application {
    public:
 
       /*!
-       * Retrieves a id that identify application run mode. 
-       *  
+       * Retrieves a id that identify application run mode.
+       *
        */
       static int mode()
       {
@@ -101,7 +101,7 @@ namespace boost { namespace application {
 
          if(!impl_->get_context().find<status>())
              impl_->get_context().insert<status>(
-               csbl::make_shared<status>(status::running)); 
+               csbl::make_shared<status>(status::running));
       }
 
       /*!
@@ -119,7 +119,7 @@ namespace boost { namespace application {
        */
       virtual ~common()
       {
-         impl_->get_context().find<status>()->state(status::stoped);
+         impl_->get_context().find<status>()->state(status::stopped);
       }
 
    private:
