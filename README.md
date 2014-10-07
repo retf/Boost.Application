@@ -1,4 +1,4 @@
-#Boost.Application (0.4.10) ![Build Status](https://travis-ci.org/retf/Boost.Application.svg?branch=master)
+#Boost.Application (0.4.10) [![Build Status](https://travis-ci.org/retf/Boost.Application.svg?branch=master)](https://travis-ci.org/retf/Boost.Application) 
 
 ### Caution
 
