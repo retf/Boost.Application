@@ -1,0 +1,187 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Class template handler</title>
+<link rel="stylesheet" href="../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Boost.Application">
+<link rel="up" href="../../boost_application/reference.html#header.boost.application.handler_hpp" title="Header &lt;boost/application/handler.hpp&gt;">
+<link rel="prev" href="global_context.html" title="Class global_context">
+<link rel="next" href="launch_id299142.html" title="Function template launch">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
+<td align="center"><a href="../../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../../libs/libraries.htm">Libraries</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
+<td align="center"><a href="../../../../../../more/index.htm">More</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="global_context.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../../boost_application/reference.html#header.boost.application.handler_hpp"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="launch_id299142.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+<div class="refentry">
+<a name="boost.application.handler"></a><div class="titlepage"></div>
+<div class="refnamediv">
+<h2><span class="refentrytitle">Class template handler</span></h2>
+<p>boost::application::handler &#8212; A class to be used by the classes that need execulte callback. </p>
+</div>
+<h2 xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv-title">Synopsis</h2>
+<div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis"><span class="comment">// In header: &lt;<a class="link" href="../../boost_application/reference.html#header.boost.application.handler_hpp" title="Header &lt;boost/application/handler.hpp&gt;">boost/application/handler.hpp</a>&gt;
+
+</span><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> HandlerReturnType <span class="special">=</span> <span class="keyword">bool</span><span class="special">&gt;</span> 
+<span class="keyword">class</span> <a class="link" href="handler.html" title="Class template handler">handler</a> <span class="special">{</span>
+<span class="keyword">public</span><span class="special">:</span>
+  <span class="comment">// types</span>
+  <span class="keyword">typedef</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">function</span><span class="special">&lt;</span> <span class="identifier">HandlerReturnType</span><span class="special">(</span><span class="keyword">void</span><span class="special">)</span> <span class="special">&gt;</span> <a name="boost.application.handler.callback"></a><span class="identifier">callback</span><span class="special">;</span>
+
+  <span class="comment">// <a class="link" href="handler.html#boost.application.handlerconstruct-copy-destruct">construct/copy/destruct</a></span>
+  <a class="link" href="handler.html#id301282-bb"><span class="identifier">handler</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="handler.html#id301261-bb"><span class="identifier">handler</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">callback</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="handler.html#id301291-bb"><span class="special">~</span><span class="identifier">handler</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+
+  <span class="comment">// <a class="link" href="handler.html#id301188-bb">public member functions</a></span>
+  <span class="keyword">void</span> <a class="link" href="handler.html#id301216-bb"><span class="identifier">set</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">callback</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">bool</span> <a class="link" href="handler.html#id301210-bb"><span class="identifier">get</span></a><span class="special">(</span><span class="identifier">callback</span> <span class="special">*</span><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">bool</span> <a class="link" href="handler.html#id301224-bb"><span class="identifier">is_valid</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <a class="link" href="handler.html" title="Class template handler">handler</a> <span class="special">&amp;</span> <a class="link" href="handler.html#id301251-bb"><span class="identifier">get_handler</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+
+  <span class="comment">// <a class="link" href="handler.html#id301265-bb">public static functions</a></span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> App<span class="special">,</span> <span class="keyword">typename</span> Handler<span class="special">&gt;</span> 
+    <span class="keyword">static</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">function</span><span class="special">&lt;</span> <span class="identifier">HandlerReturnType</span><span class="special">(</span><span class="keyword">void</span><span class="special">)</span> <span class="special">&gt;</span> 
+    <a class="link" href="handler.html#id301297-bb"><span class="identifier">make_callback</span></a><span class="special">(</span><span class="identifier">App</span> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">Handler</span><span class="special">)</span><span class="special">;</span>
+<span class="special">}</span><span class="special">;</span></pre></div>
+<div class="refsect1">
+<a name="id917502"></a><h2>Description</h2>
+<p>This callback is used on all handlers that application can define.</p>
+<p>E.g.:</p>
+<p>bool instace_aready_running();</p>
+<p>All callbacks are executed by user selected "application mode" the return is a template that can be defined be the user.</p>
+<p>In case of our sample, if your return true from instace_aready_running the application mechanism will continue, if your return false the application mechanism will exit. </p>
+<div class="refsect2">
+<a name="id917528"></a><h3>
+<a name="boost.application.handlerconstruct-copy-destruct"></a><code class="computeroutput">handler</code> 
+        public
+       construct/copy/destruct</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem">
+<pre class="literallayout"><a name="id301282-bb"></a><span class="identifier">handler</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<p>Constructs an void handler. </p>
+</li>
+<li class="listitem">
+<pre class="literallayout"><a name="id301261-bb"></a><span class="identifier">handler</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">callback</span> <span class="special">&amp;</span> cb<span class="special">)</span><span class="special">;</span></pre>
+<p>Constructs an handler.</p>
+<p>
+</p>
+</li>
+<li class="listitem">
+<pre class="literallayout"><a name="id301291-bb"></a><span class="special">~</span><span class="identifier">handler</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<p>Destruct an handler. </p>
+</li>
+</ol></div>
+</div>
+<div class="refsect2">
+<a name="id917662"></a><h3>
+<a name="id301188-bb"></a><code class="computeroutput">handler</code> public member functions</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">void</span> <a name="id301216-bb"></a><span class="identifier">set</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">callback</span> <span class="special">&amp;</span> cb<span class="special">)</span><span class="special">;</span></pre>
+<p>Set a callback to handler.</p>
+<p>
+</p>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">bool</span> <a name="id301210-bb"></a><span class="identifier">get</span><span class="special">(</span><span class="identifier">callback</span> <span class="special">*</span><span class="special">&amp;</span> cb<span class="special">)</span><span class="special">;</span></pre>
+<p>Get a callback pointer to futher execution. This method is used internaly by launch/application mode.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term">Returns:</span></p></td>
+<td><p>true if callback pointer is valid. </p></td>
+</tr></tbody>
+</table></div>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">bool</span> <a name="id301224-bb"></a><span class="identifier">is_valid</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<p>Check if a callback pointer to futher execution is valid.</p>
+<p>
+</p>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term">Returns:</span></p></td>
+<td><p>true if callback pointer is valid. </p></td>
+</tr></tbody>
+</table></div>
+</li>
+<li class="listitem">
+<pre class="literallayout"><a class="link" href="handler.html" title="Class template handler">handler</a> <span class="special">&amp;</span> <a name="id301251-bb"></a><span class="identifier">get_handler</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<p>Retrieves handler.</p>
+<p>
+</p>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term">Returns:</span></p></td>
+<td><p>the handler instance. </p></td>
+</tr></tbody>
+</table></div>
+</li>
+</ol></div>
+</div>
+<div class="refsect2">
+<a name="id917830"></a><h3>
+<a name="id301265-bb"></a><code class="computeroutput">handler</code> public static functions</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> App<span class="special">,</span> <span class="keyword">typename</span> Handler<span class="special">&gt;</span> 
+  <span class="keyword">static</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">function</span><span class="special">&lt;</span> <span class="identifier">HandlerReturnType</span><span class="special">(</span><span class="keyword">void</span><span class="special">)</span> <span class="special">&gt;</span> 
+  <a name="id301297-bb"></a><span class="identifier">make_callback</span><span class="special">(</span><span class="identifier">App</span> <span class="special">&amp;</span> app<span class="special">,</span> <span class="identifier">Handler</span> h<span class="special">)</span><span class="special">;</span></pre>
+<p>Convenient static method to create a callback to be used by handler.</p>
+<p>e.g. to make a callback of method like this:</p>
+<p>struct myapp { bool instace_aready_running(); };</p>
+<p>myapp app;</p>
+<p>handler&lt;bool&gt;::make_parameter_callback(app, &amp;myapp::instace_aready_running);</p>
+<p>
+</p>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term">Returns:</span></p></td>
+<td><p>a boost::function&lt;HandlerReturnType (context&amp;) &gt; callback to be used on handler class. </p></td>
+</tr></tbody>
+</table></div>
+</li></ol></div>
+</div>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2014 Dokfile Software Ltd.<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="global_context.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../../boost_application/reference.html#header.boost.application.handler_hpp"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="launch_id299142.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

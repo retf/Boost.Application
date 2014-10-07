@@ -1,0 +1,579 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Class aspect_map</title>
+<link rel="stylesheet" href="../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Boost.Application">
+<link rel="up" href="../../boost_application/reference.html#header.boost.application.aspect_map_hpp" title="Header &lt;boost/application/aspect_map.hpp&gt;">
+<link rel="prev" href="../../boost_application/reference.html" title="Reference">
+<link rel="next" href="basic_context.html" title="Class basic_context">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
+<td align="center"><a href="../../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../../libs/libraries.htm">Libraries</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
+<td align="center"><a href="../../../../../../more/index.htm">More</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="../../boost_application/reference.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../../boost_application/reference.html#header.boost.application.aspect_map_hpp"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="basic_context.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+<div class="refentry">
+<a name="boost.application.aspect_map"></a><div class="titlepage"></div>
+<div class="refnamediv">
+<h2><span class="refentrytitle">Class aspect_map</span></h2>
+<p>boost::application::aspect_map &#8212; The <a class="link" href="aspect_map.html" title="Class aspect_map">aspect_map</a> class implementation. </p>
+</div>
+<h2 xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv-title">Synopsis</h2>
+<div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis"><span class="comment">// In header: &lt;<a class="link" href="../../boost_application/reference.html#header.boost.application.aspect_map_hpp" title="Header &lt;boost/application/aspect_map.hpp&gt;">boost/application/aspect_map.hpp</a>&gt;
+
+</span>
+<span class="keyword">class</span> <a class="link" href="aspect_map.html" title="Class aspect_map">aspect_map</a> <span class="special">:</span> <span class="keyword">public</span> <span class="identifier">basic_lockable_adapter</span><span class="special">&lt;</span> <span class="identifier">recursive_mutex</span> <span class="special">&gt;</span> <span class="special">{</span>
+<span class="keyword">public</span><span class="special">:</span>
+
+  <span class="comment">// <a class="link" href="aspect_map.html#id300303-bb">private member functions</a></span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">key_type</span> <a class="link" href="aspect_map.html#id300298-bb"><span class="identifier">aspec_id</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">void</span> <a class="link" href="aspect_map.html#id300306-bb"><span class="identifier">ensure_correct_lock</span></a><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">strict_lock</span><span class="special">&lt;</span> <a class="link" href="aspect_map.html" title="Class aspect_map">aspect_map</a> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+
+  <span class="comment">// <a class="link" href="aspect_map.html#id300299-bb">public member functions</a></span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">csbl</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <a class="link" href="aspect_map.html#id300327-bb"><span class="identifier">find</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">csbl</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <a class="link" href="aspect_map.html#id300349-bb"><span class="identifier">find</span></a><span class="special">(</span><span class="identifier">strict_lock</span><span class="special">&lt;</span> <a class="link" href="aspect_map.html" title="Class aspect_map">aspect_map</a> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">size_type</span> <a class="link" href="aspect_map.html#id300385-bb"><span class="identifier">count</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">size_type</span> <a class="link" href="aspect_map.html#id300426-bb"><span class="identifier">count</span></a><span class="special">(</span><span class="identifier">strict_lock</span><span class="special">&lt;</span> <a class="link" href="aspect_map.html" title="Class aspect_map">aspect_map</a> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">csbl</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <a class="link" href="aspect_map.html#id300475-bb"><span class="identifier">insert</span></a><span class="special">(</span><span class="identifier">csbl</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> 
+    <span class="identifier">csbl</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> 
+    <a class="link" href="aspect_map.html#id300562-bb"><span class="identifier">insert</span></a><span class="special">(</span><span class="identifier">csbl</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span><span class="special">,</span> <span class="identifier">strict_lock</span><span class="special">&lt;</span> <a class="link" href="aspect_map.html" title="Class aspect_map">aspect_map</a> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">csbl</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <a class="link" href="aspect_map.html#id300612-bb"><span class="identifier">exchange</span></a><span class="special">(</span><span class="identifier">csbl</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> 
+    <span class="identifier">csbl</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> 
+    <a class="link" href="aspect_map.html#id300688-bb"><span class="identifier">exchange</span></a><span class="special">(</span><span class="identifier">csbl</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span><span class="special">,</span> <span class="identifier">strict_lock</span><span class="special">&lt;</span> <a class="link" href="aspect_map.html" title="Class aspect_map">aspect_map</a> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">csbl</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <a class="link" href="aspect_map.html#id300718-bb"><span class="identifier">erase</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> 
+    <span class="identifier">csbl</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <a class="link" href="aspect_map.html#id300813-bb"><span class="identifier">erase</span></a><span class="special">(</span><span class="identifier">strict_lock</span><span class="special">&lt;</span> <a class="link" href="aspect_map.html" title="Class aspect_map">aspect_map</a> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">,</span> <span class="keyword">typename</span> F<span class="special">&gt;</span> <span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <a class="link" href="aspect_map.html#id300869-bb"><span class="identifier">reduce</span></a><span class="special">(</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span><span class="special">,</span> <span class="identifier">F</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">,</span> <span class="keyword">typename</span> F<span class="special">&gt;</span> 
+    <span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <a class="link" href="aspect_map.html#id300940-bb"><span class="identifier">reduce</span></a><span class="special">(</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span><span class="special">,</span> <span class="identifier">F</span><span class="special">,</span> <span class="identifier">strict_lock</span><span class="special">&lt;</span> <a class="link" href="aspect_map.html" title="Class aspect_map">aspect_map</a> <span class="special">&gt;</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">size_type</span> <a class="link" href="aspect_map.html#id300963-bb"><span class="identifier">size</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">bool</span> <a class="link" href="aspect_map.html#id301006-bb"><span class="identifier">empty</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">void</span> <a class="link" href="aspect_map.html#id301050-bb"><span class="identifier">clear</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+<span class="special">}</span><span class="special">;</span></pre></div>
+<div class="refsect1">
+<a name="id912382"></a><h2>Description</h2>
+<p>This is a base class for application context. This class provides all methods to aspects manipulation available to user.</p>
+<p>This class used 'lock' object as 'permit' that gives you rights to manipulate aspects on it.</p>
+<p>Internal and External locking Version that can be used as part of an atomic transaction are available.</p>
+<p><span class="bold"><strong> Thread Safe: </strong></span> Yes <br>
+ <span class="bold"><strong> Exception Safe: </strong></span> Yes </p>
+<div class="refsect2">
+<a name="id912391"></a><h3>
+<a name="id300303-bb"></a><code class="computeroutput">aspect_map</code> private member functions</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem"><pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">key_type</span> <a name="id300298-bb"></a><span class="identifier">aspec_id</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="keyword">void</span> <a name="id300306-bb"></a><span class="identifier">ensure_correct_lock</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">strict_lock</span><span class="special">&lt;</span> <a class="link" href="aspect_map.html" title="Class aspect_map">aspect_map</a> <span class="special">&gt;</span> <span class="special">&amp;</span> guard<span class="special">)</span><span class="special">;</span></pre></li>
+</ol></div>
+</div>
+<div class="refsect2">
+<a name="id912504"></a><h3>
+<a name="id300299-bb"></a><code class="computeroutput">aspect_map</code> public member functions</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">csbl</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <a name="id300327-bb"></a><span class="identifier">find</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<p>Lookup a aspect and return the shared_ptr&lt;T&gt; of it. Internal locking Version.</p>
+<p><span class="bold"><strong>Effects:</strong></span> If the the aspect associated to the type T exists, returns an shared_ptr&lt;T&gt; of it; otherwise a disengaged object.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term">Returns:</span></p></td>
+<td><p>The pointer /c shared_ptr aspect or nullptr /c shared_ptr if aspect don't exists. </p></td>
+</tr>
+<tr>
+<td><p><span class="term">Throws:</span></p></td>
+<td>Nothing. </td>
+</tr>
+</tbody>
+</table></div>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> 
+  <span class="identifier">csbl</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <a name="id300349-bb"></a><span class="identifier">find</span><span class="special">(</span><span class="identifier">strict_lock</span><span class="special">&lt;</span> <a class="link" href="aspect_map.html" title="Class aspect_map">aspect_map</a> <span class="special">&gt;</span> <span class="special">&amp;</span> guard<span class="special">)</span><span class="special">;</span></pre>
+<p>Lookup a aspect and return the shared_ptr&lt;T&gt; of it. External locking Version, can be used as part of an atomic transaction.</p>
+<p><span class="bold"><strong>Effects:</strong></span> If the the aspect associated to the type T exists, returns an shared_ptr&lt;T&gt; of it; otherwise a disengaged object.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term">Returns:</span></p></td>
+<td><p>The pointer /c shared_ptr aspect or nullptr /c shared_ptr if aspect don't exists. </p></td>
+</tr>
+<tr>
+<td><p><span class="term">Throws:</span></p></td>
+<td>std::logic_error if guard hold Wrong Object; Does not owns correct lock. </td>
+</tr>
+</tbody>
+</table></div>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">size_type</span> <a name="id300385-bb"></a><span class="identifier">count</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<p>Checks if aspect associated to the type T exists Internal locking Version.</p>
+<p>The name count is chosen for sake of consistency with existing associative container requirements and std::map.</p>
+<p><span class="bold"><strong>Effects:</strong></span> If the the aspect associated to the type T exists, returns an shared_ptr&lt;T&gt; of it; otherwise a disengaged object.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term">Returns:</span></p></td>
+<td><p>1 if aspect is present; 0 otherwise. </p></td>
+</tr>
+<tr>
+<td><p><span class="term">Throws:</span></p></td>
+<td>Nothing. </td>
+</tr>
+</tbody>
+</table></div>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">size_type</span> <a name="id300426-bb"></a><span class="identifier">count</span><span class="special">(</span><span class="identifier">strict_lock</span><span class="special">&lt;</span> <a class="link" href="aspect_map.html" title="Class aspect_map">aspect_map</a> <span class="special">&gt;</span> <span class="special">&amp;</span> guard<span class="special">)</span><span class="special">;</span></pre>
+<p>Checks if aspect associated to the type T exists External locking Version, can be used as part of an atomic transaction.</p>
+<p>The name count is chosen for sake of consistency with existing associative container requirements and std::map.</p>
+<p><span class="bold"><strong>Effects:</strong></span> If the the aspect associated to the type T exists, returns an shared_ptr&lt;T&gt; of it; otherwise a disengaged object.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term">Returns:</span></p></td>
+<td><p>1 if aspect is present; 0 otherwise. </p></td>
+</tr>
+<tr>
+<td><p><span class="term">Throws:</span></p></td>
+<td>Nothing. </td>
+</tr>
+</tbody>
+</table></div>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">csbl</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <a name="id300475-bb"></a><span class="identifier">insert</span><span class="special">(</span><span class="identifier">csbl</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> asp<span class="special">)</span><span class="special">;</span></pre>
+<p>Insert a aspect if its aspect id (key_type(T)) is not already present. Internal locking Version.</p>
+<p><span class="bold"><strong>Effects:</strong></span> Insert aspect if id (key_type(T)) key is not present</p>
+<p>
+
+
+
+
+</p>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term">Parameters:</span></p></td>
+<td><div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="computeroutput">asp</code></span></p></td>
+<td><p>The aspect that you want to add to the <code class="computeroutput"><a class="link" href="aspect_map.html" title="Class aspect_map">aspect_map</a></code>. </p></td>
+</tr></tbody>
+</table></div></td>
+</tr>
+<tr>
+<td><p><span class="term">Requires:</span></p></td>
+<td><p><code class="computeroutput"> asp.get() != nullptr </code> </p></td>
+</tr>
+<tr>
+<td><p><span class="term">Postconditions:</span></p></td>
+<td><p><code class="computeroutput"> get_aspect&lt;T&gt;.get() != nullptr </code></p></td>
+</tr>
+<tr>
+<td><p><span class="term">Returns:</span></p></td>
+<td><p>An <code class="computeroutput"> shared_ptr </code> of aspect of the type T previously associated with the given aspect type (key_type(T)), or a disengaged <code class="computeroutput"> shared_ptr </code> if the key was not present. </p></td>
+</tr>
+<tr>
+<td><p><span class="term">Throws:</span></p></td>
+<td>Any exception throw due to resources unavailable. </td>
+</tr>
+</tbody>
+</table></div>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> 
+  <span class="identifier">csbl</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> 
+  <a name="id300562-bb"></a><span class="identifier">insert</span><span class="special">(</span><span class="identifier">csbl</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> asp<span class="special">,</span> <span class="identifier">strict_lock</span><span class="special">&lt;</span> <a class="link" href="aspect_map.html" title="Class aspect_map">aspect_map</a> <span class="special">&gt;</span> <span class="special">&amp;</span> guard<span class="special">)</span><span class="special">;</span></pre>
+<p>Insert a aspect if its aspect id (key_type(T)) is not already present. External locking Version, can be used as part of an atomic transaction.</p>
+<p><span class="bold"><strong>Effects:</strong></span> Insert aspect if id (key_type(T)) key is not present</p>
+<p>
+
+
+
+
+</p>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term">Parameters:</span></p></td>
+<td><div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="computeroutput">asp</code></span></p></td>
+<td><p>The aspect that you want to add to the <code class="computeroutput"><a class="link" href="aspect_map.html" title="Class aspect_map">aspect_map</a></code>. </p></td>
+</tr></tbody>
+</table></div></td>
+</tr>
+<tr>
+<td><p><span class="term">Requires:</span></p></td>
+<td><p><code class="computeroutput"> asp.get() != nullptr </code> </p></td>
+</tr>
+<tr>
+<td><p><span class="term">Postconditions:</span></p></td>
+<td><p><code class="computeroutput"> get_aspect&lt;T&gt;.get() != nullptr </code></p></td>
+</tr>
+<tr>
+<td><p><span class="term">Returns:</span></p></td>
+<td><p>An <code class="computeroutput"> shared_ptr </code> of aspect of the type T previously associated with the given aspect type (key_type(T)), or a disengaged <code class="computeroutput"> shared_ptr </code> if the key was not present. </p></td>
+</tr>
+<tr>
+<td><p><span class="term">Throws:</span></p></td>
+<td>std::logic_error if guard hold Wrong Object; Does not owns correct lock, or any exception throw due to resources unavailable. </td>
+</tr>
+</tbody>
+</table></div>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">csbl</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <a name="id300612-bb"></a><span class="identifier">exchange</span><span class="special">(</span><span class="identifier">csbl</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> asp<span class="special">)</span><span class="special">;</span></pre>
+<p>Exchange a stored aspect to another one. Internal locking Version.</p>
+<p><span class="bold"><strong>Effects:</strong></span> Insert aspect if its key is not present, otherwise replace existing aspect with new aspect.</p>
+<p>
+
+
+
+
+</p>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term">Parameters:</span></p></td>
+<td><div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="computeroutput">asp</code></span></p></td>
+<td><p>The aspect that you want to add/exchange. </p></td>
+</tr></tbody>
+</table></div></td>
+</tr>
+<tr>
+<td><p><span class="term">Requires:</span></p></td>
+<td><p><code class="computeroutput"> asp.get() != nullptr </code> </p></td>
+</tr>
+<tr>
+<td><p><span class="term">Postconditions:</span></p></td>
+<td><p><code class="computeroutput"> get_aspect&lt;T&gt;.get() != nullptr </code></p></td>
+</tr>
+<tr>
+<td><p><span class="term">Returns:</span></p></td>
+<td><p>An <code class="computeroutput"> shared_ptr </code> of aspect of the type T previously associated with the given aspect type (key_type(T)), or a disengaged <code class="computeroutput"> shared_ptr </code> if the key was not present. </p></td>
+</tr>
+<tr>
+<td><p><span class="term">Throws:</span></p></td>
+<td>Nothing. </td>
+</tr>
+</tbody>
+</table></div>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> 
+  <span class="identifier">csbl</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> 
+  <a name="id300688-bb"></a><span class="identifier">exchange</span><span class="special">(</span><span class="identifier">csbl</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> asp<span class="special">,</span> <span class="identifier">strict_lock</span><span class="special">&lt;</span> <a class="link" href="aspect_map.html" title="Class aspect_map">aspect_map</a> <span class="special">&gt;</span> <span class="special">&amp;</span> guard<span class="special">)</span><span class="special">;</span></pre>
+<p>Exchange a stored aspect to another one. External locking Version, can be used as part of an atomic transaction.</p>
+<p><span class="bold"><strong>Effects:</strong></span> Insert aspect if its key is not present, otherwise replace existing aspect with new aspect.</p>
+<p>
+
+
+
+
+</p>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term">Parameters:</span></p></td>
+<td><div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="computeroutput">asp</code></span></p></td>
+<td><p>The aspect that you want to add/exchange. </p></td>
+</tr></tbody>
+</table></div></td>
+</tr>
+<tr>
+<td><p><span class="term">Requires:</span></p></td>
+<td><p><code class="computeroutput"> asp.get() != nullptr </code> </p></td>
+</tr>
+<tr>
+<td><p><span class="term">Postconditions:</span></p></td>
+<td><p><code class="computeroutput"> get_aspect&lt;T&gt;.get() != nullptr </code></p></td>
+</tr>
+<tr>
+<td><p><span class="term">Returns:</span></p></td>
+<td><p>An <code class="computeroutput"> shared_ptr </code> of aspect of the type T previously associated with the given aspect type (key_type(T)), or a disengaged <code class="computeroutput"> shared_ptr </code> if the key was not present. </p></td>
+</tr>
+<tr>
+<td><p><span class="term">Throws:</span></p></td>
+<td>std::logic_error if guard hold Wrong Object; Does not owns correct lock. </td>
+</tr>
+</tbody>
+</table></div>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">csbl</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <a name="id300718-bb"></a><span class="identifier">erase</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<p>Remove a stored aspect of the <code class="computeroutput"><a class="link" href="aspect_map.html" title="Class aspect_map">aspect_map</a></code>. Internal locking Version.</p>
+<p><span class="bold"><strong>Effects:</strong></span> Erase object with given aspect type (key_type(T)) from the container, if such is present. 
+
+</p>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term">Returns:</span></p></td>
+<td><p>An <code class="computeroutput"> shared_ptr </code> of aspect of the type T previously associated with the given aspect type (key_type(T)), or a disengaged <code class="computeroutput"> shared_ptr </code> if the key was not present. </p></td>
+</tr>
+<tr>
+<td><p><span class="term">Throws:</span></p></td>
+<td>Nothing. </td>
+</tr>
+</tbody>
+</table></div>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> 
+  <span class="identifier">csbl</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <a name="id300813-bb"></a><span class="identifier">erase</span><span class="special">(</span><span class="identifier">strict_lock</span><span class="special">&lt;</span> <a class="link" href="aspect_map.html" title="Class aspect_map">aspect_map</a> <span class="special">&gt;</span> <span class="special">&amp;</span> guard<span class="special">)</span><span class="special">;</span></pre>
+<p>Remove a stored aspect of the <code class="computeroutput"><a class="link" href="aspect_map.html" title="Class aspect_map">aspect_map</a></code>. External locking Version, can be used as part of an atomic transaction.</p>
+<p><span class="bold"><strong>Effects:</strong></span> Erase object with given aspect type (key_type(T)) from the container, if such is present. 
+
+</p>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term">Returns:</span></p></td>
+<td><p>An <code class="computeroutput"> shared_ptr </code> of aspect of the type T previously associated with the given aspect type (key_type(T)), or a disengaged <code class="computeroutput"> shared_ptr </code> if the key was not present. </p></td>
+</tr>
+<tr>
+<td><p><span class="term">Throws:</span></p></td>
+<td>std::logic_error if guard hold Wrong Object; Does not owns correct lock. </td>
+</tr>
+</tbody>
+</table></div>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">,</span> <span class="keyword">typename</span> F<span class="special">&gt;</span> 
+  <span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <a name="id300869-bb"></a><span class="identifier">reduce</span><span class="special">(</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> asp<span class="special">,</span> <span class="identifier">F</span> f<span class="special">)</span><span class="special">;</span></pre>
+<p>Insert a aspect, performing a reduction if given aspect type (key_type(T)) is already present.</p>
+<p><span class="bold"><strong>Effects:</strong></span> Insert aspect if aspect type (key_type(T)) is not present; otherwise insert f(old, obj.second), where old is the mapped values of the existing item. Functor f may be invoked multiple times</p>
+<p>
+
+
+
+</p>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term">Requires:</span></p></td>
+<td><p><code class="computeroutput"> asp.get() != nullptr </code> </p></td>
+</tr>
+<tr>
+<td><p><span class="term">Postconditions:</span></p></td>
+<td><p><code class="computeroutput"> get_aspect&lt;T&gt;.get() != nullptr </code></p></td>
+</tr>
+<tr>
+<td><p><span class="term">Returns:</span></p></td>
+<td><p>An <code class="computeroutput"> shared_ptr </code> of aspect of the type T previously associated with the given aspect type (key_type(T)), or a disengaged <code class="computeroutput"> shared_ptr </code> if the key was not present.</p></td>
+</tr>
+<tr>
+<td><p><span class="term">Throws:</span></p></td>
+<td>Any exception throw due to resources unavailable. </td>
+</tr>
+</tbody>
+</table></div>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">,</span> <span class="keyword">typename</span> F<span class="special">&gt;</span> 
+  <span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> 
+  <a name="id300940-bb"></a><span class="identifier">reduce</span><span class="special">(</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> asp<span class="special">,</span> <span class="identifier">F</span> f<span class="special">,</span> <span class="identifier">strict_lock</span><span class="special">&lt;</span> <a class="link" href="aspect_map.html" title="Class aspect_map">aspect_map</a> <span class="special">&gt;</span> <span class="special">&amp;</span> guard<span class="special">)</span><span class="special">;</span></pre>
+<p>Insert a aspect, performing a reduction if given aspect type (key_type(T)) is already present.</p>
+<p><span class="bold"><strong>Effects:</strong></span> Insert aspect if aspect type (key_type(T)) is not present; otherwise insert f(old, obj.second), where old is the mapped values of the existing item. Functor f may be invoked multiple times</p>
+<p>
+
+
+
+</p>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term">Requires:</span></p></td>
+<td><p><code class="computeroutput"> asp.get() != nullptr </code> </p></td>
+</tr>
+<tr>
+<td><p><span class="term">Postconditions:</span></p></td>
+<td><p><code class="computeroutput"> get_aspect&lt;T&gt;.get() != nullptr </code></p></td>
+</tr>
+<tr>
+<td><p><span class="term">Returns:</span></p></td>
+<td><p>An <code class="computeroutput"> shared_ptr </code> of aspect of the type T previously associated with the given aspect type (key_type(T)), or a disengaged <code class="computeroutput"> shared_ptr </code> if the key was not present.</p></td>
+</tr>
+<tr>
+<td><p><span class="term">Throws:</span></p></td>
+<td>std::logic_error if guard hold Wrong Object; Does not owns correct lock, or any exception throw due to resources unavailable. </td>
+</tr>
+</tbody>
+</table></div>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="identifier">size_type</span> <a name="id300963-bb"></a><span class="identifier">size</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<p>Estimate of the number of aspects in the container.</p>
+<p><span class="bold"><strong>Effects:</strong></span> This function does not modify the container in any way.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term">Returns:</span></p></td>
+<td><p>Estimate of the number of aspects in the container. The estimate is exact if no modications occur during the invocation. </p></td>
+</tr>
+<tr>
+<td><p><span class="term">Throws:</span></p></td>
+<td>Nothing. </td>
+</tr>
+</tbody>
+</table></div>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">bool</span> <a name="id301006-bb"></a><span class="identifier">empty</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<p>Checks if container is empty</p>
+<p><span class="bold"><strong>Effects:</strong></span> This function does not modify the container in any way.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term">Returns:</span></p></td>
+<td><p>Returns whether the map container is empty (i.e. whether its size is 0).</p></td>
+</tr>
+<tr>
+<td><p><span class="term">Throws:</span></p></td>
+<td>Nothing. </td>
+</tr>
+</tbody>
+</table></div>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">void</span> <a name="id301050-bb"></a><span class="identifier">clear</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<p>Clear container. Internal locking Version Only.</p>
+<p><span class="bold"><strong>Effects:</strong></span> Erases all aspects from the container</p>
+<p>
+</p>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term">Throws:</span></p></td>
+<td>Nothing. </td>
+</tr></tbody>
+</table></div>
+</li>
+</ol></div>
+</div>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2014 Dokfile Software Ltd.<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="../../boost_application/reference.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../../boost_application/reference.html#header.boost.application.aspect_map_hpp"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="basic_context.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

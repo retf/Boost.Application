@@ -1,0 +1,171 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Class path</title>
+<link rel="stylesheet" href="../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Boost.Application">
+<link rel="up" href="../../boost_application/reference.html#header.boost.application.aspects.path_hpp" title="Header &lt;boost/application/aspects/path.hpp&gt;">
+<link rel="prev" href="limit_single_inst_id301834.html" title="Class limit_single_instance_default_behaviour">
+<link rel="next" href="path_default_behaviour_.html" title="Class template path_default_behaviour_">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
+<td align="center"><a href="../../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../../libs/libraries.htm">Libraries</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
+<td align="center"><a href="../../../../../../more/index.htm">More</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="limit_single_inst_id301834.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../../boost_application/reference.html#header.boost.application.aspects.path_hpp"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="path_default_behaviour_.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+<div class="refentry">
+<a name="boost.application.path"></a><div class="titlepage"></div>
+<div class="refnamediv">
+<h2><span class="refentrytitle">Class path</span></h2>
+<p>boost::application::path &#8212; A contract class to be used by the user on your own class implementation of path aspect. </p>
+</div>
+<h2 xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv-title">Synopsis</h2>
+<div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis"><span class="comment">// In header: &lt;<a class="link" href="../../boost_application/reference.html#header.boost.application.aspects.path_hpp" title="Header &lt;boost/application/aspects/path.hpp&gt;">boost/application/aspects/path.hpp</a>&gt;
+
+</span>
+<span class="keyword">class</span> <a class="link" href="path.html" title="Class path">path</a> <span class="special">:</span> <span class="keyword">private</span> <span class="identifier">noncopyable</span> <span class="special">{</span>
+<span class="keyword">public</span><span class="special">:</span>
+  <span class="comment">// <a class="link" href="path.html#boost.application.pathconstruct-copy-destruct">construct/copy/destruct</a></span>
+  <a class="link" href="path.html#id302155-bb"><span class="identifier">path</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="path.html#id302154-bb"><span class="special">~</span><span class="identifier">path</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+
+  <span class="comment">// <a class="link" href="path.html#id301979-bb">public member functions</a></span>
+  <span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <a class="link" href="path.html#id301982-bb"><span class="identifier">current_path</span></a><span class="special">(</span><span class="keyword">void</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <a class="link" href="path.html#id302040-bb"><span class="identifier">executable_name</span></a><span class="special">(</span><span class="keyword">void</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <a class="link" href="path.html#id302081-bb"><span class="identifier">executable_full_name</span></a><span class="special">(</span><span class="keyword">void</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <a class="link" href="path.html#id302056-bb"><span class="identifier">executable_path</span></a><span class="special">(</span><span class="keyword">void</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="special">&amp;</span> <a class="link" href="path.html#id302110-bb"><span class="identifier">executable_path_name</span></a><span class="special">(</span><span class="keyword">void</span><span class="special">)</span><span class="special">;</span>
+<span class="special">}</span><span class="special">;</span></pre></div>
+<div class="refsect1">
+<a name="id931291"></a><h2>Description</h2>
+<div class="refsect2">
+<a name="id931305"></a><h3>
+<a name="boost.application.pathconstruct-copy-destruct"></a><code class="computeroutput">path</code> 
+        public
+       construct/copy/destruct</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem"><pre class="literallayout"><a name="id302155-bb"></a><span class="identifier">path</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><a name="id302154-bb"></a><span class="special">~</span><span class="identifier">path</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
+</ol></div>
+</div>
+<div class="refsect2">
+<a name="id931324"></a><h3>
+<a name="id301979-bb"></a><code class="computeroutput">path</code> public member functions</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem">
+<pre class="literallayout"><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <a name="id301982-bb"></a><span class="identifier">current_path</span><span class="special">(</span><span class="keyword">void</span><span class="special">)</span><span class="special">;</span></pre>
+<p>Retrieves the application working path.</p>
+<p>
+e.g.:</p>
+<p>[Windows] E:.boost.app.v4</p>
+<p>[POSIX] /project.boost.app.v4/libs/application/vc11ide </p>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term">Returns:</span></p></td>
+<td><p>an filesystem::path that hold the requested information.</p></td>
+</tr></tbody>
+</table></div>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <a name="id302040-bb"></a><span class="identifier">executable_name</span><span class="special">(</span><span class="keyword">void</span><span class="special">)</span><span class="special">;</span></pre>
+<p>Retrieves the application executable file name (excluding extension)</p>
+<p>
+e.g.:</p>
+<p>[Windows] path_exe</p>
+<p>[POSIX] path_exe </p>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term">Returns:</span></p></td>
+<td><p>an filesystem::path that hold the requested information.</p></td>
+</tr></tbody>
+</table></div>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <a name="id302081-bb"></a><span class="identifier">executable_full_name</span><span class="special">(</span><span class="keyword">void</span><span class="special">)</span><span class="special">;</span></pre>
+<p>Retrieves the application executable full file name (including extension)</p>
+<p>
+e.g.:</p>
+<p>[Windows] path_exe.exe</p>
+<p>[POSIX] path_exe.out </p>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term">Returns:</span></p></td>
+<td><p>an filesystem::path that hold the requested information.</p></td>
+</tr></tbody>
+</table></div>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <a name="id302056-bb"></a><span class="identifier">executable_path</span><span class="special">(</span><span class="keyword">void</span><span class="special">)</span><span class="special">;</span></pre>
+<p>Retrieves the absolute path of application executable</p>
+<p>
+e.g.:</p>
+<p>[Windows] E:.boost.app.v4</p>
+<p>[POSIX] /project.boost.app.v4/libs/application/vc11ide/Debug </p>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term">Returns:</span></p></td>
+<td><p>an filesystem::path that hold the requested information.</p></td>
+</tr></tbody>
+</table></div>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="special">&amp;</span> <a name="id302110-bb"></a><span class="identifier">executable_path_name</span><span class="special">(</span><span class="keyword">void</span><span class="special">)</span><span class="special">;</span></pre>
+<p>Retrieves the application executable full file name (including extension)</p>
+<p>
+e.g.:</p>
+<p>[Windows] E:.boost.app.v4.exe</p>
+<p>[POSIX] /project.boost.app.v4/libs/application/vc11ide/Debug/path.out </p>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term">Returns:</span></p></td>
+<td><p>an filesystem::path that hold the requested information.</p></td>
+</tr></tbody>
+</table></div>
+</li>
+</ol></div>
+</div>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2014 Dokfile Software Ltd.<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="limit_single_inst_id301834.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../../boost_application/reference.html#header.boost.application.aspects.path_hpp"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="path_default_behaviour_.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

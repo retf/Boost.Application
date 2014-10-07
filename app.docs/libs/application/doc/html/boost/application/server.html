@@ -1,0 +1,138 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Class server</title>
+<link rel="stylesheet" href="../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Boost.Application">
+<link rel="up" href="../../boost_application/reference.html#header.boost.application.server_application_hpp" title="Header &lt;boost/application/server_application.hpp&gt;">
+<link rel="prev" href="common.html" title="Class common">
+<link rel="next" href="args_.html" title="Class template args_">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
+<td align="center"><a href="../../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../../libs/libraries.htm">Libraries</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
+<td align="center"><a href="../../../../../../more/index.htm">More</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="common.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../../boost_application/reference.html#header.boost.application.server_application_hpp"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="args_.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+<div class="refentry">
+<a name="boost.application.server"></a><div class="titlepage"></div>
+<div class="refnamediv">
+<h2><span class="refentrytitle">Class server</span></h2>
+<p>boost::application::server &#8212; This class hold a 'server' application mode system. </p>
+</div>
+<h2 xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv-title">Synopsis</h2>
+<div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis"><span class="comment">// In header: &lt;<a class="link" href="../../boost_application/reference.html#header.boost.application.server_application_hpp" title="Header &lt;boost/application/server_application.hpp&gt;">boost/application/server_application.hpp</a>&gt;
+
+</span>
+<span class="keyword">class</span> <a class="link" href="server.html" title="Class server">server</a> <span class="special">{</span>
+<span class="keyword">public</span><span class="special">:</span>
+  <span class="comment">// <a class="link" href="server.html#boost.application.serverconstruct-copy-destruct">construct/copy/destruct</a></span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> Application<span class="special">,</span> <span class="keyword">typename</span> SignalManager<span class="special">&gt;</span> 
+    <a class="link" href="server.html#id303001-bb"><span class="identifier">server</span></a><span class="special">(</span><span class="identifier">Application</span> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">SignalManager</span> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">application</span><span class="special">::</span><span class="identifier">context</span> <span class="special">&amp;</span><span class="special">,</span> 
+           <span class="identifier">boost</span><span class="special">::</span><span class="identifier">system</span><span class="special">::</span><span class="identifier">error_code</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="server.html#id303066-bb"><span class="special">~</span><span class="identifier">server</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+
+  <span class="comment">// <a class="link" href="server.html#id302996-bb">public static functions</a></span>
+  <span class="keyword">static</span> <span class="keyword">int</span> <a class="link" href="server.html#id302968-bb"><span class="identifier">mode</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+
+  <span class="comment">// <a class="link" href="server.html#id302980-bb">public member functions</a></span>
+  <span class="keyword">int</span> <a class="link" href="server.html#id302987-bb"><span class="identifier">run</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+<span class="special">}</span><span class="special">;</span></pre></div>
+<div class="refsect1">
+<a name="id928393"></a><h2>Description</h2>
+<p>server : Can be seen as Server (log-time duration) aplication type.</p>
+<p>An application mode is a collection of aspects and a class 'mode' that define application instantiation and behaviour.</p>
+<p>The usual use of this class is to pass it as template param on launch free function. </p>
+<div class="refsect2">
+<a name="id928384"></a><h3>
+<a name="boost.application.serverconstruct-copy-destruct"></a><code class="computeroutput">server</code> 
+        public
+       construct/copy/destruct</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> Application<span class="special">,</span> <span class="keyword">typename</span> SignalManager<span class="special">&gt;</span> 
+  <a name="id303001-bb"></a><span class="identifier">server</span><span class="special">(</span><span class="identifier">Application</span> <span class="special">&amp;</span> myapp<span class="special">,</span> <span class="identifier">SignalManager</span> <span class="special">&amp;</span> sm<span class="special">,</span> 
+         <span class="identifier">application</span><span class="special">::</span><span class="identifier">context</span> <span class="special">&amp;</span> context<span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">system</span><span class="special">::</span><span class="identifier">error_code</span> <span class="special">&amp;</span> ec<span class="special">)</span><span class="special">;</span></pre>
+<p>Creates a server application.</p>
+<p>
+Check ec for errors. </p>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term">Parameters:</span></p></td>
+<td><div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="computeroutput">context</code></span></p></td>
+<td><p>An context of application, that hold all aspects.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="computeroutput">ec</code></span></p></td>
+<td><p>Variable (boost::system::error_code) that will be set to the result of the operation.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="computeroutput">myapp</code></span></p></td>
+<td><p>An user application functor class.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="computeroutput">sm</code></span></p></td>
+<td><p>The signal manager of application, that will be used internaly by application type. User can customize this instance.</p></td>
+</tr>
+</tbody>
+</table></div></td>
+</tr></tbody>
+</table></div>
+</li>
+<li class="listitem">
+<pre class="literallayout"><a name="id303066-bb"></a><span class="special">~</span><span class="identifier">server</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<p>Destruct an server application. </p>
+</li>
+</ol></div>
+</div>
+<div class="refsect2">
+<a name="id928640"></a><h3>
+<a name="id302996-bb"></a><code class="computeroutput">server</code> public static functions</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+<pre class="literallayout"><span class="keyword">static</span> <span class="keyword">int</span> <a name="id302968-bb"></a><span class="identifier">mode</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<p>Retrieves a id that identify application run mode. </p>
+</li></ol></div>
+</div>
+<div class="refsect2">
+<a name="id928655"></a><h3>
+<a name="id302980-bb"></a><code class="computeroutput">server</code> public member functions</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+<pre class="literallayout"><span class="keyword">int</span> <a name="id302987-bb"></a><span class="identifier">run</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<p>Prepare application and run user functor operator. </p>
+</li></ol></div>
+</div>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2014 Dokfile Software Ltd.<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="common.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../../boost_application/reference.html#header.boost.application.server_application_hpp"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="args_.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>
