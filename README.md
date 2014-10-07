@@ -173,7 +173,7 @@ If you intend to use 'plugin system' and Boost.Application, we recommend that yo
      
 ### On-line Documentation (Work in Progress), and other information
 
-* [Online Docs (updated)] (http://www.dokfile.com/appbeta4/docs/libs/application/doc/html/index.html) 
+* [Online Docs (updated)] (http://retf.github.io/Boost.Application/app.docs/libs/application/doc/html/index.html) 
 * [Wiki] (https://github.com/retf/Boost.Application/wiki)
 * [Boost Library Incubator](http://rrsd.com/blincubator.com/bi_library/application/)
 
