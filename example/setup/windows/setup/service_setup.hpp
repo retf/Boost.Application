@@ -363,7 +363,7 @@ namespace boost { namespace application { namespace example {
          std::basic_string<char_type> pathname = service_path_name_;
          // Append the switch that causes the process to run as a service.
          if(service_option_string_.size()) {
-            pathname = service_path_name_ + service_option_string_;
+            pathname += char_type(' ') + service_option_string_;
             // e.g. c:\myservice\service.exe --s
          }
 
