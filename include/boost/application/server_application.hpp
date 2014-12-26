@@ -22,6 +22,12 @@
 #include <boost/application/detail/csbl.hpp>
 #include <boost/application/application_mode_register.hpp>
 
+// internal aspects
+#include <boost/application/aspects/status.hpp>
+#include <boost/application/aspects/run_mode.hpp>
+#include <boost/application/aspects/path.hpp>
+#include <boost/application/aspects/process_id.hpp>
+
 // platform dependent
 #if defined( BOOST_WINDOWS_API )
 #   include <boost/application/detail/windows/server_application_impl.hpp>
@@ -92,6 +98,14 @@ namespace boost { namespace application {
              context.insert<status>(
                csbl::make_shared<status>(status::running));
 
+         if(!context.find<process_id>())
+              context.insert<process_id>(
+               csbl::make_shared<process_id>());
+               
+         if(!context.find<path>())
+              context.insert<path>(
+               csbl::make_shared<path>());
+               
          // need be created after run_mode, status
 
          impl_.reset(new server_application_impl(

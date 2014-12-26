@@ -17,6 +17,7 @@
 //
 // *****************************************************************************
 // note that this is a experimental module 
+// note that construcor can not be explicit
 // *****************************************************************************
 //
 
@@ -170,7 +171,7 @@ namespace boost { namespace application {
    template <typename Application>
    class auto_handler : public detail::handler_detector, public 
       boost::conditional< 
-         boost::is_convertible<context, Application>::value, 
+         boost::is_convertible<context&, Application>::value, 
             detail::handler_auto_set_c<Application, auto_handler<Application> >, 
             detail::handler_auto_set_u<Application, auto_handler<Application> > 
       >::type
@@ -185,7 +186,7 @@ namespace boost { namespace application {
    public:
  
       typedef typename boost::conditional< 
-         boost::is_convertible<context, Application>::value, 
+         boost::is_convertible<context&, Application>::value, 
             detail::handler_auto_set_c<Application, auto_handler<Application> >, 
             detail::handler_auto_set_u<Application, auto_handler<Application> > 
          >::type base_selector;

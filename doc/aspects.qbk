@@ -12,7 +12,8 @@ Boost.Application provide a wide class of ready-to-use 'aspects' and user is fre
 [table:sca Simple or Common that can be any class
     [[Aspect Name]                        [Aspect Contract Class]         [Aspect Final Class]                             [Aspect Functionality]]
     [[args]                               [args]                          [args (same class)]                              [Provide functionality for handling arguments of the application]]
-    [[path]                               [path]                          [path_default_behaviour]                         [Provide functionality for handling paths of the application]]
+    [[path]                               [path]                          [path (same class)]                              [Provide functionality for handling paths of the application]]
+      [[path]                             [process_id]                    [process_id (same class)]                        [Provide functionality for obtaining a PID of application process]]
     [[run_mode]                           [run_mode]                      [run_mode (same class)]                          [Provide information of application running mode (common or server)]]
     [[status]                             [status]                        [status (same class)]                            [Provide information about current satatus of application (sopped, running or paused)]]
     [[wait_for_termination_request]       [wait_for_termination_request]  [wait_for_termination_request_default_behaviour] [Provide functionality for wait for task completion]]

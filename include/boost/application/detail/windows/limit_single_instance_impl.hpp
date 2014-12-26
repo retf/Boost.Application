@@ -66,8 +66,10 @@ namespace boost { namespace application {
          return is_another_instance_running();
       }
 
-      void release()
+      void release(bool force = false)
       {
+         // force: do nothing here force
+         
          if (mutex_ == 0)
          {
             CloseHandle(mutex_);

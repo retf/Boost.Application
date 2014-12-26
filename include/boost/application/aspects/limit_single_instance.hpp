@@ -61,7 +61,7 @@ namespace boost { namespace application {
       virtual bool lock() = 0;
 
       virtual bool is_another_instance_running() = 0;
-      virtual void release(void) = 0;
+      virtual void release(bool force = false) = 0;
    };
 
    /*!
@@ -79,6 +79,152 @@ namespace boost { namespace application {
     * before call of lock, cause is_another_instance_running to
     * return always false.
     */
+  
+
+// this is a not official version
+#if defined( ENABLE_BOOST_INTERPROCESS_NAMED_MUTEX )
+
+   /*!
+    * \brief This aspect class ensure that only a single instance of
+    *        application (process) is running on a given operating system.
+    *
+    * Note that this inplementation use Boost.Interprocess to create a
+    * named_mutex.
+    *
+    */
+   class limit_single_instance_default_behaviour
+      : public limit_single_instance
+   {
+   public:
+      /*!
+       * Constructs an limit_single_instance.
+       *
+       * \param app_uuid An Uuid (Boost.Uuid) that identify a application.
+       *        The mutex will be created using this value.
+       *        In case of positive evaluation of single istance application,
+       *        will exit.
+       */
+      limit_single_instance_default_behaviour(const uuids::uuid& app_uuid)
+         : uuid_(app_uuid)
+         , owns_lock_(false)
+      {}
+
+      /*!
+       * Constructs an limit_single_instance.
+       *
+       * \param app_uuid An Uuid that identify a application.
+       *        The mutex will be created using this value.
+       *
+       * \param callback An callback that receive a application context.
+       *        User must return true on callback to continue
+       *        with application execution, and false to terminate application
+       *        execution in case of positive evaluation of single istance.
+       */
+      limit_single_instance_default_behaviour(const uuids::uuid& app_uuid,
+         const callback& cb)
+         : limit_single_instance(cb)
+         , uuid_(app_uuid)
+         , owns_lock_(false)
+      {}
+
+      ~limit_single_instance_default_behaviour()
+      {
+         release();
+      }
+
+      /*!
+       * Creates a system mutex, the ec ( boost::system::error_code& ec)
+       * will be set to the result of the operation, they should be
+       * tested for errors.
+       *
+       * \param ec Variable (boost::system::error_code) that will be
+       *        set to the result of the operation.
+       *
+       * \return if system mutex is already created, return true
+       *         to indicate that we already have another instance
+       *         running on current operating system.
+       *
+       */
+      bool lock(boost::system::error_code &ec)
+      {
+         std::string instance_id =
+            to_upper_copy(boost::lexical_cast<std::string>(uuid_));
+
+         if(named_mutex_ == 0)
+         {
+            named_mutex_.reset(new interprocess::named_mutex(
+               interprocess::open_or_create, instance_id.c_str()));
+         }
+
+         // Tries to lock the interprocess_mutex, returns false
+         // when interprocess_mutex is already locked.
+         owns_lock_ = named_mutex_->try_lock();
+
+         if(owns_lock_ == true)
+         {
+            // we just create the lock
+            return false;
+         }
+
+         return true;
+      }
+
+      /*!
+       * Creates a system mutex, throws an exception of type
+       * boost::system::system_error on error.
+       *
+       * \return if system mutex is already created, return true
+       *         to indicate that we already have another instance
+       *         running on current operating system.
+       *
+       */
+      bool lock() {
+         boost::system::error_code ec;
+
+         bool result = lock(ec);
+         if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
+           "lock() failed", ec);
+
+         return result;
+      }
+
+      /*!
+       * Indicate that we already have another instance of application
+       * running on current operating system.
+       *
+       * \pre the lock() method need be called first.
+       * \return true if a instance of application (process) is
+       *         already running on current system.
+       *
+       */
+      bool is_another_instance_running() {
+         return owns_lock_;
+      }
+
+      /*!
+       * Release system mutex.
+       *
+       */
+      void release(bool force = false)
+      {
+         if(force)
+         {
+            named_mutex_->unlock(); owns_lock_ = false; return;
+         }
+
+         if(owns_lock_)
+         {
+            named_mutex_->unlock(); owns_lock_ = false;
+         }
+      }
+
+   private:
+      bool owns_lock_;
+      uuids::uuid uuid_;
+
+      csbl::shared_ptr<interprocess::named_mutex> named_mutex_;
+   };
+#else
    class limit_single_instance_default_behaviour : public limit_single_instance
    {
    public:
@@ -167,8 +313,8 @@ namespace boost { namespace application {
        * Release system mutex.
        *
        */
-      void release(void) {
-         impl_->release();
+      void release(bool force = false) {
+         impl_->release(force);
       }
 
    private:
@@ -177,146 +323,6 @@ namespace boost { namespace application {
       uuids::uuid uuid_;
 
    };
-
-// this is a not official version
-#if defined( ENABLE_BOOST_INTERPROCESS_NAMED_MUTEX )
-
-   /*!
-    * \brief This aspect class ensure that only a single instance of
-    *        application (process) is running on a given operating system.
-    *
-    * Note that this inplementation use Boost.Interprocess to create a
-    * named_mutex.
-    *
-    */
-   class limit_single_instance_named_mutex_behaviour
-      : public limit_single_instance
-   {
-   public:
-      /*!
-       * Constructs an limit_single_instance.
-       *
-       * \param app_uuid An Uuid (Boost.Uuid) that identify a application.
-       *        The mutex will be created using this value.
-       *        In case of positive evaluation of single istance application,
-       *        will exit.
-       */
-      limit_single_instance_named_mutex_behaviour(const uuids::uuid& app_uuid)
-         : uuid_(app_uuid)
-         , owns_lock_(false)
-      {}
-
-      /*!
-       * Constructs an limit_single_instance.
-       *
-       * \param app_uuid An Uuid that identify a application.
-       *        The mutex will be created using this value.
-       *
-       * \param callback An callback that receive a application context.
-       *        User must return true on callback to continue
-       *        with application execution, and false to terminate application
-       *        execution in case of positive evaluation of single istance.
-       */
-      limit_single_instance_named_mutex_behaviour(const uuids::uuid& app_uuid,
-         const callback& cb)
-         : limit_single_instance(cb)
-         , uuid_(app_uuid)
-         , owns_lock_(false)
-      {}
-
-      ~limit_single_instance_named_mutex_behaviour()
-      {
-         release();
-      }
-
-      /*!
-       * Creates a system mutex, the ec ( boost::system::error_code& ec)
-       * will be set to the result of the operation, they should be
-       * tested for errors.
-       *
-       * \param ec Variable (boost::system::error_code) that will be
-       *        set to the result of the operation.
-       *
-       * \return if system mutex is already created, return true
-       *         to indicate that we already have another instance
-       *         running on current operating system.
-       *
-       */
-      bool lock(boost::system::error_code &ec)
-      {
-         std::string instance_id =
-            to_upper_copy(boost::lexical_cast<std::string>(uuid_));
-
-         if(named_mutex_ == 0)
-         {
-            named_mutex_.reset(new interprocess::named_mutex(
-               interprocess::open_or_create, instance_id.c_str()));
-         }
-
-         // Tries to lock the interprocess_mutex, returns false
-         // when interprocess_mutex is already locked.
-         owns_lock_ = named_mutex_->try_lock();
-
-         if(owns_lock_ == true)
-         {
-            // we just create the lock
-            return false;
-         }
-
-         return true;
-      }
-
-      /*!
-       * Creates a system mutex, throws an exception of type
-       * boost::system::system_error on error.
-       *
-       * \return if system mutex is already created, return true
-       *         to indicate that we already have another instance
-       *         running on current operating system.
-       *
-       */
-      bool lock() {
-         boost::system::error_code ec;
-
-         bool result = lock(ec);
-         if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
-           "lock() failed", ec);
-
-         return result;
-      }
-
-      /*!
-       * Indicate that we already have another instance of application
-       * running on current operating system.
-       *
-       * \pre the lock() method need be called first.
-       * \return true if a instance of application (process) is
-       *         already running on current system.
-       *
-       */
-      bool is_another_instance_running() {
-         return owns_lock_;
-      }
-
-      /*!
-       * Release system mutex.
-       *
-       */
-      void release(void)
-      {
-         if(owns_lock_)
-         {
-            named_mutex_->unlock(); owns_lock_ = false;
-         }
-      }
-
-   private:
-      bool owns_lock_;
-      uuids::uuid uuid_;
-
-      csbl::shared_ptr<interprocess::named_mutex> named_mutex_;
-   };
-
 #endif
 
 }}  // boost::application

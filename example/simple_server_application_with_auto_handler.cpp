@@ -102,6 +102,13 @@ public:
 
       my_log_file_ << "-----------------------------" << std::endl;
 
+      boost::shared_ptr<application::process_id> pid 
+         = context_.find<application::process_id>();
+
+      my_log_file_ << "PID: " << pid->pid() << std::endl;
+
+      my_log_file_ << "-----------------------------" << std::endl;
+
       // run logic
 
       boost::shared_ptr<application::status> st =

@@ -26,6 +26,7 @@
 #include <boost/thread/thread.hpp>
 
 #include <boost/application/aspects/termination_handler.hpp>
+#include <boost/application/aspects/limit_single_instance.hpp>
 #include <boost/application/aspects/wait_for_termination_request.hpp>
 
 namespace boost { namespace application {
@@ -342,6 +343,13 @@ namespace boost { namespace application {
       {
          // we need set application_state to stop
          context_.find<status>()->state(status::stopped);
+         
+         // remove process lock
+         csbl::shared_ptr<limit_single_instance> si 
+            = context_.find<limit_single_instance>();
+            
+         if(si)
+            si->release(true);
 
          // and signalize wait_for_termination_request
          context_.find<wait_for_termination_request>()->proceed();

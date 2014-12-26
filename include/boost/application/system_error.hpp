@@ -1,19 +1,8 @@
-// system_error.hpp ----------------------------------------------------------//
-// -----------------------------------------------------------------------------
-
-// Copyright 2011-2013 Renato Tegon Forti
+// Copyright 2014 Renato Tegon Forti
 //
-// Distributed under the Boost Software License, Version 1.0. (See accompanying
-// file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
-// See http://www.boost.org/libs/application for documentation.
-
-// -----------------------------------------------------------------------------
-
-// Revision History
-// 18-10-2013 dd-mm-yyyy - Initial Release
-
-// -----------------------------------------------------------------------------
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt
+// or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_APPLICATION_SYSTEM_ERROR_HPP
 #define BOOST_APPLICATION_SYSTEM_ERROR_HPP
@@ -27,6 +16,10 @@
 #   include <errno.h>
 #elif defined(BOOST_WINDOWS_API)
 #   include <windows.h>
+#endif
+
+#ifdef BOOST_HAS_PRAGMA_ONCE
+#   pragma once
 #endif
 
 namespace boost { namespace application {
@@ -45,7 +38,7 @@ namespace boost { namespace application {
     * errno
     *
     */
-   inline int last_error(void)
+   inline int last_error(void) BOOST_NOEXCEPT
    {
 #if defined(BOOST_POSIX_API)
       return errno;
@@ -63,7 +56,7 @@ namespace boost { namespace application {
     *         function (System Error).
     *
     */
-   inline system::error_code last_error_code()
+   inline system::error_code last_error_code() BOOST_NOEXCEPT
    {
       return boost::system::error_code(last_error(),
          boost::system::system_category());

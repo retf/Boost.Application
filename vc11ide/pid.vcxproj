@@ -11,12 +11,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\example\tutorial\main_stage1.cpp" />
+    <ClCompile Include="..\example\pid.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{4D4BE500-EDC5-4B1F-FFFF-FFFFF86AF0C7}</ProjectGuid>
+    <ProjectGuid>{E11508C0-7B3E-4612-FFFF-FFFF5EFC3190}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>tutorial_stage1</RootNamespace>
+    <RootNamespace>pid</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

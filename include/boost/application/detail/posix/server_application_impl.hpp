@@ -42,6 +42,34 @@
 
 namespace boost { namespace application {
 
+   /*
+      Note about debug code on GDB
+      
+      # Debug fork
+      
+      set follow-fork-mode <mode>
+      
+      Set the debugger response to a program call of fork or vfork. A call to fork or vfork creates 
+      a new process. The <mode> argument can be:
+
+      parent: The original process is debugged after a fork. The child process runs unimpeded. 
+      This is the default.
+
+      child: The new process is debugged after a fork. The parent process runs unimpeded.
+
+      E.G.: 
+      
+      set follow-fork-mode child
+      
+      # Debug signal
+      
+      handle <SIGNAL> nostop noprint pass   
+      
+      E.G.: 
+      
+      handle SIGINT nostop noprint pass   
+   */
+
    template <typename CharType>
    class server_application_impl_ : public application_impl
    {
@@ -59,7 +87,19 @@ namespace boost { namespace application {
          : application_impl(context)
          , main_(main)
       {
+         // ver 1
+#if defined( USE_DAEMONIZE_VER_1 )
          process_id_ = daemonize(ec);
+#else        
+         if(daemon(0, 0, ec) < 0)
+         {
+            ec = last_error_code();
+            return;
+         }
+         
+         process_id_ = getpid();
+#endif
+         
          sb.start(); // need be started after daemonize
       }
 
@@ -69,6 +109,102 @@ namespace boost { namespace application {
       }
 
    protected:
+   
+      //
+      // ver 2
+      
+      // the ver 2 contains a version of a BSD-style daemon(3)
+      // function, a function to "daemonize" the calling process.  This
+      // implementation is based both on the generic daemon logic defined in
+      // the Unix Programmer's FAQ and on the daemon_start() function in
+      // W. Richard Stevens' _Unix_Network_Programming_ book (Prentice-Hall,
+      // 1990).  At the time of this writing, the Unix Programmer's FAQ is
+      // located at `http://www.whitefang.com/unix/faq_toc.html' (among
+      // other places).
+   
+      // redirect_fds(): redirect stdin, stdout, and stderr to /dev/NULL */
+
+      void redirect_fds(boost::system::error_code &ec)
+      {
+         (void) close(0);
+         (void) close(1);
+         (void) close(2);
+
+         if (open("/dev/null", O_RDWR) != 0)
+         {
+            //syslog(LOG_ERR, "Unable to open /dev/null: %s", strerror(errno));
+            //exit(1);
+            ec = boost::application::last_error_code();
+            return;
+         }
+
+         (void) dup(0);
+         (void) dup(0);
+      }
+
+      int do_fork()
+      {
+         int status = 0;
+
+         switch(fork())
+         {
+            case 0:
+               // this is the child that will become the daemon. 
+            break;
+
+            case -1:
+               // fork failure.             
+               status = -1;
+            break;
+
+            default:
+               // parent: Exit. 
+               _exit(0);
+         }
+
+         return status;
+      }
+      
+      int daemon(int nochdir, int noclose, boost::system::error_code &ec)
+      {
+         int status = 0;
+
+         //openlog("daemonize", LOG_PID, LOG_DAEMON);
+
+         // fork once to go into the background.
+         if((status = do_fork()) < 0 )
+            ;
+         // create new session
+         else if(setsid() < 0)              // shouldn't fail 
+            status = -1;
+         // fork again to ensure that daemon never reacquires a control terminal. 
+         else if((status = do_fork()) < 0 )
+            ;
+         else
+         {
+            // clear any inherited umask(2) value 
+
+            umask(0);
+
+            // we're there.
+
+            if(!nochdir)
+            {
+               // go to a neutral corner. 
+               chdir("/");
+            }
+
+            if(!noclose)
+            {
+               redirect_fds(ec);
+            }
+         }
+
+         return status;
+      }
+      
+      //
+      // ver 1
 
       // create a daemon using fork().
       //

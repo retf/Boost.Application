@@ -1,4 +1,4 @@
-#Boost.Application (0.4.10) [![Build Status](https://travis-ci.org/retf/Boost.Application.svg?branch=master)](https://travis-ci.org/retf/Boost.Application) 
+#Boost.Application (0.4.11) [![Build Status](https://travis-ci.org/retf/Boost.Application.svg?branch=master)](https://travis-ci.org/retf/Boost.Application) 
 
 ### Caution
 
@@ -137,10 +137,6 @@ int main(int argc, char *argv[])
 
    // my server aspects
 
-   // to handle path
-   app_context.insert<application::path>(
-      boost::make_shared<application::path_default_behaviour>(argc, argv));
-
    // to handle args
    app_context.insert<application::args>(
       boost::make_shared<application::args>(argc, argv));  
@@ -183,7 +179,7 @@ If you intend to use 'plugin system' and Boost.Application, we recommend that yo
 
 ### Articles
 
-Note that here we are using version 4.8 (0.4.8). If you are using current version 4.10 (0.4.10) you need adapt all article samples and download [Boost.DLL] (https://github.com/apolukhin/Boost.DLL)
+Note that here we are using version 4.8 (0.4.8). If you are using current version 4.11 (0.4.11) you need adapt all article samples and download [Boost.DLL] (https://github.com/apolukhin/Boost.DLL)
 
 Library use:<br>
 [Build a Server Application using Application Library] (http://www.codeproject.com/Articles/756866/Build-a-Server-Application-using-Application-Libra)
@@ -222,7 +218,19 @@ If you intend to use 'Application' on your application, please send-me your name
  * [Pocoproject (WinService)](http://pocoproject.org/docs-1.5.3/Poco.Util.WinService.html)
  * [Libdaemon (Daemon)] (http://www.tyrfingr.is/projects/libdaemon/)
  * [Qt (qtservice)](http://doc.qt.digia.com/solutions/4/qtservice/qtservice.html)
+ 
+### Changes on 0.4.11
 
+#### Aspects
+
+ * The 'path' aspect do not receive more any params (args) on constructor.
+ * The 'path' aspect is added by default on 'common' and 'server' application modes.
+ * New 'process_id' aspect, now is provided in context by default to obtaining a PID of proccess.
+
+#### POSIX
+
+ * server_application_impl now follows the BSD-style daemon(3) creation.
+ 
 ### Note about other version
 
 * This release will be identified as : 0.4

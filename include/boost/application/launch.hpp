@@ -1,20 +1,28 @@
-// launch.hpp  ---------------------------------------------------------------//
-// -----------------------------------------------------------------------------
-
-// Copyright 2011-2013 Renato Tegon Forti
-
-// Distributed under the Boost Software License, Version 1.0.
-// See http://www.boost.org/LICENSE_1_0.txt
-
-// -----------------------------------------------------------------------------
-
-// Revision History
-// 14-10-2013 dd-mm-yyyy - Initial Release
+// Copyright 2014 Renato Tegon Forti
 //
-// -----------------------------------------------------------------------------
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt
+// or copy at http://www.boost.org/LICENSE_1_0.txt)--
 
 #ifndef BOOST_APPLICATION_LAUNCH_HPP
 #define BOOST_APPLICATION_LAUNCH_HPP
+
+/// \file boost/application/launch.hpp
+/// \brief This file has a list of free function to launch an aplication using
+/// a specifyc mode.
+///
+/// In this version 2 flavors of application are supported:
+/// 
+/// - common
+/// - server
+/// 
+/// The "launch" function can create any of this types, and launch
+/// will aready setup/add default control aspects to application context.
+/// 
+/// Two version of "launch" are available, the first receive a
+/// boost::system::error_code variable 'ec' that would be set
+/// to the result of the operation, and the other thrown an exception of
+/// boost::system::system_error.
 
 // application
 #include <boost/application/config.hpp>
@@ -27,26 +35,11 @@
 #include <boost/application/detail/ensure_single_instance.hpp>
 #include <boost/application/detail/csbl.hpp>
 
-namespace boost { namespace application {
+#ifdef BOOST_HAS_PRAGMA_ONCE
+# pragma once
+#endif
 
-   /*!
-    * This file has a list of free function to launch an aplication using
-    * a specifyc mode.
-    *
-    * In this version 2 flavors of application are supported:
-    *
-    * - common
-    * - server
-    *
-    * The "launch" function can create any of this types, and launch
-    * will aready setup/add default control aspects to application context.
-    *
-    * Two version of "launch" are available, the first receive a
-    * boost::system::error_code variable 'ec' that would be set
-    * to the result of the operation, and no thrown an exception of
-    * boost::system::system_error.
-    *
-    */
+namespace boost { namespace application {
 
    // receive a boost::system::error_code variable 'ec' launch versions
 
@@ -74,7 +67,6 @@ namespace boost { namespace application {
     *         to O.S.
     *
     */
-
    template <typename ApplicationMode, typename Application,
       typename CustomType, typename Context>
    inline int launch(Application& app, CustomType& ct, Context &cxt,

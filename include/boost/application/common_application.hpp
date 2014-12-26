@@ -24,6 +24,8 @@
 // internal aspects
 #include <boost/application/aspects/status.hpp>
 #include <boost/application/aspects/run_mode.hpp>
+#include <boost/application/aspects/path.hpp>
+#include <boost/application/aspects/process_id.hpp>
 
 // platform dependent
 #if defined( BOOST_WINDOWS_API )
@@ -102,6 +104,14 @@ namespace boost { namespace application {
          if(!impl_->get_context().find<status>())
              impl_->get_context().insert<status>(
                csbl::make_shared<status>(status::running));
+
+         if(!impl_->get_context().find<process_id>())
+              impl_->get_context().insert<process_id>(
+               csbl::make_shared<process_id>());
+               
+         if(!impl_->get_context().find<path>())
+              impl_->get_context().insert<path>(
+               csbl::make_shared<path>());
       }
 
       /*!

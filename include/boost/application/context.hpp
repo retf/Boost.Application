@@ -1,29 +1,45 @@
-// context.hpp  --------------------------------------------------------------//
-// -----------------------------------------------------------------------------
-
-// Copyright 2011-2013 Renato Tegon Forti
-
+// Copyright 2014 Renato Tegon Forti
+//
 // Distributed under the Boost Software License, Version 1.0.
-// See http://www.boost.org/LICENSE_1_0.txt
-
-// -----------------------------------------------------------------------------
-
-// Revision History
-// 14-10-2013 dd-mm-yyyy - Initial Release
-//
-// Note about this LIBRARY
-//
-// This is a test that add "aspect" concept on Boost.Application interface.
-//
-// The main purpose of this test is to see how it
-// looks and how it behaves in a final use (interface use).
-//
-// To get older version of Boost.Appliation refer to:
-// https://sourceforge.net/projects/boostapp/
-// -----------------------------------------------------------------------------
+// (See accompanying file LICENSE_1_0.txt
+// or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_APPLICATION_CONTEXT_HPP
 #define BOOST_APPLICATION_CONTEXT_HPP
+
+/// \file boost/application/context.hpp
+/// \brief This file hold a context of application.
+/// 
+/// The library user has 2 options to use context, use a global context or local context that
+/// are passed through application constructor as parameter.
+///     
+///  - global_context (is a singleton)
+///  - context (to be used as parameter)
+/// 
+///  Then the 'application constructor' provided by user 
+///  can be defined in 2 ways (signatures). 
+/// 
+///  1. 'param' based version, in this case the constructor will that receive a 
+///     'context' of application as parameter.    
+/// 
+/// \b Examples:
+/// \code
+/// myapp(application::context& context)
+///    : context_(context)
+/// {}
+/// \endcode
+///
+///  2. 'global_context' based version, in this case the constructor don't receive 
+///      anything, the user can get access to 'context' using 
+///      application::global_context::get(). 
+/// 
+/// \b Examples:
+/// \code
+/// myapp()
+/// {
+///    // use application::global_context::get()
+/// }
+/// \endcode
 
 // application
 #include <boost/application/config.hpp>
@@ -31,52 +47,11 @@
 #include <boost/application/aspect_map.hpp>
 #include <boost/thread/shared_lock_guard.hpp>
 
-namespace boost { namespace application {
+#ifdef BOOST_HAS_PRAGMA_ONCE
+# pragma once
+#endif
 
-   /*!
-    * This file hold a context of applications
-    *
-    * The lib user has 2 options, use a global context or local context that
-    * are passed by handlers (callback) as parameter of methods.
-    *    
-    * - global_context (is a singleton)
-    * - context (to be used as parameter)
-    *
-    * Then the 'application operator and callbacks handlers' provided by user 
-    * can be defined in 2 ways (signatures). 
-    *
-    * 1. 'param' based version, in this case the handler will that receive a 
-    *    'context' of application as parameter.    
-    *
-    * e.g.
-    *
-    * int operator()(application::context& context)
-    * {
-    *    // use context
-    * }
-    *
-    * bool stop(application::context& context)
-    * {
-    *    // use context
-    * }
-    *
-    * 2. 'global_context' based version, in this case the handler don't receive 
-    *     anything, the user can get access to application::context using 
-    *     application::global_context::get(). 
-    *
-    * e.g.
-    *
-    * int operator()()
-    * {
-    *    // use application::global_context::get()
-    * }
-    *
-    * bool stop()
-    * {
-    *    // use application::global_context::get()
-    * }
-    *
-    */
+namespace boost { namespace application {
 
    namespace detail {
 
@@ -108,9 +83,6 @@ namespace boost { namespace application {
     * This class hold all aspects of an application.
     * you can use one of the ready-to-use aspects provided by library,
     * or define your own aspects.
-    *
-    *
-    *
     */
    class basic_context
       : public aspect_map, noncopyable
@@ -159,7 +131,6 @@ namespace boost { namespace application {
       static inline bool already_created() {
           return (instance_t::ptr != 0);
       }
-
    };
 
    typedef basic_context context;
@@ -169,4 +140,3 @@ namespace boost { namespace application {
 }} // boost::application
 
 #endif // BOOST_APPLICATION_CONTEXT_HPP
-

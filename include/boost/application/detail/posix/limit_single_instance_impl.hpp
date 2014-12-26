@@ -76,8 +76,12 @@ namespace boost { namespace application {
          return owns_lock_;
       }
 
-      void release(void)
+      void release(bool force = false)
       {
+         if(force) {
+            interprocess::shared_memory_object::remove(name_.c_str()); owns_lock_ = false; return;
+         }
+         
          // if I create it, I can remove it
          if(owns_lock_ == true) {
             interprocess::shared_memory_object::remove(name_.c_str());
@@ -100,6 +104,7 @@ namespace boost { namespace application {
 
       bool owns_lock_;
    };
+
 
    typedef limit_single_instance_impl_<character_types::char_type> limit_single_instance_impl;
 
