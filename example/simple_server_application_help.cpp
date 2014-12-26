@@ -69,11 +69,6 @@ int main(int argc, char *argv[])
    // my server aspects
 
    // [[c]]
-   /*<< Add 'path aspect' to application context >>*/
-   app_context.insert<application::path>(
-      boost::make_shared<application::path_default_behaviour>(argc, argv));
-
-   // [[c]]
    /*<< Add 'args aspect' to application context >>*/
    app_context.insert<application::args>(
       boost::make_shared<application::args>(argc, argv));

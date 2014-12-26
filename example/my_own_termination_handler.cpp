@@ -126,9 +126,6 @@ int main(int argc, char *argv[])
    context app_context;
    myapp app(app_context);
 
-   app_context.insert<path>(
-      boost::make_shared<path_default_behaviour>(argc, argv));
-
    // we will customize our signals behaviour
    /*<< Instantiate your custon signal manager. >>*/
    my_signal_manager sm(app_context);

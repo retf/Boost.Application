@@ -240,9 +240,6 @@ int main(int argc, char *argv[])
 
    // my server aspects
 
-   this_application()->insert<application::path>(
-      boost::make_shared<application::path_default_behaviour>(argc, argv));
-
    this_application()->insert<application::args>(
       boost::make_shared<application::args>(argc, argv));
 

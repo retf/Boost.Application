@@ -22,25 +22,7 @@ int test_main(int argc, char** argv)
 {   
    filesystem::path module_path_name;
 
-#if defined( BOOST_WINDOWS_API )
-   char module_name[MAX_PATH];
-
-   if (GetModuleFileName(0, module_name, sizeof(module_name)) > 0)
-   {
-      module_path_name = std::string(module_name);
-   }
-#elif defined( BOOST_POSIX_API )
-   std::string command = argv[0];
-   char resolved_path[PATH_MAX];
-
-   // realpath -returns the canonicalized absolute pathname
-   if (realpath (command.c_str(), resolved_path))
-   {
-      module_path_name = std::string (resolved_path);
-   }
-#endif
-
-   application::path_default_behaviour path(argc, argv);
+   application::path path;
 
    {
       BOOST_CHECK(filesystem::current_path() == path.current_path());
