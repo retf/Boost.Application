@@ -11,6 +11,9 @@
 #include <boost/application/system_error.hpp>
 #include <boost/filesystem/path.hpp>
 
+#include <cstdlib>
+#include <shlobj.h>
+
 #ifdef BOOST_HAS_PRAGMA_ONCE
 # pragma once
 #endif
@@ -51,6 +54,74 @@ namespace boost { namespace application { namespace detail {
         }
         
         return ret;
+    }
+
+    inline std::string getenv(const char* env_name)
+    {
+#if defined(_MSC_VER) && _MSC_VER >= 14
+        std::vector<char> buf;
+        std::size_t req_size = 0;
+
+        ::getenv_s(&req_size, NULL, 0, env_name);
+        if(req_size == 0)
+            return "";
+
+        if(buf.size() < req_size)
+            buf.resize(req_size);
+
+        ::getenv_s(&req_size, buf.data(), buf.size(), env_name);
+        if(req_size < buf.size())
+            buf.resize(req_size);
+
+        return buf.data();
+#else
+        char *r = ::getenv(env_name);
+        return r ? r : "";
+#endif
+    }
+
+    inline std::string home_path()
+    {
+        std::string ret = getenv("USERPROFILE");
+        if(ret.empty()) {
+            ret = getenv("HOMEDRIVE") + getenv("HOMEPATH");
+            if(ret.empty()) {
+                ret = getenv("HOME");
+                if(ret.empty())
+                    ; // or throw?
+            }
+        }
+
+        return ret;
+    }
+
+    inline std::string app_data_path()
+    {
+        TCHAR ret[MAX_PATH];
+        SHGetSpecialFolderPath(0, ret, CSIDL_APPDATA, false);
+        return ret;
+    }
+
+    inline std::string config_path()
+    {
+        return app_data_path();
+    }
+
+    inline std::string temp_path()
+    {
+        // taken from msdn example for GetTempPath()
+        DWORD ret = ::GetTempPath(0, TCHAR("")); // TODO
+
+        if(ret == 0)
+            return ""; // or throw?
+
+        std::vector<TCHAR> res(ret);
+
+        ret = ::GetTempPath(static_cast<DWORD>(res.size()), res.data());
+        if(ret == 0 || ret > res.size())
+            return ""; // or throw?
+
+        return res.data();
     }
 
 }}} // namespace boost::dll::detail

@@ -111,6 +111,26 @@ namespace boost { namespace application {
             return location().stem();
         }
 
+        filesystem::path home_path(void)
+        {
+            return boost::application::detail::home_path();
+        }
+
+        filesystem::path config_path(void)
+        {
+            return boost::application::detail::config_path();
+        }
+
+        filesystem::path app_data_path(void)
+        {
+            return boost::application::detail::app_data_path();
+        }
+
+        filesystem::path temp_path(void)
+        {
+            return boost::application::detail::temp_path();
+        }
+
     private:
 
         filesystem::path full_path_;
