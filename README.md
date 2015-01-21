@@ -8,6 +8,27 @@ This is not yet an official Boost C++ library. It wasn't reviewed and can't be d
 
 Note that this branch is a on active development, and can receive breaking changes without notifications. The stable version is: 4.8 (0.4.8)
 
+### Help Boost.Application
+
+Due to my lack of time, I need help to finish Boost.Application.
+
+If you are interested in helping, please e-mail: re.tf@acm.org
+
+We have the following open issues:
+
+* Documentation (a lot of things);
+* Fix openned BUGS;
+* Make new testcases;
+* Find and fix new BUGS;
+* Build and run in other systems/compilers and send result to be added in docs;
+* Provide new features;
+* Write tutorial and how-to;
+* Write examples;
+* Give feedback of use;
+* And any other thing that you want to propose.
+
+Thanks a lot
+
 ### Introduction
 
 Boost.Application provides a application environment, or start point to any people that want a basic infrastructure to build an system application on Windows or Unix Variants (e.g. Linux, MacOS).
