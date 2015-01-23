@@ -56,7 +56,7 @@ namespace boost { namespace application { namespace detail {
         return ret;
     }
 
-    inline std::string getenv(const char* env_name)
+    inline boost::filesystem::path getenv(const char* env_name)
     {
 #if defined(_MSC_VER) && _MSC_VER >= 14
         std::vector<char> buf;
@@ -64,7 +64,7 @@ namespace boost { namespace application { namespace detail {
 
         ::getenv_s(&req_size, NULL, 0, env_name);
         if(req_size == 0)
-            return "";
+            return boost::filesystem::path();
 
         if(buf.size() < req_size)
             buf.resize(req_size);
@@ -75,51 +75,76 @@ namespace boost { namespace application { namespace detail {
 
         return buf.data();
 #else
-        char *r = ::getenv(env_name);
-        return r ? r : "";
+        const char* res = ::getenv(env_name);
+        return res ? res : boost::filesystem::path();
 #endif
     }
 
-    inline std::string home_path()
+    inline boost::filesystem::path home_path()
     {
-        std::string ret = getenv("USERPROFILE");
+#if NTDDI_VERSION >= 0x06010000
+        wchar_t* res = NULL;
+        if(SUCCEEDED(::SHGetKnownFolderPath(
+                         FOLDERID_Profile, 0, NULL, res))) {
+            boost::filesystem::path p(res);
+            CoTaskMemFree(static_cast<void*>(res));
+            return p;
+#else
+        TCHAR res[MAX_PATH];
+        if(SUCCEEDED(::SHGetFolderPath(
+                         NULL, CSIDL_PROFILE, NULL, 0, res)))
+            return res;
+#endif
+
+        boost::filesystem::path ret = getenv("USERPROFILE");
         if(ret.empty()) {
-            ret = getenv("HOMEDRIVE") + getenv("HOMEPATH");
+            ret = getenv("HOMEDRIVE") / getenv("HOMEPATH");
             if(ret.empty()) {
                 ret = getenv("HOME");
                 if(ret.empty())
-                    ; // or throw?
+                    return boost::filesystem::path(".");
             }
         }
 
         return ret;
     }
 
-    inline std::string app_data_path()
+    inline boost::filesystem::path app_data_path()
     {
+#if NTDDI_VERSION >= 0x06010000
+        wchar_t* ret = NULL;
+        if(SUCCEEDED(::SHGetKnownFolderPath(
+                         FOLDERID_RoamingAppData, 0, NULL, ret))) {
+            boost::filesystem::path p(ret);
+            CoTaskMemFree(static_cast<void*>(ret));
+            return p;
+#else
         TCHAR ret[MAX_PATH];
-        SHGetSpecialFolderPath(0, ret, CSIDL_APPDATA, false);
-        return ret;
+        if(SUCCEEDED(::SHGetFolderPath(
+                         NULL, CSIDL_APPDATA, NULL, 0, ret)))
+            return ret;
+#endif
+        return boost::filesystem::path(".");
     }
 
-    inline std::string config_path()
+    inline boost::filesystem::path config_path()
     {
         return app_data_path();
     }
 
-    inline std::string temp_path()
+    inline boost::filesystem::path temp_path()
     {
         // taken from msdn example for GetTempPath()
-        DWORD ret = ::GetTempPath(0, TCHAR("")); // TODO
+        DWORD ret = ::GetTempPath(0, (char*)"");
 
         if(ret == 0)
-            return ""; // or throw?
+            return boost::filesystem::path(".");
 
         std::vector<TCHAR> res(ret);
 
         ret = ::GetTempPath(static_cast<DWORD>(res.size()), res.data());
         if(ret == 0 || ret > res.size())
-            return ""; // or throw?
+            return boost::filesystem::path(".");
 
         return res.data();
     }

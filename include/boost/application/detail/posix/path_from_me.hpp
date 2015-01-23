@@ -9,8 +9,11 @@
 
 #include <boost/application/config.hpp>
 #include <boost/filesystem/path.hpp>
+#include <boost/predef/os.h>
 
 #include <cstdlib>
+#include <pwd.h>
+#include <unistd.h>
 
 #ifdef BOOST_HAS_PRAGMA_ONCE
 # pragma once
@@ -22,39 +25,58 @@ namespace boost { namespace application { namespace detail {
         return boost::filesystem::read_symlink("/proc/self/exe", ec);  
     }
 
-    inline std::string getenv(const char* env_name)
+    inline boost::filesystem::path getenv(const char* env_name)
     {
-        char * r = ::getenv(env_name);
-        return r ? r : "";
+        const char* res = ::getenv(env_name);
+        return res ? res : boost::filesystem::path();
     }
 
-    inline std::string home_path()
+    inline boost::filesystem::path home_path()
     {
-        return getenv("HOME");
+        boost::filesystem::path path = getenv("HOME");
+        if(path.empty())
+        {
+            struct passwd* pwd = getpwuid(getuid());
+            if(pwd)
+                return pwd->pw_dir;
+            return ".";
+        }
+        return path;
     }
 
-    inline std::string app_data_path()
+    inline boost::filesystem::path app_data_path()
     {
-        std::string ret = getenv("XDG_DATA_HOME");
-        if(ret.empty())
-            return home_path() + "/.local/share"; // Fallback
-        return ret;
+        boost::filesystem::path path = getenv("XDG_DATA_HOME");
+        if(path.empty()) {
+#if BOOST_OS_MACOS
+            return home_path() / "Library/Preferences/";
+#else
+            return home_path() / ".local/share";
+#endif
+        }
+        return path;
     }
 
-    inline std::string config_path()
+    inline boost::filesystem::path config_path()
     {
-        std::string ret = getenv("XDG_CONFIG_HOME");
-        if(ret.empty())
-            return home_path() + "/.config"; // Fallback
-        return ret;
+
+        boost::filesystem::path path = getenv("XDG_CONFIG_HOME");
+        if(path.empty()) {
+#if BOOST_OS_MACOS
+            return home_path() / "Library/Preferences/";
+#else
+            return home_path() / ".config";
+#endif
+        }
+        return path;
     }
 
-    inline std::string temp_path()
+    inline boost::filesystem::path temp_path()
     {
-        std::string ret = getenv("TMPDIR");
-        if(ret.empty())
+        boost::filesystem::path path = getenv("TMPDIR");
+        if(path.empty())
             return "/tmp"; // Fallback if TMPDIR not available
-        return ret;
+        return path;
     }
 
 }}} // namespace boost::dll::detail
