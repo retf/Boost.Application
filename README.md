@@ -87,7 +87,7 @@ public:
          context_.find<application::status>();
 
       int count = 0;
-      while(st->state() != application::status::stoped)
+      while(st->state() != application::status::stopped)
       {
          boost::this_thread::sleep(boost::posix_time::seconds(1));
 
