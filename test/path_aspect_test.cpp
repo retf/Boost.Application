@@ -22,7 +22,7 @@ int test_main(int argc, char** argv)
 {   
    filesystem::path module_path_name;
 
-   application::path path;
+   application::default_path path;
 
    {
       BOOST_CHECK(filesystem::current_path() == path.current_path());
