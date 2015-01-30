@@ -23,11 +23,13 @@ namespace boost { namespace application { namespace detail {
 
     class default_path_impl
     {
-        inline boost::filesystem::path path_from_me(boost::system::error_code &ec)  {
+        filesystem::path full_path_;
+        
+        boost::filesystem::path path_from_me(boost::system::error_code &ec)  {
             return boost::filesystem::read_symlink("/proc/self/exe", ec);
         }
 
-        inline boost::filesystem::path getenv(const char* env_name)
+        boost::filesystem::path getenv(const char* env_name)
         {
             const char* res = ::getenv(env_name);
             return res ? res : boost::filesystem::path();
