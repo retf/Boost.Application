@@ -13,72 +13,62 @@
 #include <boost/filesystem/operations.hpp>
 
 #if defined( BOOST_WINDOWS_API )
-#include <boost/application/detail/windows/path_from_me.hpp>
+#include <boost/application/detail/windows/path_impl.hpp>
 #elif defined( BOOST_POSIX_API )
-#include <boost/application/detail/posix/path_from_me.hpp>
+#include <boost/application/detail/posix/path_impl.hpp>
 #else
 #error "Sorry, no boost application are available for this platform."
 #endif
 
 namespace boost { namespace application {
 
-    class path
-    {
-        filesystem::path extract_path(boost::system::error_code &ec) {
-
-            boost::filesystem::path full_path 
-                = boost::application::detail::path_from_me(ec);
-
-            if(ec)
-                return boost::filesystem::path();
-
-            return full_path;
-        }
-
+    class path {
     public:
+        virtual filesystem::path current_path(void) = 0;
+        virtual const filesystem::path& location(boost::system::error_code &ec) = 0;
+        virtual const filesystem::path& location() = 0;
+        virtual const filesystem::path& executable_path_name(boost::system::error_code &ec) = 0;
+        virtual const filesystem::path& executable_path_name() = 0;
+        virtual filesystem::path executable_path(boost::system::error_code &ec) = 0;
+        virtual filesystem::path executable_path() = 0;
+        virtual filesystem::path executable_full_name(boost::system::error_code &ec) = 0;
+        virtual filesystem::path executable_full_name(void) = 0;
+        virtual filesystem::path executable_name(boost::system::error_code &ec) = 0;
+        virtual filesystem::path executable_name(void) = 0;
+        virtual filesystem::path home_path(void) = 0;
+        virtual filesystem::path config_path(void) = 0;
+        virtual filesystem::path app_data_path(void) = 0;
+        virtual filesystem::path temp_path(void) = 0;        
+    };
+
+    class default_path : public path
+    {
+    public:
+        default_path() : impl_(new detail::default_path_impl) {}
 
         filesystem::path current_path(void)
         {
-           return filesystem::current_path();
+            return impl_->current_path();
         }
       
         const filesystem::path& location(boost::system::error_code &ec)
         {
-            if(!full_path_.empty())
-                return full_path_;
-
-            full_path_ = extract_path(ec);
-
-            return full_path_;
+            return impl_->location(ec);
         }
 
         const filesystem::path& location()
         {
-            if(!full_path_.empty())
-                return full_path_;
-
-            boost::system::error_code ec;
-
-            full_path_ = location(ec);
-
-            if (ec) {
-                boost::throw_exception(
-                    boost::system::system_error(
-                    ec, "location() failed"
-                    ));
-            }
-
-            return full_path_;
+            return impl_->location();
         }
 
         const filesystem::path& executable_path_name(boost::system::error_code &ec)
         {
-           return location(ec);
+           return impl_->location(ec);
         }
 
         const filesystem::path& executable_path_name()
         {
-            return location();
+            return impl_->location();
         }
 
         filesystem::path executable_path(boost::system::error_code &ec)
@@ -88,52 +78,51 @@ namespace boost { namespace application {
 
         filesystem::path executable_path()
         {
-            return location().parent_path();
+            return impl_->location().parent_path();
         }
 
         filesystem::path executable_full_name(boost::system::error_code &ec)
         {
-            return location(ec).filename();
+            return impl_->location(ec).filename();
         }
 
         filesystem::path executable_full_name(void)
         {
-            return location().filename();
+            return impl_->location().filename();
         }
 
         filesystem::path executable_name(boost::system::error_code &ec)
         {
-            return location(ec).stem();
+            return impl_->location(ec).stem();
         }
 
         filesystem::path executable_name(void)
         {
-            return location().stem();
+            return impl_->location().stem();
         }
 
         filesystem::path home_path(void)
         {
-            return boost::application::detail::home_path();
+            return impl_->home_path();
         }
 
         filesystem::path config_path(void)
         {
-            return boost::application::detail::config_path();
+            return impl_->config_path();
         }
 
         filesystem::path app_data_path(void)
         {
-            return boost::application::detail::app_data_path();
+            return impl_->app_data_path();
         }
 
         filesystem::path temp_path(void)
         {
-            return boost::application::detail::temp_path();
+            return impl_->temp_path();
         }
 
     private:
-
-        filesystem::path full_path_;
+        csbl::shared_ptr<detail::default_path_impl> impl_;
     };
 
 }} // boost::application

@@ -104,7 +104,7 @@ namespace boost { namespace application {
                
          if(!context.find<path>())
               context.insert<path>(
-               csbl::make_shared<path>());
+               csbl::make_shared<default_path>());
                
          // need be created after run_mode, status
 

@@ -50,12 +50,20 @@ public:
       std::cout << "executable_name      : " << path->executable_name()      << std::endl;
       std::cout << "executable_full_name : " << path->executable_full_name() << std::endl;
       std::cout << "executable_path_name : " << path->executable_path_name() << std::endl;
+      std::cout << "home_path            : " << path->home_path()	     << std::endl;
+      std::cout << "app_data_path        : " << path->app_data_path()	     << std::endl;
+      std::cout << "config_path          : " << path->config_path()          << std::endl;
+      std::cout << "temp_path            : " << path->temp_path()            << std::endl;
 
       // e.g.: "executable_path      : E:\project.boost.app.v4\libs\application\vc11ide\Debug"
       // e.g.: "current_path         : E:\project.boost.app.v4\libs\application\vc11ide"
       // e.g.: "executable_name      : path"
       // e.g.: "executable_full_name : path.exe"
       // e.g.: "executable_path_name : E:\project.boost.app.v4\libs\application\vc11ide\Debug\path.exe"
+      // e.g.: "home_path            : C:\Users\somebody"
+      // e.g.: "app_data_path        : C:\Users\somebody\AppData\Roaming"
+      // e.g.: "config_path          : C:\Users\somebody\AppData\Roaming"
+      // e.g.: "temp_path            : C:\Users\somebody\Local\Temp"
 
       return 0;
      
