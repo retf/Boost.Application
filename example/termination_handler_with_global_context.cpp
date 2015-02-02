@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
    application::global_context_ptr ctx = application::global_context::create();
 
    application::handler<>::callback callback
-      = boost::bind<bool>(&myapp::stop, &app);
+      = boost::bind(&myapp::stop, &app);
 
    this_application()->insert<application::termination_handler>(
       boost::make_shared<application::termination_handler_default_behaviour>(callback));

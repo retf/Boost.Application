@@ -82,7 +82,7 @@ public:
       : signal_manager(context)
    {
       handler<>::callback cb
-         = boost::bind<bool>(&my_signal_manager::stop, this);
+         = boost::bind(&my_signal_manager::stop, this);
 
       // define my own signal / handler
 #if defined( BOOST_WINDOWS_API )

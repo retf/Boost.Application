@@ -109,7 +109,7 @@ namespace boost { namespace application {
          // need be created after run_mode, status
 
          impl_.reset(new server_application_impl(
-            boost::bind<int>( &Application::operator(), &myapp), sm,
+            boost::bind( &Application::operator(), &myapp), sm,
             context, ec));
       }
 

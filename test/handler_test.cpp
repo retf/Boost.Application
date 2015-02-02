@@ -35,7 +35,7 @@ int test_main(int argc, char** argv)
    }
 
    {
-      application::handler<>::callback cb = boost::bind<bool>(
+      application::handler<>::callback cb = boost::bind(
          &handler_test::handler, &app_handler_test);
 
       application::handler<> h(cb);
@@ -47,7 +47,7 @@ int test_main(int argc, char** argv)
    }
 
    {
-      application::handler<>::callback cb = boost::bind<bool>(
+      application::handler<>::callback cb = boost::bind(
          &handler_test::handler, &app_handler_test);
 
       application::handler<> h;

@@ -127,9 +127,9 @@ public:
       task_count_ = 0;
 
       //our tasks
-      add_task(gaussian_blur<3>( boost::bind<void>( &myapp::add_result, this, _1 ))); 
-      add_task(gaussian_blur<6>( boost::bind<void>( &myapp::add_result, this, _1 ))); 
-      add_task(gaussian_blur<9>( boost::bind<void>( &myapp::add_result, this, _1 ))); 
+      add_task(gaussian_blur<3>( boost::bind( &myapp::add_result, this, _1 ))); 
+      add_task(gaussian_blur<6>( boost::bind( &myapp::add_result, this, _1 ))); 
+      add_task(gaussian_blur<9>( boost::bind( &myapp::add_result, this, _1 ))); 
      
       context_.find<application::wait_for_termination_request>()->wait();
 
@@ -178,7 +178,7 @@ int main(int argc, char *argv[])
    myapp app(app_context);
    
    application::handler<>::callback cb 
-      = boost::bind<bool>(&myapp::stop, &app);
+      = boost::bind(&myapp::stop, &app);
 
    app_context.insert<application::termination_handler>(
       make_shared<application::termination_handler_default_behaviour>(cb));

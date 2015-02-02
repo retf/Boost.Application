@@ -48,7 +48,7 @@ public:
       : signal_manager(context)
    {
       application::handler<>::callback cb
-         = boost::bind<bool>(&my_signal_manager::stop, this);
+         = boost::bind(&my_signal_manager::stop, this);
 
       bind(SIGINT,  cb);
    }

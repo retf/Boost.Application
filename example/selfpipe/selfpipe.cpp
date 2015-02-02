@@ -139,10 +139,10 @@ public:
       : application::signal_manager(cxt)
    {
       application::handler<>::parameter_callback callback1
-         = boost::bind<bool>(&signal_usr2::signal_usr1_handler, this);
+         = boost::bind(&signal_usr2::signal_usr1_handler, this);
 
       application::handler<>::parameter_callback callback2
-         = boost::bind<bool>(&signal_usr2::signal_usr2_handler, this);
+         = boost::bind(&signal_usr2::signal_usr2_handler, this);
 
       /*<< Define signal bind >>*/ 
       bind(SIGUSR1, callback1); 

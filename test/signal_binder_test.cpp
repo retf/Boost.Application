@@ -53,7 +53,7 @@ int test_main(int argc, char** argv)
 
    app_signal_binder.start();
 
-   application::handler<>::callback cb = boost::bind<bool>(
+   application::handler<>::callback cb = boost::bind(
                &handler_test::signal_handler1, &app_handler_test);
 
    boost::system::error_code ec;

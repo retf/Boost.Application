@@ -90,7 +90,7 @@ namespace boost { namespace application {
          application::context &context,
          boost::system::error_code& ec)
          : impl_(new common_application_impl(
-                 boost::bind<int>(&Application::operator(), &myapp), sm,
+                 boost::bind(&Application::operator(), &myapp), sm,
                  context, ec))
       {
          if(ec) return;

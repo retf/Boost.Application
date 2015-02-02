@@ -148,7 +148,7 @@ namespace boost { namespace application {
       static boost::function< HandlerReturnType (void) > 
          make_callback(App& app, Handler h)
       {
-         return boost::bind< HandlerReturnType >(h, &app);
+         return boost::bind(h, &app);
       }
 
    private:
