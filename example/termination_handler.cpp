@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
    myapp app(app_context);
 
    handler<>::callback stop
-      = boost::bind<bool>(&myapp::stop, &app);
+      = boost::bind(&myapp::stop, &app);
 
    app_context.insert<termination_handler>(
       boost::make_shared<termination_handler_default_behaviour>(stop));

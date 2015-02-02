@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
    // way 1
    /*
    handler<>::callback cb 
-      = boost::bind<bool>(&myapp::instace_aready_running, &app);
+      = boost::bind(&myapp::instace_aready_running, &app);
    
    // use aspects
 

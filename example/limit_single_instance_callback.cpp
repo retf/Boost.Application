@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
    // way 1
    /*
    application::handler<bool>::callback cb 
-      = boost::bind<bool>(&myapp::instace_aready_running, &app);
+      = boost::bind(&myapp::instace_aready_running, &app);
 
    app_context.insert<application::limit_single_instance>(
       boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, cb));

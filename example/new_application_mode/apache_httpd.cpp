@@ -80,7 +80,7 @@ extern "C" int myhandle(request_rec *r)
       boost::make_shared<web_app_name>("boostapp"));
 
    application::handler<std::string>::callback my_http_get_verb
-      = boost::bind<std::string>(
+      = boost::bind(
          &my_apache2_httpd_content_generator_mod::get, &app);
 
    app_context.insert<http_get_verb_handler>(
