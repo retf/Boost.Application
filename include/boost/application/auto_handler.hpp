@@ -384,7 +384,7 @@ int main()
    // add limit_single_instance handler
 
    application::handler<bool>::parameter_context_callback callback 
-      = boost::bind<bool>(&myapp::instace_aready_running, &app, _1);
+      = boost::bind(&myapp::instace_aready_running, &app, _1);
 
    app_context.insert<application::limit_single_instance>(
       csbl::make_shared<application::limit_single_instance_default_behaviour>(appuuid, callback));
@@ -392,7 +392,7 @@ int main()
    // add termination handler
   
    application::handler<>::parameter_callback termination_callback 
-      = boost::bind<bool>(&myapp::stop, &app, _1);
+      = boost::bind(&myapp::stop, &app, _1);
 
    app_context.insert<application::termination_handler>(
       csbl::make_shared<application::termination_handler_default_behaviour>(termination_callback));
@@ -460,13 +460,13 @@ int main()
    boost::uuids::uuid appuuid = gen("{9F66E4AD-ECA5-475D-8784-4BAA329EF9F2}");
 
     handler<>::global_context_callback limit_single_instance_callback 
-      = boost::bind<bool>(&myapp::instace_aready_running, &app);
+      = boost::bind(&myapp::instace_aready_running, &app);
 
    this_application()->insert<limit_single_instance>(
       csbl::make_shared<limit_single_instance_default_behaviour>(appuuid, limit_single_instance_callback));
 
    handler<>::global_context_callback termination_callback 
-      = boost::bind<bool>(&myapp::stop, &app);
+      = boost::bind(&myapp::stop, &app);
 
    this_application()->insert<termination_handler>(
       csbl::make_shared<termination_handler_default_behaviour>(termination_callback));

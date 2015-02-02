@@ -325,7 +325,7 @@ namespace boost { namespace application {
          if(th)
          {
             handler<>::callback cb
-               = boost::bind<bool>(
+               = boost::bind(
                &signal_manager::termination_signal_handler, this);
 
             bind(SIGINT,  th->get_handler(), cb, ec);

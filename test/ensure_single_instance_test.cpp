@@ -80,7 +80,7 @@ int test_main(int argc, char** argv)
       boost::uuids::uuid appuuid = gen("{8F66E4AD-ECA5-475D-8784-4BAA329EF9F2}");
 
       application::handler<>::callback cb 
-         = boost::bind<bool>(&myapp2::instace_aready_running_false, &app);
+         = boost::bind(&myapp2::instace_aready_running_false, &app);
 
       cxt.insert<application::limit_single_instance>(
          boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, cb));
@@ -100,7 +100,7 @@ int test_main(int argc, char** argv)
       boost::uuids::uuid appuuid = gen("{7F66E4AD-ECA5-475D-8784-4BAA329EF9F2}");
 
       application::handler<>::callback cb 
-         = boost::bind<bool>(&myapp2::instace_aready_running_true, &app);
+         = boost::bind(&myapp2::instace_aready_running_true, &app);
 
       cxt.insert<application::limit_single_instance>(
          boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, cb));
@@ -121,7 +121,7 @@ int test_main(int argc, char** argv)
       application::global_context::create();
 
       application::handler<>::callback cb 
-         = boost::bind<bool>(&myapp::instace_aready_running_false, &app);
+         = boost::bind(&myapp::instace_aready_running_false, &app);
 
       this_application()->insert<application::limit_single_instance>(
          boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, cb));
@@ -144,7 +144,7 @@ int test_main(int argc, char** argv)
       application::global_context::create();
 
       application::handler<>::callback cb 
-         = boost::bind<bool>(&myapp::instace_aready_running_true, &app);
+         = boost::bind(&myapp::instace_aready_running_true, &app);
 
       this_application()->insert<application::limit_single_instance>(
          boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, cb));
