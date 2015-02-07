@@ -130,10 +130,11 @@ namespace boost { namespace application { namespace detail {
     #if NTDDI_VERSION >= 0x06010000
             wchar_t* res = NULL;
             if(SUCCEEDED(::SHGetKnownFolderPath(
-                             FOLDERID_Profile, 0, NULL, res))) {
+                             FOLDERID_Profile, 0, NULL, (PWSTR*)res))) {
                 boost::filesystem::path p(res);
                 CoTaskMemFree(static_cast<void*>(res));
                 return p;
+            }
     #else
             TCHAR res[MAX_PATH];
             if(SUCCEEDED(::SHGetFolderPath(
@@ -159,10 +160,11 @@ namespace boost { namespace application { namespace detail {
     #if NTDDI_VERSION >= 0x06010000
             wchar_t* ret = NULL;
             if(SUCCEEDED(::SHGetKnownFolderPath(
-                             FOLDERID_RoamingAppData, 0, NULL, ret))) {
+                             FOLDERID_RoamingAppData, 0, NULL, (PWSTR*)ret))) {
                 boost::filesystem::path p(ret);
                 CoTaskMemFree(static_cast<void*>(ret));
                 return p;
+            }
     #else
             TCHAR ret[MAX_PATH];
             if(SUCCEEDED(::SHGetFolderPath(
