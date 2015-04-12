@@ -22,6 +22,7 @@
 // boost
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
+#include <vector>
 
 //
 #include "../../initializers.hpp"
@@ -313,6 +314,8 @@ namespace boost { namespace application { namespace example {
          const setup_type<T> &service_path_name,		 
          const setup_type<T> &service_user = setup_type<T>(""),
          const setup_type<T> &service_password = setup_type<T>(""),
+         const setup_type<T> &service_start_mode = setup_type<T>("auto"),
+         const setup_type<T> &service_depends = setup_type<T>(""),
          const setup_type<T> &service_option_string = setup_type<T>(""))
       {
          service_name_ = service_name.get();
@@ -322,6 +325,8 @@ namespace boost { namespace application { namespace example {
          service_user_ = service_user.get();
          service_password_ = service_password.get();
          service_option_string_ = service_option_string.get();
+         service_start_mode_ = service_start_mode.get();
+         service_depends_ = service_depends.get();
       }
 
       virtual ~install_windows_service_()
@@ -367,6 +372,15 @@ namespace boost { namespace application { namespace example {
             // e.g. c:\myservice\service.exe --s
          }
 
+         DWORD create_service_start_mode = SERVICE_AUTO_START;
+         if (service_start_mode_ == std::basic_string<char_type>("manaul"))
+           create_service_start_mode = SERVICE_DEMAND_START;
+
+         // e.g. the format of service depends str is "service1\0services2\0services3\0\0"
+         std::vector<char_type> create_service_depends(service_depends_.length() + 2, 0);
+         std::copy(service_depends_.begin(), service_depends_.end(), create_service_depends.begin());
+         std::replace(create_service_depends.begin(), create_service_depends.end(), '\\', '\0');
+
          // Add this service to the SCM's database.
          SC_HANDLE hservice = CreateService(
             scm.get(),
@@ -374,12 +388,12 @@ namespace boost { namespace application { namespace example {
             service_display_name_.c_str(),
             SERVICE_CHANGE_CONFIG,
             SERVICE_WIN32_OWN_PROCESS,
-            SERVICE_AUTO_START,
+            create_service_start_mode,
             SERVICE_ERROR_NORMAL,
             pathname.c_str(),
             NULL,
             NULL,
-            NULL, // service dependencies
+            create_service_depends.data(), // service dependencies
             NULL,
             NULL);
 
@@ -416,7 +430,7 @@ namespace boost { namespace application { namespace example {
                NULL,                       // dependencies
                actual_service_user.c_str(),// user account
                service_password_.c_str(),  // user account password
-               NULL );                     // service display name
+               NULL ) ? true : false;                     // service display name
 
             if ( !succeed )
             {
@@ -518,9 +532,11 @@ namespace boost { namespace application { namespace example {
       std::basic_string<char_type> service_description_;
       std::basic_string<char_type> service_path_name_;
       std::basic_string<char_type> service_option_string_;
+      std::basic_string<char_type> service_start_mode_;
+      std::basic_string<char_type> service_depends_;
 	  
-	  std::basic_string<char_type> service_user_;
-	  std::basic_string<char_type> service_password_;
+      std::basic_string<char_type> service_user_;
+      std::basic_string<char_type> service_password_;
 
    }; // install_windows_service
 

@@ -19,6 +19,7 @@
 // service_setup_ex.exe -i --name="My Service" --path="c:\myservice\service.exe" --display="My Service"
 // service_setup_ex.exe -i --name="My Service" --path="c:\myservice\service.exe" --display="My Service" --description "Service Description"
 // service_setup_ex.exe -i --name="My Service" --path="c:\myservice\service.exe" --user=".\Renato Tegon Forti" --pass="x1x1x1"
+// service_setup_ex.exe -i --name="My Service" --path="c:\myservice\service.exe" --start="manaul" --depends="service1\service2\service3"
 // [check]
 // service_setup_ex.exe -c --name="My Service" 
 // [uninstallation]
@@ -37,6 +38,12 @@
 #include <boost/program_options.hpp>
 
 #include "setup/service_setup.hpp"
+
+#ifdef BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
+namespace ns = boost;
+#else
+namespace ns = std;
+#endif
 
 using namespace boost;
 
@@ -60,7 +67,7 @@ public:
       std::cout << "Setup Windows Service " 
          << "(Note that you need run this AS ADMIN!)" << std::endl;
 
-      boost::shared_ptr<application::args> myargs 
+      ns::shared_ptr<application::args> myargs 
          = context_.find<application::args>();
 
       // define our simple installation schema options
@@ -76,6 +83,8 @@ public:
          ("pass", po::value<std::string>()->default_value(""), "user password (optional, installation only)")
          ("display", po::value<std::string>()->default_value(""), "service display name (optional, installation only)")
          ("description", po::value<std::string>()->default_value(""), "service description (optional, installation only)")
+         ("start", po::value<std::string>()->default_value("auto"), "service start mode (optional, installation only, auto or manaul, default is auto)")
+         ("depends", po::value<std::string>()->default_value(""), "other services of this service depended, multiple services using '\\' separate  (optional, installation only)")
          ;
 
       po::variables_map vm;
@@ -97,7 +106,9 @@ public:
          application::setup_arg(vm["description"].as<std::string>()),
          application::setup_arg(vm["path"].as<std::string>()),
          application::setup_arg(vm["user"].as<std::string>()), 
-         application::setup_arg(vm["pass"].as<std::string>())).install(ec);
+         application::setup_arg(vm["pass"].as<std::string>()),
+         application::setup_arg(vm["start"].as<std::string>()),
+         application::setup_arg(vm["depends"].as<std::string>())).install(ec);
 
          std::cout << ec.message() << std::endl;
 
@@ -142,6 +153,9 @@ public:
          return true;
       }
       
+      std::cout << install << std::endl;
+      return true;
+
 #endif
 
       return 0;
@@ -160,7 +174,7 @@ int main(int argc, char *argv[])
       windows_service_setup app(app_context);
 
       app_context.insert<application::args>(
-         boost::make_shared<application::args>(argc, argv));
+         ns::make_shared<application::args>(argc, argv));
 
       return application::launch<application::common>(app, app_context);
    }
