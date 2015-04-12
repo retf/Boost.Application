@@ -84,7 +84,7 @@ public:
 
       if (vm.count("help")) 
       {
-         std::cout << install << std::cout;
+         std::cout << install << std::endl;
          return true;
       }
 
