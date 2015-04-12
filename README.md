@@ -170,7 +170,7 @@ int main(int argc, char *argv[])
    if(ec)
    {
       std::cout << "[E] " << ec.message() 
-         << " <" << ec.value() << "> " << std::cout;
+         << " <" << ec.value() << "> " << std::endl;
    }
    
    return result;
