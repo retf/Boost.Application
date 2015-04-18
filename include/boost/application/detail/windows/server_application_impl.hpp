@@ -59,10 +59,10 @@ namespace boost { namespace application {
       typedef CharType char_type;
       typedef std::basic_string<char_type> string_type;
 
-      server_application_impl_(const mainop &main, signal_binder &sb,
+      server_application_impl_(const mainop &main_op, signal_binder &sb,
          application::context &context, boost::system::error_code& ec)
          : application_impl(context)
-         , main_(main)
+         , main_(main_op)
          , launch_thread_(0)
          , result_code_(0)
          , terminate_event_(0)
