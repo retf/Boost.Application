@@ -12,7 +12,6 @@
 #include <boost/application/system_error.hpp>
 
 #include <cstdlib>
-#include <shlobj.h>
 
 #ifdef BOOST_HAS_PRAGMA_ONCE
 # pragma once
