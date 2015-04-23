@@ -24,7 +24,7 @@
 
 using namespace boost;
 
-//[path
+//[pid
 class myapp
 {
 public:

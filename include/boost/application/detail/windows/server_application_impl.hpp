@@ -29,8 +29,7 @@
 #include <boost/application/detail/application_impl.hpp>
 #include <boost/application/signal_binder.hpp>
 
-#include <boost/thread/thread.hpp>
-#include <boost/lambda/lambda.hpp>
+//#include <boost/lambda/lambda.hpp>
 
 #ifdef BOOST_MSVC
 #  pragma warning(push)
@@ -355,7 +354,7 @@ namespace boost { namespace application {
          	 error = terminate_code_;
          }
 
-      	 stop();
+      	stop();
 
          csbl::shared_ptr<status> st =
             context_.find<status>();
@@ -415,8 +414,8 @@ namespace boost { namespace application {
          }
 
          // Launch work thread (main)
-         launch_thread_ = new boost::thread(
-            boost::bind(&server_application_impl_::work_thread, this, dw_argc, lpsz_argv));
+         launch_thread_ = new csbl::thread(
+            csbl::bind(&server_application_impl_::work_thread, this, dw_argc, lpsz_argv));
 
          HANDLE hevent[2];
 
@@ -484,7 +483,7 @@ namespace boost { namespace application {
       // the SCM. Created by RegisterServiceCtrlHandler
       SERVICE_STATUS_HANDLE service_status_handle_;
 
-      boost::thread *launch_thread_;
+      csbl::thread *launch_thread_;
 
       // app code
       mainop main_;

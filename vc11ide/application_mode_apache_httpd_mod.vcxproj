@@ -58,7 +58,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PLUGIN_LIBRARY_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>E:\type_index\include;E:\project.boost.app.v4.11.git\include;C:\boost_1_54_0;C:\Program Files %28x86%29\Apache Software Foundation\Apache2.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\type_index\include;E:\project.boost.app.v4.12.git\include;C:\boost_1_54_0;C:\Program Files %28x86%29\Apache Software Foundation\Apache2.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

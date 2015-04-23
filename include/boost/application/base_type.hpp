@@ -43,8 +43,7 @@ namespace boost { namespace application {
          : s_(s)
       {}
 
-      const Type& get() const
-      {
+      const Type& get() const {
          return s_;
       }
 

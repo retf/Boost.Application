@@ -70,8 +70,7 @@ namespace boost { namespace application {
    template <typename ApplicationMode, typename Application,
       typename CustomType, typename Context>
    inline int launch(Application& app, CustomType& ct, Context &cxt,
-      system::error_code& ec)
-   {
+      system::error_code& ec) {
       // the ensure_single_instance tell us to exit?
      
       bool we_need_exit = detail::ensure_single_instance<Context>()(cxt, ec); 
@@ -92,8 +91,7 @@ namespace boost { namespace application {
    template <typename ApplicationMode, typename Application, 
       typename CustomType>
    inline int launch(Application& app, CustomType& ct, global_context_ptr cxt,
-      system::error_code& ec)
-   {
+      system::error_code& ec) {
       return launch<ApplicationMode>(app, ct, *cxt.get(), ec);
    }
 
@@ -118,8 +116,7 @@ namespace boost { namespace application {
     *
     */
    template <typename ApplicationMode, typename Application, typename Context>
-   inline int launch(Application& app, Context &cxt, system::error_code& ec)
-   {
+   inline int launch(Application& app, Context &cxt, system::error_code& ec) {
       signal_manager ct(cxt, ec); // our default custom type
 
       if(ec) return 0;
@@ -128,8 +125,7 @@ namespace boost { namespace application {
    }
 
    template <typename ApplicationMode, typename Application>
-   inline int launch(Application& app, global_context_ptr cxt, system::error_code& ec)
-   {
+   inline int launch(Application& app, global_context_ptr cxt, system::error_code& ec) {
       return launch<ApplicationMode>(app, *cxt.get(), ec);
    }
 
@@ -157,8 +153,7 @@ namespace boost { namespace application {
     */
    template <typename ApplicationMode, typename Application,
       typename CustomType, typename Context>
-   inline int launch(Application& app, CustomType& ct, Context &cxt)
-   {
+   inline int launch(Application& app, CustomType& ct, Context &cxt) {
       system::error_code ec; int ret = 0;
       ret = launch<ApplicationMode>(app, ct, cxt, ec);
 
@@ -169,8 +164,7 @@ namespace boost { namespace application {
    }
 
    template <typename ApplicationMode, typename Application, typename CustomType>
-   inline int launch(Application& app, CustomType& ct, global_context_ptr cxt)
-   {
+   inline int launch(Application& app, CustomType& ct, global_context_ptr cxt) {
       return launch<ApplicationMode>(app, ct, *cxt.get());
    }
 
@@ -191,8 +185,7 @@ namespace boost { namespace application {
     *
     */
    template <typename ApplicationMode, typename Application, typename Context>
-   inline int launch(Application& app, Context &cxt)
-   {
+   inline int launch(Application& app, Context &cxt) {
       system::error_code ec; int ret = 0;
       ret = launch<ApplicationMode>(app, cxt, ec);
 
@@ -203,8 +196,7 @@ namespace boost { namespace application {
    }
 
    template <typename ApplicationMode, typename Application>
-   inline int launch(Application& app, global_context_ptr cxt)
-   {
+   inline int launch(Application& app, global_context_ptr cxt) {
       return launch<ApplicationMode>(app, *cxt.get());
    }
 

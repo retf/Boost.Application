@@ -22,51 +22,33 @@
 
 namespace boost { namespace application {
 
-    class path {
-    public:
-        virtual filesystem::path current_path(void) = 0;
-        virtual const filesystem::path& location(boost::system::error_code &ec) = 0;
-        virtual const filesystem::path& location() = 0;
-        virtual const filesystem::path& executable_path_name(boost::system::error_code &ec) = 0;
-        virtual const filesystem::path& executable_path_name() = 0;
-        virtual filesystem::path executable_path(boost::system::error_code &ec) = 0;
-        virtual filesystem::path executable_path() = 0;
-        virtual filesystem::path executable_full_name(boost::system::error_code &ec) = 0;
-        virtual filesystem::path executable_full_name(void) = 0;
-        virtual filesystem::path executable_name(boost::system::error_code &ec) = 0;
-        virtual filesystem::path executable_name(void) = 0;
-        virtual filesystem::path home_path(void) = 0;
-        virtual filesystem::path config_path(void) = 0;
-        virtual filesystem::path app_data_path(void) = 0;
-        virtual filesystem::path temp_path(void) = 0;        
-    };
 
-    class default_path : public path
+    class path 
     {
     public:
-        default_path() : impl_(new detail::default_path_impl) {}
+        path() : impl_(new detail::default_path_impl) {}
 
         filesystem::path current_path(void)
         {
             return impl_->current_path();
         }
       
-        const filesystem::path& location(boost::system::error_code &ec)
+        filesystem::path location(boost::system::error_code &ec)
         {
             return impl_->location(ec);
         }
 
-        const filesystem::path& location()
+        filesystem::path location()
         {
             return impl_->location();
         }
 
-        const filesystem::path& executable_path_name(boost::system::error_code &ec)
+        filesystem::path executable_path_name(boost::system::error_code &ec)
         {
            return impl_->location(ec);
         }
 
-        const filesystem::path& executable_path_name()
+        filesystem::path executable_path_name()
         {
             return impl_->location();
         }

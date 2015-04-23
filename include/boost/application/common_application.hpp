@@ -111,7 +111,7 @@ namespace boost { namespace application {
                
          if(!impl_->get_context().find<path>())
               impl_->get_context().insert<path>(
-               csbl::make_shared<default_path>());
+               csbl::make_shared<path>());
       }
 
       /*!

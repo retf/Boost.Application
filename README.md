@@ -1,4 +1,4 @@
-#Boost.Application (0.4.11) [![Build Status](https://travis-ci.org/retf/Boost.Application.svg?branch=master)](https://travis-ci.org/retf/Boost.Application) 
+#Boost.Application (0.4.12) [![Build Status](https://travis-ci.org/retf/Boost.Application.svg?branch=master)](https://travis-ci.org/retf/Boost.Application) 
 
 ### Caution
 
@@ -239,6 +239,15 @@ If you intend to use 'Application' on your application, please send-me your name
  * [Pocoproject (WinService)](http://pocoproject.org/docs-1.5.3/Poco.Util.WinService.html)
  * [Libdaemon (Daemon)] (http://www.tyrfingr.is/projects/libdaemon/)
  * [Qt (qtservice)](http://doc.qt.digia.com/solutions/4/qtservice/qtservice.html)
+ 
+### Changes on 0.4.12
+
+ * The header config.hpp was refactored;
+ * global_context can handle errors using boost::system::error_code.
+
+ #### Aspects
+
+ * The 'path' aspect do not use path_default interface more.
  
 ### Changes on 0.4.11
 

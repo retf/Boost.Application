@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
    
    /*<< Path manipulation aspect, to be used to get executable module path to use in log >>*/
    app_context.insert<application::path>(
-      boost::make_shared<application::default_path>());
+      boost::make_shared<application::path>());
 
    /*<< Arg manipulation aspect >>*/
    app_context.insert<application::args>(

@@ -96,8 +96,7 @@ namespace boost { namespace application {
 
       // context constructible 
       template <typename Application, typename Derived>
-      struct handler_auto_set_c : public Application
-      {
+      struct handler_auto_set_c : public Application {
          handler_auto_set_c(context &cxt)
             : Application (cxt)
          {
@@ -114,8 +113,7 @@ namespace boost { namespace application {
 
       // unconstructible (to use with global_context)
       template <typename Application, typename Derived>
-      struct handler_auto_set_u : public Application
-      {
+      struct handler_auto_set_u : public Application {
          handler_auto_set_u(context &cxt)
          {
             static_cast<Derived*>(this)->setup(cxt);

@@ -94,40 +94,90 @@ namespace boost { namespace application {
    class global_context : public basic_context
    {
    public:
-      static inline csbl::shared_ptr<global_context> create()
-      {
+
+      static inline csbl::shared_ptr<global_context> create() {
+        boost::system::error_code ec;
+        create(ec);
+
+        if(ec) 
+           BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC("global context is already created", ec); 
+
+         return instance_t::ptr;
+      }
+
+      static inline csbl::shared_ptr<global_context> create(boost::system::error_code &ec) BOOST_NOEXCEPT  {
          boost::lock_guard<boost::shared_mutex> u_guard(instance_t::lock);
-         if(already_created())
-            BOOST_THROW_EXCEPTION(std::logic_error(
-               "global context is already created"));
+
+         ec.clear();
+         if(already_created()) {
+            ec = boost::system::error_code(
+                 boost::system::errc::file_exists,
+                 boost::system::generic_category()
+                 );
+
+            return csbl::shared_ptr<global_context>();
+         }
 
          instance_t::ptr.reset(new context_t());
          return instance_t::ptr;
       }
-      static inline void destroy()
-      {
+	  
+      static inline void destroy()  {
+         boost::system::error_code ec;
+         destroy(ec);
+
+         if(ec) 
+            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC("no global context to destroy", ec);  
+      }
+	  
+      static inline void destroy(boost::system::error_code &ec) BOOST_NOEXCEPT {
          boost::lock_guard<boost::shared_mutex> u_guard(instance_t::lock);
-         if(!already_created())
-         BOOST_THROW_EXCEPTION(std::logic_error(
-            "no global context to destroy"));
+
+         ec.clear();
+         if(!already_created()) {
+            ec = boost::system::error_code(
+                 boost::system::errc::bad_file_descriptor,
+                 boost::system::generic_category()
+                 );
+           return;
+         }
 
          instance_t::ptr.reset();
       }
-      static inline csbl::shared_ptr<global_context> get()
-      {
+
+      static inline csbl::shared_ptr<global_context> get() {
+         boost::system::error_code ec;
+         csbl::shared_ptr<global_context> cxt =get(ec);
+
+         if(ec)
+            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC("there is no global context", ec); 
+
+         return cxt;
+      }
+
+      static inline csbl::shared_ptr<global_context> get(boost::system::error_code &ec) BOOST_NOEXCEPT {
          boost::shared_lock_guard<boost::shared_mutex> s_guard(instance_t::lock);
-         if(!already_created())
-            BOOST_THROW_EXCEPTION(std::logic_error(
-               "there is no global context"));
+
+         ec.clear();
+         if(!already_created()) {
+            ec = boost::system::error_code(
+                 boost::system::errc::bad_file_descriptor,
+                 boost::system::generic_category()
+                 );
+           return csbl::shared_ptr<global_context>();
+         }
 
          return instance_t::ptr;
       }
+	  
    protected:
       global_context() { }
+	  
    private:
       typedef global_context context_t;
       typedef detail::T_instance<context_t> instance_t;
       typedef csbl::shared_ptr<context_t> context_ptr_t;
+	  
       static inline bool already_created() {
           return (instance_t::ptr != 0);
       }

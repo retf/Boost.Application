@@ -32,12 +32,12 @@ BOOST_APPLICATION_FEATURE_SELECT
 #if defined( BOOST_APPLICATION_FEATURE_NS_SELECT_STD )
       return typeid(T);
 #elif defined( BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST )
-      return BOOST_APPLICATION_TYPE_INDEX_SELECT::type_id<T>();
+      return BOOST_APPLICATION_TYPE_INDEX_NS_SELECT::type_id<T>();
 #else // auto detect
 #   ifndef BOOST_NO_CXX11_HDR_TYPEINDEX
       return typeid(T);
 #   else
-      return BOOST_APPLICATION_TYPE_INDEX_SELECT::type_id<T>();
+      return BOOST_APPLICATION_TYPE_INDEX_NS_SELECT::type_id<T>();
 #   endif
 #endif
 

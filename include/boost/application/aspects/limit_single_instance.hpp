@@ -17,7 +17,6 @@
 #define BOOST_APPLICATION_LIMIT_SINGLE_INSTANCE_ASPECT_HPP
 
 #include <boost/noncopyable.hpp>
-#include <boost/function.hpp>
 
 #include <boost/application/config.hpp>
 #include <boost/application/detail/csbl.hpp>
