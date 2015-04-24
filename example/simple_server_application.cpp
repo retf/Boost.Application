@@ -252,7 +252,7 @@ int main(int argc, char *argv[])
    // add termination handler
 
    application::handler<>::callback termination_callback
-      = application::csbl::bind(&myapp::stop, &app);
+      = boost::bind(&myapp::stop, &app);
 
    app_context.insert<application::termination_handler>(
       application::csbl::make_shared<application::termination_handler_default_behaviour>(termination_callback));
@@ -264,7 +264,7 @@ int main(int argc, char *argv[])
    // windows only : add pause handler
 
    application::handler<>::callback pause_callback
-      = application::csbl::bind(&myapp::pause, &app);
+      = boost::bind(&myapp::pause, &app);
 
    app_context.insert<application::pause_handler>(
       application::csbl::make_shared<application::pause_handler_default_behaviour>(pause_callback));
@@ -272,7 +272,7 @@ int main(int argc, char *argv[])
    // windows only : add resume handler
 
    application::handler<>::callback resume_callback
-      = application::csbl::bind(&myapp::resume, &app);
+      = boost::bind(&myapp::resume, &app);
 
    app_context.insert<application::resume_handler>(
       application::csbl::make_shared<application::resume_handler_default_behaviour>(resume_callback));

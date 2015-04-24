@@ -12,6 +12,7 @@
 // #define BOOST_LIB_DIAGNOSTIC
 
 #include <iostream>
+//#include <chrono>   
 #include <boost/application.hpp>
 #include <boost/test/minimal.hpp>
 
@@ -48,6 +49,7 @@ public:
    }
 };
 
+
 int test_main(int argc, char** argv)
 {
    application::context app_context;
@@ -83,6 +85,10 @@ int test_main(int argc, char** argv)
       std::cerr << "waiting..." << std::endl;
 
    BOOST_CHECK(app_handler_test.count_ > 0);
+
+
+
+   std::this_thread::sleep_for(std::chrono::seconds(1));
 
    return 0;
 }
