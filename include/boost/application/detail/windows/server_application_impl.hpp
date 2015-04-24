@@ -415,7 +415,7 @@ namespace boost { namespace application {
 
          // Launch work thread (main)
          launch_thread_ = new csbl::thread(
-            csbl::bind(&server_application_impl_::work_thread, this, dw_argc, lpsz_argv));
+            boost::bind(&server_application_impl_::work_thread, this, dw_argc, lpsz_argv));
 
          HANDLE hevent[2];
 
