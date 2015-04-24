@@ -10,7 +10,9 @@
 /// \file boost/application.hpp
 /// \brief Includes all the headers of the Boost.Application library.
 
+// config
 #include <boost/config.hpp>
+#include <boost/application/config.hpp>
 // application
 #include <boost/application/version.hpp>
 #include <boost/application/context.hpp>

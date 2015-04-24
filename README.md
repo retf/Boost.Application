@@ -51,7 +51,7 @@ using namespace boost;
 
 // my application code
 
-class myapp 
+class myapp
 {   
 public:
 

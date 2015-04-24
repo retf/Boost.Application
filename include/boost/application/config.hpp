@@ -45,6 +45,10 @@
 // > sudo bjam define=BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
 //
 
+// because of asio we cant use CXX11_HDR_SYSTEM_ERROR
+// The standard library does not provide header <system_error>.
+// BOOST_NO_CXX11_HDR_SYSTEM_ERROR
+
 // force selection
 #if defined( BOOST_APPLICATION_FEATURE_NS_SELECT_STD )
 #   include <memory>
@@ -158,7 +162,6 @@
    using BOOST_APPLICATION_FEATURE_HDR_UNORDERED_MAP_NS_SELECT::unordered_map;                       \
    using BOOST_APPLICATION_FEATURE_HDR_UNORDERED_MAP_NS_SELECT::static_pointer_cast;                 \
    using BOOST_APPLICATION_FEATURE_HDR_THREAD_NS_SELECT::thread;                                     \
-   using BOOST_APPLICATION_FEATURE_HDR_FUNCTIONAL_NS_SELECT::bind;                                   \
    using BOOST_APPLICATION_FEATURE_HDR_FUNCTIONAL_NS_SELECT::function;
 
 // error handle for Boost.Application lib, based on Boost.System.
