@@ -98,14 +98,12 @@ namespace boost { namespace application {
       template <typename Application, typename Derived>
       struct handler_auto_set_c : public Application {
          handler_auto_set_c(context &cxt)
-            : Application (cxt)
-         {
+            : Application (cxt) {
             static_cast<Derived*>(this)->setup(cxt);
          }
 
          handler_auto_set_c(context &cxt, boost::uuids::uuid& appid)
-            : Application (cxt)
-         {
+            : Application (cxt) {
             static_cast<Derived*>(this)->setup(cxt);
             static_cast<Derived*>(this)->setup(cxt, appid);
          }
@@ -114,13 +112,11 @@ namespace boost { namespace application {
       // unconstructible (to use with global_context)
       template <typename Application, typename Derived>
       struct handler_auto_set_u : public Application {
-         handler_auto_set_u(context &cxt)
-         {
+         handler_auto_set_u(context &cxt) {
             static_cast<Derived*>(this)->setup(cxt);
          }
 
-         handler_auto_set_u(context &cxt, boost::uuids::uuid& appid)
-         {
+         handler_auto_set_u(context &cxt, boost::uuids::uuid& appid) {
             static_cast<Derived*>(this)->setup(cxt);
             static_cast<Derived*>(this)->setup(cxt, appid);
          }
@@ -205,10 +201,8 @@ namespace boost { namespace application {
 
       // setup context fro common handlers
 
-      void setup(context &cxt)
-      {
-         if(has_stop<Application, bool(Application::*)()>::value)
-         {   
+      void setup(context &cxt) {
+         if(has_stop<Application, bool(Application::*)()>::value) {   
             cxt.insert<termination_handler>(
                csbl::make_shared<termination_handler_default_behaviour>(
                   handler<bool>::make_callback(*this, 
@@ -220,8 +214,7 @@ namespace boost { namespace application {
          // platform dependent
          // pause and resume is only available on windows     
 #        if defined( BOOST_WINDOWS_API )   
-         if(has_pause<Application, bool(Application::*)()>::value)
-         {
+         if(has_pause<Application, bool(Application::*)()>::value) {
             cxt.insert<pause_handler>(
                csbl::make_shared<pause_handler_default_behaviour>(
                   handler<bool>::make_callback(*this, 
@@ -230,8 +223,7 @@ namespace boost { namespace application {
                            > )));
          }
 
-         if(has_resume<Application, bool(Application::*)()>::value)
-         {
+         if(has_resume<Application, bool(Application::*)()>::value) {
             cxt.insert<resume_handler>(
                csbl::make_shared<resume_handler_default_behaviour>(
                   handler<bool>::make_callback(*this, 
@@ -243,10 +235,8 @@ namespace boost { namespace application {
 
       }
 
-      void setup(context &cxt, boost::uuids::uuid& appid)
-      {
-         if(has_single_instance<Application, bool(Application::*)()>::value)
-         {
+      void setup(context &cxt, boost::uuids::uuid& appid) {
+         if(has_single_instance<Application, bool(Application::*)()>::value) {
             cxt.insert<limit_single_instance>(
                csbl::make_shared<limit_single_instance_default_behaviour>(appid,
                   handler<bool>::make_callback(*this, 
@@ -260,15 +250,13 @@ namespace boost { namespace application {
 
       template<bool Enable>  
       typename boost::enable_if_c< Enable, bool>::type 
-         stop_handler_() 
-      { 
+         stop_handler_() { 
          return Application::stop(); 
       } 
 
       template<bool Enable> // never called
       typename boost::enable_if_c<!Enable, bool>::type 
-         stop_handler_() 
-      {
+         stop_handler_() {
          return false; 
       } 
     
@@ -279,15 +267,13 @@ namespace boost { namespace application {
 
       template<bool Enable>  
       typename boost::enable_if_c< Enable, bool>::type 
-         pause_handler_() 
-      { 
+         pause_handler_() { 
          return Application::pause(); 
       } 
 
       template<bool Enable> // never called
       typename boost::enable_if_c<!Enable, bool>::type 
-         pause_handler_() 
-      {
+         pause_handler_() {
          return false; 
       }
  
@@ -295,15 +281,13 @@ namespace boost { namespace application {
 
       template<bool Enable>  
       typename boost::enable_if_c< Enable, bool>::type 
-         resume_handler_() 
-      { 
+         resume_handler_() { 
          return Application::resume(); 
       } 
 
       template<bool Enable> // never called
       typename boost::enable_if_c<!Enable, bool>::type 
-         resume_handler_() 
-      {
+         resume_handler_() {
          return false; 
       }
 #     endif  
@@ -312,15 +296,13 @@ namespace boost { namespace application {
 
       template<bool Enable>  
       typename boost::enable_if_c< Enable, bool>::type 
-         single_instance_handler_() 
-      { 
+         single_instance_handler_() { 
          return Application::instace_aready_running(); 
       } 
 
       template<bool Enable> // never called
       typename boost::enable_if_c<!Enable, bool>::type 
-         single_instance_handler_() 
-      {
+         single_instance_handler_() {
          return false; 
       }
    };  

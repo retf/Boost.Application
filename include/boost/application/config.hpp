@@ -28,6 +28,7 @@
 #define BOOST_APPLICATION_CONFIG_HPP
 
 #include <boost/config.hpp>
+#include <boost/predef/os.h>
 #include <boost/application/system_error.hpp>
 #include <boost/application/version.hpp>
 

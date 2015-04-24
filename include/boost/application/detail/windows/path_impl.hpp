@@ -182,7 +182,9 @@ namespace boost { namespace application { namespace detail {
         boost::filesystem::path temp_path()
         {
             // taken from msdn example for GetTempPath()
-            DWORD ret = ::GetTempPath(0, (char*)"");
+            // DWORD ret = ::GetTempPath(0, (char*)"");
+
+            DWORD ret = ::GetTempPathW(0, (LPWSTR)"");
     
             if(ret == 0)
                 return boost::filesystem::path(".");

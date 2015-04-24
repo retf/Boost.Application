@@ -8,6 +8,9 @@
 // #define BOOST_ALL_DYN_LINK
 // #define BOOST_LIB_DIAGNOSTIC
 
+// #define BOOST_APPLICATION_FEATURE_NS_SELECT_STD
+// #define BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
+
 #include <iostream>
 #include <boost/application.hpp>
 #include <boost/test/minimal.hpp>
