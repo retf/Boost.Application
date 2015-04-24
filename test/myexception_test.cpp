@@ -8,16 +8,14 @@
 // #define BOOST_ALL_DYN_LINK
 // #define BOOST_LIB_DIAGNOSTIC
 
+#define BOOST_TEST_MODULE myexception_test
+
+
 #include <iostream>
 #include <boost/application.hpp>
-#include <boost/test/minimal.hpp>
+#include <boost/test/unit_test.hpp>
 
 using namespace boost;
-
-#define BOOST_ALL_DYN_LINK
-#define BOOST_LIB_DIAGNOSTIC
-
-#define BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
 
 #include <iostream>
 #include <sstream>
@@ -98,6 +96,18 @@ private:
 
 
 
+
+BOOST_AUTO_TEST_CASE(myexception_throw)
+{
+   {
+      application::context app_context;      
+      myapp app(app_context);
+
+      BOOST_CHECK_THROW(application::launch<application::common>(app, app_context), myexception);
+   }
+}
+
+/*
 int test_main(int argc, char** argv)
 {   
 
@@ -105,6 +115,9 @@ int test_main(int argc, char** argv)
    {
       application::context app_context;      
       myapp app(app_context);
+
+       BOOST_CHECK_THROW(application::launch<application::common>(app, app_context), myexception);
+
 
       return application::launch<application::common>(app, app_context);
    }
@@ -124,3 +137,4 @@ int test_main(int argc, char** argv)
 
 
 
+*/

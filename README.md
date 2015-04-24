@@ -243,7 +243,8 @@ If you intend to use 'Application' on your application, please send-me your name
 ### Changes on 0.4.12
 
  * The header config.hpp was refactored;
- * global_context can handle errors using boost::system::error_code.
+ * global_context can handle errors using boost::system::error_code;
+ * global_context now throws boost::system::system_error, not more std::logic_error.
 
  #### Aspects
 
