@@ -73,7 +73,9 @@ namespace boost { namespace application {
       virtual ~signal_binder() {
          if(io_service_thread_) {
             io_service_.stop();
-            io_service_thread_->join();
+#           ifndef BOOST_APPLICATION_USE_CXX11_HDR_THREAD
+            io_service_thread_->join(); // todo: this fail on std::thread, need check.
+#           endif
             delete io_service_thread_;
          }
       }
