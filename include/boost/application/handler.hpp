@@ -101,7 +101,10 @@ namespace boost { namespace application {
        *
        */
       bool is_valid() const {
-         return callback_;
+         if(callback_)
+            return true;
+
+         return false;
       }
 
       /*!

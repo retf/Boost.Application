@@ -52,7 +52,6 @@ namespace boost { namespace application {
    public:
       explicit signal_binder(context &cxt)
          : signals_(io_service_)
-         , io_service_thread_(0)
          , context_(cxt) {
          signals_.async_wait(
             boost::bind(&signal_binder::signal_handler, this,
@@ -62,7 +61,6 @@ namespace boost { namespace application {
 
       explicit signal_binder(global_context_ptr cxt)
          : signals_(io_service_)
-         , io_service_thread_(0)
          , context_(*cxt.get()) {
          signals_.async_wait(
             boost::bind(&signal_binder::signal_handler, this,
@@ -74,9 +72,8 @@ namespace boost { namespace application {
          if(io_service_thread_) {
             io_service_.stop();
 #           ifndef BOOST_APPLICATION_USE_CXX11_HDR_THREAD
-            io_service_thread_->join(); // todo: this fail on std::thread, need check.
+            if (io_service_thread_->joinable()) io_service_thread_->join(); // todo: this fail on std::thread, need check.
 #           endif
-            delete io_service_thread_;
          }
       }
 
@@ -195,8 +192,8 @@ namespace boost { namespace application {
     protected:
 
       void start() {
-          io_service_thread_ = new csbl::thread(
-            boost::bind(&signal_binder::run_io_service, this));
+         io_service_thread_.reset(new csbl::thread(
+            boost::bind(&signal_binder::run_io_service, this)));
       }
 
       void run_io_service() {
@@ -244,7 +241,7 @@ namespace boost { namespace application {
       asio::io_service io_service_;
       asio::signal_set signals_;
 
-      csbl::thread *io_service_thread_;
+      csbl::shared_ptr<csbl::thread> io_service_thread_;
 
    protected:
 
