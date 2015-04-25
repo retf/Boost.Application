@@ -1,4 +1,4 @@
-#Boost.Application (0.4.12) [![Build Status](https://travis-ci.org/retf/Boost.Application.svg?branch=master)](https://travis-ci.org/retf/Boost.Application) 
+#Boost.Application (0.4.12) [![Build Status](https://travis-ci.org/retf/Boost.Application.svg?branch=master)](https://travis-ci.org/retf/Boost.Application) [![Coverage Status](https://coveralls.io/repos/retf/Boost.Application/badge.svg?branch=master)](https://coveralls.io/r/retf/Boost.Application?branch=master)
 
 ### Caution
 
