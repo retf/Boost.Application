@@ -13,7 +13,9 @@ env:
    # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
    #   via the "travis encrypt" command using the project repo's public key
    - secure: "GU5aiA6793FQckMMz/gE0L1kPQzgxeq5wqL2Aq0E9kYiYtrHyg1HiWhHEcRUYAKGUTAsb+RQUG331HMNfnoxsop80DTs4uz05tQsGvW0nCfCpnuiCdYIGctsXaHNwmc0c+nDIsmoKLUMzmljJ3Ys3mAe0ItxyRJ/fJvgy5CkEo0="
-   
+  
+  matrix: 
+  
    - CXX_STANDARD=c++98
    - CXX_STANDARD=c++0x
 
