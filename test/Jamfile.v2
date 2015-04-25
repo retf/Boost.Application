@@ -122,6 +122,7 @@ project
       # auto handler
       #
       [ run auto_handler_test.cpp ]
+	  [ run auto_handler_global_context_test.cpp ]
       #
       #
 
