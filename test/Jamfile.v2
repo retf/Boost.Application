@@ -117,6 +117,13 @@ project
       [ run simple_server_application_test.cpp ]
       #
       #
+	  
+	  #
+      # auto handler
+      #
+      [ run auto_handler_test.cpp ]
+      #
+      #
 
       #
       # aspects
