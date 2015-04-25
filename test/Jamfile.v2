@@ -122,7 +122,7 @@ project
       # aspects
       #
       [ run args_aspect_test.cpp ]
-      # [ run path_aspect_test.cpp ]
+      [ run path_aspect_test.cpp ]
       #
       #
 
