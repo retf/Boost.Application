@@ -8,26 +8,9 @@ os:
     - linux
 
 env:
+    - CXX_STANDARD=c++98
+    - CXX_STANDARD=c++0x
 
-  global:
-   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
-   #   via the "travis encrypt" command using the project repo's public key
-   - secure: "GU5aiA6793FQckMMz/gE0L1kPQzgxeq5wqL2Aq0E9kYiYtrHyg1HiWhHEcRUYAKGUTAsb+RQUG331HMNfnoxsop80DTs4uz05tQsGvW0nCfCpnuiCdYIGctsXaHNwmc0c+nDIsmoKLUMzmljJ3Ys3mAe0ItxyRJ/fJvgy5CkEo0="
-   - CXX_STANDARD=c++98
-   - CXX_STANDARD=c++0x
-
-addons:
-  coverity_scan:
-    project:
-      name: "retf/Boost.Application"
-    notification_email: re.tf@acm.org
-    build_command_prepend: "echo $COV_BUILD_OPTIONS $COVERITY_SCAN_BUILD_COMMAND "
-    build_command:   "../../../b2 cxxflags=--coverage\ -std=$CXX_STANDARD linkflags=--coverage "
-    project:
-      name: "$TRAVIS_REPO_SLUG"
-      description: "Build submitted via Travis CI"
-
-	
 before_install:
     # Set this to the name of your Boost library
     # Autodetect library name by using the following code: - PROJECT_TO_TEST=`git rev-parse --show-toplevel`
