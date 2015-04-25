@@ -37,6 +37,7 @@ namespace boost { namespace application {
      * instace_aready_running the application mechanism will continue,
      * if your return false the application mechanism will exit.
      *
+     *
      */
    
    template<class HandlerReturnType = bool>
