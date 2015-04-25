@@ -147,8 +147,8 @@ project
       [ compile ../example/my_own_termination_handler.cpp ]
       [ compile ../example/limit_single_instance.cpp ]
       [ compile ../example/simple_server_application.cpp ]
-      [ compile ../example/simple_server_application_with_auto_handler.cpp ]
-      [ compile ../example/simple_server_application_with_auto_handler_and_global_context.cpp ]
+      # [ compile ../example/simple_server_application_with_auto_handler.cpp ]
+      # [ compile ../example/simple_server_application_with_auto_handler_and_global_context.cpp ]
       [ run ../example/setup/windows/setup.cpp : : : <build>no <target-os>windows:<build>yes ]
       #
       #
