@@ -151,7 +151,9 @@ private:
 
 int main(int argc, char *argv[])
 { 
-   return application::launch<application::server>(application::auto_app<myapp>(), argc, argv);  
+   return application::launch<
+      application::server
+	     >(application::auto_app<myapp>(), argc, argv);  
 }
 
 ```
