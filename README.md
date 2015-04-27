@@ -222,8 +222,9 @@ If you intend to use 'Application' on your application, please send-me your name
 
  * The header config.hpp was refactored;
  * global_context can handle errors using boost::system::error_code;
- * global_context now throws boost::system::system_error, not more std::logic_error.
-
+ * global_context now throws boost::system::system_error, not more std::logic_error;
+ * auto_app utility file that simplifies the creation of an application;
+ 
  #### Aspects
 
  * The 'path' aspect do not use path_default interface more.
