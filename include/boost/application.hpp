@@ -17,6 +17,7 @@
 #include <boost/application/version.hpp>
 #include <boost/application/context.hpp>
 #include <boost/application/launch.hpp>
+#include <boost/application/auto_app.hpp>
 #include <boost/application/auto_handler.hpp>
 // application/aspects
 #include <boost/application/aspects/args.hpp>

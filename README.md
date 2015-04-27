@@ -150,30 +150,8 @@ private:
 };
 
 int main(int argc, char *argv[])
-{   
-   application::context app_context;
-   
-   // auto_handler will automatically add termination, pause and resume (windows) handlers
-   application::auto_handler<myapp> app(app_context);
-
-   // my server aspects
-
-   // to handle args
-   app_context.insert<application::args>(
-      boost::make_shared<application::args>(argc, argv));  
-
-   // my server instantiation
-
-   boost::system::error_code ec;
-   int result = application::launch<application::server>(app, app_context, ec);
-
-   if(ec)
-   {
-      std::cout << "[E] " << ec.message() 
-         << " <" << ec.value() << "> " << std::endl;
-   }
-   
-   return result;
+{ 
+   return application::launch<application::server>(application::auto_app<myapp>(), argc, argv);  
 }
 
 ```

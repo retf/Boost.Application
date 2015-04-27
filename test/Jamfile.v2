@@ -125,6 +125,13 @@ project
 	  [ run auto_handler_global_context_test.cpp ]
       #
       #
+	  
+	  #
+      # auto app
+      #
+      [ run auto_app_test.cpp ]
+      #
+      #
 
       #
       # aspects

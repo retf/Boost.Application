@@ -72,6 +72,7 @@ private:
 
 int main(int argc, char *argv[])
 {  
+
    /*<<Create a context application aspect pool>>*/   
    application::context app_context;
 

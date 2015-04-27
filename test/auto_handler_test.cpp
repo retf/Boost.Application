@@ -56,6 +56,7 @@ int test_main(int argc, char** argv)
    BOOST_CHECK(application::launch<application::server>(app, app_context, ec) == 0);
    BOOST_CHECK(ec.value());
 
+
    return 0;
 }
 
