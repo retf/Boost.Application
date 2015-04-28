@@ -75,7 +75,6 @@ public:
 
 int test_main(int argc, char** argv)
 {   
-
    BOOST_CHECK(!(application::launch<application::common, application::auto_app<myapp1> >()));
    BOOST_CHECK(!(application::launch<application::common, application::auto_app<myapp2, application::global_context> >()));
    BOOST_CHECK(!(application::launch<application::common, application::auto_app<myapp1, application::context> >()));
@@ -92,71 +91,6 @@ int test_main(int argc, char** argv)
    BOOST_CHECK(!(application::launch<application::common, application::auto_app<myapp2, application::global_context> >(argc, argv, boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
    BOOST_CHECK(!(application::launch<application::common, application::auto_app<myapp1, application::context> >(argc, argv, boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
 
-   /*
-   BOOST_CHECK(application::launch<application::common>(application::auto_app<myapp2, application::global_context>(), ec) == 0);
-   BOOST_CHECK(!ec);
-   BOOST_CHECK(application::launch<application::common>(application::auto_app<myapp1, application::context>(), ec) == 0);
-   BOOST_CHECK(!ec);
-   BOOST_CHECK(application::launch<application::common>(application::auto_app<myapp1>(), ec) == 0);
-   BOOST_CHECK(!ec);
-   */
-
-   /*
-   application::auto_app<myapp2, application::global_context> app0();
-   BOOST_CHECK(application::launch<application::common>(app0, ec) == 0);
-   BOOST_CHECK(!ec);
- 
-   application::auto_app<myapp1, application::context> app1;
-   BOOST_CHECK(application::launch<application::common>(app1, ec) == 0);
-   BOOST_CHECK(!ec);
-   application::auto_app<myapp1> app2;
-   BOOST_CHECK(application::launch<application::common>(app2, ec) == 0);
-   BOOST_CHECK(!ec);
-   */
- /*
-   BOOST_CHECK(application::launch<application::common>(application::auto_app<myapp2, application::global_context>()) == 0);
-   BOOST_CHECK(application::launch<application::common>(application::auto_app<myapp1, application::context>()) == 0);
-   BOOST_CHECK(application::launch<application::common>(application::auto_app<myapp1>()) == 0);
- */
-   /* 
-   BOOST_CHECK(application::launch<application::common>(application::auto_app<myapp2, application::global_context>(), boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"), ec) == 0);
-   BOOST_CHECK(!ec);
-   BOOST_CHECK(application::launch<application::common>(application::auto_app<myapp1, application::context>(),boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"), ec) == 0);
-   BOOST_CHECK(!ec);
-   BOOST_CHECK(application::launch<application::common>(application::auto_app<myapp1>(), boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"), ec) == 0);
-   BOOST_CHECK(!ec);
-
-   BOOST_CHECK(application::launch<application::common>(application::auto_app<myapp2, application::global_context>(), boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}")) == 0);
-   BOOST_CHECK(application::launch<application::common>(application::auto_app<myapp1, application::context>(),boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}")) == 0);
-   BOOST_CHECK(application::launch<application::common>(application::auto_app<myapp1>(), boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}")) == 0);
-*/
-   /*
-   BOOST_CHECK(application::launch<application::common>(application::auto_app<myapp2, application::global_context>(), argc, argv, ec) == 0);
-   BOOST_CHECK(!ec);
-   BOOST_CHECK(application::launch<application::common>(application::auto_app<myapp1, application::context>(), argc, argv, ec) == 0);
-   BOOST_CHECK(!ec);
-   BOOST_CHECK(application::launch<application::common>(application::auto_app<myapp1>(), argc, argv, ec) == 0);
-   BOOST_CHECK(!ec);
-
-   BOOST_CHECK(application::launch<application::common>(application::auto_app<myapp2, application::global_context>(), argc, argv) == 0);
-   BOOST_CHECK(!ec);
-   BOOST_CHECK(application::launch<application::common>(application::auto_app<myapp1, application::context>(), argc, argv) == 0);
-   BOOST_CHECK(!ec);
-   BOOST_CHECK(application::launch<application::common>(application::auto_app<myapp1>(), argc, argv) == 0);
-   BOOST_CHECK(!ec);
-
-     
-   BOOST_CHECK(application::launch<application::common>(application::auto_app<myapp2, application::global_context>(), argc, argv, boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"), ec) == 0);
-   BOOST_CHECK(!ec);
-   BOOST_CHECK(application::launch<application::common>(application::auto_app<myapp1, application::context>(), argc, argv, boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"), ec) == 0);
-   BOOST_CHECK(!ec);
-   BOOST_CHECK(application::launch<application::common>(application::auto_app<myapp1>(), argc, argv, boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"), ec) == 0);
-   BOOST_CHECK(!ec);
-
-   BOOST_CHECK(application::launch<application::common>(application::auto_app<myapp2, application::global_context>(), argc, argv, boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}")) == 0);
-   BOOST_CHECK(application::launch<application::common>(application::auto_app<myapp1, application::context>(), argc, argv, boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}")) == 0);
-   BOOST_CHECK(application::launch<application::common>(application::auto_app<myapp1>(), argc, argv, boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}")) == 0);
- */
    return 0;
 }
 
