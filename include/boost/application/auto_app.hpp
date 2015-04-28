@@ -17,7 +17,6 @@
 //
 // *****************************************************************************
 // note that this is a experimental module 
-// note that construcor can not be explicit
 // *****************************************************************************
 //
 
@@ -28,9 +27,8 @@
 #include <boost/application/config.hpp>
 #include <boost/application/detail/csbl.hpp>
 #include <boost/application/context.hpp>
+#include <boost/application/launch.hpp>
 #include <boost/application/auto_handler.hpp>
-
-// exprimental code
 
 namespace boost { namespace application { 
 
@@ -53,11 +51,30 @@ namespace boost { namespace application {
       typedef auto_app<app_t, cxt_t> this_type_t;
    };
 
+   /*!
+    * Creates a application using auto_app, the ec 
+    * ( boost::system::error_code& ec) will be set to the result 
+    * of the operation, they should be tested for errors.
+    *
+    * \param app User application functor instance.
+    *
+    * \param ec Variable (boost::system::error_code) that will be
+    *        set to the result of the operation.
+    *
+    * \return the return of application operator of user functor
+    *         class that usually need be returned by main function
+    *         to O.S.
+    *
+    */
    template <typename ApplicationMode, typename Application>
    inline int launch(Application& app,  system::error_code& ec) {
 
       if(!boost::is_same<Application, typename Application::this_type_t>::value) {
-         std::cout << "todo" << std::endl;
+           ec = boost::system::error_code(
+                 boost::system::errc::invalid_argument,
+                 boost::system::generic_category()
+                 );
+           return 1;
       }
 
       if(boost::is_same<typename Application::cxt_t, global_context>::value) {
@@ -81,7 +98,7 @@ namespace boost { namespace application {
    // application::launch<application::common>(application::auto_app<myapp2, application::global_context>(), ec);
    // application::launch<application::common>(application::auto_app<myapp1, application::context>(), ec);
    // application::launch<application::common>(application::auto_app<myapp1>(), ec);
-   /*
+
    template <typename ApplicationMode, typename Application>
    inline int launch(Application& app) {
 
@@ -97,7 +114,7 @@ namespace boost { namespace application {
    // application::launch<application::common>(application::auto_app<myapp2, application::global_context>());
    // application::launch<application::common>(application::auto_app<myapp1, application::context>());
    // application::launch<application::common>(application::auto_app<myapp1>());
-
+   /*
    template <typename ApplicationMode, typename Application>
    inline int launch(Application& app, uuids::uuid& appid, system::error_code& ec) {
 
