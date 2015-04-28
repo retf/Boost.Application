@@ -29,6 +29,7 @@
 #include <boost/application/context.hpp>
 #include <boost/application/launch.hpp>
 #include <boost/application/auto_handler.hpp>
+#include <boost/application/aspects/args.hpp>
 
 namespace boost { namespace application { 
 
