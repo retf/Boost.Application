@@ -127,9 +127,9 @@ project
       #
 	  
 	  #
-      # auto app
+      # auto app (in dev)
       #
-      [ run auto_app_test.cpp ]
+      # [ run auto_app_test.cpp ]
       #
       #
 
