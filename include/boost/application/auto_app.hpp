@@ -90,9 +90,9 @@ namespace boost { namespace application {
          return ret;
       }
 
-      context context;
-      auto_handler<typename Application::app_t> dapp(context);
-      return launch<ApplicationMode>(dapp, context, ec);
+      context cxt;
+      auto_handler<typename Application::app_t> dapp(cxt);
+      return launch<ApplicationMode>(dapp, cxt, ec);
    }
 
    // application::launch<application::common>(application::auto_app<myapp2, application::global_context>(), ec);
