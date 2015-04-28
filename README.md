@@ -151,9 +151,29 @@ private:
 
 int main(int argc, char *argv[])
 { 
-   return application::launch<
-      application::common, application::auto_app<myapp> 
-	     >(argc, argv);
+  application::context app_context;
+   
+   // auto_handler will automatically add termination, pause and resume (windows) handlers
+   application::auto_handler<myapp> app(app_context);
+
+   // my server aspects
+
+   // to handle args
+   app_context.insert<application::args>(
+      boost::make_shared<application::args>(argc, argv));  
+
+   // my server instantiation
+
+   boost::system::error_code ec;
+   int result = application::launch<application::server>(app, app_context, ec);
+
+   if(ec)
+   {
+      std::cout << "[E] " << ec.message() 
+         << " <" << ec.value() << "> " << std::cout;
+   }
+   
+   return result;
 }
 
 ```
@@ -225,7 +245,6 @@ If you intend to use 'Application' on your application, please send-me your name
  * The header config.hpp was refactored;
  * global_context can handle errors using boost::system::error_code;
  * global_context now throws boost::system::system_error, not more std::logic_error;
- * auto_app utility file that simplifies the creation of an application;
  
  #### Aspects
 
