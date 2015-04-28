@@ -67,7 +67,7 @@ namespace boost { namespace application {
     *
     */
    template <typename ApplicationMode, typename Application>
-   inline int launch(Application& app,  system::error_code& ec) {
+   inline int launch(const Application& app,  system::error_code& ec) {
 
       if(!boost::is_same<Application, typename Application::this_type_t>::value) {
            ec = boost::system::error_code(
@@ -100,7 +100,7 @@ namespace boost { namespace application {
    // application::launch<application::common>(application::auto_app<myapp1>(), ec);
 
    template <typename ApplicationMode, typename Application>
-   inline int launch(Application& app) {
+   inline int launch(const Application& app) {
 
       system::error_code ec; int ret = 0;
       ret = launch<ApplicationMode>(app, ec);
