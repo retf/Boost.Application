@@ -36,11 +36,16 @@ namespace boost { namespace application {
     * \brief This class Tie a application and context, and simplifies the 
     *        creation of an application.
     *
+    *        The default context is not global context, if you desire 
+    *        to use global you need specify as second template param,
+    *        check example.
+    *
     *        Using it you can start application with one line.
     *
     * \b Examples:
     * \code
     * launch<common>(auto_app<myapp1>());
+    * launch<common>(auto_app<myapp1, global_context>());
     * \endcode
     *        
     */
@@ -67,7 +72,7 @@ namespace boost { namespace application {
     *
     */
    template <typename ApplicationMode, typename Application>
-   inline int launch(const Application& app,  system::error_code& ec) {
+   inline int launch(const Application& app, system::error_code& ec) {
 
       if(!boost::is_same<Application, typename Application::this_type_t>::value) {
            ec = boost::system::error_code(
@@ -114,17 +119,17 @@ namespace boost { namespace application {
    // application::launch<application::common>(application::auto_app<myapp2, application::global_context>());
    // application::launch<application::common>(application::auto_app<myapp1, application::context>());
    // application::launch<application::common>(application::auto_app<myapp1>());
-   /*
-   template <typename ApplicationMode, typename Application>
-   inline int launch(Application& app, uuids::uuid& appid, system::error_code& ec) {
 
-      if(boost::is_same<Application::cxt_t, global_context>::value) {
+   template <typename ApplicationMode, typename Application>
+   inline int launch(const Application& app, uuids::uuid& appid, system::error_code& ec) {
+
+      if(boost::is_same<typename Application::cxt_t, global_context>::value) {
 
          global_context_ptr cxt = global_context::create(ec);
 
          if(ec) return 1;
 
-         auto_handler<Application::app_t> app(cxt, appid);
+         auto_handler<typename Application::app_t> app(cxt, appid);
          int ret = launch<ApplicationMode>(app, cxt, ec);
 
          global_context::destroy();
@@ -132,7 +137,7 @@ namespace boost { namespace application {
       }
 
       context context;
-      auto_handler<Application::app_t> dapp(context, appid);
+      auto_handler<typename Application::app_t> dapp(context, appid);
       return launch<ApplicationMode>(dapp, context, ec);
    }
  
@@ -141,7 +146,7 @@ namespace boost { namespace application {
    // application::launch<application::common>(application::auto_app<myapp1>(), boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"), ec);
 
    template <typename ApplicationMode, typename Application>
-   inline int launch(Application& app, uuids::uuid& appid) {
+   inline int launch(const Application& app, uuids::uuid& appid) {
 
       system::error_code ec; int ret = 0;
       ret = launch<ApplicationMode>(app, appid, ec);
@@ -157,9 +162,9 @@ namespace boost { namespace application {
    // application::launch<application::common>(application::auto_app<myapp1>(), boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"));
  
    template <typename ApplicationMode, typename Application>
-   inline int launch(Application& app, int argc, character_types::char_type *argv[], system::error_code& ec) {
+   inline int launch(const Application& app, int argc, character_types::char_type *argv[], system::error_code& ec) {
 
-      if(boost::is_same<Application::cxt_t, global_context>::value) {
+      if(boost::is_same<typename Application::cxt_t, global_context>::value) {
 
          global_context_ptr cxt = global_context::create(ec);
 
@@ -168,7 +173,7 @@ namespace boost { namespace application {
          cxt->insert<args>(
             csbl::make_shared<args>(argc, argv));  
 
-         auto_handler<Application::app_t> app(cxt);
+         auto_handler<typename  Application::app_t> app(cxt);
          int ret = launch<ApplicationMode>(app, cxt, ec);
 
          global_context::destroy();
@@ -180,12 +185,12 @@ namespace boost { namespace application {
       cxt.insert<args>(
             csbl::make_shared<args>(argc, argv));  
  
-      auto_handler<Application::app_t> dapp(cxt);
+      auto_handler<typename Application::app_t> dapp(cxt);
       return launch<ApplicationMode>(dapp, cxt, ec);
    }
 
    template <typename ApplicationMode, typename Application>
-   inline int launch(Application& app, int argc, character_types::char_type *argv[]) {
+   inline int launch(const Application& app, int argc, character_types::char_type *argv[]) {
 
       system::error_code ec; int ret = 0;
       ret = launch<ApplicationMode>(app, argc, argv, ec);
@@ -197,9 +202,9 @@ namespace boost { namespace application {
    }
  
    template <typename ApplicationMode, typename Application>
-   inline int launch(Application& app, int argc, character_types::char_type *argv[], uuids::uuid& appid, system::error_code& ec) {
+   inline int launch(const Application& app, int argc, character_types::char_type *argv[], uuids::uuid& appid, system::error_code& ec) {
 
-      if(boost::is_same<Application::cxt_t, global_context>::value) {
+      if(boost::is_same<typename Application::cxt_t, global_context>::value) {
 
          global_context_ptr cxt = global_context::create(ec);
 
@@ -208,7 +213,7 @@ namespace boost { namespace application {
          cxt->insert<args>(
             csbl::make_shared<args>(argc, argv));  
 
-         auto_handler<Application::app_t> app(cxt, appid);
+         auto_handler<typename Application::app_t> app(cxt, appid);
          int ret = launch<ApplicationMode>(app, cxt, ec);
 
          global_context::destroy();
@@ -220,12 +225,12 @@ namespace boost { namespace application {
       cxt.insert<args>(
             csbl::make_shared<args>(argc, argv));  
  
-      auto_handler<Application::app_t> dapp(cxt, appid);
+      auto_handler<typename Application::app_t> dapp(cxt, appid);
       return launch<ApplicationMode>(dapp, cxt, ec);
    }
 
    template <typename ApplicationMode, typename Application>
-   inline int launch(Application& app, int argc, character_types::char_type *argv[], uuids::uuid& appid) {
+   inline int launch(const Application& app, int argc, character_types::char_type *argv[], uuids::uuid& appid) {
 
       system::error_code ec; int ret = 0;
       ret = launch<ApplicationMode>(app, argc, argv, appid, ec);
@@ -235,8 +240,7 @@ namespace boost { namespace application {
 
       return ret;
    }
-   */
+   
 }} // boost::application
-
 
 #endif // BOOST_APPLICATION_AUTO_HANDLER_HPP
