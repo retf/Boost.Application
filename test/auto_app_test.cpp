@@ -8,11 +8,14 @@
 // #define BOOST_ALL_DYN_LINK
 // #define BOOST_LIB_DIAGNOSTIC
 
-#define BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
+
+
+// #define BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
 
 #include <iostream>
 #include <boost/application.hpp>
 #include <boost/uuid/string_generator.hpp>
+#include <boost/application/auto_app.hpp>
 #include <boost/test/minimal.hpp>
 
 using namespace boost;
@@ -75,6 +78,33 @@ public:
 
 int test_main(int argc, char** argv)
 {   
+   system::error_code ec;
+
+   BOOST_CHECK(!(application::auto_app<application::common, myapp1>::start(ec)));
+   BOOST_CHECK(!(application::auto_app<application::common, myapp1>::start()));
+
+   BOOST_CHECK(!(application::auto_app<application::common, myapp1>::start(uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"), ec)));
+   BOOST_CHECK(!(application::auto_app<application::common, myapp1>::start(uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
+
+   BOOST_CHECK(!(application::auto_app<application::common, myapp1>::start(argc, argv, ec)));
+   BOOST_CHECK(!(application::auto_app<application::common, myapp1>::start(argc, argv)));
+
+   BOOST_CHECK(!(application::auto_app<application::common, myapp1>::start(argc, argv, uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"), ec)));
+   BOOST_CHECK(!(application::auto_app<application::common, myapp1>::start(argc, argv, uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
+
+   BOOST_CHECK(!(application::auto_app<application::common, myapp2, application::global_context>::start(ec)));
+   BOOST_CHECK(!(application::auto_app<application::common, myapp2, application::global_context>::start()));
+
+   BOOST_CHECK(!(application::auto_app<application::common, myapp2, application::global_context>::start(uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"), ec)));
+   BOOST_CHECK(!(application::auto_app<application::common, myapp2, application::global_context>::start(uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
+
+   BOOST_CHECK(!(application::auto_app<application::common, myapp2, application::global_context>::start(argc, argv, ec)));
+   BOOST_CHECK(!(application::auto_app<application::common, myapp2, application::global_context>::start(argc, argv)));
+
+   BOOST_CHECK(!(application::auto_app<application::common, myapp2, application::global_context>::start(argc, argv, uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"), ec)));
+   BOOST_CHECK(!(application::auto_app<application::common, myapp2, application::global_context>::start(argc, argv, uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
+
+   /*
    BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp1> >()));
    BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp2, application::global_context> >()));
    BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp1, application::context> >()));
@@ -90,6 +120,7 @@ int test_main(int argc, char** argv)
    BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp1> >(argc, argv, boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
    BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp2, application::global_context> >(argc, argv, boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
    BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp1, application::context> >(argc, argv, boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
+   */
 
    return 0;
 }

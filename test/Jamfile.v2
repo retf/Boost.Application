@@ -129,7 +129,7 @@ project
 	  #
       # auto app
       #
-      # [ run auto_app_test.cpp ]
+      [ run auto_app_test.cpp ]
       #
       #
 
