@@ -39,17 +39,26 @@ namespace boost { namespace application {
     *        creation of an application.
     *
     *        Using it you can start application with one line.
+    *
+    * \b Examples:
+    * \code
+    * launch<common>(auto_app<myapp1>());
+    * \endcode
     *        
-    *        launch<common>(auto_app<myapp1>());
     */
    template <typename App, typename Cxt = context>
    struct auto_app : noncopyable {
       typedef App app_t;
       typedef Cxt cxt_t;
+      typedef auto_app<app_t, cxt_t> this_type_t;
    };
 
    template <typename ApplicationMode, typename Application>
    inline int launch(Application& app,  system::error_code& ec) {
+
+      if(!boost::is_same<Application, typename Application::this_type_t>::value) {
+         std::cout << "todo" << std::endl;
+      }
 
       if(boost::is_same<typename Application::cxt_t, global_context>::value) {
 

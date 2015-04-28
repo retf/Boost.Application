@@ -12,6 +12,7 @@
 
 #include <iostream>
 #include <boost/application.hpp>
+#include <boost/application/auto_app.hpp>
 #include <boost/uuid/string_generator.hpp>
 #include <boost/test/minimal.hpp>
 
