@@ -64,7 +64,7 @@ namespace boost { namespace application {
    // application::launch<application::common>(application::auto_app<myapp2, application::global_context>(), ec);
    // application::launch<application::common>(application::auto_app<myapp1, application::context>(), ec);
    // application::launch<application::common>(application::auto_app<myapp1>(), ec);
-
+   /*
    template <typename ApplicationMode, typename Application>
    inline int launch(Application& app) {
 
@@ -201,7 +201,7 @@ namespace boost { namespace application {
 
       return ret;
    }
-
+   */
 }} // boost::application
 
 
