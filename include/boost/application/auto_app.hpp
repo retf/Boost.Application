@@ -32,6 +32,56 @@
 
 namespace boost { namespace application { 
 
+
+   template <typename App, typename Cxt = context>
+   struct auto_app : noncopyable {
+      typedef App app_t;
+      typedef Cxt cxt_t;
+      typedef auto_app<app_t, cxt_t> this_type_t;
+   };
+
+   template <typename ApplicationMode, typename Application>
+   inline int launch(system::error_code& ec) {
+
+      if(!boost::is_same<Application, typename Application::this_type_t>::value) {
+           ec = boost::system::error_code(
+                 boost::system::errc::invalid_argument,
+                 boost::system::generic_category()
+                 );
+           return 1;
+      }
+
+      if(boost::is_same<typename Application::cxt_t, global_context>::value) {
+         global_context_ptr cxt = global_context::create(ec);
+
+         if(ec) return 1;
+
+         auto_handler<typename Application::app_t> app(cxt);
+         int ret = launch<ApplicationMode>(app, cxt, ec);
+
+         global_context::destroy();
+         return ret;
+      }
+
+      context cxt;
+      auto_handler<typename Application::app_t> dapp(cxt);
+      return launch<ApplicationMode>(dapp, cxt, ec);
+   }
+
+   template <typename ApplicationMode, typename Application>
+   inline int launch() {
+
+      system::error_code ec; int ret = 0;
+      ret = launch<ApplicationMode, Application>(ec);
+
+      if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
+	       "launch() failed", ec);
+
+      return ret;
+   }
+ 
+
+
    /*!
     * \brief This class Tie a application and context, and simplifies the 
     *        creation of an application.
@@ -49,12 +99,14 @@ namespace boost { namespace application {
     * \endcode
     *        
     */
+   /*
    template <typename App, typename Cxt = context>
    struct auto_app : noncopyable {
       typedef App app_t;
       typedef Cxt cxt_t;
       typedef auto_app<app_t, cxt_t> this_type_t;
    };
+   */
 
    /*!
     * Creates a application using auto_app, the ec 
@@ -71,6 +123,7 @@ namespace boost { namespace application {
     *         to O.S.
     *
     */
+   /*
    template <typename ApplicationMode, typename Application>
    inline int launch(const Application& app, system::error_code& ec) {
 
@@ -240,6 +293,7 @@ namespace boost { namespace application {
 
       return ret;
    }
+   */
    
 }} // boost::application
 
