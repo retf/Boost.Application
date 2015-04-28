@@ -75,21 +75,21 @@ public:
 
 int test_main(int argc, char** argv)
 {   
-   BOOST_CHECK(!(application::launch<application::common, application::auto_app<myapp1> >()));
-   BOOST_CHECK(!(application::launch<application::common, application::auto_app<myapp2, application::global_context> >()));
-   BOOST_CHECK(!(application::launch<application::common, application::auto_app<myapp1, application::context> >()));
+   BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp1> >()));
+   BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp2, application::global_context> >()));
+   BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp1, application::context> >()));
 
-   BOOST_CHECK(!(application::launch<application::common, application::auto_app<myapp1> >(boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
-   BOOST_CHECK(!(application::launch<application::common, application::auto_app<myapp2, application::global_context> >(boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
-   BOOST_CHECK(!(application::launch<application::common, application::auto_app<myapp1, application::context> >(boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
+   BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp1> >(boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
+   BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp2, application::global_context> >(boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
+   BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp1, application::context> >(boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
 
-   BOOST_CHECK(!(application::launch<application::common, application::auto_app<myapp1> >(argc, argv)));
-   BOOST_CHECK(!(application::launch<application::common, application::auto_app<myapp2, application::global_context> >(argc, argv)));
-   BOOST_CHECK(!(application::launch<application::common, application::auto_app<myapp1, application::context> >(argc, argv)));
+   BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp1> >(argc, argv)));
+   BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp2, application::global_context> >(argc, argv)));
+   BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp1, application::context> >(argc, argv)));
 
-   BOOST_CHECK(!(application::launch<application::common, application::auto_app<myapp1> >(argc, argv, boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
-   BOOST_CHECK(!(application::launch<application::common, application::auto_app<myapp2, application::global_context> >(argc, argv, boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
-   BOOST_CHECK(!(application::launch<application::common, application::auto_app<myapp1, application::context> >(argc, argv, boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
+   BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp1> >(argc, argv, boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
+   BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp2, application::global_context> >(argc, argv, boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
+   BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp1, application::context> >(argc, argv, boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
 
    return 0;
 }
