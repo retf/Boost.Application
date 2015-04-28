@@ -34,6 +34,14 @@
 
 namespace boost { namespace application { 
 
+   /*!
+    * \brief This class Tie a application and context, and simplifies the 
+    *        creation of an application.
+    *
+    *        Using it you can start application with one line.
+    *        
+    *        launch<common>(auto_app<myapp1>());
+    */
    template <typename App, typename Cxt = context>
    struct auto_app : noncopyable {
       typedef App app_t;
@@ -43,13 +51,13 @@ namespace boost { namespace application {
    template <typename ApplicationMode, typename Application>
    inline int launch(Application& app,  system::error_code& ec) {
 
-      if(boost::is_same<Application::cxt_t, global_context>::value) {
+      if(boost::is_same<typename Application::cxt_t, global_context>::value) {
 
          global_context_ptr cxt = global_context::create(ec);
 
          if(ec) return 1;
 
-         auto_handler<Application::app_t> app(cxt);
+         auto_handler<typename Application::app_t> app(cxt);
          int ret = launch<ApplicationMode>(app, cxt, ec);
 
          global_context::destroy();
@@ -57,7 +65,7 @@ namespace boost { namespace application {
       }
 
       context context;
-      auto_handler<Application::app_t> dapp(context);
+      auto_handler<typename Application::app_t> dapp(context);
       return launch<ApplicationMode>(dapp, context, ec);
    }
 
