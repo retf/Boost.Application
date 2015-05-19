@@ -14,6 +14,10 @@
 #include <cstdlib>
 #include <shlobj.h>
 
+#if NTDDI_VERSION < NTDDI_VISTA
+#error at least the windows vista feature level of the windows sdk is required, e.g. include https://gist.github.com/BurningEnlightenment/05eef0ba2b569d5e2828 at the beginning of your prefix header
+#endif
+
 #ifdef BOOST_HAS_PRAGMA_ONCE
 # pragma once
 #endif
