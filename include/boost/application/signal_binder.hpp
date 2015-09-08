@@ -71,9 +71,9 @@ namespace boost { namespace application {
       virtual ~signal_binder() {
          if(io_service_thread_) {
             io_service_.stop();
-            if (io_service_thread_->joinable()) {
-               io_service_thread_->join();
-            }
+#           ifndef BOOST_APPLICATION_USE_CXX11_HDR_THREAD
+            if (io_service_thread_->joinable()) io_service_thread_->join(); // todo: this fail on std::thread, need check.
+#           endif
          }
       }
 
@@ -324,11 +324,11 @@ namespace boost { namespace application {
       {
          // we need set application_state to stop
          context_.find<status>()->state(status::stopped);
-
+         
          // remove process lock
-         csbl::shared_ptr<limit_single_instance> si
+         csbl::shared_ptr<limit_single_instance> si 
             = context_.find<limit_single_instance>();
-
+            
          if(si)
             si->release(true);
 
