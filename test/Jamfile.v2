@@ -69,7 +69,7 @@ project
    # <define>BOOST_LIB_DIAGNOSTIC
 	  
    # others
-      <link>shared:<define>BOOST_ALL_DLL      
+   #   <link>shared:<define>BOOST_ALL_DLL      
       <library>/boost/system//boost_system
       <library>/boost/program_options//boost_program_options
       <library>/boost/filesystem//boost_filesystem
