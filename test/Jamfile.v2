@@ -68,7 +68,15 @@ project
    # <define>BOOST_ALL_DYN_LINK
    # <define>BOOST_LIB_DIAGNOSTIC
    
-   <define>BOOST_SYSTEM_STATIC_LINK=0
+   # http://boost.2283326.n4.nabble.com/Test-Thread-Regression-since-9-December-td4670920.html
+   
+   # t1
+   # <define>BOOST_SYSTEM_STATIC_LINK=0
+   
+   # t2
+   <define>BOOST_ALL_NO_LIB=1 
+   <define>BOOST_SYSTEM_DYN_LINK=1 
+   <define>BOOST_SYSTEM_NO_DEPRECATED
 	  
    # others
    #   <link>shared:<define>BOOST_ALL_DLL      
