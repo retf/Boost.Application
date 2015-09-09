@@ -67,6 +67,8 @@ project
    # use dynamic libs
    # <define>BOOST_ALL_DYN_LINK
    # <define>BOOST_LIB_DIAGNOSTIC
+   
+   <define>BOOST_SYSTEM_STATIC_LINK=0
 	  
    # others
    #   <link>shared:<define>BOOST_ALL_DLL      
