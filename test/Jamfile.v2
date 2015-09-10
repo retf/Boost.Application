@@ -74,13 +74,13 @@ project
    # <define>BOOST_SYSTEM_STATIC_LINK=0
    
    # t2
-   <define>BOOST_ALL_NO_LIB=1 
-   <define>BOOST_SYSTEM_DYN_LINK=1 
-   <define>BOOST_SYSTEM_NO_DEPRECATED
+   # <define>BOOST_ALL_NO_LIB=1 
+   # <define>BOOST_SYSTEM_DYN_LINK=1 
+   # <define>BOOST_SYSTEM_NO_DEPRECATED
 	  
    # others
-   #   <link>shared:<define>BOOST_ALL_DLL      
-      <library>/boost/system//boost_system
+      <link>shared:<define>BOOST_ALL_DLL      
+      <library>/boost/system//boost_system<link>shared
       <library>/boost/program_options//boost_program_options
       <library>/boost/filesystem//boost_filesystem
       <library>/boost/date_time//boost_date_time
