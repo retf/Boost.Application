@@ -78,7 +78,9 @@ project
    # <define>BOOST_SYSTEM_DYN_LINK=1 
    # <define>BOOST_SYSTEM_NO_DEPRECATED
 	  
-   # others
+   # others 
+   
+      <link>shared:<define>BOOST_SYSTEM_DYN_LINK=1
       <link>shared:<define>BOOST_ALL_DLL      
       <library>/boost/system//boost_system
       <library>/boost/program_options//boost_program_options
@@ -97,9 +99,14 @@ project
 
       # t6
       <use>/boost/system//boost_system <link>shared
+            <use>/boost/program_options//boost_program_options <link>shared
+      <use>/boost/filesystem//boost_filesystem <link>shared
+      <use>/boost/date_time//boost_date_time <link>shared
+      <use>/boost/thread//boost_thread <link>shared
+      <use>/boost/test//boost_test_exec_monitor <link>shared
+
       
-        <link>shared:<define>BOOST_SYSTEM_DYN_LINK=1
-       <link>static:<define>BOOST_SYSTEM_STATIC_LINK=1
+     
 
       ;
 {
