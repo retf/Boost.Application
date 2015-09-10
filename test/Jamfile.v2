@@ -87,6 +87,13 @@ project
       <library>/boost/thread//boost_thread
       <library>/boost/test//boost_test_exec_monitor
       <threading>multi
+      
+      # t4
+      # <link>shared:<define>BOOST_SYSTEM_DYN_LINK=1
+      # <link>static:<define>BOOST_SYSTEM_STATIC_LINK=1
+      
+      # t5
+      <use>/boost//system <link>shared
 
       ;
 {
