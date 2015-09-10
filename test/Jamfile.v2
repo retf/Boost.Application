@@ -99,7 +99,7 @@ project
 
       # t6
       <use>/boost/system//boost_system <link>shared
-            <use>/boost/program_options//boost_program_options <link>shared
+      <use>/boost/program_options//boost_program_options <link>shared
       <use>/boost/filesystem//boost_filesystem <link>shared
       <use>/boost/date_time//boost_date_time <link>shared
       <use>/boost/thread//boost_thread <link>shared
