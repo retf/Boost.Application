@@ -93,6 +93,9 @@ project
       # <link>static:<define>BOOST_SYSTEM_STATIC_LINK=1
       
       # t5
+      # <use>/boost//system <link>shared
+
+      # t6
       <use>/boost/system//boost_system <link>shared
 
       ;
