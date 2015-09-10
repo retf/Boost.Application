@@ -80,7 +80,7 @@ project
 	  
    # others
       <link>shared:<define>BOOST_ALL_DLL      
-      <library>/boost/system//boost_system<link>shared
+      <library>/boost/system//boost_system
       <library>/boost/program_options//boost_program_options
       <library>/boost/filesystem//boost_filesystem
       <library>/boost/date_time//boost_date_time
