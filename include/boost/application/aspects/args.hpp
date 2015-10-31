@@ -58,7 +58,7 @@ namespace boost { namespace application {
        */
       int argc() const
       {
-         return arguments_.size();
+         return (int)arguments_.size();
       }
 
       /*!
