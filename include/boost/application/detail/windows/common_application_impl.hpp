@@ -38,12 +38,12 @@ namespace boost { namespace application {
       typedef CharType char_type;
       typedef std::basic_string<char_type> string_type;
 
-      common_application_impl_(const mainop &main,
+      common_application_impl_(const mainop &main_op,
                                signal_binder &sb,
                                application::context &context,
                                boost::system::error_code& ec)
          : application_impl(context)
-         , main_(main)
+         , main_(main_op)
       {
          sb.start();
       }
