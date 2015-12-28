@@ -14,9 +14,12 @@
 #include <cstdlib>
 #include <shlobj.h>
 
-#if NTDDI_VERSION < NTDDI_VISTA
-#error at least the windows vista feature level of the windows sdk is required, e.g. include https://gist.github.com/BurningEnlightenment/05eef0ba2b569d5e2828 at the beginning of your prefix header
+#include <boost/detail/winapi/config.hpp>
+#if BOOST_USE_WINAPI_VERSION < BOOST_WINAPI_VERSION_VISTA
+#error Boost.Application requires at least the windows vista feature level of the windows sdk.
 #endif
+
+#include <boost/detail/winapi/dll.hpp>
 
 #ifdef BOOST_HAS_PRAGMA_ONCE
 # pragma once
@@ -34,16 +37,16 @@ namespace boost { namespace application { namespace detail {
             // A handle to the loaded module whose path is being requested.
             // If this parameter is NULL, GetModuleFileName retrieves the path of the
             // executable file of the current process.
-            WCHAR path_hldr[MAX_PATH];
-            LPWSTR path = path_hldr;
-            ::GetModuleFileNameW(NULL, path, MAX_PATH);
+            boost::detail::winapi::WCHAR_ path_hldr[MAX_PATH];
+            boost::detail::winapi::LPWSTR_ path = path_hldr;
+            boost::detail::winapi::get_module_file_name(NULL, path, MAX_PATH);
             ec = last_error_code();
     
             // In case of ERROR_INSUFFICIENT_BUFFER_ trying to get buffer big enough to store the whole path
             for (unsigned i = 2; i < 129 && ec.value() == ERROR_INSUFFICIENT_BUFFER; i *= 2) {
                 path = new WCHAR[MAX_PATH * i];
     
-                ::GetModuleFileNameW(NULL, path, MAX_PATH * i);
+                boost::detail::winapi::get_module_file_name(NULL, path, MAX_PATH * i);
                 ec = last_error_code();
     
                 if (ec) {
@@ -158,12 +161,7 @@ namespace boost { namespace application { namespace detail {
     
         boost::filesystem::path temp_path()
         {
-            static const DWORD max_path_len = MAX_PATH + 1;
-            wchar_t path[max_path_len] = L"";
-
-            DWORD path_len = ::GetTempPathW( max_path_len, path );
-
-            return boost::filesystem::path( path_len ? path : L"." );
+            return boost::filesystem::temp_directory_path();
         }
     };
 
