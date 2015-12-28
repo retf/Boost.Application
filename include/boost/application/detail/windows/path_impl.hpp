@@ -12,14 +12,14 @@
 #include <boost/filesystem/path.hpp>
 
 #include <cstdlib>
-#include <shlobj.h>
 
 #include <boost/detail/winapi/config.hpp>
 #if BOOST_USE_WINAPI_VERSION < BOOST_WINAPI_VERSION_VISTA
 #error Boost.Application requires at least the windows vista feature level of the windows sdk.
 #endif
-
 #include <boost/detail/winapi/dll.hpp>
+
+#include <shlobj.h>
 
 #ifdef BOOST_HAS_PRAGMA_ONCE
 # pragma once
