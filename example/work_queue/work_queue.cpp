@@ -10,9 +10,6 @@
 // The result will be printed on CTRL-C (Stop) signal
 // -----------------------------------------------------------------------------
 
-#define BOOST_ALL_DYN_LINK
-#define BOOST_LIB_DIAGNOSTIC
-
 #include <boost/asio.hpp>
 #include <boost/thread.hpp>
 #include <boost/application.hpp>

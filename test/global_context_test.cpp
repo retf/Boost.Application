@@ -5,6 +5,8 @@
 
 // For more information, see http://www.boost.org
 
+#define BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
+
 #define BOOST_TEST_MODULE global_context_test
 
 #include <iostream>

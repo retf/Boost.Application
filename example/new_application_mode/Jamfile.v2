@@ -6,44 +6,15 @@
 #
 
 project
-   : source-location .
-   : requirements
-        <include>../../..
+    : source-location .
+    : requirements
         <include>../../../../Singularity
-        <include>../../../../type_index
 		<target-os>linux:<include>/usr/include/apache2/
         <target-os>linux:<include>/usr/include/apr-1.0/
-		<target-os>windows:<include>C:\Program Files (x86)\Apache Software Foundation\Apache2.2
-		
-
-
-   # windows
-
-   # msvc
-      <toolset>msvc:<define>_SCL_SECURE_NO_WARNINGS
-      <toolset>msvc:<define>_SCL_SECURE_NO_DEPRECATE
-      <toolset>msvc:<define>_CRT_SECURE_NO_WARNINGS
-      <toolset>msvc:<define>_CRT_SECURE_NO_DEPRECATE
-      <toolset>msvc:<define>_SCL_SECURE_NO_WARNINGS
-
-   # linux
-      <target-os>linux:<linkflags>"-ldl" 
-
-   # gcc
-      <toolset>gcc:<cxxflags>-fno-strict-aliasing  # avoids strict aliasing violations in other Boost components
-
-   # others
-      <link>shared:<define>BOOST_ALL_DLL
-      <library>/boost/system//boost_system
-      <library>/boost/program_options//boost_program_options
-      <library>/boost/filesystem//boost_filesystem
-      <library>/boost/date_time//boost_date_time
-      <library>/boost/thread//boost_thread
-      <library>/boost/test//boost_test_exec_monitor
-      <threading>multi
-      ;
+		<target-os>windows:<include>"C:\Program Files (x86)\Apache Software Foundation\Apache2.2"
+    ;
 
 lib apache_httpd
-   : apache_httpd.cpp
-   ;
+    : apache_httpd.cpp
+    ;
    

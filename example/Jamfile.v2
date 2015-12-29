@@ -9,112 +9,121 @@ import os ;
 
 if [ os.name ] = SOLARIS
 {
-  lib socket ;
-  lib nsl ;
+    lib socket ;
+    lib nsl ;
 }
 else if [ os.name ] = NT
 {
-  lib ws2_32 ;
-  lib mswsock ;
+    lib ws2_32 ;
+    lib mswsock ;
+    lib ole32 ;   # CoTaskMemFree
+    lib shell32 ; # SHGetKnownFolderPath
 }
 else if [ os.name ] = HPUX
 {
-  lib ipv6 ;
+    lib ipv6 ;
 }
 
 project
-   : source-location .
-   : requirements
+    : source-location .
+    : requirements
+        <threading>multi
+
+    # includes
         <include>../../..
         <include>../../../../type_index
 
-   # windows
+    # preprocessor definitions
+        <define>BOOST_ALL_NO_LIB
+        <define>BOOST_LIB_DIAGNOSTIC
+        <link>shared:<define>BOOST_ALL_DYN_LINK
 
-   # msvc
-      <toolset>msvc:<define>_SCL_SECURE_NO_WARNINGS
-      <toolset>msvc:<define>_SCL_SECURE_NO_DEPRECATE
-      <toolset>msvc:<define>_CRT_SECURE_NO_WARNINGS
-      <toolset>msvc:<define>_CRT_SECURE_NO_DEPRECATE
-      <toolset>msvc:<define>_SCL_SECURE_NO_WARNINGS
+    # windows
+        <os>NT:<define>_WIN32_WINNT=0x0600
+        <os>NT:<library>ole32
+        <os>NT:<library>shell32
 
-   # linux
-      <target-os>linux:<linkflags>"-ldl" 
+    # msvc
+        <toolset>msvc:<define>_SCL_SECURE_NO_WARNINGS
+        <toolset>msvc:<define>_SCL_SECURE_NO_DEPRECATE
+        <toolset>msvc:<define>_CRT_SECURE_NO_WARNINGS
+        <toolset>msvc:<define>_CRT_SECURE_NO_DEPRECATE
+        <toolset>msvc:<define>_SCL_SECURE_NO_WARNINGS
+
+    # linux
+        <target-os>linux:<linkflags>"-ldl" 
       
-   # mingw, cygwin
-      <os>NT:<define>_WIN32_WINNT=0x0501
-      <os>NT,<toolset>gcc:<library>ws2_32
-      <os>NT,<toolset>gcc:<library>mswsock
-      <os>NT,<toolset>gcc-cygwin:<define>__USE_W32_SOCKETS
-   #  <os>NT,<toolset>gcc:<linkflags>"-ldl" 
+    # mingw, cygwin
+        <os>NT,<toolset>gcc:<library>ws2_32
+        <os>NT,<toolset>gcc:<library>mswsock
+        <os>NT,<toolset>gcc-cygwin:<define>__USE_W32_SOCKETS
+        # <os>NT,<toolset>gcc:<linkflags>"-ldl" 
   
-   # solaris     
-      <os>SOLARIS:<library>socket
-      <os>SOLARIS:<library>nsl
+    # solaris     
+        <os>SOLARIS:<library>socket
+        <os>SOLARIS:<library>nsl
       
-   # hpux  
-      <os>HPUX,<toolset>gcc:<define>_XOPEN_SOURCE_EXTENDED
-      <os>HPUX:<library>ipv6
+    # hpux  
+        <os>HPUX,<toolset>gcc:<define>_XOPEN_SOURCE_EXTENDED
+        <os>HPUX:<library>ipv6
 
-   # gcc
-      <toolset>gcc:<cxxflags>-fno-strict-aliasing  # avoids strict aliasing violations in other Boost components
+    # gcc
+        <toolset>gcc:<cxxflags>-fno-strict-aliasing  # avoids strict aliasing violations in other Boost components
 
-   # others
-      <link>shared:<define>BOOST_ALL_DLL
-      <library>/boost/system//boost_system
-      <library>/boost/program_options//boost_program_options
-      <library>/boost/filesystem//boost_filesystem
-      <library>/boost/date_time//boost_date_time
-      <library>/boost/thread//boost_thread
-      <library>/boost/test//boost_test_exec_monitor
-      <threading>multi
-      ;
-	
-	  
-	  
+    # others
+        <library>/boost/system//boost_system
+        <library>/boost/program_options//boost_program_options
+        <library>/boost/filesystem//boost_filesystem
+        <library>/boost/date_time//boost_date_time
+        <library>/boost/thread//boost_thread
+    ;
+
+
 # test compilation/configuration
 # exe test 
 #    : test.cpp 
 #    ;
 
 exe simple_application
-   : simple_application.cpp
-   ;
+    : simple_application.cpp
+    ;
    
 exe path
-   : path.cpp
-   ;
+    : path.cpp
+    ;
    
 exe simple_application_with_global_context
-   : simple_application_with_global_context.cpp
-   ;
+    : simple_application_with_global_context.cpp
+    ;
 
 exe wait_for_termination_request
-   : wait_for_termination_request.cpp 
-   ;
+    : wait_for_termination_request.cpp 
+    ;
 
 exe my_own_wait_for_termination_request
-   : my_own_wait_for_termination_request.cpp
-   ;
+    : my_own_wait_for_termination_request.cpp
+    ;
 
 exe termination_handler
-   : termination_handler.cpp
-   ;
+    : termination_handler.cpp
+    ;
 
 exe termination_handler_with_global_context
-   : termination_handler_with_global_context.cpp
-   ;
+    : termination_handler_with_global_context.cpp
+    ;
    
 exe my_own_termination_handler
-   : my_own_termination_handler.cpp
-   ;
+    : my_own_termination_handler.cpp
+    ;
 
 exe limit_single_instance
-   : limit_single_instance.cpp
-   ;
+    : limit_single_instance.cpp
+    ;
 
-exe simple_server_application
-   : simple_server_application.cpp
-   ;
+# TODO, fix 2 compile errors
+#exe simple_server_application
+#    : simple_server_application.cpp
+#    ;
 
 # auto_handler
 
@@ -129,6 +138,13 @@ exe simple_server_application
 # windows only
 
 exe service_setup
-   : setup/windows/setup.cpp
-   : <build>no <target-os>windows:<build>yes 
-   ;	
+    : setup/windows/setup.cpp
+    : <build>no <target-os>windows:<build>yes 
+    ;
+
+
+# sub projects
+build-project selfpipe ;
+build-project tutorial ;
+build-project work_queue ;
+

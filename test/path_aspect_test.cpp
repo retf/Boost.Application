@@ -5,16 +5,11 @@
 
 // For more information, see http://www.boost.org
 
-// #define BOOST_ALL_DYN_LINK
-// #define BOOST_LIB_DIAGNOSTIC
+#define BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
 
 #include <iostream>
 #include <boost/application.hpp>
 #include <boost/test/minimal.hpp>
-
-#if defined( BOOST_WINDOWS_API )
-#elif defined( BOOST_POSIX_API )
-#endif
 
 using namespace boost;
 
@@ -22,7 +17,7 @@ int test_main(int argc, char** argv)
 {   
    filesystem::path module_path_name;
 
-   #if defined( BOOST_WINDOWS_API )
+#if defined( BOOST_WINDOWS_API )
    wchar_t module_name[MAX_PATH];
 
    if (GetModuleFileNameW(0, module_name, sizeof(module_name)) > 0)
