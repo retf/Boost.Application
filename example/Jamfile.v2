@@ -16,6 +16,8 @@ else if [ os.name ] = NT
 {
     lib ws2_32 ;
     lib mswsock ;
+    lib ole32 ;   # CoTaskMemFree
+    lib shell32 ; # SHGetKnownFolderPath
 }
 else if [ os.name ] = HPUX
 {
@@ -25,10 +27,21 @@ else if [ os.name ] = HPUX
 project
     : source-location .
     : requirements
+        <threading>multi
+
+    # includes
         <include>../../..
         <include>../../../../type_index
 
+    # preprocessor definitions
+        <define>BOOST_ALL_NO_LIB
+        <define>BOOST_LIB_DIAGNOSTIC
+        <link>shared:<define>BOOST_ALL_DYN_LINK
+
     # windows
+        <os>NT:<define>_WIN32_WINNT=0x0600
+        <os>NT:<library>ole32
+        <os>NT:<library>shell32
 
     # msvc
         <toolset>msvc:<define>_SCL_SECURE_NO_WARNINGS
@@ -41,7 +54,6 @@ project
         <target-os>linux:<linkflags>"-ldl" 
       
     # mingw, cygwin
-        <os>NT:<define>_WIN32_WINNT=0x0501
         <os>NT,<toolset>gcc:<library>ws2_32
         <os>NT,<toolset>gcc:<library>mswsock
         <os>NT,<toolset>gcc-cygwin:<define>__USE_W32_SOCKETS
@@ -59,14 +71,11 @@ project
         <toolset>gcc:<cxxflags>-fno-strict-aliasing  # avoids strict aliasing violations in other Boost components
 
     # others
-        <link>shared:<define>BOOST_ALL_DLL
         <library>/boost/system//boost_system
         <library>/boost/program_options//boost_program_options
         <library>/boost/filesystem//boost_filesystem
         <library>/boost/date_time//boost_date_time
         <library>/boost/thread//boost_thread
-        <library>/boost/test//boost_test_exec_monitor
-        <threading>multi
     ;
 
 
@@ -111,9 +120,10 @@ exe limit_single_instance
     : limit_single_instance.cpp
     ;
 
-exe simple_server_application
-    : simple_server_application.cpp
-    ;
+# TODO, fix 2 compile errors
+#exe simple_server_application
+#    : simple_server_application.cpp
+#    ;
 
 # auto_handler
 
@@ -130,4 +140,11 @@ exe simple_server_application
 exe service_setup
     : setup/windows/setup.cpp
     : <build>no <target-os>windows:<build>yes 
-    ;	
+    ;
+
+
+# sub projects
+build-project selfpipe ;
+build-project tutorial ;
+build-project work_queue ;
+
