@@ -25,9 +25,9 @@ project boost/libs/application/doc ;
 # 
 
 local doxygen_params =
-  <doxygen:param>PREDEFINED=BOOST_APPLICATINO_DOXYGEN
-  <doxygen:param>HIDE_UNDOC_CLASSES=YES
-  <doxygen:param>HIDE_UNDOC_MEMBERS=YES
+    <doxygen:param>PREDEFINED=BOOST_APPLICATINO_DOXYGEN
+    <doxygen:param>HIDE_UNDOC_CLASSES=YES
+    <doxygen:param>HIDE_UNDOC_MEMBERS=YES
 ;
 
 #
@@ -36,35 +36,35 @@ local doxygen_params =
 
 doxygen autodoc_core
 :
-   [ glob 
-      ../../../boost/application/aspect_map.hpp 
-      ../../../boost/application/context.hpp 
-      ../../../boost/application/handler.hpp 
-      ../../../boost/application/signal_binder.hpp 
-      ../../../boost/application/launch.hpp 
-   ]
+    [ glob 
+        ../../../boost/application/aspect_map.hpp 
+        ../../../boost/application/context.hpp 
+        ../../../boost/application/handler.hpp 
+        ../../../boost/application/signal_binder.hpp 
+        ../../../boost/application/launch.hpp 
+    ]
 :
-   $(doxygen_params)
-   <xsl:param>"boost.doxygen.reftitle=Core Reference"
+    $(doxygen_params)
+    <xsl:param>"boost.doxygen.reftitle=Core Reference"
 ;
 
 doxygen autodoc_modes
 :
-   [ glob 
-      ../../../boost/application/common_application.hpp 
-      ../../../boost/application/server_application.hpp 
-   ]
+    [ glob 
+        ../../../boost/application/common_application.hpp 
+        ../../../boost/application/server_application.hpp 
+    ]
 :
-   $(doxygen_params)
-   <xsl:param>"boost.doxygen.reftitle=Application Modes Reference"
+    $(doxygen_params)
+    <xsl:param>"boost.doxygen.reftitle=Application Modes Reference"
 ;
 
 doxygen autodoc_aspects
 :
-   [ glob ../../../boost/application/aspects/*.hpp ]
+    [ glob ../../../boost/application/aspects/*.hpp ]
 :
-   $(doxygen_params)
-   <xsl:param>"boost.doxygen.reftitle=Aspects Reference"
+    $(doxygen_params)
+    <xsl:param>"boost.doxygen.reftitle=Aspects Reference"
 ;
 
 #
@@ -73,12 +73,12 @@ doxygen autodoc_aspects
 
 boostbook standalone
 :
-  application.qbk
+    application.qbk
 :
-  <dependency>autodoc_core
-  <dependency>autodoc_modes
-  <dependency>autodoc_aspects
-  <xsl:param>boost.root=../../../..
-  <xml:param>html.stylesheet=../../../../doc/src/boostbook.css
+    <dependency>autodoc_core
+    <dependency>autodoc_modes
+    <dependency>autodoc_aspects
+    <xsl:param>boost.root=../../../..
+    <xml:param>html.stylesheet=../../../../doc/src/boostbook.css
 ;
 

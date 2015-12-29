@@ -16,182 +16,173 @@ path-constant TEST_DIR : $(BOOST_ROOT)/bin.v2/libs/application/test ;
 
 if [ os.name ] = SOLARIS
 {
-  lib socket ;
-  lib nsl ;
+    lib socket ;
+    lib nsl ;
 }
 else if [ os.name ] = NT
 {
-  lib ws2_32 ;
-  lib mswsock ;
+    lib ws2_32 ;
+    lib mswsock ;
 }
 else if [ os.name ] = HPUX
 {
-  lib ipv6 ;
+    lib ipv6 ;
 }
 
 project
-   : source-location .
-   : requirements
+    : source-location .
+    : requirements
         <include>../../..
         <include>../../../../type_index
-   # windows
+    # windows
 
-   # msvc
-      <toolset>msvc:<define>_SCL_SECURE_NO_WARNINGS
-      <toolset>msvc:<define>_SCL_SECURE_NO_DEPRECATE
-      <toolset>msvc:<define>_CRT_SECURE_NO_WARNINGS
-      <toolset>msvc:<define>_CRT_SECURE_NO_DEPRECATE
-      <toolset>msvc:<define>_SCL_SECURE_NO_WARNINGS
+    # msvc
+        <toolset>msvc:<define>_SCL_SECURE_NO_WARNINGS
+        <toolset>msvc:<define>_SCL_SECURE_NO_DEPRECATE
+        <toolset>msvc:<define>_CRT_SECURE_NO_WARNINGS
+        <toolset>msvc:<define>_CRT_SECURE_NO_DEPRECATE
+        <toolset>msvc:<define>_SCL_SECURE_NO_WARNINGS
  
-   # linux
-      <target-os>linux:<linkflags>"-ldl" 
-      
-   # mingw, cygwin
-      <os>NT:<define>_WIN32_WINNT=0x0501
-      <os>NT,<toolset>gcc:<library>ws2_32
-      <os>NT,<toolset>gcc:<library>mswsock
-      <os>NT,<toolset>gcc-cygwin:<define>__USE_W32_SOCKETS
-   #  <os>NT,<toolset>gcc:<linkflags>"-ldl" 
+    # linux
+        <target-os>linux:<linkflags>"-ldl" 
+
+    # mingw, cygwin
+        <os>NT:<define>_WIN32_WINNT=0x0501
+        <os>NT,<toolset>gcc:<library>ws2_32
+        <os>NT,<toolset>gcc:<library>mswsock
+        <os>NT,<toolset>gcc-cygwin:<define>__USE_W32_SOCKETS
+        # <os>NT,<toolset>gcc:<linkflags>"-ldl" 
   
-   # solaris     
-      <os>SOLARIS:<library>socket
-      <os>SOLARIS:<library>nsl
+    # solaris     
+        <os>SOLARIS:<library>socket
+        <os>SOLARIS:<library>nsl
       
-   # hpux  
-      <os>HPUX,<toolset>gcc:<define>_XOPEN_SOURCE_EXTENDED
-      <os>HPUX:<library>ipv6
+    # hpux  
+        <os>HPUX,<toolset>gcc:<define>_XOPEN_SOURCE_EXTENDED
+        <os>HPUX:<library>ipv6
 
-   # gcc
-      <toolset>gcc:<cxxflags>-fno-strict-aliasing  # avoids strict aliasing violations in other Boost components
-	
-   # use dynamic libs
-   # <define>BOOST_ALL_DYN_LINK
-   # <define>BOOST_LIB_DIAGNOSTIC
+    # gcc
+        <toolset>gcc:<cxxflags>-fno-strict-aliasing  # avoids strict aliasing violations in other Boost components
+
+    # use dynamic libs
+    # <define>BOOST_ALL_DYN_LINK
+    # <define>BOOST_LIB_DIAGNOSTIC
    
-   # http://boost.2283326.n4.nabble.com/Test-Thread-Regression-since-9-December-td4670920.html
-   
-   # t1
-   # <define>BOOST_SYSTEM_STATIC_LINK=0
-   
-   # t2
-   # <define>BOOST_ALL_NO_LIB=1 
-   # <define>BOOST_SYSTEM_DYN_LINK=1 
-   # <define>BOOST_SYSTEM_NO_DEPRECATED
-	  
-   # others 
-   
-      <link>shared:<define>BOOST_SYSTEM_DYN_LINK=1
-      <link>shared:<define>BOOST_ALL_DLL      
-      <library>/boost/system//boost_system
-      <library>/boost/program_options//boost_program_options
-      <library>/boost/filesystem//boost_filesystem
-      <library>/boost/date_time//boost_date_time
-      <library>/boost/thread//boost_thread
-      <library>/boost/test//boost_test_exec_monitor
-      <threading>multi
-      
-      # t4
-      # <link>shared:<define>BOOST_SYSTEM_DYN_LINK=1
-      # <link>static:<define>BOOST_SYSTEM_STATIC_LINK=1
-      
-      # t5
-      # <use>/boost//system <link>shared
+    # http://boost.2283326.n4.nabble.com/Test-Thread-Regression-since-9-December-td4670920.html
 
-      # t6
-      <use>/boost/system//boost_system <link>shared
-      <use>/boost/program_options//boost_program_options <link>shared
-      <use>/boost/filesystem//boost_filesystem <link>shared
-      <use>/boost/date_time//boost_date_time <link>shared
-      <use>/boost/thread//boost_thread <link>shared
-      <use>/boost/test//boost_test_exec_monitor <link>shared
+    # t1
+    # <define>BOOST_SYSTEM_STATIC_LINK=0
 
-      
-     
+    # t2
+    # <define>BOOST_ALL_NO_LIB=1 
+    # <define>BOOST_SYSTEM_DYN_LINK=1 
+    # <define>BOOST_SYSTEM_NO_DEPRECATED
 
-      ;
-{
+    # others 
+        <link>shared:<define>BOOST_SYSTEM_DYN_LINK=1
+        <link>shared:<define>BOOST_ALL_DLL      
+        <library>/boost/system//boost_system
+        <library>/boost/program_options//boost_program_options
+        <library>/boost/filesystem//boost_filesystem
+        <library>/boost/date_time//boost_date_time
+        <library>/boost/thread//boost_thread
+        <library>/boost/test//boost_test_exec_monitor
+        <threading>multi
 
+        # t4
+        # <link>shared:<define>BOOST_SYSTEM_DYN_LINK=1
+        # <link>static:<define>BOOST_SYSTEM_STATIC_LINK=1
 
-   test-suite application
-      : 
-      #
-      # application foundation
-      #
-      # [ run aspect_map_test.cpp ] --> TODO, fix, rmoved to test travis
-      # 
-      [ run signal_binder_test.cpp :  :  : <link>shared ]
-      [ run handler_test.cpp ]
-      [ run launch_test.cpp ]
-      [ run ensure_single_instance_test.cpp ]
-      [ run global_context_test.cpp ]
-      #
-      #
-	  
-      #
-      # translation unit test
-      #
-      [ run tunit_test.cpp myapp.cpp ]
-      #
-      #
+        # t5
+        # <use>/boost//system <link>shared
 
-      #
-      # common application
-      #
-      [ run simple_common_application_test.cpp ]
-      #
-      #
+        # t6
+        <use>/boost/system//boost_system <link>shared
+        <use>/boost/program_options//boost_program_options <link>shared
+        <use>/boost/filesystem//boost_filesystem <link>shared
+        <use>/boost/date_time//boost_date_time <link>shared
+        <use>/boost/thread//boost_thread <link>shared
+        <use>/boost/test//boost_test_exec_monitor <link>shared
+        
+    ;
 
-      #
-      # server application
-      #
-      [ run simple_server_application_test.cpp ]
-      #
-      #
-	  
-	  #
-      # auto handler
-      #
-      [ run auto_handler_test.cpp ]
-	  [ run auto_handler_global_context_test.cpp ]
-      #
-      #
-	  
-	  #
-      # auto app (in dev)
-      #
-      # [ run auto_app_test.cpp ]
-      #
-      #
+test-suite application
+    : 
+        #
+        # application foundation
+        #
+        # [ run aspect_map_test.cpp ] --> TODO, fix, rmoved to test travis
+        # 
+        [ run signal_binder_test.cpp :  :  : <link>shared ]
+        [ run handler_test.cpp ]
+        [ run launch_test.cpp ]
+        [ run ensure_single_instance_test.cpp ]
+        [ run global_context_test.cpp ]
+        #
+        #
 
-      #
-      # aspects
-      #
-      [ run args_aspect_test.cpp ]
-      [ run path_aspect_test.cpp ]
-      #
-      #
+        #
+        # translation unit test
+        #
+        [ run tunit_test.cpp myapp.cpp ]
+        #
+        #
 
-      #
-      # Ensuring that examples build and run
-      #
-      [ compile ../example/simple_application.cpp ]
-      [ compile ../example/path.cpp ]
-      [ compile ../example/simple_application_with_global_context.cpp ]
-      [ compile ../example/wait_for_termination_request.cpp ]
-      [ compile ../example/my_own_wait_for_termination_request.cpp ]
-      [ compile ../example/termination_handler.cpp ]
-      [ compile ../example/termination_handler_with_global_context.cpp ]
-      [ compile ../example/my_own_termination_handler.cpp ]
-      [ compile ../example/limit_single_instance.cpp ]
-      [ compile ../example/simple_server_application.cpp ]
-      # [ compile ../example/simple_server_application_with_auto_handler.cpp ]
-      # [ compile ../example/simple_server_application_with_auto_handler_and_global_context.cpp ]
-      [ run ../example/setup/windows/setup.cpp : : : <build>no <target-os>windows:<build>yes ]
-      #
-      #
+        #
+        # common application
+        #
+        [ run simple_common_application_test.cpp ]
+        #
+        #
 
-      #  eof
-      ;
-      #
-}
-      
+        #
+        # server application
+        #
+        [ run simple_server_application_test.cpp ]
+        #
+        #
+
+        #
+        # auto handler
+        #
+        [ run auto_handler_test.cpp ]
+        [ run auto_handler_global_context_test.cpp ]
+        #
+        #
+
+        #
+        # auto app (in dev)
+        #
+        # [ run auto_app_test.cpp ]
+        #
+        #
+
+        #
+        # aspects
+        #
+        [ run args_aspect_test.cpp ]
+        [ run path_aspect_test.cpp ]
+        #
+        #
+
+        #
+        # Ensuring that examples build and run
+        #
+        [ compile ../example/simple_application.cpp ]
+        [ compile ../example/path.cpp ]
+        [ compile ../example/simple_application_with_global_context.cpp ]
+        [ compile ../example/wait_for_termination_request.cpp ]
+        [ compile ../example/my_own_wait_for_termination_request.cpp ]
+        [ compile ../example/termination_handler.cpp ]
+        [ compile ../example/termination_handler_with_global_context.cpp ]
+        [ compile ../example/my_own_termination_handler.cpp ]
+        [ compile ../example/limit_single_instance.cpp ]
+        [ compile ../example/simple_server_application.cpp ]
+        # [ compile ../example/simple_server_application_with_auto_handler.cpp ]
+        # [ compile ../example/simple_server_application_with_auto_handler_and_global_context.cpp ]
+        [ run ../example/setup/windows/setup.cpp : : : <build>no <target-os>windows:<build>yes ]
+        #
+        #
+
+        #  eof
+    ;
