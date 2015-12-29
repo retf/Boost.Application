@@ -120,10 +120,9 @@ exe limit_single_instance
     : limit_single_instance.cpp
     ;
 
-# TODO, fix 2 compile errors
-#exe simple_server_application
-#    : simple_server_application.cpp
-#    ;
+exe simple_server_application
+    : simple_server_application.cpp
+    ;
 
 # auto_handler
 
