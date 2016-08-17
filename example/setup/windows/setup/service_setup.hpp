@@ -249,7 +249,12 @@ namespace boost { namespace application { namespace example {
          }
 
          // Open the SCM on this machine.
-         windows_scm scm(SC_MANAGER_CONNECT);
+         windows_scm scm(SC_MANAGER_CONNECT , ec);
+
+         if(ec)
+         {
+             return;
+         }
 
          // Open this service for DELETE access
          SC_HANDLE hservice = OpenService(scm.get(), service_name_.c_str(), DELETE);
@@ -363,7 +368,12 @@ namespace boost { namespace application { namespace example {
             return;
          }
 
-         windows_scm scm(SC_MANAGER_CREATE_SERVICE);
+         windows_scm scm(SC_MANAGER_CREATE_SERVICE, ec);
+
+         if(ec)
+         {
+             return;
+         }
 
          std::basic_string<char_type> pathname = service_path_name_;
          // Append the switch that causes the process to run as a service.
