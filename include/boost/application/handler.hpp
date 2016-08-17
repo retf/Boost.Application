@@ -132,7 +132,7 @@ namespace boost { namespace application {
        *
        * myapp app;
        *
-       * handler<bool>::make_parameter_callback(app, &myapp::instace_aready_running);
+       * handler<bool>::make_callback(app, &myapp::instace_aready_running);
        *
        * \return a boost::function<HandlerReturnType (context&) > callback 
        *         to be used on handler class.
