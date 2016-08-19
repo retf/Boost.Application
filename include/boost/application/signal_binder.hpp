@@ -202,7 +202,7 @@ namespace boost { namespace application {
 
       void signal_handler(const boost::system::error_code& ec,
          int signal_number) {
-         csbl::thread thread(&signal_binder::spawn, this, ec, signal_number);
+         spawn(ec, signal_number);
 
          // triggers again
          signals_.async_wait(
