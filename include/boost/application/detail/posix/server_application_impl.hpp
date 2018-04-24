@@ -267,6 +267,12 @@ namespace boost { namespace application {
          sigemptyset(&sa.sa_mask);
          sa.sa_flags = 0;
 
+         if (getrlimit(RLIMIT_NOFILE, &rl) < 0)
+         {
+            // can't get system resource consumption limits
+            ec = last_error_code(); return 0;
+         }
+
          if (sigaction(SIGHUP, &sa, NULL) < 0)
          {
             // can't ignore SIGHUP
