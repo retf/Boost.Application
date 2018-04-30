@@ -133,12 +133,12 @@ public:
 
    /*<< Customize SIGNALS bind >>*/
    signal_usr2(application::global_context_ptr cxt)
-      : application::signal_manager(cxt)
+      : application::signal_manager(*cxt)
    {
-      application::handler<>::parameter_callback callback1
+      application::handler<>::callback callback1
          = boost::bind(&signal_usr2::signal_usr1_handler, this);
 
-      application::handler<>::parameter_callback callback2
+      application::handler<>::callback callback2
          = boost::bind(&signal_usr2::signal_usr2_handler, this);
 
       /*<< Define signal bind >>*/ 
