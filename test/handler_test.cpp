@@ -9,7 +9,8 @@
 
 #include <iostream>
 #include <boost/application.hpp>
-#include <boost/test/minimal.hpp>
+#define BOOST_TEST_MODULE Handler
+#include <boost/test/unit_test.hpp>
 
 using namespace boost;
 
@@ -21,7 +22,7 @@ struct handler_test
    }
 };
 
-int test_main(int argc, char** argv)
+BOOST_AUTO_TEST_CASE(handler)
 {
    handler_test app_handler_test;
    application::context app_context;
@@ -58,8 +59,6 @@ int test_main(int argc, char** argv)
       BOOST_CHECK(h.get(hcb));
       BOOST_CHECK((*hcb)());
    }
-
-   return 0;
 }
 
 

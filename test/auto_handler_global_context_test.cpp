@@ -9,7 +9,8 @@
 
 #include <iostream>
 #include <boost/application.hpp>
-#include <boost/test/minimal.hpp>
+#define BOOST_TEST_MODULE AutoHandlerGlobalContext
+#include <boost/test/unit_test.hpp>
 
 using namespace boost;
 
@@ -47,22 +48,21 @@ private:
 
 };
 
-int test_main(int argc, char** argv)
+BOOST_AUTO_TEST_CASE(auto_handler_global_context)
 {   
    system::error_code ec;
 
    application::global_context_ptr app_context = application::global_context::create(ec);
-   BOOST_CHECK(ec.value());
+   BOOST_CHECK(!ec.value());
 
    application::auto_handler<myapp> app(app_context);
 
    BOOST_CHECK(application::launch<application::server>(app, app_context, ec) == 0);
-   BOOST_CHECK(ec.value());
+   BOOST_CHECK(!ec.value());
 
    application::global_context::destroy(ec);
-   BOOST_CHECK(ec.value());
+   BOOST_CHECK(!ec.value());
 
-   return 0;
 }
 
 

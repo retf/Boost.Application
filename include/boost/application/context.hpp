@@ -46,6 +46,8 @@
 #include <boost/application/detail/csbl.hpp>
 #include <boost/application/aspect_map.hpp>
 #include <boost/thread/shared_lock_guard.hpp>
+#include <boost/core/noncopyable.hpp>
+
 
 #ifdef BOOST_HAS_PRAGMA_ONCE
 # pragma once
