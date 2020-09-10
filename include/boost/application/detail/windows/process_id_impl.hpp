@@ -11,8 +11,8 @@
 #include <boost/application/detail/csbl.hpp>
 #include <boost/application/system_error.hpp>
 
-#include <boost/detail/winapi/basic_types.hpp>
-#include <boost/detail/winapi/process.hpp>
+#include <boost/winapi/basic_types.hpp>
+#include <boost/winapi/process.hpp>
 
 #ifdef BOOST_HAS_PRAGMA_ONCE
 # pragma once
@@ -23,7 +23,7 @@ namespace boost { namespace application { namespace detail {
    class  process_id_impl {
       
    public:
-      typedef boost::detail::winapi::DWORD_ native_pid_t;
+      typedef boost::winapi::DWORD_ native_pid_t;
       
       process_id_impl()
          : pid_ (0)  
@@ -37,7 +37,7 @@ namespace boost { namespace application { namespace detail {
          if(pid_)
             return pid_;
             
-         pid_ = boost::detail::winapi::GetCurrentProcessId();
+         pid_ = boost::winapi::GetCurrentProcessId();
          return pid_;
       }
         
