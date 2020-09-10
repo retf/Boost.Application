@@ -67,7 +67,7 @@
 #   include <boost/make_shared.hpp>
 #   include <boost/unordered_map.hpp>
 #   include <boost/thread/thread.hpp>
-#   include <boost/bind.hpp>
+#   include <boost/bind/bind.hpp>
 #   include <boost/function.hpp>
 #   include <boost/type_index.hpp>
 #else // auto detect
@@ -98,7 +98,7 @@
 #      include <functional>
 #      define BOOST_APPLICATION_USE_CXX11_HDR_FUNCTIONAL
 #   else
-#      include <boost/bind.hpp>
+#      include <boost/bind/bind.hpp>
 #      include <boost/function.hpp>
 #   endif
 #   ifndef BOOST_NO_CXX11_HDR_TYPEINDEX

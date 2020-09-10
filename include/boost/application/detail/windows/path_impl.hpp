@@ -13,11 +13,11 @@
 
 #include <cstdlib>
 
-#include <boost/detail/winapi/config.hpp>
+#include <boost/winapi/config.hpp>
 #if BOOST_USE_WINAPI_VERSION < BOOST_WINAPI_VERSION_VISTA
 #error Boost.Application requires at least the windows vista feature level of the windows sdk.
 #endif
-#include <boost/detail/winapi/dll.hpp>
+#include <boost/winapi/dll.hpp>
 
 #include <shlobj.h>
 
@@ -37,16 +37,16 @@ namespace boost { namespace application { namespace detail {
             // A handle to the loaded module whose path is being requested.
             // If this parameter is NULL, GetModuleFileName retrieves the path of the
             // executable file of the current process.
-            boost::detail::winapi::WCHAR_ path_hldr[MAX_PATH];
-            boost::detail::winapi::LPWSTR_ path = path_hldr;
-            boost::detail::winapi::get_module_file_name(NULL, path, MAX_PATH);
+            boost::winapi::WCHAR_ path_hldr[MAX_PATH];
+            boost::winapi::LPWSTR_ path = path_hldr;
+            boost::winapi::get_module_file_name(NULL, path, MAX_PATH);
             ec = last_error_code();
     
             // In case of ERROR_INSUFFICIENT_BUFFER_ trying to get buffer big enough to store the whole path
             for (unsigned i = 2; i < 129 && ec.value() == ERROR_INSUFFICIENT_BUFFER; i *= 2) {
                 path = new WCHAR[MAX_PATH * i];
     
-                boost::detail::winapi::get_module_file_name(NULL, path, MAX_PATH * i);
+                boost::winapi::get_module_file_name(NULL, path, MAX_PATH * i);
                 ec = last_error_code();
     
                 if (ec) {

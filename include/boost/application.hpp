@@ -12,6 +12,7 @@
 
 // config
 #include <boost/config.hpp>
+#include <boost/noncopyable.hpp>
 #include <boost/application/config.hpp>
 // application
 #include <boost/application/version.hpp>
