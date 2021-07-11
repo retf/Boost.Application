@@ -19,6 +19,8 @@
 // application
 #include <boost/application/config.hpp>
 #include <boost/application/context.hpp>
+#include <boost/core/noncopyable.hpp>
+
 
 namespace boost { namespace application {
 

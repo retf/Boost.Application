@@ -9,7 +9,8 @@
 
 #include <iostream>
 #include <boost/application.hpp>
-#include <boost/test/minimal.hpp>
+#define  BOOST_TEST_MODULE SignalBinder
+#include <boost/test/unit_test.hpp>
 
 using namespace boost;
 
@@ -44,7 +45,7 @@ public:
    }
 };
 
-int test_main(int argc, char** argv)
+BOOST_AUTO_TEST_CASE(signal_binder)
 {
    application::context app_context;
    my_signal_binder app_signal_binder(app_context);
@@ -80,7 +81,6 @@ int test_main(int argc, char** argv)
 
    BOOST_CHECK(app_handler_test.count_ > 0);
 
-   return 0;
 }
 
 

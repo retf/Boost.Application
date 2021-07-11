@@ -9,12 +9,16 @@
 
 #include <iostream>
 #include <boost/application.hpp>
-#include <boost/test/minimal.hpp>
+#define BOOST_TEST_MODULE PathAspect
+#include <boost/test/unit_test.hpp>
 
 using namespace boost;
 
-int test_main(int argc, char** argv)
-{   
+BOOST_AUTO_TEST_CASE(path_aspect)
+{
+   auto& argc = boost::unit_test::framework::master_test_suite().argc;
+   auto& argv = boost::unit_test::framework::master_test_suite().argv;
+
    filesystem::path module_path_name;
 
 #if defined( BOOST_WINDOWS_API )
@@ -78,6 +82,6 @@ int test_main(int argc, char** argv)
    isempty = path.temp_path().string();
    BOOST_CHECK(isempty.size());
  
-   return 0;
+
 }
 

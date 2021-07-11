@@ -11,7 +11,8 @@
 #include <boost/application.hpp>
 #include <boost/uuid/string_generator.hpp>
 #include <boost/application/auto_app.hpp>
-#include <boost/test/minimal.hpp>
+#define BOOST_TEST_MODULE AutoApp
+#include <boost/test/unit_test.hpp>
 
 using namespace boost;
 
@@ -71,8 +72,10 @@ public:
    }
 };
 
-int test_main(int argc, char** argv)
-{   
+BOOST_AUTO_TEST_CASE(auto_app)
+{
+    auto& argc = boost::unit_test::framework::master_test_suite().argc;
+    auto& argv = boost::unit_test::framework::master_test_suite().argv;
    system::error_code ec;
 
    BOOST_CHECK(!(application::auto_app<application::common, myapp1>::start(ec)));
@@ -117,7 +120,6 @@ int test_main(int argc, char** argv)
    BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp1, application::context> >(argc, argv, boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
    */
 
-   return 0;
 }
 
 

@@ -1,17 +1,20 @@
 
 
 #define BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
-
 //[intro
 #include <iostream>
 #include <boost/application.hpp>
-#include <boost/test/minimal.hpp>
+#define BOOST_TEST_MODULE  Tunit
+#include <boost/test/unit_test.hpp>
 
 // other unit
 #include "myapp.h"
 
-int test_main(int argc, char** argv)
-{   
+BOOST_AUTO_TEST_CASE(tunit)
+{
+   auto& argc = boost::unit_test::framework::master_test_suite().argc;
+   auto& argv = boost::unit_test::framework::master_test_suite().argv;
+
    myapp app;
    application::global_context_ptr ctx = application::global_context::create();
 
@@ -21,6 +24,5 @@ int test_main(int argc, char** argv)
    BOOST_CHECK(application::launch<application::common>(app, ctx) == 0);
 
    application::global_context::destroy();
-   
-   return 0;
+
 }
