@@ -9,7 +9,8 @@
 
 #include <iostream>
 #include <boost/application.hpp>
-#include <boost/test/minimal.hpp>
+#define  BOOST_TEST_MODULE EnsureSingleInstance
+#include <boost/test/unit_test.hpp>
 #include <boost/uuid/string_generator.hpp>
 
 using namespace boost;
@@ -58,7 +59,7 @@ private:
    
 };
 
-int test_main(int argc, char** argv)
+BOOST_AUTO_TEST_CASE(ensure_single_instance)
 {   
    // test no ensure_single_instance
    {
@@ -154,7 +155,6 @@ int test_main(int argc, char** argv)
       application::global_context::destroy();
    }
 
-   return 0;
 }
 
 

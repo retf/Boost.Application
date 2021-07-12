@@ -9,7 +9,8 @@
 
 #include <iostream>
 #include <boost/application.hpp>
-#include <boost/test/minimal.hpp>
+#define BOOST_TEST_MODULE SimpleServerApplication
+#include <boost/test/unit_test.hpp>
 
 using namespace boost;
 
@@ -28,8 +29,8 @@ private:
    application::context& context_;
 };
 
-int test_main(int argc, char** argv)
-{   
+BOOST_AUTO_TEST_CASE(simple_server_application)
+{
    application::context app_context; 
    myapp app(app_context);
 
@@ -47,7 +48,6 @@ int test_main(int argc, char** argv)
    BOOST_CHECK(ret == 0);
 #endif
 
-   return 0;
 }
 
 

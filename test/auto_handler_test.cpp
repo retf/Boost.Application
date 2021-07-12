@@ -9,7 +9,8 @@
 
 #include <iostream>
 #include <boost/application.hpp>
-#include <boost/test/minimal.hpp>
+#define BOOST_TEST_MODULE AutoHandler
+#include <boost/test/unit_test.hpp>
 
 using namespace boost;
 
@@ -43,7 +44,8 @@ private:
 
 };
 
-int test_main(int argc, char** argv)
+
+BOOST_AUTO_TEST_CASE(auto_handler)
 {   
    application::context app_context;
    application::auto_handler<myapp> app(app_context);
@@ -51,10 +53,8 @@ int test_main(int argc, char** argv)
    boost::system::error_code ec;
 
    BOOST_CHECK(application::launch<application::server>(app, app_context, ec) == 0);
-   BOOST_CHECK(ec.value());
+   BOOST_CHECK(!ec.value());
 
-
-   return 0;
 }
 
 

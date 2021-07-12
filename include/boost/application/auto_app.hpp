@@ -109,6 +109,14 @@ namespace boost { namespace application {
          
       }
 
+      static int start(uuids::uuid&& appid) {
+          return start(appid);
+      }
+
+       static int start(uuids::uuid&& appid, system::error_code& ec) {
+           return start(appid, ec);
+       }
+
       static int start(uuids::uuid& appid) {
 
          system::error_code ec; int ret = 0;
@@ -156,8 +164,12 @@ namespace boost { namespace application {
 
          return ret;
       }
+       static int start(int argc, character_types::char_type *argv[], uuids::uuid&& appid, system::error_code& ec) {
+           return  start(argc, argv, appid, ec);
+       }
 
-      static int start(int argc, character_types::char_type *argv[], uuids::uuid& appid, system::error_code& ec) {
+
+       static int start(int argc, character_types::char_type *argv[], uuids::uuid& appid, system::error_code& ec) {
           if(boost::is_same<Context, global_context>::value) {
             global_context_ptr cxt = global_context::create(ec);
 
@@ -182,7 +194,11 @@ namespace boost { namespace application {
          return launch<ApplicationMode>(dapp, cxt, ec);
       }
 
-      static int start(int argc, character_types::char_type *argv[], uuids::uuid& appid) {
+       static int start(int argc, character_types::char_type *argv[], uuids::uuid&& appid) {
+           return start(argc, argv, appid);
+       }
+
+       static int start(int argc, character_types::char_type *argv[], uuids::uuid& appid) {
 
          system::error_code ec; int ret = 0;
          ret = auto_app<ApplicationMode, Application, Context, CustomType>::start(argc, argv, appid, ec);

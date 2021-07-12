@@ -9,7 +9,8 @@
 
 #include <iostream>
 #include <boost/application.hpp>
-#include <boost/test/minimal.hpp>
+#define BOOST_TEST_MODULE Launch
+#include <boost/test/unit_test.hpp>
 
 using namespace boost;
 
@@ -63,7 +64,7 @@ public:
    }
 };
 
-int test_main(int argc, char** argv)
+BOOST_AUTO_TEST_CASE(launch_test)
 {
    // common
 
@@ -352,7 +353,7 @@ int test_main(int argc, char** argv)
 
 #endif
 
-   return 0;
+
 }
 
 
