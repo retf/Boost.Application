@@ -59,7 +59,7 @@ namespace boost { namespace application {
       typedef std::basic_string<char_type> string_type;
 
       server_application_impl_(const mainop &main_op, signal_binder &sb,
-         application::context &context, boost::system::error_code& ec)
+         application::context &context, error_code_t& ec)
          : application_impl(context)
          , main_(main_op)
          , launch_thread_(0)
@@ -89,7 +89,7 @@ namespace boost { namespace application {
 
    protected:
 
-      void initialize(boost::system::error_code& ec)
+      void initialize(error_code_t& ec)
       {
          if(instance_ == 0)
             instance_ = this;

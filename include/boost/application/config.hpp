@@ -29,6 +29,7 @@
 
 #include <boost/config.hpp>
 #include <boost/predef/os.h>
+#include <boost/application/asio_wrapper.hpp>
 #include <boost/application/system_error.hpp>
 #include <boost/application/version.hpp>
 
@@ -183,12 +184,21 @@
 // THROW your own EXCEPTION
 #if defined(BOOST_APPLICATION_TROWN_MY_OWN_EXCEPTION)
 
+#ifdef ASIO_STANDALONE
+#define BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR(what)                        \
+   BOOST_APPLICATION_TROWN_MY_OWN_EXCEPTION(                                   \
+      what " : " + ::asio::error_code(                                  \
+         last_error(),                                                         \
+            ::asio::system_category()).message(),                       \
+               last_error())
+#else
 #define BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR(what)                        \
    BOOST_APPLICATION_TROWN_MY_OWN_EXCEPTION(                                   \
       what " : " + boost::system::error_code(                                  \
          last_error(),                                                         \
             boost::system::system_category()).message(),                       \
                last_error())
+#endif
 
 #define BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(what, ec)        \
    BOOST_APPLICATION_TROWN_MY_OWN_EXCEPTION(                                   \
@@ -199,17 +209,33 @@
 
 // use this version if you have not recovered the 'c' ie right after the error.
 // this version recovery 'ec' internaly.
+#ifdef ASIO_STANDALONE
+#define BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR(what)                        \
+   BOOST_APPLICATION_THROW(system_error_t(                                     \
+      error_code_t(last_error(),                                               \
+         ::asio::system_category()),                                           \
+            BOOST_APPLICATION_SOURCE_LOCATION what))
+#else
 #define BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR(what)                        \
    BOOST_APPLICATION_THROW(boost::system::system_error(                        \
       boost::system::error_code(last_error(),                                  \
          boost::system::system_category()),                                    \
             BOOST_APPLICATION_SOURCE_LOCATION what))
+#endif
 
 // use this version when you already have the value of 'ec', ie you already
 // called 'last_error'.
+#ifdef ASIO_STANDALONE
+#define BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(what, ec)        \
+   BOOST_APPLICATION_THROW(::asio::system_error(                                 \
+      ec, BOOST_APPLICATION_SOURCE_LOCATION what))
+
+#else
 #define BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(what, ec)        \
    BOOST_APPLICATION_THROW(boost::system::system_error(                        \
       ec, BOOST_APPLICATION_SOURCE_LOCATION what))
+
+#endif
 
 #endif
 

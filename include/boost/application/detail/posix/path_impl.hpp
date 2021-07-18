@@ -8,7 +8,11 @@
 #define BOOST_APPLICATION_DETAIL_POSIX_PATH_FROM_ME_HPP
 
 #include <boost/application/config.hpp>
-#include <boost/filesystem/path.hpp>
+#ifdef ASIO_STANDALONE
+#   include <filesystem>
+#else
+#   include <boost/filesystem/path.hpp>
+#endif
 #include <boost/predef/os.h>
 
 #include <cstdlib>
@@ -23,62 +27,69 @@ namespace boost { namespace application { namespace detail {
 
     class default_path_impl
     {
-        filesystem::path full_path_;
+        fs::path full_path_;
         
-        boost::filesystem::path path_from_me(boost::system::error_code &ec)  {
-            return boost::filesystem::read_symlink("/proc/self/exe", ec);
+        fs::path path_from_me(error_code_t& ec)  {
+            return fs::read_symlink("/proc/self/exe", ec);
         }
 
-        boost::filesystem::path getenv(const char* env_name)
+        fs::path getenv(const char* env_name)
         {
             const char* res = ::getenv(env_name);
-            return res ? res : boost::filesystem::path();
+            return res ? res : fs::path();
         }
 
     public:
 
-        filesystem::path current_path(void)
+        fs::path current_path(void)
         {
-           return filesystem::current_path();
+           return fs::current_path();
         }
 
-        const filesystem::path& location(boost::system::error_code &ec)
+        const fs::path& location(error_code_t& ec)
         {
             if(!full_path_.empty())
                 return full_path_;
 
-            boost::filesystem::path full_path
+            fs::path full_path
                 = path_from_me(ec);
             if(ec)
-                full_path_ = boost::filesystem::path();
+                full_path_ = fs::path();
 
             full_path_ = full_path;
 
             return full_path_;
         }
 
-        const filesystem::path& location()
+        const fs::path& location()
         {
             if(!full_path_.empty())
                 return full_path_;
 
-            boost::system::error_code ec;
+            error_code_t ec;
 
             full_path_ = location(ec);
 
             if (ec) {
+#ifdef ASIO_STANDALONE
+                boost::throw_exception(
+                    std::system_error(
+                    ec, "location() failed"
+                    ));
+#else
                 boost::throw_exception(
                     boost::system::system_error(
                     ec, "location() failed"
                     ));
+#endif
             }
 
             return full_path_;
         }
 
-        inline boost::filesystem::path home_path()
+        inline fs::path home_path()
         {
-            boost::filesystem::path path = getenv("HOME");
+            fs::path path = getenv("HOME");
             if(path.empty())
             {
                 struct passwd* pwd = getpwuid(getuid());
@@ -89,9 +100,9 @@ namespace boost { namespace application { namespace detail {
             return path;
         }
 
-        inline boost::filesystem::path app_data_path()
+        inline fs::path app_data_path()
         {
-            boost::filesystem::path path = getenv("XDG_DATA_HOME");
+            fs::path path = getenv("XDG_DATA_HOME");
             if(path.empty()) {
     #if BOOST_OS_MACOS
                 return home_path() / "Library/Preferences/";
@@ -102,10 +113,10 @@ namespace boost { namespace application { namespace detail {
             return path;
         }
 
-        inline boost::filesystem::path config_path()
+        inline fs::path config_path()
         {
 
-            boost::filesystem::path path = getenv("XDG_CONFIG_HOME");
+            fs::path path = getenv("XDG_CONFIG_HOME");
             if(path.empty()) {
     #if BOOST_OS_MACOS
                 return home_path() / "Library/Preferences/";
@@ -116,9 +127,9 @@ namespace boost { namespace application { namespace detail {
             return path;
         }
 
-        inline boost::filesystem::path temp_path()
+        inline fs::path temp_path()
         {
-            boost::filesystem::path path = getenv("TMPDIR");
+            fs::path path = getenv("TMPDIR");
             if(path.empty())
                 return "/tmp"; // Fallback if TMPDIR not available
             return path;

@@ -54,18 +54,30 @@ namespace boost { namespace application {
          : signals_(io_service_)
          , context_(cxt) {
          signals_.async_wait(
+#ifdef ASIO_STANDALONE
+            std::bind(&signal_binder::signal_handler, this,
+            std::placeholders::_1,
+            std::placeholders::_2));
+#else
             boost::bind(&signal_binder::signal_handler, this,
             boost::asio::placeholders::error,
             boost::asio::placeholders::signal_number));
+#endif
       }
 
       explicit signal_binder(global_context_ptr cxt)
          : signals_(io_service_)
          , context_(*cxt.get()) {
          signals_.async_wait(
+#ifdef ASIO_STANDALONE
+            std::bind(&signal_binder::signal_handler, this,
+            std::placeholders::_1,
+            std::placeholders::_2));
+#else
             boost::bind(&signal_binder::signal_handler, this,
             boost::asio::placeholders::error,
             boost::asio::placeholders::signal_number));
+#endif
       }
 
       virtual ~signal_binder() {
@@ -86,13 +98,23 @@ namespace boost { namespace application {
        *          arrives.
        *
        */
+#ifdef ASIO_STANDALONE
       void bind(int signal_number, const handler<>& h) {
-         boost::system::error_code ec;
+         asio::error_code ec;
          bind(signal_number, h, handler<>(), ec);
 
          if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
             "bind() failed", ec);
       }
+#else
+      void bind(int signal_number, const handler<>& h) {
+         error_code_t ec;
+         bind(signal_number, h, handler<>(), ec);
+
+         if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
+            "bind() failed", ec);
+      }
+#endif
 
       /*!
        * Bind/tie a standard SIGNAL to a handler callback, and define
@@ -107,15 +129,25 @@ namespace boost { namespace application {
        *           first handler return true;
        *
        */
+#ifdef ASIO_STANDALONE
       void bind(int signal_number, const handler<>& h1, const handler<>& h2) {
-         boost::system::error_code ec;
+         asio::error_code ec;
          bind(signal_number, h1, h2, ec);
 
          if(ec)
             BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
             "bind() failed", ec);
       }
+#else
+      void bind(int signal_number, const handler<>& h1, const handler<>& h2) {
+         error_code_t ec;
+         bind(signal_number, h1, h2, ec);
 
+         if(ec)
+            BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
+            "bind() failed", ec);
+      }
+#endif
        /*!
        * Bind/tie a standard SIGNAL to a handler callback. 'ec' version.
        *
@@ -125,10 +157,17 @@ namespace boost { namespace application {
        *          arrives.
        *
        */
+#ifdef ASIO_STANDALONE
       void bind(int signal_number, const handler<>& h,
-         boost::system::error_code& ec) {
+         asio::error_code& ec) {
          bind(signal_number, h, handler<>(), ec);
       }
+#else
+      void bind(int signal_number, const handler<>& h,
+         error_code_t& ec) {
+         bind(signal_number, h, handler<>(), ec);
+      }
+#endif
 
       /*!
        * Bind/tie a standard SIGNAL to a handler callback, and define
@@ -143,12 +182,19 @@ namespace boost { namespace application {
        *           first handler return true;
        *
        */
-      void bind(int signal_number, const handler<>& h1, const handler<>& h2,
-         boost::system::error_code& ec) {
+#ifdef ASIO_STANDALONE
+      void bind(int signal_number, const handler<>& h1, const handler<>& h2, 
+         asio::error_code& ec) {
          signals_.add(signal_number, ec);
          handler_map_[signal_number] = std::make_pair(h1, h2);
       }
-
+#else
+      void bind(int signal_number, const handler<>& h1, const handler<>& h2, 
+         error_code_t& ec) {
+         signals_.add(signal_number, ec);
+         handler_map_[signal_number] = std::make_pair(h1, h2);
+      }
+#endif
       /*!
        * Unbind/untie a standard SIGNAL.
        *
@@ -156,7 +202,11 @@ namespace boost { namespace application {
        *
        */
       void unbind(int signal_number) {
-         boost::system::error_code ec;
+#ifdef ASIO_STANDALONE
+         asio::error_code ec;
+#else
+         error_code_t ec;
+#endif
          unbind(signal_number, ec);
 
          if(ec)
@@ -170,7 +220,11 @@ namespace boost { namespace application {
        * \param signal_number The signal constant, e.g.: SIGUSR2, SIGINT.
        *
        */
-      void unbind(int signal_number, boost::system::error_code& ec) {
+#ifdef ASIO_STANDALONE
+      void unbind(int signal_number, asio::error_code& ec) {
+#else
+      void unbind(int signal_number, error_code_t& ec) {
+#endif
          if(handler_map_.cend() != handler_map_.find(signal_number))
          {
             // replace
@@ -200,20 +254,35 @@ namespace boost { namespace application {
          io_service_.run();
       }
 
-      void signal_handler(const boost::system::error_code& ec,
+#ifdef ASIO_STANDALONE
+      void signal_handler(const asio::error_code& ec,
          int signal_number) {
+#else
+      void signal_handler(const error_code_t& ec,
+         int signal_number) {
+#endif
          spawn(ec, signal_number);
 
          // triggers again
          signals_.async_wait(
+#ifdef ASIO_STANDALONE
+            std::bind(&signal_binder::signal_handler, this,
+            std::placeholders::_1,
+            std::placeholders::_2));
+#else
             boost::bind(&signal_binder::signal_handler, this,
             boost::asio::placeholders::error,
             boost::asio::placeholders::signal_number));
+#endif
       }
 
    protected:
 
-      void spawn(const boost::system::error_code& ec, int signal_number) {
+#ifdef ASIO_STANDALONE
+      void spawn(const asio::error_code& ec, int signal_number) {
+#else
+      void spawn(const error_code_t& ec, int signal_number) {
+#endif
          if (ec)
             return;
 
@@ -238,9 +307,13 @@ namespace boost { namespace application {
       // if first handler returns true, the second handler are called
       csbl::unordered_map<int, std::pair< handler<>, handler<> > > handler_map_;
 
+#ifdef ASIO_STANDALONE
+      ::asio::io_service io_service_;
+      ::asio::signal_set signals_;
+#else
       asio::io_service io_service_;
       asio::signal_set signals_;
-
+#endif
       csbl::shared_ptr<csbl::thread> io_service_thread_;
 
    protected:
@@ -260,8 +333,13 @@ namespace boost { namespace application {
    {
    public:
 
+#ifdef ASIO_STANDALONE
       signal_manager(application::context &context,
-         boost::system::error_code& ec)
+         asio::error_code& ec)
+#else
+      signal_manager(application::context &context,
+         error_code_t& ec)
+#endif
          : signal_binder(context)
       {
          register_signals(ec);
@@ -270,7 +348,11 @@ namespace boost { namespace application {
       signal_manager(application::context &context)
          : signal_binder(context)
       {
-         boost::system::error_code ec;
+#ifdef ASIO_STANDALONE
+         asio::error_code ec;
+#else
+         error_code_t ec;
+#endif
 
          register_signals(ec);
 
@@ -298,7 +380,11 @@ namespace boost { namespace application {
 
       // parameter context version
 
-      virtual void register_signals(boost::system::error_code& ec)
+#ifdef ASIO_STANDALONE
+      virtual void register_signals(asio::error_code& ec)
+#else
+      virtual void register_signals(error_code_t& ec)
+#endif
       {
          csbl::shared_ptr<termination_handler> th
             = setup_termination_behaviour();

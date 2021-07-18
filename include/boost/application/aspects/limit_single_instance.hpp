@@ -56,7 +56,7 @@ namespace boost { namespace application {
        * running on current operating system.
        *
        */
-      virtual bool lock(boost::system::error_code &ec) = 0;
+      virtual bool lock(error_code_t& ec) = 0;
       virtual bool lock() = 0;
 
       virtual bool is_another_instance_running() = 0;
@@ -132,7 +132,7 @@ namespace boost { namespace application {
       }
 
       /*!
-       * Creates a system mutex, the ec ( boost::system::error_code& ec)
+       * Creates a system mutex, the ec ( error_code_t& ec)
        * will be set to the result of the operation, they should be
        * tested for errors.
        *
@@ -144,7 +144,7 @@ namespace boost { namespace application {
        *         running on current operating system.
        *
        */
-      bool lock(boost::system::error_code &ec)
+      bool lock(error_code_t& ec)
       {
          std::string instance_id =
             to_upper_copy(boost::lexical_cast<std::string>(uuid_));
@@ -178,7 +178,7 @@ namespace boost { namespace application {
        *
        */
       bool lock() {
-         boost::system::error_code ec;
+         error_code_t ec;
 
          bool result = lock(ec);
          if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
@@ -260,7 +260,7 @@ namespace boost { namespace application {
       {}
 
       /*!
-       * Creates a system mutex, the ec ( boost::system::error_code& ec)
+       * Creates a system mutex, the ec ( error_code_t& ec)
        * will be set to the result of the operation, they should be
        * tested for errors.
        *
@@ -272,7 +272,7 @@ namespace boost { namespace application {
        *         running on current operating system.
        *
        */
-      bool lock(boost::system::error_code &ec) {
+      bool lock(error_code_t& ec) {
          return impl_->lock(uuid_, ec);
       }
 
@@ -286,7 +286,7 @@ namespace boost { namespace application {
        *
        */
       bool lock() {
-         boost::system::error_code ec;
+         error_code_t ec;
 
          bool result = lock(ec);
          if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(

@@ -98,7 +98,7 @@ namespace boost { namespace application {
    public:
 
       static inline csbl::shared_ptr<global_context> create() {
-        boost::system::error_code ec;
+        error_code_t ec;
         create(ec);
 
         if(ec) 
@@ -107,14 +107,19 @@ namespace boost { namespace application {
          return instance_t::ptr;
       }
 
-      static inline csbl::shared_ptr<global_context> create(boost::system::error_code &ec) BOOST_NOEXCEPT  {
+      static inline csbl::shared_ptr<global_context> create(error_code_t& ec) BOOST_NOEXCEPT  {
          boost::lock_guard<boost::shared_mutex> u_guard(instance_t::lock);
 
          ec.clear();
          if(already_created()) {
-            ec = boost::system::error_code(
+            ec = error_code_t(
+#ifdef ASIO_STANDALONE
+                 static_cast<int>(std::errc::file_exists),
+                 std::generic_category()
+#else
                  boost::system::errc::file_exists,
                  boost::system::generic_category()
+#endif
                  );
 
             return csbl::shared_ptr<global_context>();
@@ -125,21 +130,26 @@ namespace boost { namespace application {
       }
 	  
       static inline void destroy()  {
-         boost::system::error_code ec;
+         error_code_t ec;
          destroy(ec);
 
          if(ec) 
             BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC("no global context to destroy", ec);  
       }
 	  
-      static inline void destroy(boost::system::error_code &ec) BOOST_NOEXCEPT {
+      static inline void destroy(error_code_t& ec) BOOST_NOEXCEPT {
          boost::lock_guard<boost::shared_mutex> u_guard(instance_t::lock);
 
          ec.clear();
          if(!already_created()) {
-            ec = boost::system::error_code(
+            ec = error_code_t(
+#ifdef ASIO_STANDALONE
+                 static_cast<int>(std::errc::bad_file_descriptor),
+                 std::generic_category()
+#else
                  boost::system::errc::bad_file_descriptor,
                  boost::system::generic_category()
+#endif
                  );
            return;
          }
@@ -148,7 +158,7 @@ namespace boost { namespace application {
       }
 
       static inline csbl::shared_ptr<global_context> get() {
-         boost::system::error_code ec;
+         error_code_t ec;
          csbl::shared_ptr<global_context> cxt =get(ec);
 
          if(ec)
@@ -157,14 +167,19 @@ namespace boost { namespace application {
          return cxt;
       }
 
-      static inline csbl::shared_ptr<global_context> get(boost::system::error_code &ec) BOOST_NOEXCEPT {
+      static inline csbl::shared_ptr<global_context> get(error_code_t& ec) BOOST_NOEXCEPT {
          boost::shared_lock_guard<boost::shared_mutex> s_guard(instance_t::lock);
 
          ec.clear();
          if(!already_created()) {
-            ec = boost::system::error_code(
+            ec = error_code_t(
+#ifdef ASIO_STANDALONE
+                 static_cast<int>(std::errc::bad_file_descriptor),
+                 std::generic_category()
+#else
                  boost::system::errc::bad_file_descriptor,
                  boost::system::generic_category()
+#endif
                  );
            return csbl::shared_ptr<global_context>();
          }

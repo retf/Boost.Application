@@ -44,7 +44,7 @@ namespace boost { namespace application {
       
          selfpipe()
          {
-            boost::system::error_code ec;
+            error_code_t ec;
 
             setup(ec);
 
@@ -52,7 +52,7 @@ namespace boost { namespace application {
                "selfpipe() failed", ec);
          }
          
-         selfpipe(boost::system::error_code &ec)
+         selfpipe(error_code_t& ec)
          {
             setup(ec);
          }
@@ -64,7 +64,7 @@ namespace boost { namespace application {
       
       protected:
 
-         void setup(boost::system::error_code &ec)
+         void setup(error_code_t& ec)
          {
             if (pipe(fd_) == -1)
             {
