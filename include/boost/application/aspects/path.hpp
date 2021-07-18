@@ -28,77 +28,77 @@ namespace boost { namespace application {
     public:
         path() : impl_(new detail::default_path_impl) {}
 
-        filesystem::path current_path(void)
+        fs::path current_path(void)
         {
             return impl_->current_path();
         }
       
-        filesystem::path location(boost::system::error_code &ec)
+        fs::path location(error_code_t& ec)
         {
             return impl_->location(ec);
         }
 
-        filesystem::path location()
+        fs::path location()
         {
             return impl_->location();
         }
 
-        filesystem::path executable_path_name(boost::system::error_code &ec)
+        fs::path executable_path_name(error_code_t& ec)
         {
            return impl_->location(ec);
         }
 
-        filesystem::path executable_path_name()
+        fs::path executable_path_name()
         {
             return impl_->location();
         }
 
-        filesystem::path executable_path(boost::system::error_code &ec)
+        fs::path executable_path(error_code_t& ec)
         {
             return location(ec).parent_path();
         }
 
-        filesystem::path executable_path()
+        fs::path executable_path()
         {
             return impl_->location().parent_path();
         }
 
-        filesystem::path executable_full_name(boost::system::error_code &ec)
+        fs::path executable_full_name(error_code_t& ec)
         {
             return impl_->location(ec).filename();
         }
 
-        filesystem::path executable_full_name(void)
+        fs::path executable_full_name(void)
         {
             return impl_->location().filename();
         }
 
-        filesystem::path executable_name(boost::system::error_code &ec)
+        fs::path executable_name(error_code_t& ec)
         {
             return impl_->location(ec).stem();
         }
 
-        filesystem::path executable_name(void)
+        fs::path executable_name(void)
         {
             return impl_->location().stem();
         }
 
-        filesystem::path home_path(void)
+        fs::path home_path(void)
         {
             return impl_->home_path();
         }
 
-        filesystem::path config_path(void)
+        fs::path config_path(void)
         {
             return impl_->config_path();
         }
 
-        filesystem::path app_data_path(void)
+        fs::path app_data_path(void)
         {
             return impl_->app_data_path();
         }
 
-        filesystem::path temp_path(void)
+        fs::path temp_path(void)
         {
             return impl_->temp_path();
         }

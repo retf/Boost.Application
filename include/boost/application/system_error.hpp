@@ -7,10 +7,8 @@
 #ifndef BOOST_APPLICATION_SYSTEM_ERROR_HPP
 #define BOOST_APPLICATION_SYSTEM_ERROR_HPP
 
+#include <boost/application/asio_wrapper.hpp>
 #include <boost/system/config.hpp>
-#include <boost/system/error_code.hpp>
-#include <boost/system/system_error.hpp>
-#include <boost/asio.hpp>
 
 #if defined(BOOST_POSIX_API)
 #   include <errno.h>
@@ -56,11 +54,19 @@ namespace boost { namespace application {
     *         function (System Error).
     *
     */
-   inline system::error_code last_error_code() BOOST_NOEXCEPT
+#ifdef ASIO_STANDALONE
+   inline error_code_t last_error_code() BOOST_NOEXCEPT
+   {
+      return ::asio::error_code(last_error(),
+         asio::system_category());
+   }
+#else
+   inline error_code_t last_error_code() BOOST_NOEXCEPT
    {
       return boost::system::error_code(last_error(),
          boost::system::system_category());
    }
+#endif
 
 }}// boost::application
 

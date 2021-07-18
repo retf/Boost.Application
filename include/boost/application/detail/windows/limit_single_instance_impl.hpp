@@ -44,7 +44,7 @@ namespace boost { namespace application {
          release();
       }
 
-      bool lock(const uuids::uuid& instance_id, boost::system::error_code &ec)
+      bool lock(const uuids::uuid& instance_id, error_code_t& ec)
       {
          // Make sure that you use a name that is unique for this application otherwise
          // two apps may think they are the same if they are using same name for

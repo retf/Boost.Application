@@ -53,7 +53,7 @@ namespace boost { namespace application {
       // If the thread acquires ownership of the mutex,
       // returns true, if the another thread has ownership
       // of the mutex, returns false.
-      bool lock(const uuids::uuid& instance_id, boost::system::error_code &ec)
+      bool lock(const uuids::uuid& instance_id, error_code_t& ec)
       {
          name_ =
             boost::to_upper_copy(boost::lexical_cast<string_type>(instance_id));

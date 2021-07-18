@@ -85,7 +85,7 @@ namespace boost { namespace application {
        */
       template <typename Application, typename SignalManager>
       server(Application& myapp, SignalManager &sm,
-             application::context &context, boost::system::error_code& ec) {
+             application::context &context, error_code_t& ec) {
          // default aspects patterns added to this kind of application
 
          if(!context.find<run_mode>())

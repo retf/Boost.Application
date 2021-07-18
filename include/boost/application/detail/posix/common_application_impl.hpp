@@ -41,7 +41,7 @@ namespace boost { namespace application {
       common_application_impl_(const mainop &main,
                                signal_binder &sb,
                                application::context &context,
-                               boost::system::error_code& ec)
+                               error_code_t& ec)
          : application_impl(context)
          , main_(main)
       {

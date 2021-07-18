@@ -44,7 +44,7 @@ namespace boost { namespace application {
    // receive a boost::system::error_code variable 'ec' launch versions
 
    /*!
-    * Creates a application, the ec ( boost::system::error_code& ec)
+    * Creates a application, the ec ( error_code_t& ec)
     * will be set to the result of the operation, they should be
     * tested for errors.
     *
@@ -70,7 +70,7 @@ namespace boost { namespace application {
    template <typename ApplicationMode, typename Application,
       typename CustomType, typename Context>
    inline int launch(Application& app, CustomType& ct, Context &cxt,
-      system::error_code& ec) {
+      error_code_t& ec) {
       // the ensure_single_instance tell us to exit?
      
       bool we_need_exit = detail::ensure_single_instance<Context>()(cxt, ec); 
@@ -91,12 +91,12 @@ namespace boost { namespace application {
    template <typename ApplicationMode, typename Application, 
       typename CustomType>
    inline int launch(Application& app, CustomType& ct, global_context_ptr cxt,
-      system::error_code& ec) {
+      error_code_t& ec) {
       return launch<ApplicationMode>(app, ct, *cxt.get(), ec);
    }
 
    /*!
-    * Creates a application, the ec ( boost::system::error_code& ec)
+    * Creates a application, the ec ( error_code_t& ec)
     * will be set to the result of the operation, they should be
     * tested for errors.
     *
@@ -116,7 +116,7 @@ namespace boost { namespace application {
     *
     */
    template <typename ApplicationMode, typename Application, typename Context>
-   inline int launch(Application& app, Context &cxt, system::error_code& ec) {
+   inline int launch(Application& app, Context &cxt, error_code_t& ec) {
       signal_manager ct(cxt, ec); // our default custom type
 
       if(ec) return 0;
@@ -154,7 +154,7 @@ namespace boost { namespace application {
    template <typename ApplicationMode, typename Application,
       typename CustomType, typename Context>
    inline int launch(Application& app, CustomType& ct, Context &cxt) {
-      system::error_code ec; int ret = 0;
+      error_code_t ec; int ret = 0;
       ret = launch<ApplicationMode>(app, ct, cxt, ec);
 
       if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
@@ -186,7 +186,7 @@ namespace boost { namespace application {
     */
    template <typename ApplicationMode, typename Application, typename Context>
    inline int launch(Application& app, Context &cxt) {
-      system::error_code ec; int ret = 0;
+      error_code_t ec; int ret = 0;
       ret = launch<ApplicationMode>(app, cxt, ec);
 
       if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(

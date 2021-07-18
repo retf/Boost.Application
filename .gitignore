@@ -1,0 +1,135 @@
+# project
+buildnumber
+src/version.h
+build/**
+build-debug/**
+build-release/**
+nbproject/**
+run/**
+*.log**
+*.xml
+*nbproject*
+*.swp
+/version.toml
+cmake/FindCustom**
+.vscode
+*.bak
+
+## Directory-based project format:
+deploy/**
+cmake-build*/**
+cmake-rapid*/**
+.idea/
+**/.idea/
+*/.idea
+*/.idea/**
+*.swp
+tests/log/**
+vendor/lib/**
+vendor/pkg/**
+vendor/bin/**
+vendor-old/**
+vendor-old/**/*
+opt/**
+dist-**/
+
+# C++
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# C 
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Debug files
+*.dSYM/
+
+# MAC OS X
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+
+# Linux
+*~
+
+# KDE directory preferences
+.directory
+
+# Linux trash folder which might appear on any partition or disk
+.Trash-*

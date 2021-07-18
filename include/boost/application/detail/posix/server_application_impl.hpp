@@ -83,7 +83,7 @@ namespace boost { namespace application {
       typedef std::basic_string<char_type> string_type;
 
       server_application_impl_(const mainop &main, signal_binder &sb,
-                               application::context &context, boost::system::error_code& ec)
+                               application::context &context, error_code_t& ec)
          : application_impl(context)
          , main_(main)
       {
@@ -124,7 +124,7 @@ namespace boost { namespace application {
    
       // redirect_fds(): redirect stdin, stdout, and stderr to /dev/NULL */
 
-      void redirect_fds(boost::system::error_code &ec)
+      void redirect_fds(error_code_t& ec)
       {
          (void) close(0);
          (void) close(1);
@@ -165,7 +165,7 @@ namespace boost { namespace application {
          return status;
       }
       
-      int daemon(int nochdir, int noclose, boost::system::error_code &ec)
+      int daemon(int nochdir, int noclose, error_code_t& ec)
       {
          int status = 0;
 
@@ -221,7 +221,7 @@ namespace boost { namespace application {
       // penalty that it incurs is the time and memory required to duplicate the
       // parent's page tables, and to create a unique task structure for the child.
 
-      pid_t daemonize(boost::system::error_code &ec)
+      pid_t daemonize(error_code_t& ec)
       {
          // ignore terminal stop signals
          #ifdef SIGTTOU

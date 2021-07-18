@@ -31,7 +31,7 @@ namespace boost { namespace application { namespace detail {
     {
         filesystem::path full_path_;
         
-        static boost::filesystem::path path_from_me(boost::system::error_code &ec) {
+        static boost::filesystem::path path_from_me(error_code_t& ec) {
             boost::filesystem::path ret;
             
             // A handle to the loaded module whose path is being requested.
@@ -110,7 +110,7 @@ namespace boost { namespace application { namespace detail {
            return filesystem::current_path();
         }
 
-        const filesystem::path& location(boost::system::error_code &ec)
+        const filesystem::path& location(error_code_t& ec)
         {
             if ( full_path_.empty( ) )
             {
@@ -123,7 +123,7 @@ namespace boost { namespace application { namespace detail {
         {
             if ( full_path_.empty( ) )
             {
-                boost::system::error_code ec;
+                error_code_t ec;
 
                 full_path_ = location( ec );
 

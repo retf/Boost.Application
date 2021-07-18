@@ -80,7 +80,7 @@ namespace boost { namespace application {
 
       static int start() {
 
-         system::error_code ec; int ret = 0;
+         error_code_t ec; int ret = 0;
          ret = auto_app<ApplicationMode, Application, Context, CustomType>::start(ec);
 
          if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
@@ -119,7 +119,7 @@ namespace boost { namespace application {
 
       static int start(uuids::uuid& appid) {
 
-         system::error_code ec; int ret = 0;
+         error_code_t ec; int ret = 0;
 
          ret = auto_app<ApplicationMode, Application, Context, CustomType>::start(appid, ec);
 
@@ -156,7 +156,7 @@ namespace boost { namespace application {
 
       static int start(int argc, character_types::char_type *argv[]) {
 
-         system::error_code ec; int ret = 0;
+         error_code_t ec; int ret = 0;
          ret = auto_app<ApplicationMode, Application, Context, CustomType>::start(argc, argv, ec);
 
          if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
@@ -200,7 +200,7 @@ namespace boost { namespace application {
 
        static int start(int argc, character_types::char_type *argv[], uuids::uuid& appid) {
 
-         system::error_code ec; int ret = 0;
+         error_code_t ec; int ret = 0;
          ret = auto_app<ApplicationMode, Application, Context, CustomType>::start(argc, argv, appid, ec);
 
          if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(

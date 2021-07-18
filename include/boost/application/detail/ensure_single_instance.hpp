@@ -27,7 +27,7 @@ namespace boost { namespace application { namespace detail {
    // returns true to indicate that application needs exit.
 
    inline bool check(context &cxt,
-      boost::system::error_code& ec)
+      error_code_t& ec)
    { 
       csbl::shared_ptr<limit_single_instance> ol =
          cxt.find<limit_single_instance>();
@@ -65,7 +65,7 @@ namespace boost { namespace application { namespace detail {
    }
 
    template <class T> struct ensure_single_instance {
-      bool operator()(T &cxt, boost::system::error_code& ec)
+      bool operator()(T &cxt, error_code_t& ec)
       {
          return check(cxt, ec);
       }
@@ -74,7 +74,7 @@ namespace boost { namespace application { namespace detail {
    template <> struct ensure_single_instance< 
          global_context_ptr > {
       bool operator()(global_context_ptr cxt,
-         boost::system::error_code& ec)
+         error_code_t& ec)
       {
          return check(*cxt.get(), ec);
       }
